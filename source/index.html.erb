@@ -1,0 +1,35 @@
+---
+pageable: true
+per_page: 6
+---
+<% page_articles.each_with_index do |article, i| %>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><%= link_to article.title, article %></h1>
+        <ul>
+          <li class="entry-time"><%= article.date.strftime('%Y.%m.%e') %></li>
+          <li class="entry-cat"><%= article.tags.map {|tag| link_to "#{slug_to_japanese(tag)}", tag_path(tag)}.join(', ').html_safe %></li>
+          <li class="entry-author"><%= link_to article.data.authors, '/author/' + article.data.authors + '.html' %></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <%= link_to article.data.authors, '/author/' + article.data.authors + '.html' %>
+      </div>
+      <div class="entry-body">
+        <%= article_excerpt(article.body) %>
+      </div>
+    </article>
+<% end %>
+
+<% if paginate %>
+    <div id="entry-link">
+      <ul>
+        <% if next_page %>
+            <li id="older-link"><%= link_to 'Previous page', next_page %></li>
+        <% end %>
+        <% if prev_page %>
+            <li id="newer-link"><%= link_to 'Next page', prev_page %></li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>

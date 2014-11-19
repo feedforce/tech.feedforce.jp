@@ -1,0 +1,13 @@
+<nav>
+  <div>
+    <ul class="menu">
+      <% data.navigation.each do |key| %>
+          <% if current_page.url === key['url'] %>
+              <li class="current_page_item"><%= link_to key['label'], key['url'] %></li>
+          <% else %>
+              <li><%= link_to key['label'], key['url'] %></li>
+          <% end %>
+      <% end %>
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,39 @@
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_text"><h2>技術チームの本棚</h2>
+        <div class="textwidget">
+          <script type="text/javascript" src="http://widget.booklog.jp/blogparts/js/booklog_minishelf.js?default" id="booklog_minishelf"></script>
+          <script type="text/javascript" src="http://api.booklog.jp/json/feedforce-tech?category=0&amp;count=15&amp;callback=booklog_minishelf"></script>
+        </div>
+      </div>
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+          <% blog.articles[0...6].each do |article| %>
+              <li><%= link_to article.title, article %></li>
+          <% end %>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+          <% blog.tags.each do |tag, articles| %>
+              <li><%= link_to "#{slug_to_japanese(tag)} (#{articles.size})", tag_path(tag) %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li class="first"><a href="about.html">feedforce tech teamとは</a></li>
+      <li><a href="http://www.feedforce.jp/service/" target="_blank">feedforceのプロダクト</a></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<%= javascript_include_tag 'lib', 'prettify', 'script' %>

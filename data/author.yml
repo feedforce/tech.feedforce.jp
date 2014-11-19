@@ -1,0 +1,143 @@
+#--------------------------------------------
+# 執筆者データ
+#
+# id: Markdown内で使う`authors`と同じ内容を設定
+# name: サイト上で表示する名前
+# thumbnail: サイト上で表示する画像Path。
+#           `/images/authors/`の下に格納してください。
+# profile: サイト上で表示する自己紹介内容
+# media: 各SNSとかその他の類。
+#--------------------------------------------
+- id: ozawa
+  name: sakuro
+  thumbnail: sakuro.jpg
+  profile: "電源不要ゲーマー。<br>
+            好きなゲームは King's Court(絶版なのでeBayで手に入れた)<br>
+            好きなメソッドはObject#tap"
+  media:
+    - label: GitHub
+      url: https://github.com/sakuro
+    - label: Qiita
+      url: http://qiita.com/sakuro/items
+#------------------------------------------
+- id: sugiuchi
+  name: sugiuchi
+  thumbnail: sugiuchi.jpg
+  profile: "主にサーバ周り担当。<br>
+            趣味は自転車。<br>
+            最近お気に入りの作業用BGMはRebuild.fm"
+  media:
+    - label: GitHub
+      url: https://github.com/critical-alert
+    - label: Twitter
+      url: https://twitter.com/critical_alert
+#------------------------------------------
+- id: r-suzuki
+  name: r-suzuki
+  thumbnail: r-suzuki.png
+  profile: "チームマネージャー。<br>
+            3度のメシ並みにチームビルディングやファシリテーションが好き。<br>
+            レフトウィングおじさん。"
+  media:
+    - label: Twitter
+      url: https://twitter.com/hapicky
+#------------------------------------------
+- id: e-takano
+  name: kano-e
+  thumbnail: kano-e.png
+  profile: "お気に入りのレビュー依頼ぬいぐるみはラスカル。<br>
+            休日は、こどもとScratchやったり、プレーパークで焚き火したり。<br>
+            最近smalrubyが気になってる。"
+  media:
+    - label: Qiita
+      url: http://qiita.com/kano-e
+    - label: Scratch
+      url: http://scratch.mit.edu/users/kano-e/
+#------------------------------------------
+- id: meihong
+  name: meihong
+  thumbnail: meihong.png
+  profile: "N<br>
+            O<br>
+            COKE, NO LIFE"
+  media:
+    - label: Facebook
+      url: https://www.facebook.com/kenta.meihong.onishi
+    - label: Blog
+      url: http://damelog.com/
+#------------------------------------------
+- id: mogi
+  name: mogi
+  thumbnail: mogi.png
+  profile: "最近ロードバイクに乗ってます<br>
+            オレンジのジャージがトレードマーク<br>
+            最近キーボードを kinesis に変えて調子に乗ってます。"
+  media:
+    - label: GitHub
+      url: https://github.com/mgi166
+#------------------------------------------
+- id: kunishima
+  name: kunishima
+  thumbnail: kunishima.jpg
+  profile: "†深淵のリア充†<br>
+            好きな川は荒川です<br>
+            最近お気に入りのツールはAlfred"
+  media:
+    - label: GitHub
+      url: https://github.com/Lorentzca
+    - label: Blog
+      url: http://lorentzca.blogspot.jp/
+#------------------------------------------
+- id: inoue
+  name: inoue
+  thumbnail: inoue.jpg
+  profile: "FFの女子力担当٩(๑❛ᴗ❛๑)۶<br>
+            大都会岡山出身。<br>
+            食べること・寝ることでストレスを解消するタイプ。"
+  media:
+    - label: Twitter
+      url: https://twitter.com/a_know
+    - label: About me
+      url: http://home.a-know.me/
+#------------------------------------------
+- id: masutaka
+  name: masutaka
+  thumbnail: masutaka.jpg
+  profile: "カレー大好き！<br>
+            なんだかんだココイチには週イチで行きます。<br>
+            金沢カレーはあまり好きではありません。"
+  media:
+    - label: GitHub
+      url: https://github.com/masutaka
+    - label: マスタカのChangeLogメモ
+      url: http://masutaka.net/chalow/
+#------------------------------------------
+- id: hoshino
+  name: hoshino
+  thumbnail: hoshino.jpg
+  profile: "こう見えて2児の父。<br>
+            好きな川は多摩川です。<br>
+            好きなメソッドはArray#combination"
+  media:
+    - label: GitHub
+      url: https://github.com/hoshinotsuyoshi
+    - label: Twitter
+      url: https://twitter.com/hoppiestar
+#------------------------------------------
+- id: t-nakano
+  name: t-nakano
+  thumbnail: t-nakano.png
+  profile: "見た目30歳の新卒1年目エンジニア<br>
+            ヨット、将棋が趣味<br>
+            サブライマーです"
+  media:
+    - label: GitHub
+      url: https://github.com/TasukuNakano
+    - label: Qiita
+      url: http://qiita.com/TasukuNakano
+#------------------------------------------
+#- id: hszmtmhr
+#  name: hszmtmhr
+#  thumbnail: no-image.png
+#  profile: "2015卒内定者。<br>
+#            ボードゲームやマジック：ザ・ギャザリングでエンジニアの方々と仲良くなりたい。"

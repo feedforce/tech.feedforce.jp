@@ -1,0 +1,45 @@
+---
+title: #{author.name}
+---
+<% author_data = author_info(author.name) %>
+<article class="entry-archive">
+  <% if !author_data.empty? %>
+      <div class="page-member-archive">
+        <div class="page-member-image">
+          <%= image_tag "authors/#{author_data.thumbnail}", :class => 'avatar avatar-100 photo', :height => '100', :width => '100' %>
+        </div>
+        <div class="page-member-name">
+          <p><%= author_data.name %></p>
+        </div>
+        <div class="page-member-profile">
+          <p>
+            <%= author_data.profile %><br/>
+            <%= author_data.media.map { |media| link_to media['label'], media['url'] }.join(' | ').html_safe %>
+          </p>
+        </div>
+      </div>
+  <% else %>
+      <div class="page-member-archive">
+        <div class="page-member-image">
+          <%= image_tag 'authors/no-image.png', :class => 'avatar avatar-100 photo', :height => '100', :width => '100' %>
+        </div>
+        <div class="page-member-name">
+          <p><%= author.name %></p>
+        </div>
+      </div>
+  <% end %>
+  <h1 id="entry-archive-head"><%= author.name %>の記事一覧</h1>
+  <% page_articles.each do |article| %>
+      <article class="entry">
+        <div class="entry-date">
+          <h1><%= link_to article.title, article %></h1>
+          <ul>
+            <li class="entry-time"><%= article.date.strftime('%Y.%m.%e') %></li>
+            <li class="entry-cat"><%= article.tags.map { |tag| link_to "#{slug_to_japanese(tag)}", tag_path(tag) }.join(', ').html_safe %></li>
+            <li class="entry-author"><%= link_to article.data.authors, '/author/' + article.data.authors + '.html' %></li>
+          </ul>
+        </div>
+      </article>
+  <% end %>
+
+</article>

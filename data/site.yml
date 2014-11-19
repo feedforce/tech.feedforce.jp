@@ -1,0 +1,8 @@
+# Base Setting
+name: "feedforce Engineers' blog"
+url : "http://tech.feedforce.jp/"
+description: "株式会社フィードフォース技術チームのサイト。社内勉強会資料や開発の様子および成果の公開など。"
+author: "feedforce Inc."
+
+# OGP Setting
+og-image: "og_image.png"

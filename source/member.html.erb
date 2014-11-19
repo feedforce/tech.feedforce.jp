@@ -1,0 +1,38 @@
+---
+title: "編集者一覧"
+---
+
+<article class="entry-page">
+  <h1>編集者一覧</h1>
+
+  <ul class="page-member">
+    <% data.author.each do |authors| %>
+    <li>
+      <div class="page-member-image">
+        <%= image_tag "authors/#{authors['thumbnail']}", :class => 'avatar avatar-100 photo', :height => '100', :width => '100' %>
+      </div>
+      <div class="page-member-name">
+        <h2><%= authors['name'] %></h2>
+        <%= link_to '投稿記事', "/author/#{authors['id']}.html" %>
+      </div>
+      <div class="page-member-profile">
+        <p>
+          <%= authors['profile'] %><br/>
+          <%= authors['media'].map{|media| link_to media['label'], media['url']}.join(' | ').html_safe %>
+        </p>
+      </div>
+    </li>
+    <% end %>
+  </ul>
+  <!--/投稿者一覧を表示-->
+
+
+  <div class="page-member-links">
+    <h2>feedforce tech team <br>ソーシャルアカウント</h2>
+    <ul>
+      <li id="qiita"><a href="http://qiita.com/organizations/feedforce" target="_blank"><span>Qiita</span></a></li>
+      <li id="forkwell"><a href="https://forkwell.com/c/feedforce" target="_blank"><span>Forkwell</span></a></li>
+      <li id="github"><a href="https://github.com/feedforce" target="_blank"><span>GitHub</span></a></li>
+    </ul>
+  </div>
+  <!-- /entry-head --></article>

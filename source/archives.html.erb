@@ -1,0 +1,26 @@
+---
+title: "Archives"
+---
+
+<article class="entry-archive">
+  <h1 id="entry-archive-head">Archives</h1>
+  <div class="entry-archive-yearlist">
+    <%
+       article_list = page_articles.group_by do |articles|
+         articles.date.strftime('%Y')
+       end
+
+       article_list.each do |year, articles|
+    %>
+        <section>
+          <h2><%= year %></h2>
+          <% articles.each do |article, value| %>
+              <dl>
+                <dt><%= article.date.strftime('%m/%e') %></dt>
+                <dd><%= link_to article.title, article.url %></dd>
+              </dl>
+          <% end %>
+        </section>
+    <% end %>
+  </div>
+</article>

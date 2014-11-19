@@ -2,7 +2,7 @@
 title: Peeking Rails 4
 date: 2012-12-27 11:42:21
 authors: ozawa
-tags: rails, ruby, resume, 
+tags: ruby, resume,
 ---
 12月14日の社内勉強会では、2013年前半にリリースされる見込みのRuby on Railsバージョン4について、最新のコードを試す方法や目に付いた新機能を紹介してみました。
 

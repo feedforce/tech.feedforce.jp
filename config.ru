@@ -5,10 +5,10 @@ use Rack::Auth::Basic, "Restricted Area" do |username, password|
   [username, password] == [ENV["BASIC_AUTH_USERNAME"], ENV["BASIC_AUTH_PASSWORD"]]
 end
 
-# Serve static files under a `dist` directory:
-# - `/` will try to serve your `dist/index.html` file
-# - `/foo` will try to serve `dist/foo` or `dist/foo.html` in that order
-# - missing files will try to serve dist/404.html or a tiny default 404 page
+# Serve static files under a `build` directory:
+# - `/` will try to serve your `build/index.html` file
+# - `/foo` will try to serve `build/foo` or `build/foo.html` in that order
+# - missing files will try to serve build/404.html or a tiny default 404 page
 
 module Rack
   class TryStatic
@@ -33,11 +33,11 @@ module Rack
 end
 
 use Rack::Deflater
-use Rack::TryStatic, :root => "dist", :urls => %w[/], :try => ['.html', 'index.html', '/index.html']
+use Rack::TryStatic, :root => "build", :urls => %w[/], :try => ['.html', 'index.html', '/index.html']
 
 # Run your own Rack app here or use this one to serve 404 messages:
 run lambda{ |env|
-      not_found_page = File.expand_path("../dist/404.html", __FILE__)
+      not_found_page = File.expand_path("../build/404.html", __FILE__)
       if File.exist?(not_found_page)
         [ 404, { 'Content-Type'  => 'text/html'}, [File.read(not_found_page)] ]
       else

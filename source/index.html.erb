@@ -13,7 +13,15 @@ per_page: 6
         </ul>
       </div>
       <div class="entry-author-image">
-        <%= link_to article.data.authors, '/author/' + article.data.authors + '.html' %>
+        <%
+           author_data = author_info(article.data.authors)
+           if !author_data.blank?
+             author_thumbnail = author_data['thumbnail']
+           else
+             author_thumbnail = 'no-image.png'
+           end
+        %>
+        <%= link_to "#{image_tag "authors/#{author_thumbnail}"}", "/author/#{article.data.authors}.html" %>
       </div>
       <div class="entry-body">
         <%= article_excerpt(article.body) %>

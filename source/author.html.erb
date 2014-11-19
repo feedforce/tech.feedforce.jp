@@ -3,7 +3,7 @@ title: #{author.name}
 ---
 <% author_data = author_info(author.name) %>
 <article class="entry-archive">
-  <% if !author_data.empty? %>
+  <% if !author_data.blank? %>
       <div class="page-member-archive">
         <div class="page-member-image">
           <%= image_tag "authors/#{author_data.thumbnail}", :class => 'avatar avatar-100 photo', :height => '100', :width => '100' %>

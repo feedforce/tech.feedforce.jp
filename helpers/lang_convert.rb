@@ -16,7 +16,7 @@ class LangageConverter < Middleman::Extension
       return jp_text
     end
     def author_info(author_id)
-      author_data = []
+      author_data = ''
 
       data.author.each do |key, value|
         if author_id == key.id then

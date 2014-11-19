@@ -15,7 +15,15 @@
       </ul>
     </div>
     <div class="entry-author-image">
-      <a href="<?php bloginfo('url'); ?>/author/<?php the_author_meta( user_login, $userID ); ?>"><?php echo get_avatar(get_the_author_id()) ?></a>
+      <%
+         author_data = author_info(current_article.data.authors)
+         if !author_data.blank?
+           author_thumbnail = author_data['thumbnail']
+         else
+           author_thumbnail = 'no-image.png'
+         end
+      %>
+      <%= link_to "#{image_tag "authors/#{author_thumbnail}"}", "/author/#{current_article.data.authors}.html" %>
     </div>
     <div class="entry-body">
       <%= current_article.body %>

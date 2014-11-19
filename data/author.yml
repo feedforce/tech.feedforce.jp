@@ -54,6 +54,19 @@
     - label: Scratch
       url: http://scratch.mit.edu/users/kano-e/
 #------------------------------------------
+- id: kobayashi
+  name: kasei_san
+  thumbnail: kasei_san.jpg
+  profile: "社内ニンジャスレイヤー推進おじさん<br>
+            気が向いた時に、色々作ってます"
+  media:
+    - label: GitHub
+      url: https://github.com/kasei-san/
+    - label: Twitter
+      url: http://twitter.com/kasei_san
+    - label: Qiita
+      url: http://qiita.com/kasei-san
+#------------------------------------------
 - id: meihong
   name: meihong
   thumbnail: meihong.png

@@ -89,6 +89,8 @@ GEM
       tilt (~> 1.4.1)
     padrino-support (0.12.4)
       activesupport (>= 3.1)
+    puma (2.9.2)
+      rack (>= 1.1, < 2.0)
     rack (1.5.2)
     rack-test (0.6.2)
       rack (>= 1.0)
@@ -127,3 +129,4 @@ DEPENDENCIES
   middleman-blog (~> 3.5.3)
   middleman-blog-authors (~> 0.0.1)
   nokogiri (~> 1.6.4.1)
+  puma

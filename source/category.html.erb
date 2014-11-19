@@ -1,25 +1,18 @@
 ---
-pageable: true
-per_page: 12
+title: #{slug_to_japanese(tagname)}
 ---
-<h1>Articles tagged '<%= tagname %>'</h1>
-
-<% if paginate && num_pages > 1 %>
-  <p>Page <%= page_number %> of <%= num_pages %></p>
-
-  <% if prev_page %>
-    <p><%= link_to 'Previous page', prev_page %></p>
-  <% end %>
-<% end %>
-
-<ul>
+<article class="entry-archive">
+  <h1 id="entry-archive-head"><%= slug_to_japanese(tagname) %>の記事一覧</h1>
   <% page_articles.each_with_index do |article, i| %>
-    <li><%= link_to article.title, article %> <span><%= article.date.strftime('%b %e') %></span></li>
+      <article class="entry">
+        <div class="entry-date">
+          <h1><%= link_to article.title, article.url %></a></h1>
+          <ul>
+            <li class="entry-time"><%= article.date.strftime('%Y.%m.%e') %></li>
+            <li class="entry-cat"><%= article.tags.map { |tag| link_to "#{slug_to_japanese(tag)}", tag_path(tag) }.join(', ').html_safe %></li>
+            <li class="entry-author"><%= link_to article.data.authors, '/author/' + article.data.authors + '.html' %></li>
+          </ul>
+        </div>
+      </article>
   <% end %>
-</ul>
-
-<% if paginate %>
-  <% if next_page %>
-    <p><%= link_to 'Next page', next_page %></p>
-  <% end %>
-<% end %>
+</article>

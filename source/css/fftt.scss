@@ -1610,6 +1610,7 @@ ul.page-member {
     bottom: -70px;
     right: 55px;
     display: block;
+    -webkit-transform: translateZ(0);
     a {
       display: block;
       width: 50px;

@@ -1,10 +1,10 @@
-require 'helpers/lang_convert'
+require 'helpers/custom'
 
 ###
 # Blog settings
 ###
 
-# Time.zone = "UTC"
+Time.zone = "Tokyo"
 
 activate :blog do |blog|
   # This will add a prefix to all links, template references and source paths
@@ -29,6 +29,8 @@ activate :blog do |blog|
   blog.paginate = true
   # blog.per_page = 10
   blog.page_link = "page/{num}"
+
+  blog.new_article_template = 'templates/article.tt'
 end
 
 page "/feed.xml", layout: false
@@ -71,7 +73,7 @@ page "/feed.xml", layout: false
 # activate :automatic_image_sizes
 
 # Reload the browser automatically whenever files change
-# activate :livereload
+activate :livereload
 
 # Methods defined in the helpers block are available in templates
 # helpers do
@@ -110,8 +112,14 @@ configure :build do
   # set :http_prefix, "/Content/images/"
 end
 
-activate :lang_convert
+###
+# Custom Helper
+###
+activate :custom_helper
 
+###
+# Middleman Blog Authors
+###
 activate :authors do |authors|
   authors.author_path = 'author/:author.html'
   authors.author_template = 'author.html'
@@ -119,4 +127,7 @@ end
 
 ignore '/author.html'
 
+###
+# Bower Components Support
+###
 sprockets.append_path '../bower_components'

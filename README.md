@@ -45,3 +45,7 @@ $ bundle exec middleman article post-name
 
 create source/posts/YYYY-MM-DD-post-name.html.md
 ```
+
+## Added New Author
+
+Edit `data/author.yml`

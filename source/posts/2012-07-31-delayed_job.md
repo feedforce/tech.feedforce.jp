@@ -1,6 +1,6 @@
 ---
 title: Delayed_job についてちょっと詳しく
-date: 2012-07-31 10:14:49
+date: 2012-07-31 10:14 JST
 authors: ff_koshigoe
 tags: ruby, resume, 
 ---

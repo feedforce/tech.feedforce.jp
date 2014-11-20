@@ -1,6 +1,6 @@
 ---
 title: ホワイトボードを使ったタスク管理
-date: 2008-03-11 18:18:56
+date: 2008-03-11 18:18 JST
 authors: ff_koshigoe
 tags: dev_style, 
 ---

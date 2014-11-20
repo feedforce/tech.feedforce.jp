@@ -1,6 +1,6 @@
 ---
 title: memcached
-date: 2007-03-16 19:08:17
+date: 2007-03-16 19:08 JST
 authors: akahige
 tags: infrastructure, resume, 
 ---

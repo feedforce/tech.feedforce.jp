@@ -1,6 +1,6 @@
 ---
 title: 負荷分散講習会 Apache編
-date: 2007-08-27 14:23:02
+date: 2007-08-27 14:23 JST
 authors: akahige
 tags: infrastructure, resume, 
 ---

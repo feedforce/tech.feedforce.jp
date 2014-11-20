@@ -1,6 +1,6 @@
 ---
 title: 個人で使ってみた Docker とCoreOSとか
-date: 2014-07-17 15:42:23
+date: 2014-07-17 15:42 JST
 authors: hoshino
 tags: infrastructure, resume, 
 ---

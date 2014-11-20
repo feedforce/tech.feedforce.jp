@@ -1,10 +1,10 @@
 ---
 title: 開発合宿レポート＠伊東温泉
-date: 2007-11-01 19:44:51
+date: 2007-11-01 19:44 JST
 authors: fukunaga
 tags: resume, 
 ---
-<p><img src="/images/2007/11/itoh-onsen-2.jpg" alt="伊東温泉" /></p>
+<p><img src="http://tech.feedforce.jp/wp-content/uploads/2007/11/itoh-onsen-2.jpg" alt="伊東温泉" /></p>
 
 <p>10月28日から30日にかけて開発合宿に行ってきた<a href="http://blog.fkoji.com/" target="_blank">fukunaga</a>です。月・火お休みをもらって個人的に行ったわけですが、なぜかここにレポート書いてます。</p>
 
@@ -12,7 +12,7 @@ tags: resume,
 <!--more-->
 <p>メンバーは8月末まで弊社で技術チームのリーダーをしていたakahige氏とその知り合いN氏と私の3人。季節外れの直射日光にやられつつも、N氏の愛車で渋滞にはまることなく旅館へ到着しました。</p>
 
-<p><img src="/images/2007/11/itoh-onsen-1.jpg" alt="伊東温泉" /><p>
+<p><img src="http://tech.feedforce.jp/wp-content/uploads/2007/11/itoh-onsen-1.jpg" alt="伊東温泉" /><p>
 
 <p>↑ 10月末とは思えない天候とこの青空。<b>絶好の開発日和</b>ですねｗ</p>
 
@@ -20,7 +20,7 @@ tags: resume,
 
 <p>そんな感じで旅館に着くなり開発開始。</p>
 
-<p><img src="/images/2007/11/itoh-onsen-3.jpg" alt="開発合宿" /></p>
+<p><img src="http://tech.feedforce.jp/wp-content/uploads/2007/11/itoh-onsen-3.jpg" alt="開発合宿" /></p>
 
 <p>↑当然ながら全員デュアル・ディスプレイ。私はN氏から借りました。</p>
 
@@ -45,7 +45,7 @@ tags: resume,
 
 <p>これ以外の時間は開発、休憩、睡眠、風呂を適当に。</p>
 
-<p><img src="/images/2007/11/itoh-onsen-4.jpg" alt="山喜旅館の食事" /></p>
+<p><img src="http://tech.feedforce.jp/wp-content/uploads/2007/11/itoh-onsen-4.jpg" alt="山喜旅館の食事" /></p>
 
 <p>ということで、合宿の良かったことをいくつか。</p>
 

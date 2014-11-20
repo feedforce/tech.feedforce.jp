@@ -1,6 +1,6 @@
 ---
 title: Geo Tagging関連情報まとめ
-date: 2007-04-03 10:08:34
+date: 2007-04-03 10:08 JST
 authors: fukunaga
 tags: resume, 
 ---

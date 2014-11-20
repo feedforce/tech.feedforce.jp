@@ -1,6 +1,6 @@
 ---
 title: RailsのMigration
-date: 2006-07-21 14:53:17
+date: 2006-07-21 14:53 JST
 authors: akahige
 tags: ruby, resume, 
 ---

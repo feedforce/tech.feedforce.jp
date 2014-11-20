@@ -1,6 +1,6 @@
 ---
 title: サイバーサングラス製作記
-date: 2014-10-31 10:30:21
+date: 2014-10-31 10:30 JST
 authors: kobayashi
 tags: resume, 
 ---

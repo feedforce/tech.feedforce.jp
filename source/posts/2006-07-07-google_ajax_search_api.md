@@ -1,6 +1,6 @@
 ---
 title: Google AJAX Search API
-date: 2006-07-07 14:48:46
+date: 2006-07-07 14:48 JST
 authors: fukunaga
 tags: resume, 
 ---

@@ -1,6 +1,6 @@
 ---
 title: Vagrantを使って手軽にChefを始める
-date: 2014-03-27 10:43:17
+date: 2014-03-27 10:43 JST
 authors: sugiuchi
 tags: infrastructure, resume, 
 ---

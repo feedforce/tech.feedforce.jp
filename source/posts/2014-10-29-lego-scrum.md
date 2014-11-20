@@ -1,6 +1,6 @@
 ---
 title: 「LEGO(R)ではじめるスクラム入門」に参加してきました
-date: 2014-10-29 11:03:15
+date: 2014-10-29 11:03 JST
 authors: inoue
 tags: resume, dev_style, 
 ---
@@ -10,7 +10,7 @@ tags: resume, dev_style,
 
 <!--more-->
 
-<img src="/images/2014/10/lego.jpeg" alt="lego" class="alignnone size-full wp-image-1119" />
+<img src="http://tech.feedforce.jp/wp-content/uploads/2014/10/lego.jpeg" alt="lego" class="alignnone size-full wp-image-1119" />
 
 <h2>参加動機について</h2>
 
@@ -226,7 +226,7 @@ k. ソフトウェアカンバン
 そして、ここで決めた役割・属性になりきって、家族で新しい街に引っ越すと仮定し、引越し先の街に望む施設や建物を書く、という流れです。<br>
 私は、おもしろそうだったので「ペット」という役割になってみました...！</p>
 
-<img src="/images/2014/10/dog.jpeg" alt="dog" class="alignnone size-medium wp-image-1120" />
+<img src="http://tech.feedforce.jp/wp-content/uploads/2014/10/dog.jpeg" alt="dog" class="alignnone size-medium wp-image-1120" />
 
 <p>波乱の予感。</p>
 
@@ -237,7 +237,7 @@ k. ソフトウェアカンバン
 
 <p>やっぱり人は、<strong>絶対見積りよりも相対見積りの方がとくい</strong>なんですね〜。（って、アジャイルサムライにも書いてありましたしね！）</p>
 
-<img src="/images/2014/10/pref.jpeg" alt="pref" class="alignnone size-medium wp-image-1121" />
+<img src="http://tech.feedforce.jp/wp-content/uploads/2014/10/pref.jpeg" alt="pref" class="alignnone size-medium wp-image-1121" />
 
 <h3>3. レゴスクラム</h3>
 
@@ -272,7 +272,7 @@ k. ソフトウェアカンバン
 
 <p>ちなみに、レゴスクラムでは、「今まで座っていた席から相手チームの席に移動＝立場が変わる（顧客→開発）」、というルールになっています。つまり、席の移動後、目の前には相手の要求が広がっている、という状態になるわけです。</p>
 
-<img src="/images/2014/10/town.jpeg" alt="town" class="alignnone size-medium wp-image-1123" />
+<img src="http://tech.feedforce.jp/wp-content/uploads/2014/10/town.jpeg" alt="town" class="alignnone size-medium wp-image-1123" />
 
 <ul>
 <li>席を移動し、相手チームの要望をもとにソフトウェアカンバンを作成する
@@ -319,7 +319,7 @@ k. ソフトウェアカンバン
 </ul></li>
 </ul>
 
-<img src="/images/2014/10/kanban.jpeg" alt="kanban" class="alignnone size-medium wp-image-1122" />
+<img src="http://tech.feedforce.jp/wp-content/uploads/2014/10/kanban.jpeg" alt="kanban" class="alignnone size-medium wp-image-1122" />
 
 <ul>
 <li>街づくりを開始！7分間！</li>
@@ -399,11 +399,11 @@ k. ソフトウェアカンバン
 
 <p>冒頭でも記述しました通り、今回はエンジニアのリーダーである私が参加したのですが、このレゴスクラム、エンジニアはもちろんのこと、<strong>ディレクターさんにも是非体験してもらいたい</strong>な、と強く思いました。というのもやはり、スクラムチームは全ての役割が揃って始めて、「スクラムチーム」だからです。チーム内の一人でも多くの人が「スクラム」という開発手法に対する理解を深めることで、今よりもよりチーム一丸となってプロダクト開発のサイクルを回していけるようになれば、その結果としてより良いプロダクトを生み出して行けるようになれば、と思いました！</p>
 
-<img src="/images/2014/10/home.jpeg" alt="home" class="alignnone size-medium wp-image-1124" />
+<img src="http://tech.feedforce.jp/wp-content/uploads/2014/10/home.jpeg" alt="home" class="alignnone size-medium wp-image-1124" />
 
 <h2>おまけ</h2>
 
 <p>このレゴスクラムでは、「アンチ認定証」というのを発行してくれるらしいのですが（「<i>アジャイルに認定証はいらない。それは過去の証明でしかない。必要なのは将来につながる 改善マインド だ。 by Jim Coplien</i>」という考えに基づいて）、今回それを頂けないかをダメ元で聞いてみたところ、「<strong>持ってきてはいないのですが、ご希望でしたら後日郵送しますよ</strong>」とのことでした！(∩´∀｀)∩ﾜｰｲ<br>
 今後、皆さんもレゴスクラムに参加されたときは、聞いてみても良いかもしれません。笑</p>
 
-<img src="/images/2014/10/20141028_141152.jpg" alt="20141028_141152" class="alignnone size-medium wp-image-1125" />
+<img src="http://tech.feedforce.jp/wp-content/uploads/2014/10/20141028_141152.jpg" alt="20141028_141152" class="alignnone size-medium wp-image-1125" />

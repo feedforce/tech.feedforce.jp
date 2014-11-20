@@ -1,6 +1,6 @@
 ---
 title: Selenium RCの紹介
-date: 2007-02-02 18:32:51
+date: 2007-02-02 18:32 JST
 authors: ff_koshigoe
 tags: test, resume, 
 ---

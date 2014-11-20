@@ -1,6 +1,6 @@
 ---
 title: ShindigとPartuzaでOpenSocialガジェットのテスト環境を構築(その2)
-date: 2008-10-27 11:07:36
+date: 2008-10-27 11:07 JST
 authors: fukunaga
 tags: resume, 
 ---
@@ -66,7 +66,7 @@ Shindig が動く環境のホスト名を設定します。
 + 'gadget_server'    =&gt; 'http://dev.shindig.jp',</code></pre>
 ここまで設定できれば、PartuzaでOpenSocialガジェットが動くようになります。
 
-<img src="/images/2008/10/partuza-home.gif" alt="Partuza" />
+<img src="http://tech.feedforce.jp/wp-content/uploads/2008/10/partuza-home.gif" alt="Partuza" />
 
 ↑ テストで<a href="http://www.google.co.jp/ig/directory?hl=ja&amp;url=map.fkoji.com/kusayakyu/search.xml">このガジェット</a>を追加してみました。(※ このガジェットにOpenSocialの機能はありません。)
 <h2>まとめ</h2>

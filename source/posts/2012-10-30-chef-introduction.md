@@ -1,6 +1,6 @@
 ---
 title: はじめましてChef
-date: 2012-10-30 11:59:20
+date: 2012-10-30 11:59 JST
 authors: r-suzuki
 tags: infrastructure, resume, 
 ---

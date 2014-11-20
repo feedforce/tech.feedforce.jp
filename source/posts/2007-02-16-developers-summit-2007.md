@@ -1,6 +1,6 @@
 ---
 title: デブサミ2007
-date: 2007-02-16 18:58:15
+date: 2007-02-16 18:58 JST
 authors: fukunaga
 tags: resume, 
 ---

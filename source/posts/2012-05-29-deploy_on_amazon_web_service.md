@@ -1,6 +1,6 @@
 ---
 title: Amazon Web Service (AWS) でサービスをデプロイしてみた
-date: 2012-05-29 20:05:34
+date: 2012-05-29 20:05 JST
 authors: meihong
 tags: infrastructure, resume, operation, 
 ---
@@ -54,7 +54,7 @@ Amazon が提供している DNS サービス。一部ドメインをホスト�
 </ul>
 ネットワーク構成は、若干簡略化している箇所はありますが、大まかに以下のような感じです。
 
-<img src="/images/2012/05/fftt_network.png" alt="AWS構成" />
+<img src="http://tech.feedforce.jp/wp-content/uploads/2012/05/fftt_network.png" alt="AWS構成" />
 <h4>EC2 構成</h4>
 各 EC2 の OS は CentOS 6.2 としました。個人的には社内で Gentoo Linux を布教して回っているのですが、一向にユーザが増えない現状、EC2 の OS を Gentoo にすることはテロ行為に等しいと判断せざるを得ず、泣く泣く断念しました。CentOS を自前でインストールするのではなく、「えもにゅ」と同じく <a href="http://www.rightscale.com/" target="_blank">RightScale</a> 社の AMI (Amazon Machine Image) をベースにカスタマイズしています。
 
@@ -76,7 +76,7 @@ Amazon VPC で運用する場合、各 EC2 に SSH などでログインする�
 
 そこで、Elastic IP を振った EC2 インスタンスを NAT インスタンスとして用意し、Amazon VPC 側のサブネット設定で 0.0.0.0/0 向けの通信を NAT インスタンスに向けることで、全ての EC2 で外部にアクセスできるようになります。
 
-<img src="/images/2012/05/routing_to_nat_instance.png" alt="NATインスタンスへルーティング" />
+<img src="http://tech.feedforce.jp/wp-content/uploads/2012/05/routing_to_nat_instance.png" alt="NATインスタンスへルーティング" />
 <h4>ELB + Route 53</h4>
 ELB を独自のドメインで運用する場合、各 ELB に対して発行される FQDN をホストするドメインの CNAME として登録することで運用します。A レコードでは運用できないため、いわゆる Zone Apex と呼ばれる feedforce.jp といったサブドメインがない場合は bind などで運用できません。
 

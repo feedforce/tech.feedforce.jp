@@ -1,6 +1,6 @@
 ---
 title: Macアプリのパッケージ作成方法
-date: 2010-04-01 11:22:09
+date: 2010-04-01 11:22 JST
 authors: nakano
 tags: resume, 
 ---
@@ -25,7 +25,7 @@ MacOSXのアプリケーションはコピーしてインストールが済ん�
 
 <h2 align="justify"><font class="Apple-style-span" size="6"><span class="Apple-style-span" style="font-size: 19px">プロジェクト作成</span></font></h2>
 <p align="justify">まず、PackageMakerを開いてプロジェクトを作成します。</p>
-<p align="justify"><a href="/images/2010/03/100326-0001.png" title="100326-0001.png"><img src="/images/2010/03/100326-0001.thumbnail.png" alt="100326-0001.png" /></a></p>
+<p align="justify"><a href="http://tech.feedforce.jp/wp-content/uploads/2010/03/100326-0001.png" title="100326-0001.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2010/03/100326-0001.thumbnail.png" alt="100326-0001.png" /></a></p>
 <p align="justify">&nbsp;</p>
 
 <p align="justify">Organization : 逆DNS形式の組織名
@@ -38,7 +38,7 @@ Minimum Target : OSのバージョン
 <p align="justify">パッケージに含めるそれぞれの製品についての設定です。</p>
 
 <h3><a title="web" name="web"></a><span class="sanchor"> </span>Configuration</h3>
-<a href="/images/2010/03/100120-0002.png" title="100120-0002.png"><img src="/images/2010/03/100120-0002.thumbnail.png" alt="100120-0002.png" /></a>
+<a href="http://tech.feedforce.jp/wp-content/uploads/2010/03/100120-0002.png" title="100120-0002.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2010/03/100120-0002.thumbnail.png" alt="100120-0002.png" /></a>
 
 Insatll: インストールするファイル
 Destination: インストール先のファルダ
@@ -54,7 +54,7 @@ Require admin authentication: 管理者権限が必要
 <p align="justify">Allow custom location にチェックを入れるとユーザがインストール時にインストール先を指定できるようになります。</p>
 
 <h3><a title="web" name="web"></a><span class="sanchor"> </span>Contents</h3>
-<a href="/images/2010/03/100120-0003.png" title="100120-0003.png"><img src="/images/2010/03/100120-0003.thumbnail.png" alt="100120-0003.png" /></a>
+<a href="http://tech.feedforce.jp/wp-content/uploads/2010/03/100120-0003.png" title="100120-0003.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2010/03/100120-0003.thumbnail.png" alt="100120-0003.png" /></a>
 
 <p align="justify">Owner: ファイルのオーナー
 Group: ファイルのグループ
@@ -64,16 +64,16 @@ File Filters: パッケージに含めないファイルの指定
 File Filtersでは正規表現を用いてパッケージに入れたくないファイルやフォルダの指定ができます。
 デフォルトでは、.svnやCVSなどが指定されています。
 
-<a href="/images/2010/03/100326-0002.png" title="100326-0002.png"><img src="/images/2010/03/100326-0002.thumbnail.png" alt="100326-0002.png" /></a>
+<a href="http://tech.feedforce.jp/wp-content/uploads/2010/03/100326-0002.png" title="100326-0002.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2010/03/100326-0002.thumbnail.png" alt="100326-0002.png" /></a>
 <h3><a title="web" name="web"></a><span class="sanchor"> </span>Components</h3>
-<a href="/images/2010/03/100121-0001.png" title="100121-0001.png"><img src="/images/2010/03/100121-0001.thumbnail.png" alt="100121-0001.png" /></a>
+<a href="http://tech.feedforce.jp/wp-content/uploads/2010/03/100121-0001.png" title="100121-0001.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2010/03/100121-0001.thumbnail.png" alt="100121-0001.png" /></a>
 
 <p align="justify">Allow Relocation : インストール後に移動したコンポーネントを探すことを許可
 Allow Downgrade : ダウングレードを許可
 <p align="justify">ダウングレードの判断はConfigurationのPackage Versionで指定してある値から判断されます。</p>
 
 <h3><a title="web" name="web"></a><span class="sanchor"> </span>Scripts</h3>
-<a href="/images/2010/03/100121-0002.png" title="100121-0002.png"><img src="/images/2010/03/100121-0002.thumbnail.png" alt="100121-0002.png" /></a>
+<a href="http://tech.feedforce.jp/wp-content/uploads/2010/03/100121-0002.png" title="100121-0002.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2010/03/100121-0002.thumbnail.png" alt="100121-0002.png" /></a>
 
 scripts directory : 実行スクリプトがあるフォルダを指定する
 Preinstall : インストール前に実行するスクリプト
@@ -86,7 +86,7 @@ Postinstall : インストール後に実行するスクリプト
 <h2 align="justify"><font class="Apple-style-span" size="6"><span class="Apple-style-span" style="font-size: 19px">インストールパッケージの設定</span></font></h2>
 パッケージ全体に関する設定を行ないます。
 <h3><a title="web" name="web"></a><span class="sanchor"> </span>Configuration</h3>
-<a href="/images/2010/03/100121-0003.png" title="100121-0003.png"><img src="/images/2010/03/100121-0003.thumbnail.png" alt="100121-0003.png" /></a>
+<a href="http://tech.feedforce.jp/wp-content/uploads/2010/03/100121-0003.png" title="100121-0003.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2010/03/100121-0003.thumbnail.png" alt="100121-0003.png" /></a>
 
 Title : タイトル
 User Sees : インストールオプション
@@ -102,7 +102,7 @@ Description : 概要
 
 <h3><a title="web" name="web"></a><span class="sanchor"> </span>Requirements</h3>
 <p align="justify"> システムの条件を指定します。以下、ここで指定できるいくつかの例です。</p>
-<p align="justify"> <a href="/images/2010/03/100121-0004.png" title="100121-0004.png"><img src="/images/2010/03/100121-0004.thumbnail.png" alt="100121-0004.png" /></a></p>
+<p align="justify"> <a href="http://tech.feedforce.jp/wp-content/uploads/2010/03/100121-0004.png" title="100121-0004.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2010/03/100121-0004.thumbnail.png" alt="100121-0004.png" /></a></p>
 Megabytes Available on Target : 空きディスク容量
 Maximum CPU Frequency(Hz) : CPUのクロック周波数
 Number of CPUs  : CPUの数
@@ -112,7 +112,7 @@ Result of Script : 指定したスクリプトの実行結果
 Result of Scriptで指定できるように、自前のスクリプトの結果からインストールするかどうかを判断することもできます。
 <h3><a title="web" name="web"></a><span class="sanchor"> </span>Actions</h3>
 <p align="justify">インストール前とインストール後での動作を指定します。</p>
-<a href="/images/2010/03/100121-0005.png" title="100121-0005.png"><img src="/images/2010/03/100121-0005.thumbnail.png" alt="100121-0005.png" /></a>
+<a href="http://tech.feedforce.jp/wp-content/uploads/2010/03/100121-0005.png" title="100121-0005.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2010/03/100121-0005.thumbnail.png" alt="100121-0005.png" /></a>
 
 以下は設定できる項目の例です。
 
@@ -120,12 +120,12 @@ Show File in Finder : ファインダーで指定のパスを開く
 Open URL : ブラウザで指定のURLを開く
 Create Alias : エイリアスの作成
 
-<a href="/images/2010/03/100121-0006.png" title="100121-0006.png"><img src="/images/2010/03/100121-0006.thumbnail.png" alt="100121-0006.png" /></a>
+<a href="http://tech.feedforce.jp/wp-content/uploads/2010/03/100121-0006.png" title="100121-0006.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2010/03/100121-0006.thumbnail.png" alt="100121-0006.png" /></a>
 <h2 align="justify"><font class="Apple-style-span" size="6"><span class="Apple-style-span" style="font-size: 19px">選択項目の設定</span></font></h2>
 <p align="justify">インストール時にユーザが必要な製品のみインストールできるように選択項目についての設定を行います。</p>
 
 <h3><a title="web" name="web"></a><span class="sanchor"> </span>Configuration</h3>
-<a href="/images/2010/03/100121-0007.png" title="100121-0007.png"><img src="/images/2010/03/100121-0007.thumbnail.png" alt="100121-0007.png" /></a>
+<a href="http://tech.feedforce.jp/wp-content/uploads/2010/03/100121-0007.png" title="100121-0007.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2010/03/100121-0007.thumbnail.png" alt="100121-0007.png" /></a>
 
 Choice Name : 選択時の名前
 identifier : 選択識別子
@@ -142,7 +142,7 @@ Description : 説明
 選択パッケージの個別にシステム条件を設定します。
 条件項目については、パッケージ設定のActionsタブ中のものと同じです。
 
-<a href="/images/2010/03/100121-0008.png" title="100121-0008.png"><img src="/images/2010/03/100121-0008.thumbnail.png" alt="100121-0008.png" /></a>
+<a href="http://tech.feedforce.jp/wp-content/uploads/2010/03/100121-0008.png" title="100121-0008.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2010/03/100121-0008.thumbnail.png" alt="100121-0008.png" /></a>
 <p align="justify">ここではシステム条件を満たせなかった場合の選択項目の動きを指定できます。</p>
  Selected, Enabled, Hiddenのそれぞれに対して、
 - Yes : チェックを入れる
@@ -152,7 +152,7 @@ Description : 説明
 
 <h2 align="justify"><font class="Apple-style-span" size="6"><span class="Apple-style-span" style="font-size: 19px">インタフェースの編集</span></font></h2>
 <p style="text-align: justify">インストーラの起動後に表示される背景画像やライセンスの文言などをここで設定します。</p>
-<p style="text-align: justify"> <a href="/images/2010/03/100122-0001.png" title="100122-0001.png"><img src="/images/2010/03/100122-0001.thumbnail.png" alt="100122-0001.png" /></a></p>
+<p style="text-align: justify"> <a href="http://tech.feedforce.jp/wp-content/uploads/2010/03/100122-0001.png" title="100122-0001.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2010/03/100122-0001.thumbnail.png" alt="100122-0001.png" /></a></p>
 
 <p align="justify">background : 背景画像
 Introduction : 前書き

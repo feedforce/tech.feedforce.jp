@@ -1,6 +1,6 @@
 ---
 title: 貧者のためのCoreOS(Jenkinsを例に)
-date: 2014-11-17 10:25:45
+date: 2014-11-17 10:25 JST
 authors: hoshino
 tags: resume, 
 ---

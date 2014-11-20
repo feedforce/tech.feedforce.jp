@@ -1,6 +1,6 @@
 ---
 title: Anemoneによるクローラー入門
-date: 2014-11-10 10:33:59
+date: 2014-11-10 10:33 JST
 authors: t-nakano
 tags: ruby, resume, 
 ---
@@ -208,7 +208,7 @@ Crawl-delay: クロール間隔(単位はあやふや)</p>
 <p>最後に今回、クローラーを勉強するにあたって以下の本を参考にさせていただきました。<br>
 クローラーに関する基礎から応用まで網羅されていて、とても良書でした。<br>
 本記事を読んで、クローラーに興味を持っていただけたら、読んでみてください。<br>
-<a href="http://www.amazon.co.jp/dp/4797380357"><img src="/images/2014/11/9f581f9b7f4046c18983b6c479aa7c3f.jpeg"></a></p>
+<a href="http://www.amazon.co.jp/dp/4797380357"><img src="http://tech.feedforce.jp/wp-content/uploads/2014/11/9f581f9b7f4046c18983b6c479aa7c3f.jpeg"></a></p>
 
 <p>みなさん安全に楽しくクローリング生活を楽しんでいただけたらと思います！<br>
 以上です。ありがとうございました。</p>

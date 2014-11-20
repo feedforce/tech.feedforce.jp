@@ -1,6 +1,6 @@
 ---
 title: keepalived講習会
-date: 2007-08-13 16:34:53
+date: 2007-08-13 16:34 JST
 authors: akahige
 tags: infrastructure, resume, 
 ---

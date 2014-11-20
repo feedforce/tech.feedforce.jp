@@ -1,6 +1,6 @@
 ---
 title: ruby-gettext
-date: 2007-05-09 10:12:40
+date: 2007-05-09 10:12 JST
 authors: ozawa
 tags: ruby, resume, 
 ---

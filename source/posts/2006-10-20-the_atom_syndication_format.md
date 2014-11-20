@@ -1,6 +1,6 @@
 ---
 title: The Atom Syndication Format
-date: 2006-10-20 15:12:33
+date: 2006-10-20 15:12 JST
 authors: yanagi
 tags: resume, 
 ---

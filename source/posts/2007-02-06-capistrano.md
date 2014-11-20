@@ -1,6 +1,6 @@
 ---
 title: Capistrano
-date: 2007-02-06 22:35:33
+date: 2007-02-06 22:35 JST
 authors: akahige
 tags: ruby, resume, 
 ---

@@ -1,6 +1,6 @@
 ---
 title: Twitter の Streaming API について
-date: 2010-01-21 11:42:26
+date: 2010-01-21 11:42 JST
 authors: fukunaga
 tags: resume, 
 ---

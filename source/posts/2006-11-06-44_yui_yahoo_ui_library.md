@@ -1,6 +1,6 @@
 ---
 title: YUI (Yahoo! UI Library)
-date: 2006-11-06 15:47:51
+date: 2006-11-06 15:47 JST
 authors: akahige
 tags: resume, 
 ---

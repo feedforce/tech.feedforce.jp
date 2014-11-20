@@ -1,6 +1,6 @@
 ---
 title: 自由研究：フィード巡回ボットのHTTPリクエスト観察日記
-date: 2007-09-20 15:45:08
+date: 2007-09-20 15:45 JST
 authors: ff_koshigoe
 tags: resume, 
 ---

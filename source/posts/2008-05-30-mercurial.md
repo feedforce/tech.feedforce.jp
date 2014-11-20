@@ -1,6 +1,6 @@
 ---
 title: Mercurial はじめの一歩
-date: 2008-05-30 16:11:35
+date: 2008-05-30 16:11 JST
 authors: ozawa
 tags: resume, 
 ---

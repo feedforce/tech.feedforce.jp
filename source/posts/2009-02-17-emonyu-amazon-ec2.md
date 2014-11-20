@@ -1,6 +1,6 @@
 ---
 title: 「えもにゅ」がAmazon EC2で動くまで
-date: 2009-02-17 19:26:04
+date: 2009-02-17 19:26 JST
 authors: fukunaga
 tags: infrastructure, operation, 
 ---
@@ -28,7 +28,7 @@ tags: infrastructure, operation,
 <h3>えもにゅの構成</h3>
 えもにゅの構成は以下の図のようになっています。
 
-<img src="/images/2009/02/emonyu-amazon-ec2.gif" alt="えもにゅの構成" />
+<img src="http://tech.feedforce.jp/wp-content/uploads/2009/02/emonyu-amazon-ec2.gif" alt="えもにゅの構成" />
 
 EC2上にCentOSのインスタンスを起動、その上にPHP, Apache, MySQLなどをインストールしています。今のところインスタンスは1つです。画像やCSSといったスタティックなファイルは Amazon S3 に配備し、 static.emonyu.jp というサブドメインをCNAMEに割り当てています。
 

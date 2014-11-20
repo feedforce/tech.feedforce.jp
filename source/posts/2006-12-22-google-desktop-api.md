@@ -1,6 +1,6 @@
 ---
 title: Google Desktop API
-date: 2006-12-22 17:49:45
+date: 2006-12-22 17:49 JST
 authors: fukunaga
 tags: resume, 
 ---

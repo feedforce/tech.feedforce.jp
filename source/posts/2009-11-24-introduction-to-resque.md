@@ -1,6 +1,6 @@
 ---
 title: Resque 概要
-date: 2009-11-24 19:09:21
+date: 2009-11-24 19:09 JST
 authors: ff_koshigoe
 tags: resume, 
 ---

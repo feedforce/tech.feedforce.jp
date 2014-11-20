@@ -1,6 +1,6 @@
 ---
 title: feedforceで使っている開発ツールたち(Slackはじめました)
-date: 2014-10-24 15:19:49
+date: 2014-10-24 15:19 JST
 authors: r-suzuki
 tags: dev_style, 
 ---
@@ -27,7 +27,7 @@ tags: dev_style,
 
 <p>「ペアプロするときは相手のエディタを使ってみる」という穏和な関係を保っています。</p>
 
-<img src="/images/2014/10/IMG_2109-1024x768.jpg" alt="IMG_2109" width="1024" height="768" class="aligncenter size-large wp-image-1092" />
+<img src="http://tech.feedforce.jp/wp-content/uploads/2014/10/IMG_2109-1024x768.jpg" alt="IMG_2109" width="1024" height="768" class="aligncenter size-large wp-image-1092" />
 
 <h2>
 <span id="バージョン管理ci" class="fragment"></span><a href="#%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E7%AE%A1%E7%90%86ci"><i class="fa fa-link"></i></a>バージョン管理、CI</h2>
@@ -44,7 +44,7 @@ tags: dev_style,
 
 <p>Qiita:Teamでは日報による日々の情報共有に始まり、開発に関するノウハウや新サービスのアイディアなどが投稿されています。「自分用」を装いつつ有益な情報をシェアする「俺のメモ」タグが人気です。</p>
 
-<img src="/images/2014/10/qiita-team-1024x645.png" alt="qiita-team" width="1024" height="645" class="aligncenter size-large wp-image-1090" />
+<img src="http://tech.feedforce.jp/wp-content/uploads/2014/10/qiita-team-1024x645.png" alt="qiita-team" width="1024" height="645" class="aligncenter size-large wp-image-1090" />
 
 <p>チャットツールはHipChatを使っていましたが、未読管理や視認性のよさ(アイコン表示など)からSlackに今週乗り換えました。</p>
 

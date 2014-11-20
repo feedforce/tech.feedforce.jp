@@ -1,4 +1,4 @@
-class LangageConverter < Middleman::Extension
+class MyMiddlemanHelpers < Middleman::Extension
   def initialize(app, options_hash={}, &block)
     super
   end
@@ -38,4 +38,4 @@ class LangageConverter < Middleman::Extension
   end
 end
 
-::Middleman::Extensions.register(:lang_convert, LangageConverter)
+::Middleman::Extensions.register(:custom_helper, MyMiddlemanHelpers)

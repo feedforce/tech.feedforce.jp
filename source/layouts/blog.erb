@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <%= partial 'head' %>
-<body>
+<body class="single">
 <%= partial 'header' %>
 
 <div id="content">
@@ -28,6 +28,7 @@
     <div class="entry-body">
       <%= current_article.body %>
     </div>
+    <%= partial 'post_banner' %>
   </article>
 </div>
 

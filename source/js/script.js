@@ -21,7 +21,7 @@ FFBLOG.Common.Menu = {
 };
 
 FFBLOG.Common.PageTop = {
-  DURANTION: {
+  DURATION: {
     SHOW_HIDE: 200,
     PAGE_TOP: 500
   },
@@ -55,18 +55,18 @@ FFBLOG.Common.PageTop = {
 
       _self.$body.animate({
         scrollTop: 0
-      }, _self.DURANTION.PAGE_TOP, 'swing', _self.hidePageTopTarget());
+      }, _self.DURATION.PAGE_TOP, 'swing', _self.hidePageTopTarget());
     })
   },
   hidePageTopTarget: function () {
     this.$pageTopTarget.animate({
       bottom: '-70px'
-    }, this.DURANTION.SHOW_HIDE);
+    }, this.DURATION.SHOW_HIDE);
   },
   showPageTopTarget: function () {
     this.$pageTopTarget.animate({
       bottom: '30px'
-    }, this.DURANTION.SHOW_HIDE);
+    }, this.DURATION.SHOW_HIDE);
   }
 };
 

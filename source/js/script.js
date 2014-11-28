@@ -25,44 +25,57 @@ FFBLOG.Common.PageTop = {
     SHOW_HIDE: 200,
     PAGE_TOP: 500
   },
-  init : function() {
+  init: function () {
     this.setParameter();
     this.bindEvent();
   },
-  setParameter : function () {
+  setParameter: function () {
     this.$window = $(window);
-    this.$body   = $('html, body')
+    this.$body = $('html, body');
 
     this.$pageTopTarget = $('.pagetop');
   },
-  bindEvent : function() {
+  bindEvent: function () {
     var _self = this;
 
-    this.$window.on('scroll', function(){
+    this.$window.on('scroll', function () {
+      if (_self.$body.is(':animated') || _self.$pageTopTarget.is(':animated')) {
+        return;
+      }
+
       if ($(this).scrollTop() > 0) {
-        _self.$pageTopTarget.stop().animate({
-          bottom: '30px'
-        },_self.DURANTION.SHOW_HIDE);
+        _self.showPageTopTarget();
       } else {
-        _self.$pageTopTarget.stop().animate({
-          bottom: '-70px'
-        },_self.DURANTION.SHOW_HIDE);
+        _self.hidePageTopTarget();
       }
     });
 
-    this.$pageTopTarget.on('click', function(e) {
+    this.$pageTopTarget.on('click', function (e) {
       e.preventDefault();
-      _self.$body.animate({scrollTop: 0}, _self.DURANTION.PAGE_TOP);
+
+      _self.$body.animate({
+        scrollTop: 0
+      }, _self.DURANTION.PAGE_TOP, 'swing', _self.hidePageTopTarget());
     })
+  },
+  hidePageTopTarget: function () {
+    this.$pageTopTarget.animate({
+      bottom: '-70px'
+    }, this.DURANTION.SHOW_HIDE);
+  },
+  showPageTopTarget: function () {
+    this.$pageTopTarget.animate({
+      bottom: '30px'
+    }, this.DURANTION.SHOW_HIDE);
   }
 };
 
 FFBLOG.Common.PrettyCode = {
-  ADD_CLASS_NAME : 'prettyprint',
-  init : function() {
+  ADD_CLASS_NAME: 'prettyprint',
+  init: function () {
     this.bindEvent();
   },
-  bindEvent : function() {
+  bindEvent: function () {
     $('html, body').find('pre').addClass(this.ADD_CLASS_NAME);
     prettyPrint();
   }

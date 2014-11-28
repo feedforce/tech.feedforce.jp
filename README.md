@@ -16,7 +16,7 @@ $ gem install bundler
 npm install -g bower
 ```
 
-## Getting Start
+## Getting Started
 
 ```
 $ bower install
@@ -46,6 +46,6 @@ $ bundle exec middleman article post-name
 create source/posts/YYYY-MM-DD-post-name.html.md
 ```
 
-## Added New Author
+## Add a New Author
 
 Edit `data/author.yml`

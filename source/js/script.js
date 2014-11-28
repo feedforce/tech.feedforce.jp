@@ -3,18 +3,18 @@ FFBLOG.Common = {};
 
 FFBLOG.Common.Menu = {
   SET_CLASS_NAME: 'togmenu',
-  init : function() {
+  init: function () {
     this.setParameter();
     this.bindEvent();
   },
-  setParameter : function() {
+  setParameter: function () {
     this.$openTrigger = $('.menubtn');
     this.$menu = $('#menu');
   },
-  bindEvent : function() {
+  bindEvent: function () {
     var _self = this;
 
-    this.$openTrigger.on('click', function() {
+    this.$openTrigger.on('click', function () {
       _self.$openTrigger.toggleClass(SET_CLASS_NAME)
     })
   }

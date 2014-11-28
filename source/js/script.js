@@ -1,7 +1,7 @@
-var FFBLOG = FFBLOG || {};
-FFBLOG.Common = {};
+var FF_BLOG = FF_BLOG || {};
+FF_BLOG.Common = {};
 
-FFBLOG.Common.Menu = {
+FF_BLOG.Common.Menu = {
   SET_CLASS_NAME: 'togmenu',
   init: function () {
     this.setParameter();
@@ -15,12 +15,12 @@ FFBLOG.Common.Menu = {
     var _self = this;
 
     this.$openTrigger.on('click', function () {
-      _self.$openTrigger.toggleClass(SET_CLASS_NAME)
+      _self.$openTrigger.toggleClass(_self.SET_CLASS_NAME)
     })
   }
 };
 
-FFBLOG.Common.PageTop = {
+FF_BLOG.Common.PageTop = {
   DURATION: {
     SHOW_HIDE: 200,
     PAGE_TOP: 500
@@ -70,7 +70,7 @@ FFBLOG.Common.PageTop = {
   }
 };
 
-FFBLOG.Common.PrettyCode = {
+FF_BLOG.Common.PrettyCode = {
   ADD_CLASS_NAME: 'prettyprint',
   init: function () {
     this.bindEvent();
@@ -82,9 +82,9 @@ FFBLOG.Common.PrettyCode = {
 };
 
 $(function () {
-  FFBLOG.Common.Menu.init();
-  FFBLOG.Common.PageTop.init();
-  FFBLOG.Common.PrettyCode.init();
+  FF_BLOG.Common.Menu.init();
+  FF_BLOG.Common.PageTop.init();
+  FF_BLOG.Common.PrettyCode.init();
 });
 
 !function (d, i) {

@@ -4,7 +4,7 @@ date: 2014-10-17 15:42 JST
 authors: masutaka
 tags: infrastructure, test, 
 ---
-<a href="http://jenkins-ci.org/" target="_blank"><img src="http://tech.feedforce.jp/wp-content/uploads/2014/10/logo-title.png" alt="logo-title" width="796" height="256" class="alignnone size-full wp-image-1047" /></a>
+<a href="http://jenkins-ci.org/" target="_blank"><img src="/images/2014/10/logo-title.png" alt="logo-title" width="796" height="256" class="alignnone size-full wp-image-1047" /></a>
 
 <p>お久しぶりです。アジャイル推進おじさん改め、サーバCIおじさんの増田です。</p>
 <p>プライベートではベヨネッタ2をやっています。3rdクライマックスはクリアできそうです。最高難易度はたぶん無理です。</p>
@@ -69,7 +69,7 @@ tags: infrastructure, test,
 
 <h2>おまけ</h2>
 
-<p>サーバのCIも思うところがあって、少し前<a href="http://tech.feedforce.jp/author/sugiuchi">sugiuchi</a>、<a href="http://tech.feedforce.jp/author/r-suzuki">r-suzuki</a>とこんな話をしました。</p>
+<p>サーバのCIも思うところがあって、少し前<a href="/author/sugiuchi">sugiuchi</a>、<a href="/author/r-suzuki">r-suzuki</a>とこんな話をしました。</p>
 
 <p>「確かにサーバはテスト出来ているけど、site-cookbooks自体のテストはないから、本当に正しいレシピなのか分からないよね。でもchefspec書くの？辛くない？」等々</p>
 
@@ -84,7 +84,7 @@ tags: infrastructure, test,
   <li>JenkinsからGitHubへの通知は鉄板の<a href="https://wiki.jenkins-ci.org/display/JENKINS/GitHub+pull+request+builder+plugin" target="_blank">GitHub pull request builder plugin</a>です。</li>
 </ul>
 
-<a href="http://tech.feedforce.jp/wp-content/uploads/2014/10/jenkins-settings.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2014/10/jenkins-settings-s.png" alt="jenkins-settings-s" width="480" height="1643" class="alignnone size-full wp-image-1066" /></a>
+<a href="/images/2014/10/jenkins-settings.png"><img src="/images/2014/10/jenkins-settings-s.png" alt="jenkins-settings-s" width="480" height="1643" class="alignnone size-full wp-image-1066" /></a>
 
 <h3>Gemfile</h3>
 

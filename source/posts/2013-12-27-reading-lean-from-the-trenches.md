@@ -8,7 +8,7 @@ tags: dev_style,
 
 <!--more-->
 
-<img src="http://tech.feedforce.jp/wp-content/uploads/2013/12/IMG_0047-1024x575.jpg" alt="リーン開発の現場" width="1024" height="575" class="aligncenter size-large wp-image-573" />
+<img src="/images/2013/12/IMG_0047-1024x575.jpg" alt="リーン開発の現場" width="1024" height="575" class="aligncenter size-large wp-image-573" />
 
 <h2>開催までの経緯</h2>
 
@@ -41,7 +41,7 @@ tags: dev_style,
 <p>メンバーからは「ただ読むだけではなく意見交換することで理解が深まる」といった読書会についての感想や、「別チームでの朝会の進め方やタスクボードの使い方、意図を聞けて参考になった」という日々の開発と絡めたもの、「エンジニアだけでなくデザイナーやディレクターにも参加してほしい」といった意見まで寄せられました。<br />
 業務時間外なので任意参加としていますが、ほとんどのエンジニアが参加してくれているところも主催者としては喜ばしいことです。</p>
 
-<img src="http://tech.feedforce.jp/wp-content/uploads/2013/12/IMG_4554-3-1024x768.jpg" alt="発表の様子" width="1024" height="768" class="aligncenter size-large wp-image-558" title="発表の様子" />
+<img src="/images/2013/12/IMG_4554-3-1024x768.jpg" alt="発表の様子" width="1024" height="768" class="aligncenter size-large wp-image-558" title="発表の様子" />
 
 <h2>まとめ</h2>
 

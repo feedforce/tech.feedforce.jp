@@ -78,7 +78,7 @@ Anemoneは現在開発が止まっていますが、クローラーの機能と�
 <p>実行する際にはターミナルで<br>
 <code>$ ruby anemone.rb http://tech.feedforce.jp/</code><br>
 とすると、このリンク先にから辿れるリンク一覧と、更にその一覧からたどった先のリンク一覧を表示することができます。<br>
-「<a href="http://tech.feedforce.jp/">http://tech.feedforce.jp/</a> 」以外から取得したい場合はURLを変えると違うページからでもリンク一覧を取得できると思います。<br>
+「<a href="/">http://tech.feedforce.jp/</a> 」以外から取得したい場合はURLを変えると違うページからでもリンク一覧を取得できると思います。<br>
 ただ、リンクが多いサイトでは実行に時間がかかってしまいますので、注意するようにしてください。</p>
 
 <h3>
@@ -91,9 +91,9 @@ Anemoneは現在開発が止まっていますが、クローラーの機能と�
 対象はフィードフォースのブログで、以下の記事としました。</p>
 
 <ul>
-<li><a href="http://tech.feedforce.jp/lego-scrum.html">「LEGO(R)ではじめるスクラム入門」に参加してきました</a></li>
-<li><a href="http://tech.feedforce.jp/summer_intern2014.html">フィードフォースで初めてエンジニア向けサマーインターンをやってみた</a></li>
-<li><a href="http://tech.feedforce.jp/agile_whiteboards.html">アジャイル開発で便利だったホワイトボードなどまとめ</a></li>
+<li><a href="/lego-scrum.html">「LEGO(R)ではじめるスクラム入門」に参加してきました</a></li>
+<li><a href="/summer_intern2014.html">フィードフォースで初めてエンジニア向けサマーインターンをやってみた</a></li>
+<li><a href="/agile_whiteboards.html">アジャイル開発で便利だったホワイトボードなどまとめ</a></li>
 </ul>
 
 <div class="code-frame" data-lang="rb"><div class="highlight"><pre><span class="c1"># anemone2.rb</span>
@@ -129,7 +129,7 @@ Webページを指定して取得できたらあとは、anemone.rbと同様に<
 XPathはHTMLをXML文書として、階層構造で特定部分を示すための構文です。<br>
 XPathを使わずに正規表現を使って情報を抜き出すことも可能ですが、かなり手間がかかるためXPathを使うことをおすすめします。<br>
 記法としてはHTMLを木構造としてみて、探し当てたいノードに一番近いルートのタグからたどって表記します。<br>
-例えば、<a href="http://tech.feedforce.jp/summer_intern2014.html">ここ</a>のタイトルである「フィードフォースで初めてサマーインターンをやってみた」のXPathは<code>//*[@id="content"]/article/div[1]/h1</code>となります。</p>
+例えば、<a href="/summer_intern2014.html">ここ</a>のタイトルである「フィードフォースで初めてサマーインターンをやってみた」のXPathは<code>//*[@id="content"]/article/div[1]/h1</code>となります。</p>
 
 <p>XPathの取得方法は文章で書くよりもスライドの方がわかりやすいと思うので、スライドの35ページ辺りを参考にしてみてください。</p>
 
@@ -208,7 +208,7 @@ Crawl-delay: クロール間隔(単位はあやふや)</p>
 <p>最後に今回、クローラーを勉強するにあたって以下の本を参考にさせていただきました。<br>
 クローラーに関する基礎から応用まで網羅されていて、とても良書でした。<br>
 本記事を読んで、クローラーに興味を持っていただけたら、読んでみてください。<br>
-<a href="http://www.amazon.co.jp/dp/4797380357"><img src="http://tech.feedforce.jp/wp-content/uploads/2014/11/9f581f9b7f4046c18983b6c479aa7c3f.jpeg"></a></p>
+<a href="http://www.amazon.co.jp/dp/4797380357"><img src="/images/2014/11/9f581f9b7f4046c18983b6c479aa7c3f.jpeg"></a></p>
 
 <p>みなさん安全に楽しくクローリング生活を楽しんでいただけたらと思います！<br>
 以上です。ありがとうございました。</p>

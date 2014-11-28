@@ -23,7 +23,7 @@ CentOS7ではsystemdがデフォルトで動いており、弊社ではCentOSを
 <h2>
 補足
 </h2><p>あと、スライドの補足として、今回デモで動かしたCoreOSの起動〜Jenkinsコンテナ起動までのスクリプトのリンクを貼っておきます。</p>
-<p><ol type="1"><li><a href="https://gist.github.com/hoshinotsuyoshi/627362efc554e2fd9a5f" title="" target="_blank">起動スクリプト例</a></li>
+<p><ol><li><a href="https://gist.github.com/hoshinotsuyoshi/627362efc554e2fd9a5f" title="" target="_blank">起動スクリプト例</a></li>
 <li><a href="http://young-dawn-7740.herokuapp.com/script.txt" title="" target="_blank">ipxe script例</a></li>
 <li><a href="https://gist.githubusercontent.com/hoshinotsuyoshi/4421f1d7754db9629903/raw/7b005f4e8438434f48b7f03b50946c9c6731c0a1/test-config.config" title="" target="_blank">cloud-config例</a></li></ol></p>
 <p>ipxeやcloud-configのスクリプトは、CoreOSの公式ページに書いてあることを参考にしたのですが、<br>
@@ -33,7 +33,7 @@ CentOS7の影響で、systemdやDockerが使われるようになれば、もっ
 <h2>
 弊社のインフラ開発
 </h2><p>さて、弊社のインフラ開発では<code>Vagrant</code>+<code>Chef</code>+<code>Serverspec</code>での開発がメインで行われています
-(現在インフラのCIも検討中です)。<br>chefについては<a href="http://tech.feedforce.jp/?s=chef" title="" target="_blank">他のエントリ</a>をご覧いただければと思います!</p>
+(現在インフラのCIも検討中です)。<br>chefについては<a href="/?s=chef" title="" target="_blank">他のエントリ</a>をご覧いただければと思います!</p>
 <p>ちなみに私を含めアプリケーションエンジニアも、chefリポジトリのレビューをしたり、PRを投げたりしています。<br>
 そういったことができるのが今の小さなチームの利点だと思っております!</p>
 <p>関係ないですが、7/11当日は台風一過の日で後楽園にめでたく虹が出ました、良い思い出です(みんなそっち見てた)</p>

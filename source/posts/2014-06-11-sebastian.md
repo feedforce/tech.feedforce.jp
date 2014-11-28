@@ -5,7 +5,7 @@ authors: e-takano
 tags: ruby, 
 ---
 こんにちは、 kano-e です。
-HipChatで好きな emoticon は <img src="http://tech.feedforce.jp/wp-content/uploads/2014/06/429bf35a-97ae-e2ee-f374-f9364cbc885f.png" alt="(ghost)" title="(ghost)" width="24" height="24" class="alignnone size-full wp-image-864" /> です。
+HipChatで好きな emoticon は <img src="/images/2014/06/429bf35a-97ae-e2ee-f374-f9364cbc885f.png" alt="(ghost)" title="(ghost)" width="24" height="24" class="alignnone size-full wp-image-864" /> です。
 
 今日は <strong>HipChat API</strong> と HipChat API を使った <strong>執事のセバスチャン</strong> についてお話したいと思います。
 
@@ -18,28 +18,28 @@ HipChatで好きな emoticon は <img src="http://tech.feedforce.jp/wp-content/u
 弊社フィードフォースは後楽園駅徒歩五分、窓を開ければ東京ドームシティのジェットコースターの歓声と絶叫。
 便利で素敵なロケーションなのですが、東京ドームでコンサートや野球の試合がある日には混雑に巻き込まれる悲劇も多々。
 
-[caption id="attachment_887" width="760"] <img src="http://tech.feedforce.jp/wp-content/uploads/2014/06/crowd.jpg" alt="" width="760" height="430" class="size-full wp-image-887" /> 「あれ、今日何かイベントやってるんだっけ？ うわ、お店どこも混んでる……」※ 写真はイメージです[/caption]
+[caption id="attachment_887" width="760"] <img src="/images/2014/06/crowd.jpg" alt="" width="760" height="430" class="size-full wp-image-887" /> 「あれ、今日何かイベントやってるんだっけ？ うわ、お店どこも混んでる……」※ 写真はイメージです[/caption]
 
 そんな悲劇を防ぐのが、セバスチャンの仕事のひとつです。
 
 <a href="http://www.tokyo-dome.co.jp/dome/schedule/">東京ドーム</a>や<a href="http://www.meetsport.jp/hall">東京ドームシティホール</a>でイベントのある日には、
 
-<img src="http://tech.feedforce.jp/wp-content/uploads/2014/06/790332da-ed51-9dcf-765b-e53e76e4cc15.png" alt="東京ドームでは 18:00 より 【巨人戦】巨人　ー　横浜DeNA 開催でございます。お帰りのお時間にはお気をつけ下さい。" width="676" height="56" class="aligncenter size-full wp-image-866" />
+<img src="/images/2014/06/790332da-ed51-9dcf-765b-e53e76e4cc15.png" alt="東京ドームでは 18:00 より 【巨人戦】巨人　ー　横浜DeNA 開催でございます。お帰りのお時間にはお気をつけ下さい。" width="676" height="56" class="aligncenter size-full wp-image-866" />
 
 このようにセバスチャンがお知らせをしてくれます。
 
 ほかには、
 MTG の時間になったら教えてくれたり、
 
-<img src="http://tech.feedforce.jp/wp-content/uploads/2014/06/bc58e64b-6a0e-8001-46e2-4f402f20fec2.png" alt="まもなくのご予定がございます。18:00より 新人さんふりかえり 以上でございます。" width="677" height="93" class="aligncenter size-full wp-image-870" />
+<img src="/images/2014/06/bc58e64b-6a0e-8001-46e2-4f402f20fec2.png" alt="まもなくのご予定がございます。18:00より 新人さんふりかえり 以上でございます。" width="677" height="93" class="aligncenter size-full wp-image-870" />
 
 業務終了の時間を教えてくれたり、
 
-<img src="http://tech.feedforce.jp/wp-content/uploads/2014/06/ed4d7922-4b19-054a-19d2-c09a40fa7298.png" alt="まもなく業務終了のお時間でございますが、お仕事のおかげんはいかがでしょうか。戸締まり用の鍵はご準備よろしゅうございますか？" width="669" height="80" class="aligncenter size-full wp-image-871" />
+<img src="/images/2014/06/ed4d7922-4b19-054a-19d2-c09a40fa7298.png" alt="まもなく業務終了のお時間でございますが、お仕事のおかげんはいかがでしょうか。戸締まり用の鍵はご準備よろしゅうございますか？" width="669" height="80" class="aligncenter size-full wp-image-871" />
 
 朝には1日のスケジュールを読み上げてくれたりなど、
 
-<img src="http://tech.feedforce.jp/wp-content/uploads/2014/06/8dc2c5ad-2a9c-857e-312d-0a6010f2c59b.png" alt="おはようございます。5月9日金曜日でございます。本日のご予定をお知らせいたします。 10:30 より CF朝会" width="668" height="138" class="aligncenter size-full wp-image-869" />
+<img src="/images/2014/06/8dc2c5ad-2a9c-857e-312d-0a6010f2c59b.png" alt="おはようございます。5月9日金曜日でございます。本日のご予定をお知らせいたします。 10:30 より CF朝会" width="668" height="138" class="aligncenter size-full wp-image-869" />
 
 HipChat 上でいくつかの仕事をこなしています。
 
@@ -61,7 +61,7 @@ room.send(
 
 これだけのコードで、
 
-<img src="http://tech.feedforce.jp/wp-content/uploads/2014/06/2888d8ec-1dd8-c0c0-17ce-c2f934f28908.png" alt="おはようございます。5月9日金曜日でございます。" width="670" height="37" class="aligncenter size-full wp-image-873" />
+<img src="/images/2014/06/2888d8ec-1dd8-c0c0-17ce-c2f934f28908.png" alt="おはようございます。5月9日金曜日でございます。" width="670" height="37" class="aligncenter size-full wp-image-873" />
 
 こんなふうに、投稿できてしまいます。
 
@@ -192,7 +192,7 @@ API から emoticon を使いたい場合は <b>message_format</b> パラメー�
 長い URL を共有したい、といった場合は <b>html</b> フォーマットにするなど、用途によって使い分けができます。
 セバスチャンが <b>text</b> フォーマットを使っているのは emoticon を使いたかったからです。
 
-<img src="http://tech.feedforce.jp/wp-content/uploads/2014/06/2b2937eb-3312-748b-6424-6bef6c0292b3.png" alt="(ff) 16:00より 制作MTG" width="667" height="60" class="aligncenter size-full wp-image-874" />
+<img src="/images/2014/06/2b2937eb-3312-748b-6424-6bef6c0292b3.png" alt="(ff) 16:00より 制作MTG" width="667" height="60" class="aligncenter size-full wp-image-874" />
 
 HipChat はオリジナルの emoticon が登録できるので、自社ロゴなどを登録して使っています。
 
@@ -203,5 +203,5 @@ HipChat はオリジナルの emoticon が登録できるので、自社ロゴ�
 家の子自慢のような「こんな bot 作ったよ」とかの話が好きなので、もっと bot 紹介記事増えろー、と念じながら書きました。
 みなさんの bot 紹介を待っています！
 
-<img src="http://tech.feedforce.jp/wp-content/uploads/2014/06/82b5335c-6a8d-cf5f-ad7a-338340d5f78f.png" alt="皆様、本日の業務時間は終了でございます。本日もお疲れ様でございました。" width="667" height="61" class="aligncenter size-full wp-image-875" />
+<img src="/images/2014/06/82b5335c-6a8d-cf5f-ad7a-338340d5f78f.png" alt="皆様、本日の業務時間は終了でございます。本日もお疲れ様でございました。" width="667" height="61" class="aligncenter size-full wp-image-875" />
 

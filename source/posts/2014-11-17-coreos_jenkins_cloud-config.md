@@ -10,7 +10,7 @@ CoreOS大好きおじさん星野です。
 
 社内勉強会で、また懲りずにCoreOSの話をしました。
 
-(<a href="http://tech.feedforce.jp/docker_coreos.html">前回</a>はDockerfileの書き方を話しました)
+(<a href="/docker_coreos.html">前回</a>はDockerfileの書き方を話しました)
 
 <!--more-->
 
@@ -61,7 +61,7 @@ etcdとかを使うのも良いと思いますが、今回はサーバー1台だ
 個別の設定はcloud-configの"write-files"でファイルを生成し、docker buildで注入するのが良いと思います。
 
 具体的には今回は、Jenkinsのが立ち上がった時点でカスタムジョブ(個別の設定)がセットされている状態になって欲しかったので
-<ol type="1">
+<ol>
 <li>cloud-configの"write-files:"で、Jenkinsのカスタムジョブを記述したconfig.xml を生成</li>
 <li>子imageを docker build</li>
 </ol>

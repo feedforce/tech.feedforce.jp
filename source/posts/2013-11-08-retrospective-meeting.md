@@ -10,7 +10,7 @@ tags: dev_style,
 
 <!--more-->
 
-<a href="http://tech.feedforce.jp/wp-content/uploads/2013/11/tech.jpg"><img src="http://tech.feedforce.jp/wp-content/uploads/2013/11/tech.jpg" alt="KPT" width="960" height="639" class="aligncenter size-full wp-image-409" /></a>
+<a href="/images/2013/11/tech.jpg"><img src="/images/2013/11/tech.jpg" alt="KPT" width="960" height="639" class="aligncenter size-full wp-image-409" /></a>
 
 <p>feedforceでは新しく入社したエンジニアを対象に1ヶ月間毎日ふりかえりを行っています。</p>
 

@@ -78,7 +78,7 @@ $ svn co http://svn.apache.org/repos/asf/incubator/shindig/trunk/ .</code></pre>
 
 <pre><code>http://dev.shindig.jp/gadgets/ifr?url=[ガジェットのXMLファイルのURL]</code></pre>
 
-<p><img src='http://tech.feedforce.jp/wp-content/uploads/2008/09/shindig-example.gif' alt='shindig-example.gif' /></p>
+<p><img src='/images/2008/09/shindig-example.gif' alt='shindig-example.gif' /></p>
 
 <p>↑ ドキュメントに<a href="http://www.labpixies.com/campaigns/todo/todo.xml">サンプルとして記載されているガジェット</a>を実行したところ。</p>
 

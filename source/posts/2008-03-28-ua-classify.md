@@ -12,11 +12,11 @@ tags: resume,
 
 <p>今回はこの「フィードの購読者数」について、少しお話をしたいと思います。</p>
 <!--more-->
-<p><img src='http://tech.feedforce.jp/wp-content/uploads/2008/03/rsssuite-graph.gif' alt='rsssuite-graph.gif' /></p>
+<p><img src='/images/2008/03/rsssuite-graph.gif' alt='rsssuite-graph.gif' /></p>
 
 <p>↑ このような時系列のグラフで購読者数とクリック数を表示しています。</p>
 
-<p><img src='http://tech.feedforce.jp/wp-content/uploads/2008/03/rsssuite-ua-graph.gif' alt='rsssuite-ua-graph.gif' /></p>
+<p><img src='/images/2008/03/rsssuite-ua-graph.gif' alt='rsssuite-ua-graph.gif' /></p>
 
 <p>↑ 購読者数はユーザーエージェント別にもレポートされます。</p>
 

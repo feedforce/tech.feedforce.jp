@@ -142,7 +142,7 @@ config.vm.provision ... の下あたりに下記を追記します。
 次の一歩となるとknife-soloを使いリモートサーバにレシピを適用するのが良いでしょう。
 
 また、少し前になりますが弊社blogでも概要の部分に触れた記事がありますので参考にしてください。
-<a href="http://tech.feedforce.jp/chef-introduction.html" title="はじめましてChef" target="_blank">はじめましてChef</a>
+<a href="/chef-introduction.html" title="はじめましてChef" target="_blank">はじめましてChef</a>
 
 <h2> 今回使ったVagrantfileとrecipe </h2>
 

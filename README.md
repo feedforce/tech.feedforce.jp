@@ -1,6 +1,6 @@
 # FeedForce Middleman Blog
 
-## Require
+## Requirement
 
 - Ruby
 - bundler

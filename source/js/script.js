@@ -1,77 +1,90 @@
-var FFBLOG = FFBLOG || {};
-FFBLOG.Common = {};
+var FF_BLOG = FF_BLOG || {};
+FF_BLOG.Common = {};
 
-FFBLOG.Common.Menu = {
+FF_BLOG.Common.Menu = {
   SET_CLASS_NAME: 'togmenu',
-  init : function() {
+  init: function () {
     this.setParameter();
     this.bindEvent();
   },
-  setParameter : function() {
+  setParameter: function () {
     this.$openTrigger = $('.menubtn');
     this.$menu = $('#menu');
   },
-  bindEvent : function() {
+  bindEvent: function () {
     var _self = this;
 
-    this.$openTrigger.on('click', function() {
-      _self.$openTrigger.toggleClass(SET_CLASS_NAME)
+    this.$openTrigger.on('click', function () {
+      _self.$openTrigger.toggleClass(_self.SET_CLASS_NAME)
     })
   }
 };
 
-FFBLOG.Common.PageTop = {
-  DURANTION: {
+FF_BLOG.Common.PageTop = {
+  DURATION: {
     SHOW_HIDE: 200,
     PAGE_TOP: 500
   },
-  init : function() {
+  init: function () {
     this.setParameter();
     this.bindEvent();
   },
-  setParameter : function () {
+  setParameter: function () {
     this.$window = $(window);
-    this.$body   = $('html, body')
+    this.$body = $('html, body');
 
     this.$pageTopTarget = $('.pagetop');
   },
-  bindEvent : function() {
+  bindEvent: function () {
     var _self = this;
 
-    this.$window.on('scroll', function(){
+    this.$window.on('scroll', function () {
+      if (_self.$body.is(':animated') || _self.$pageTopTarget.is(':animated')) {
+        return;
+      }
+
       if ($(this).scrollTop() > 0) {
-        _self.$pageTopTarget.stop().animate({
-          bottom: '30px'
-        },_self.DURANTION.SHOW_HIDE);
+        _self.showPageTopTarget();
       } else {
-        _self.$pageTopTarget.stop().animate({
-          bottom: '-70px'
-        },_self.DURANTION.SHOW_HIDE);
+        _self.hidePageTopTarget();
       }
     });
 
-    this.$pageTopTarget.on('click', function(e) {
+    this.$pageTopTarget.on('click', function (e) {
       e.preventDefault();
-      _self.$body.animate({scrollTop: 0}, _self.DURANTION.PAGE_TOP);
+
+      _self.$body.animate({
+        scrollTop: 0
+      }, _self.DURATION.PAGE_TOP, 'swing', _self.hidePageTopTarget());
     })
+  },
+  hidePageTopTarget: function () {
+    this.$pageTopTarget.animate({
+      bottom: '-70px'
+    }, this.DURATION.SHOW_HIDE);
+  },
+  showPageTopTarget: function () {
+    this.$pageTopTarget.animate({
+      bottom: '30px'
+    }, this.DURATION.SHOW_HIDE);
   }
 };
 
-FFBLOG.Common.PrettyCode = {
-  ADD_CLASS_NAME : 'prettyprint',
-  init : function() {
+FF_BLOG.Common.PrettyCode = {
+  ADD_CLASS_NAME: 'prettyprint',
+  init: function () {
     this.bindEvent();
   },
-  bindEvent : function() {
+  bindEvent: function () {
     $('html, body').find('pre').addClass(this.ADD_CLASS_NAME);
     prettyPrint();
   }
 };
 
 $(function () {
-  FFBLOG.Common.Menu.init();
-  FFBLOG.Common.PageTop.init();
-  FFBLOG.Common.PrettyCode.init();
+  FF_BLOG.Common.Menu.init();
+  FF_BLOG.Common.PageTop.init();
+  FF_BLOG.Common.PrettyCode.init();
 });
 
 !function (d, i) {

@@ -4,7 +4,7 @@ date: 2007-08-27 14:23 JST
 authors: akahige
 tags: infrastructure, resume, 
 ---
-
+  
   <div class="day">
   <h2><span class="date"><a name="l0"> </a></span><span class="title">ゴール</span></h2>
   <div class="body">

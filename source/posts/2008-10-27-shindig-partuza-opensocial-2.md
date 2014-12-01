@@ -6,7 +6,7 @@ tags: resume,
 ---
 前回はOpenSocialガジェットのホスティング環境を構築できる <a href="http://incubator.apache.org/shindig/">Shindig</a> について説明しました。
 
-» <a href="http://tech.feedforce.jp/shindig-partuza-opensocial-1.html">FFTT : ShindigとPartuzaでOpenSocialガジェットのテスト環境を構築(その1)</a>
+» <a href="/shindig-partuza-opensocial-1.html">FFTT : ShindigとPartuzaでOpenSocialガジェットのテスト環境を構築(その1)</a>
 
 今回は、その Shindig を利用して OpenSocial 機能を実装している <a href="http://www.partuza.nl/">Partuza</a> を紹介します。
 <!--more-->
@@ -66,10 +66,10 @@ Shindig が動く環境のホスト名を設定します。
 + 'gadget_server'    =&gt; 'http://dev.shindig.jp',</code></pre>
 ここまで設定できれば、PartuzaでOpenSocialガジェットが動くようになります。
 
-<img src="http://tech.feedforce.jp/wp-content/uploads/2008/10/partuza-home.gif" alt="Partuza" />
+<img src="/images/2008/10/partuza-home.gif" alt="Partuza" />
 
 ↑ テストで<a href="http://www.google.co.jp/ig/directory?hl=ja&amp;url=map.fkoji.com/kusayakyu/search.xml">このガジェット</a>を追加してみました。(※ このガジェットにOpenSocialの機能はありません。)
 <h2>まとめ</h2>
 このように、 Shindig と Partuza を利用すると、OpenSocial対応のガジェットおよびSNSの開発環境を簡単に構築することができます。興味のある方はぜひ利用してみてください。
 
-» <a href="http://tech.feedforce.jp/shindig-partuza-opensocial-1.html">FFTT : ShindigとPartuzaでOpenSocialガジェットのテスト環境を構築(その1)</a>
+» <a href="/shindig-partuza-opensocial-1.html">FFTT : ShindigとPartuzaでOpenSocialガジェットのテスト環境を構築(その1)</a>

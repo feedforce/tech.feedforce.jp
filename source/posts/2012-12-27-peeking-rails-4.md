@@ -2,7 +2,7 @@
 title: Peeking Rails 4
 date: 2012-12-27 11:42 JST
 authors: ozawa
-tags: rails, ruby, resume, 
+tags: ruby, resume,
 ---
 12月14日の社内勉強会では、2013年前半にリリースされる見込みのRuby on Railsバージョン4について、最新のコードを試す方法や目に付いた新機能を紹介してみました。
 
@@ -134,7 +134,7 @@ gem 'turbolinks'</code></pre>
 
 ブラウザで http://localhost:3000/ にアクセスするとおなじみのウェルカムページが表示されます。
 
-<a href="http://tech.feedforce.jp/wp-content/uploads/2012/12/rails4-welcome.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2012/12/rails4-welcome-150x150.png" alt="Rails 3までと一見変わるところのないRails 4 Welcomeページ" title="Rails 4 Welcomeページ" width="150" height="150" class="aligncenter size-thumbnail wp-image-269" /></a>
+<a href="/images/2012/12/rails4-welcome.png"><img src="/images/2012/12/rails4-welcome-150x150.png" alt="Rails 3までと一見変わるところのないRails 4 Welcomeページ" title="Rails 4 Welcomeページ" width="150" height="150" class="aligncenter size-thumbnail wp-image-269" /></a>
 
 <h3>おなじみのページ(?)</h3>
 
@@ -234,9 +234,9 @@ Rails 3まではActionControllerのparamsはHashWithIndifferentAccessのイン�
 
 Scaffoldで作られた user_params のままだと、全てのパラメータを許可していますので、ユーザーの新規作成時に admin 属性を有効にして作成すると、誰でも管理権限のあるユーザーを作ることが出来てしまいます。
 
-<a href="http://tech.feedforce.jp/wp-content/uploads/2012/12/create_with_admin_permitted.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2012/12/create_with_admin_permitted-150x150.png" alt="admin属性を許可した状態で、admin属性を有効にしてユーザー生成を試みる" title="admin属性を許可した状態でadmin権限のあるユーザーを作成" width="150" height="150" class="aligncenter size-thumbnail wp-image-270" /></a>
+<a href="/images/2012/12/create_with_admin_permitted.png"><img src="/images/2012/12/create_with_admin_permitted-150x150.png" alt="admin属性を許可した状態で、admin属性を有効にしてユーザー生成を試みる" title="admin属性を許可した状態でadmin権限のあるユーザーを作成" width="150" height="150" class="aligncenter size-thumbnail wp-image-270" /></a>
 
-<a href="http://tech.feedforce.jp/wp-content/uploads/2012/12/created_with_admin_permitted.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2012/12/created_with_admin_permitted-150x150.png" alt="" title="admin権限のあるユーザーが生成された" width="150" height="150" class="aligncenter size-thumbnail wp-image-271" /></a>
+<a href="/images/2012/12/created_with_admin_permitted.png"><img src="/images/2012/12/created_with_admin_permitted-150x150.png" alt="" title="admin権限のあるユーザーが生成された" width="150" height="150" class="aligncenter size-thumbnail wp-image-271" /></a>
 
 そこで、以下のように name のみを許可するように変更してみましょう。
 
@@ -246,9 +246,9 @@ end</code></pre>
 
 生成してみます。
 
-<a href="http://tech.feedforce.jp/wp-content/uploads/2012/12/create_without_admin_permitted.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2012/12/create_without_admin_permitted-150x150.png" alt="admin属性を許可しない状態で、admin属性を有効にしてユーザー生成を試みる" title="admin権限を許可しない状態でadmin権限のあるユーザーを生成" width="150" height="150" class="aligncenter size-thumbnail wp-image-272" /></a>
+<a href="/images/2012/12/create_without_admin_permitted.png"><img src="/images/2012/12/create_without_admin_permitted-150x150.png" alt="admin属性を許可しない状態で、admin属性を有効にしてユーザー生成を試みる" title="admin権限を許可しない状態でadmin権限のあるユーザーを生成" width="150" height="150" class="aligncenter size-thumbnail wp-image-272" /></a>
 
-<a href="http://tech.feedforce.jp/wp-content/uploads/2012/12/created_without_admin_permitted.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2012/12/created_without_admin_permitted-150x150.png" alt="admin権限のあるユーザーの生成を試みたが阻止された" title="admin権限のないユーザーを生成した" width="150" height="150" class="aligncenter size-thumbnail wp-image-273" /></a>
+<a href="/images/2012/12/created_without_admin_permitted.png"><img src="/images/2012/12/created_without_admin_permitted-150x150.png" alt="admin権限のあるユーザーの生成を試みたが阻止された" title="admin権限のないユーザーを生成した" width="150" height="150" class="aligncenter size-thumbnail wp-image-273" /></a>
 
 今度はadmin権限を外部から設定されてしまう事態を回避できました。
 

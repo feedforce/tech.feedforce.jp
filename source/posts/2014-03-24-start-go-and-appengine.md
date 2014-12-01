@@ -26,7 +26,7 @@ tags: resume,
 <p>Go言語の言語仕様についてのサイトだと、「<a href="http://tour.golang.org/#1">A Tour of Go</a>」（<a href="http://go-tour-jp.appspot.com/">日本語版</a>）あたりが有名でうまくまとまっていて、しかも実際にテストコードを書いてみて実行してみることも可能なので、<s>もう私の資料なんか見るまでもないんです(｀；ω；´)</s>！</p>
 <p>とはいえ、本家では80ページ近くにわたって紹介されているので、もう少し手短に・さらっと知ることができるようにと、私の資料では「A Tour of Go」のうちのエッセンスを抽出し、まとめてみました！</p>
 
-<a href="http://tech.feedforce.jp/wp-content/uploads/2014/03/dabdfd03014f4ee861f370df3f4fb105.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2014/03/dabdfd03014f4ee861f370df3f4fb105-300x225.png" alt="スクリーンショット 2014-03-17 11.37.25" width="300" height="225" class="alignnone size-medium wp-image-682" /></a>
+<a href="/images/2014/03/dabdfd03014f4ee861f370df3f4fb105.png"><img src="/images/2014/03/dabdfd03014f4ee861f370df3f4fb105-300x225.png" alt="スクリーンショット 2014-03-17 11.37.25" width="300" height="225" class="alignnone size-medium wp-image-682" /></a>
 
 <h4>こまけぇこたぁいいんだよ！　とにかく「動く」Webアプリを「Goで」書いてみる！</h4>
 <p>千里の道も一歩から。「何かしら動くものを作ってみる」ことは、プログラミング言語の習得の近道の一つだと思っています。</p>
@@ -34,7 +34,7 @@ tags: resume,
 <p>そのアプリは、はてなが公開しているとあるWebAPIを使って、マッシュアップ的な感じで作ってみています！...さて、どんなアプリなんでしょうか...( ＾ω＾)</p>
 <p>もちろんみなさんにも簡単に作ってみてもらうことができます！ぜひトライしてみてください！</p>
 
-<a href="http://tech.feedforce.jp/wp-content/uploads/2014/03/d07f48511b92747c913633b367935458.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2014/03/d07f48511b92747c913633b367935458-300x224.png" alt="スクリーンショット 2014-03-17 11.37.46" width="300" height="224" class="alignnone size-medium wp-image-683" /></a>
+<a href="/images/2014/03/d07f48511b92747c913633b367935458.png"><img src="/images/2014/03/d07f48511b92747c913633b367935458-300x224.png" alt="スクリーンショット 2014-03-17 11.37.46" width="300" height="224" class="alignnone size-medium wp-image-683" /></a>
 
 <h4>作ったWebアプリの appengine へのデプロイを、アカウントの取得からご紹介！</h4>
 <p>しています！</p>
@@ -42,7 +42,7 @@ tags: resume,
 <p>そして appengine は、最初の登録さえしてしまえばデプロイするのも楽チンです！</p>
 <p>この資料では、作成したWebアプリを実際にデプロイ、つまり、<b>そのアプリを全世界に公開してしまう</b>ところまでを、<b>アカウントを取得するところから</b>ご紹介しています！</p>
 
-<a href="http://tech.feedforce.jp/wp-content/uploads/2014/03/4393f7062e339c3591fa69bed4395d9f.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2014/03/4393f7062e339c3591fa69bed4395d9f-300x224.png" alt="スクリーンショット 2014-03-17 11.38.04" width="300" height="224" class="alignnone size-medium wp-image-684" /></a>
+<a href="/images/2014/03/4393f7062e339c3591fa69bed4395d9f.png"><img src="/images/2014/03/4393f7062e339c3591fa69bed4395d9f-300x224.png" alt="スクリーンショット 2014-03-17 11.38.04" width="300" height="224" class="alignnone size-medium wp-image-684" /></a>
 
 <p>...とまぁ、そんな感じです！</p>
 <p>下にあるのが発表資料になります。ぜひみなさんも、Go言語と appengine 、始めてみてくださいね！</p>

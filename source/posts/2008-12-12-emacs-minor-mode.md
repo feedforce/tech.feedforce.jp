@@ -38,7 +38,7 @@ Emacs内でファイル間を移動するには、ウィンドウとバッファ
 「M-x test-mode」でモードのオン/オフを切り替えることができ、test-modeがオンの時はキーバインド「C-c f」で関数test-functionを呼び出すことができるようになります。
 この設定の場合、test-modeがオンのときは"TestMode"がモード行に表示されます。
 
-<a href="http://tech.feedforce.jp/wp-content/uploads/2008/12/2008-12-09_1807.png" title="2008-12-09_1807.png"><img src="http://tech.feedforce.jp/wp-content/uploads/2008/12/2008-12-09_1807.png" alt="2008-12-09_1807.png" /></a>
+<a href="/images/2008/12/2008-12-09_1807.png" title="2008-12-09_1807.png"><img src="/images/2008/12/2008-12-09_1807.png" alt="2008-12-09_1807.png" /></a>
 <h3 align="justify">実際にマイナーモードを作ってみる</h3>
 では、実際にマイナーモードを作成していきます。
 ここでは<a href="http://www.rsssuite.jp" title="RSS Suite" target="_blank">RSS Suite</a>の管理画面で利用するファイル間を移動できるようにすることを目標とします。

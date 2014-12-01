@@ -17,7 +17,7 @@ tags: dev_style,
 <h2>ザラザラの壁にも貼れるホワイトボードペーパー</h2>
 
 <div>
-<a href="http://tech.feedforce.jp/wp-content/uploads/2014/07/whiteboard.jpg"><img src="http://tech.feedforce.jp/wp-content/uploads/2014/07/whiteboard.jpg" alt="whiteboard" width="620" height="349" class="alignnone size-full wp-image-977" /></a>
+<a href="/images/2014/07/whiteboard.jpg"><img src="/images/2014/07/whiteboard.jpg" alt="whiteboard" width="620" height="349" class="alignnone size-full wp-image-977" /></a>
 <ul>
   <li><a href="http://item.rakuten.co.jp/e-plus/cs-paper-cut/" target="_blank">ホワイトボード シート (粘着材付き) ： クリーンスチールペーパー　0.2mm厚×900mm×1M【切売】【RCP】</a></li>
   <li>100cm x 90cm あたりの価格 3,800円 (税込 4,104 円) 送料別</li>
@@ -34,7 +34,7 @@ tags: dev_style,
 
 <dl>
 <dt>KPTやかんばん、体力ゲージなどに使われている様子</dt>
-<dd><a href="http://tech.feedforce.jp/wp-content/uploads/2014/07/whiteboard2.jpg"><img src="http://tech.feedforce.jp/wp-content/uploads/2014/07/whiteboard2.jpg" alt="whiteboard2" width="800" height="349" class="alignnone size-full wp-image-979" /></a></dd>
+<dd><a href="/images/2014/07/whiteboard2.jpg"><img src="/images/2014/07/whiteboard2.jpg" alt="whiteboard2" width="800" height="349" class="alignnone size-full wp-image-979" /></a></dd>
 </dl>
 
 <h2>紙でできたホワイトボードペーパー(A1サイズ)</h2>

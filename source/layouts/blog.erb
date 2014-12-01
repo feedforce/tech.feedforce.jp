@@ -10,7 +10,7 @@
       <h1><%= link_to current_article.title, current_article %></h1>
       <ul>
         <li class="entry-time"><%= current_article.date.strftime('%Y.%m.%e') %></li>
-        <li class="entry-cat"><%= current_article.tags.map {|tag| link_to "#{slug_to_japanese(tag)}", tag_path(tag)}.join(', ').html_safe %></li>
+        <li class="entry-cat"><%= current_article.tags.map { |tag| link_to "#{slug_to_japanese(tag)}", tag_path(tag) }.join(', ').html_safe %></li>
         <li class="entry-author"><%= link_to current_article.data.authors, '/author/' + current_article.data.authors + '.html' %></li>
       </ul>
     </div>
@@ -28,8 +28,34 @@
     <div class="entry-body">
       <%= current_article.body %>
     </div>
+    <div class="sns-btn">
+      <% current_page_url = data.site.url + current_page.url %>
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="<%= current_page_url %>"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="<%= current_page.title %>" data-url="<%= current_page_url %>" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=<%= current_page_url %>&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/<%= current_page_url %>" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
     <%= partial 'post_banner' %>
   </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+      <% if current_article.next_article %>
+          <li id="newer-link">
+            <a href="<%= current_article.next_article.url %>" rel="next"><%= current_article.next_article.title %></a>
+          </li>
+      <% end %>
+      <% if current_article.previous_article %>
+          <li id="older-link">«
+            <a href="<%= current_article.previous_article.url %>" rel="prev"><%= current_article.previous_article.title %></a>
+          </li>
+      <% end %>
+    </ul>
+  </div>
 </div>
 
 <%= partial 'footer' %>

@@ -1,0 +1,1230 @@
+@charset "UTF-8"
+
+#headline a
+  overflow: hidden
+  text-indent: 100%
+  white-space: nowrap
+
+article, aside, figcaption, figure, footer, header, nav, section, summary
+  display: block
+  margin: 0
+
+audio, canvas, svg, video
+  display: inline-block
+
+html
+  -webkit-text-size-adjust: 100%
+  -ms-text-size-adjust: 100%
+
+body, dd, dl, form, h1, h2, h3, h4, h5, h6, ol, ul
+  margin: 0
+
+h1, h2, h3, h4, h5, h6, small
+  font-size: 100%
+
+ol, ul
+  padding: 0
+  list-style: none
+
+table
+  border-collapse: collapse
+  border-spacing: 0
+
+th
+  text-align: left
+
+address, dfn, dt, em
+  font-weight: 700
+  font-style: normal
+
+q
+  quotes: none
+
+img
+  border: none
+
+#content a:hover img
+  opacity: .6
+  filter: alpha(opacity = 60)
+
+abbr[title], dfn[title]
+  cursor: pointer
+  border-bottom: 1px dotted #000
+
+iframe
+  vertical-align: middle
+
+fieldset
+  border: 1px solid silver
+  margin: 0 2px
+  padding: .35em .625em .75em
+
+legend
+  border: 0
+  padding: 0
+
+button, input, select, textarea
+  font-size: 100%
+  margin: 0 2px
+  vertical-align: baseline
+  *vertical-align: middle
+
+.buttonClass, button
+  cursor: pointer
+  -webkit-appearance: button
+
+input
+  &[type=button], &[type=reset], &[type=submit]
+    cursor: pointer
+    -webkit-appearance: button
+
+.inputBox
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+  padding: 0
+  *height: 13px
+  *width: 13px
+
+input
+  &[type=checkbox], &[type=radio]
+    -moz-box-sizing: border-box
+    box-sizing: border-box
+    padding: 0
+    *height: 13px
+    *width: 13px
+
+a:hover .alpha
+  opacity: .75
+  filter: alpha(opacity = 75)
+  -ms-filter: "alpha(opacity=75)"
+
+.fluidimg
+  -ms-interpolation-mode: bicubic
+  image-rendering: optimizeQuality
+  max-width: 100%
+  height: auto
+
+a
+  outline: 0
+  text-decoration: underline
+  color: #1D8DCC
+  &:hover
+    text-decoration: none
+
+body
+  font-size: 90%
+  line-height: 1.6
+  font-family: 'Lucida Grande','Hiragino Kaku Gothic ProN',Meiryo,sans-serif
+  color: #343434
+  background: #fff
+
+p
+  margin-top: 0
+  margin-bottom: 18px
+  margin-left: 0
+  margin-right: 0
+
+#content
+  #entry-link ul, .entry .entry-date ul
+    *zoom: 1
+
+#single-entry-link, footer .foot-menu
+  *zoom: 1
+
+#content
+  #entry-link ul:after, .entry .entry-date ul:after
+    content: ""
+    display: block
+    clear: both
+
+#single-entry-link:after, footer .foot-menu:after
+  content: ""
+  display: block
+  clear: both
+
+.clear
+  clear: both
+
+#content, .wrapper
+  width: 94%
+  margin: 0 auto
+
+header
+  background: #F5F5F5
+  padding-bottom: 1em
+  ul li a
+    text-decoration: none
+    color: #2C2A2B
+  #search
+    margin: 1em auto 0
+    #search-box
+      background: #fff
+      width: 90%
+      height: 25px
+      display: block
+      position: relative
+      border-radius: 999em
+      margin: 0 auto
+    #search-text
+      width: 82%
+      position: absolute
+      top: 2px
+      left: 6px
+      border: none
+      background: 0 0
+      display: block
+      zoom: 1
+      color: #666
+    #search-btn
+      position: absolute
+      top: 6px
+      right: 1%
+      background-image: url(../images/retina-sbb5d9a22e7.png)
+      background-repeat: no-repeat
+      display: block
+      height: 12px
+      background-size: 262px 198px
+      background-position: 0 -145px
+      text-indent: -9999px
+      background-color: #fff
+      border: 0
+
+h1
+  text-align: center
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+
+#headline
+  margin: 40px 0
+  a
+    background-image: url(../images/retina-sbb5d9a22e7.png)
+    background-repeat: no-repeat
+    display: block
+    height: 34px
+    width: 262px
+    background-size: 262px 198px
+    background-position: 0 0
+    margin-left: auto
+    margin-right: auto
+
+#content
+  .entry
+    .entry-date
+      float: left
+      h1
+        text-align: left
+        margin: 0 0 8px
+        font-size: 1.15rem
+        line-height: 1.4
+        a
+          color: #222
+          text-decoration: none
+          &:hover
+            text-decoration: underline
+      ul
+        margin-bottom: 14px
+        li
+          color: #aaa
+          margin-right: 6px
+          line-height: 1
+          display: block
+          float: left
+          margin-bottom: 4px
+          a
+            color: #aaa
+            text-decoration: none
+            &:hover
+              text-decoration: underline
+          &.entry-time
+            background-image: url(../images/retina-sbb5d9a22e7.png)
+            background-repeat: no-repeat
+            display: block
+            height: 16px
+            background-size: 262px 198px
+            background-position: 0 -113px
+            padding-left: 20px
+          &.entry-cat
+            background-image: url(../images/retina-sbb5d9a22e7.png)
+            background-repeat: no-repeat
+            display: block
+            height: 16px
+            background-size: 262px 198px
+            background-position: 0 -182px
+            padding-left: 20px
+          &.entry-author
+            display: none
+    .entry-author-image
+      margin-top: 2px
+      float: right
+      border: 1px solid #D6E4ED
+      border-radius: 30px
+      img
+        width: 45px
+        height: 45px
+        border-radius: 35px
+        border: 1px solid #fff
+        vertical-align: bottom
+    .entry-body
+      clear: both
+      padding-bottom: 15px
+      margin-bottom: 30px
+      border-bottom: 1px solid #ebf2f6
+    .sns-btn
+      text-align: right
+      padding: 10px 0
+      clear: both
+      li
+        display: inline
+        margin: 0
+      .pocket-btn
+        display: inline
+      .twitter-share-button
+        width: 100px!important
+      .pocket-btn iframe
+        width: 100px!important
+        margin-top: 3px
+  #single-entry-bnr
+    padding-top: 5px
+    margin-bottom: 20px
+    img
+      max-width: 100%
+  #entry-link ul
+    margin-bottom: 30px
+    li
+      background: none repeat scroll 0 0 rgba(0, 0, 0, 0)
+      border: 3px solid #D3E2EB
+      border-radius: 999em
+      cursor: pointer
+      display: inline-block
+      font-style: normal
+      height: 32px
+      letter-spacing: -0.02em
+      line-height: 31px
+      outline: 0 none
+      padding: 0 16px
+      position: relative
+      text-align: center
+      text-rendering: optimizelegibility
+      -webkit-transition: background-color 0.1s ease 0s, border-color 0.1s ease 0s, color 0.1s ease 0s
+      transition: background-color 0.1s ease 0s, border-color 0.1s ease 0s, color 0.1s ease 0s
+      vertical-align: bottom
+      white-space: nowrap
+      a
+        text-decoration: none
+        color: #8DBACD
+      &#older-link
+        float: left
+      &#newer-link
+        float: right
+      &:hover
+        border-color: #BBEAEA
+
+footer
+  .foot-menu
+    background: #2C2A2B
+    a
+      color: #BEE1F4
+      text-decoration: none
+    h2
+      color: #fff
+  .copy
+    ul li a
+      color: #888
+      text-decoration: none
+    p small
+      color: #bbb
+      font-size: .7rem
+
+.pagetop
+  display: none
+
+.single #content .entry .entry-body
+  border-bottom: none
+  margin-bottom: 10px
+
+.entry-body
+  border-bottom: none
+  margin-bottom: 40px
+  img
+    max-width: 100%
+    height: auto
+  p
+    margin-bottom: 20px
+  h2
+    border-bottom: 3px solid #EBEBEB
+    margin-bottom: 14px
+    padding-bottom: 4px
+    font-size: .95rem
+  h3
+    border-left: 7px solid #EBEBEB
+    border-bottom: 1px dotted #ccc
+    padding: 0 .8em .4em
+    margin: 30px 0 34px
+    font-size: .95rem
+  h4
+    font-size: .95rem
+    margin-bottom: 14px
+    background: #eee
+    padding: .3em 1em .3em 40px
+    border-radius: 4px
+    position: relative
+    &:before
+      position: absolute
+      top: 13px
+      left: 15px
+      width: 12px
+      height: 12px
+      background: #fff
+      border-radius: 50%
+      box-shadow: 1px 1px 1px #ccc inset
+      content: ""
+  h5
+    font-size: .9rem
+    color: #111
+  ol
+    list-style: none
+    margin: 10px 5px 20px
+  ul
+    list-style: none
+    margin: 10px 5px 20px
+    li
+      margin: .5em 4%
+      padding: 0
+      list-style: disc
+      line-height: 1.6
+  ol li
+    margin: .5em 0 .5em 20px
+    list-style: decimal
+    ol
+      margin: 0
+      padding: 0
+  ul li ul
+    margin: 0
+    padding: 0
+    li
+      list-style: circle
+  a
+    word-wrap: break-word
+  pre
+    margin-bottom: 30px
+  p
+    code
+      background: #222
+      border-radius: 4px
+      color: #fff
+      padding: .2em .4em
+    .caption-text
+      font-size: .8rem
+      color: #999
+      margin-top: 4px
+      text-align: center
+      display: block
+  code
+    font-family: "Source Code Pro",Monaco,Consolas,"Courier New",Courier,monospace,sans-serif
+  blockquote
+    quotes: "“" "”"
+    margin: 30px 0
+    &:before
+      content: open-quote
+      font-size: 64pt
+      text-align: center
+      line-height: 42px
+      float: left
+      position: relative
+      top: 10px
+      color: #ddd
+      padding-right: 10px
+      font-family: Georgia,"Times New Roman",Times,serif
+    h2, h3, h4
+      font-size: 14px
+      background: 0 0
+      margin-bottom: 5px
+  cite
+    padding-left: 3em
+    font-style: normal
+    &:before
+      content: "―"
+      padding-right: 10px
+  a.sup
+    font-size: .6em
+    vertical-align: super
+  .refs
+    border: 1px dotted #ccc
+    border-radius: 5px
+    padding: 10px 15px 0
+    font-size: .8rem
+    margin-bottom: 20px
+    h2
+      font-size: .9rem
+      margin: 0 0 10px
+      border-bottom: 1px dotted #ccc
+    ol li
+      margin-bottom: 10px
+
+#entry-form
+  margin-bottom: 30px
+  h2
+    font-size: 1rem
+  .commentlist
+    margin: 10px 0
+    li
+      border-left: 4px solid #EBEBEB
+      padding: 0 0 0 20px
+      clear: both
+      overflow: hidden
+      margin-bottom: 20px
+      cite
+        font-style: normal
+        font-weight: 700
+        display: block
+        font-size: .75rem
+        color: #333
+      .comment-author img
+        width: 40px
+        height: 40px
+        border-radius: 40px
+        border: 1px solid #D6E4ED
+        vertical-align: bottom
+      .comment-meta
+        font-size: .75rem
+        color: #999
+        span
+          display: inline
+      .comment-main-text
+        background: #F9F9F9
+        padding: 1em 1.2em .1em
+        border-radius: 5px
+      &.byuser
+        border-left: none
+        border-right: 4px solid #EBEBEB
+        padding: 0 20px 0 0
+
+#form
+  border: 3px solid #EBEBEB
+  border-radius: 4px
+  padding: 4%
+  color: #666
+  margin-bottom: 20px
+  table
+    width: 95%
+    td
+      font-weight: 400
+      padding: 5px
+      text-align: left
+    th
+      font-weight: 400
+      padding: 5px
+      text-align: left
+      font-family: Verdana,Geneva,sans-serif
+      padding-right: 20px
+      vertical-align: top
+      width: 27%
+      span
+        color: #F99
+  input
+    width: 80%
+    border: 1px solid #ccc
+    display: inline
+  textarea
+    border: 1px solid #ccc
+    display: inline
+    &.comment
+      border: 1px solid #ccc
+      display: inline
+  #commentsubmit
+    margin-left: 28%
+    padding: 8px
+    background-color: #111
+    border: none
+    border-radius: 5px
+    color: #fff
+    width: 180px
+    font-family: Verdana,Geneva,sans-serif
+  textarea
+    width: 100%
+    resize: none
+  #comment-author-login #commentsubmit
+    margin-top: 10px
+    margin-left: 0
+
+#tburl
+  width: 70%
+  border: 1px solid #ccc
+
+#single-entry-link
+  border-top: solid 3px #ebf2f6
+  padding: 10px 0
+  color: #8CB9CC
+  li
+    display: block
+    a
+      text-decoration: none
+      color: #8CB9CC
+      &:hover
+        color: #1D8DCC
+    &#older-link
+      float: left
+    &#newer-link
+      float: right
+
+.entry-page h1
+  font-size: 1.3rem
+  border-bottom: 1px solid #ebf2f6
+  padding-bottom: 10px
+  margin-bottom: 20px
+
+ul.page-member
+  font-size: .85rem
+  li
+    border-top: 1px solid #ebf2f6
+    padding-top: 20px
+    &:first-child
+      border: none
+      padding-top: 0
+
+.page-member-image
+  float: left
+  border: 1px solid #D6E4ED
+  border-radius: 40px
+  img
+    width: 80px
+    height: 80px
+    border-radius: 45px
+    border: 1px solid #fff
+    vertical-align: bottom
+
+.page-member-name
+  margin: 0 0 8px 100px
+  h2, p
+    font-weight: 700
+    margin: 0
+
+.page-member-profile
+  margin-left: 100px
+
+.page-member-links
+  border: 2px solid #D9D9D9
+  border-radius: 2px
+  padding: 1em
+  margin: 40px 0
+  h2
+    font-size: .9rem
+    margin-bottom: 8px
+    text-align: center
+    br
+      display: none
+  ul
+    overflow: hidden
+    width: 98%
+    margin: 0 auto
+    li
+      display: block
+      width: 32%
+      a
+        color: #fff
+        display: block
+        padding: .6em .6em .6em .8em
+        text-decoration: none
+        border-radius: 4px
+      &#forkwell
+        float: left
+        margin-right: 2%
+        a
+          background-color: #1895CF
+          span
+            background-image: url(../images/retina-sbb5d9a22e7.png)
+            background-repeat: no-repeat
+            display: block
+            height: 22px
+            width: 22px
+            background-size: 262px 198px
+            background-position: 0 -91px
+            padding-left: 30px
+          &:hover
+            background-color: #3DA6D7
+      &#github
+        float: left
+        a
+          background-color: #000
+          span
+            background-image: url(../images/retina-sbb5d9a22e7.png)
+            background-repeat: no-repeat
+            display: block
+            height: 22px
+            width: 22px
+            background-size: 262px 198px
+            background-position: 0 -69px
+            padding-left: 30px
+          &:hover
+            background-color: #333
+      &#qiita
+        float: left
+        margin-right: 2%
+        a
+          background-color: #5EC328
+          span
+            background-image: url(../images/retina-sbb5d9a22e7.png)
+            background-repeat: no-repeat
+            display: block
+            height: 22px
+            width: 22px
+            background-size: 262px 198px
+            background-position: 0 -47px
+            padding-left: 30px
+          &:hover
+            background-color: #62D02A
+
+.page-member-archive
+  background: #F4F8FA
+  padding: 1em
+  border-radius: 4px
+  margin-bottom: 40px
+  overflow: hidden
+  .page-member-image
+    border: none
+  img
+    border: 5px solid #fff
+  p
+    margin-bottom: 0
+
+.entry-archive
+  margin-bottom: 50px
+  h1#entry-archive-head
+    font-size: 1.25rem
+    color: #666
+    border-bottom: 3px solid #ebf2f6
+    padding: 0 0 10px
+    margin: 0 0 10px
+    text-align: left
+    clear: both
+  .entry
+    overflow: hidden
+    border-bottom: 1px solid #ebf2f6
+    padding: 10px 0 2px
+
+.entry-archive-yearlist
+  h2
+    font-size: 1rem
+  dl dt
+    color: #999
+    font-weight: 400
+
+@media screen and (min-width: 0) and (max-width: 765px)
+  header
+    padding: .4em 0 .2em
+    .wrapper
+      width: 100%
+    .menubtn
+      margin: 0 3% .4em
+      background-image: url(../images/retina-sbb5d9a22e7.png)
+      background-repeat: no-repeat
+      display: block
+      height: 25px
+      width: 29px
+      background-size: 262px 198px
+      background-position: 0 -157px
+      cursor: pointer
+      span
+        display: none
+    .togmenu
+      display: none
+    ul
+      margin: 0
+      border-top: 1px solid #ccc
+      li
+        list-style: none
+        margin: 0 0 1px
+        border-bottom: 1px dotted #ccc
+        a
+          position: relative
+          display: block
+          padding: 10px 3%
+          padding-right: 27px
+          &:before
+            content: ""
+            position: absolute
+            top: 50%
+            right: 15px
+            width: 10px
+            height: 10px
+            margin-top: -7px
+            border-top: 3px solid #ccc
+            border-right: 3px solid #ccc
+            -webkit-transform: rotate(45deg)
+            -ms-transform: rotate(45deg)
+            transform: rotate(45deg)
+    #search
+      padding-bottom: 1em
+  footer
+    .wrapper
+      width: 100%
+    #widget_text .textwidget
+      width: 200px
+      margin: 0 auto
+      padding: 10px 0
+    h2
+      border-top: 1px solid #333
+      border-bottom: 1px solid #333
+      background: #212121
+      padding: 8px 3%
+    ul
+      margin: 4px 0
+      li
+        list-style: none
+        margin: 0 0 1px
+        border-top: 1px dotted #000
+        &:first-child
+          border: none
+        a
+          position: relative
+          display: block
+          padding: 10px 3%
+          padding-right: 27px
+          text-decoration: none
+          &:before
+            content: ""
+            position: absolute
+            top: 50%
+            right: 15px
+            width: 10px
+            height: 10px
+            margin-top: -7px
+            border-top: 3px solid #bee1f4
+            border-right: 3px solid #bee1f4
+            -webkit-transform: rotate(45deg)
+            -ms-transform: rotate(45deg)
+            transform: rotate(45deg)
+    .copy
+      ul
+        margin: 4px 0
+        li
+          border-bottom: 1px solid #ccc
+          border-top: none
+          a
+            color: #888
+            &:before
+              content: ""
+              position: absolute
+              top: 50%
+              right: 15px
+              width: 10px
+              height: 10px
+              margin-top: -7px
+              border-top: 3px solid #ccc
+              border-right: 3px solid #ccc
+              -webkit-transform: rotate(45deg)
+              -ms-transform: rotate(45deg)
+              transform: rotate(45deg)
+      p
+        background-image: url(../images/retina-sbb5d9a22e7.png)
+        background-repeat: no-repeat
+        display: block
+        height: 13px
+        background-size: 262px 198px
+        background-position: 0 -34px
+        margin: 10px 3%
+        small
+          display: block
+          padding: 20px 0 10px
+  #content .entry .entry-date
+    width: 82%
+  .entry-archive-yearlist
+    h2
+      border-bottom: 1px solid #ebf2f6
+      padding-bottom: 4px
+      margin: 0 0 4px
+    dl
+      padding-top: 10px
+      margin-bottom: 30px
+      dd
+        margin-bottom: 10px
+        border-bottom: 1px dotted #BED5E2
+        padding-bottom: 10px
+        a
+          text-decoration: none
+        &:last-child
+          border-bottom: none
+  #entry-form .commentlist li
+    .comment-author
+      float: left
+      margin: 0 10px 10px 0
+    .comment-meta
+      padding-top: 4px
+      float: left
+      span
+        display: inline
+    .comment-main-text
+      clear: both
+  #form
+    table
+      width: 100%
+      td, th
+        display: block
+        width: 100%
+        margin: 0
+        padding: 0
+    input
+      width: 97%
+    #commentsubmit
+      margin: 10px 0 0
+      padding: .4em
+    textarea
+      width: 97%
+      resize: none
+
+@media only screen and (min-width: 481px)
+  header #search #search-text
+    width: 91%
+  #content .entry .entry-date ul li.entry-author
+    background-image: url(../images/retina-sbb5d9a22e7.png)
+    background-repeat: no-repeat
+    display: block
+    height: 16px
+    background-size: 262px 198px
+    background-position: 0 -129px
+    padding-left: 20px
+  .entry-archive-yearlist dl
+    font-size: 1.1rem
+    dt
+      position: absolute
+      width: 4em
+    dd
+      padding-left: 4em
+
+@media only screen and (min-width: 768px)
+  #content, .wrapper
+    width: 650px
+    margin: 0 auto
+  header
+    overflow: hidden
+    padding: 0
+    .menubtn
+      display: none
+    ul
+      float: left
+      li
+        display: inline
+        a
+          text-decoration: none
+          color: #2C2A2B
+          display: block
+          width: 90px
+          font-size: .8rem
+          font-family: Georgia,serif
+          float: left
+          text-align: center
+          padding: .9em 0
+          &:hover
+            background: #fff
+            color: #ccc
+        &.current_page_item a
+          background: #fff
+          color: #1D8ECC
+    #search
+      float: right
+      margin: .6em 0 0
+      #search-box
+        width: 170px
+        height: 22px
+      #search-text
+        width: 130px
+      #search-btn
+        top: 5px
+  footer
+    .foot-menu
+      padding: 1.6em 0
+    .wrapper
+      width: 650px
+      margin: 0 auto
+      overflow: hidden
+      position: relative
+      > div
+        margin-right: 20px
+        h2
+          font-size: .95rem
+          margin-bottom: 6px
+        &#widget_text
+          float: left
+          width: 200px
+        &#popular-posts, &#widget_recent_entries
+          margin-left: 230px
+          margin-right: 180px
+        &#widget_categories
+          position: absolute
+          top: 0
+          right: 0
+          float: right
+          margin-right: 0
+        ul
+          li
+            padding-bottom: 6px
+            a
+              text-decoration: underline
+              &:hover
+                text-decoration: none
+          &.wpp-list li
+            clear: none
+    .copy
+      ul
+        background-image: url(../images/retina-sbb5d9a22e7.png)
+        background-repeat: no-repeat
+        display: block
+        height: 13px
+        background-size: 262px 198px
+        background-position: 0 -34px
+        margin: 14px 0 4px
+        padding-left: 90px
+        line-height: 1
+        li
+          padding: 0 6px 0 10px
+          display: inline
+          border-left: 1px dotted #c1c1c1
+          font-size: .8rem
+          a:hover
+            text-decoration: underline
+          &:first-child
+            border: none
+      p
+        margin-bottom: 6px
+  #single-entry-link
+    margin: 0
+    padding: 10px 0
+  #content .entry
+    .entry-date
+      width: 90%
+      h1
+        font-size: 1.45rem
+    .entry-body
+      padding-bottom: 20px
+      margin-bottom: 40px
+  .entry-body
+    font-size: 1rem
+    line-height: 1.8
+    p
+      margin-bottom: 20px
+    img.aligncenter
+      margin-left: auto
+      margin-right: auto
+      display: block
+    h2
+      font-size: 1.2rem
+      margin: 30px 0 10px
+    h3
+      font-size: 1.05rem
+    h4, h5
+      font-size: 1rem
+    .refs
+      font-size: .85rem
+      padding: 15px 25px 0
+      h2
+        font-size: 1rem
+  #headline
+    margin: 70px auto 80px
+  .page-member-links
+    padding: 1.5em 2em
+    overflow: hidden
+    h2
+      margin-bottom: 0
+      text-align: left
+      float: left
+      width: 28%
+      br
+        display: block
+    ul
+      overflow: hidden
+      padding-top: 2px
+      width: 72%
+      float: right
+  ul.page-member li
+    clear: both
+    overflow: hidden
+    padding: 12px 0
+  .page-member-image
+    margin-right: 20px
+  .page-member-name
+    margin: 0
+    float: left
+    width: 90px
+    h2
+      padding-bottom: 4px
+  .page-member-profile
+    margin: 0
+    float: right
+    width: 440px
+  .page-member-archive
+    padding: 1.5em
+  #content .entry-archive
+    .entry .entry-date h1
+      font-size: 1.1rem
+    .page-member-profile
+      width: 400px
+  .entry-archive-yearlist
+    section
+      border-bottom: 1px solid #ebf2f6
+      padding: 20px 0 5px
+    h2
+      padding-bottom: 4px
+      position: absolute
+      width: 5em
+      font-size: 1.4rem
+      font-weight: 400
+    dl
+      padding: .2em 0 0 5em
+      dd
+        padding-bottom: 14px
+  #entry-form
+    h2
+      font-size: 1rem
+      margin-bottom: 14px
+    .commentlist li
+      cite
+        font-size: .75rem
+        margin-bottom: 4px
+      .comment-author
+        margin-bottom: 4px
+        img
+          width: 40px
+          height: 40px
+          border-radius: 40px
+          border: 1px solid #D6E4ED
+          vertical-align: bottom
+      .comment-meta
+        font-size: .75rem
+        span
+          display: block
+      .comment-meta-all
+        float: left
+        width: 12%
+        text-align: center
+      .comment-main-text
+        float: right
+        width: 80%
+      &.byuser
+        .comment-meta-all
+          float: right
+        .comment-main-text
+          float: left
+
+@media only screen and (min-width: 1000px)
+  #content, .wrapper
+    width: 760px
+    margin: 0 auto
+  #content .entry .entry-author-image img
+    width: 50px
+    height: 50px
+  header
+    ul li a
+      width: 100px
+    #search
+      #search-box
+        width: 190px
+      #search-text
+        width: 150px
+  footer
+    .wrapper
+      width: 760px
+      div
+        margin-right: 30px
+        &#widget_categories
+          margin-right: 0
+    .copy
+      ul
+        float: left
+      p
+        float: right
+        margin-top: 10px
+  .pagetop
+    position: fixed
+    bottom: -70px
+    right: 55px
+    display: block
+    a
+      display: block
+      width: 50px
+      height: 50px
+      background-color: #000
+      border-radius: 50px
+      text-align: center
+      color: #fff
+      font-size: 10px
+      text-decoration: none
+      line-height: 50px
+  .page-member-links
+    h2
+      width: 26%
+    ul
+      width: 74%
+      li
+        width: 32%
+  .page-member-profile
+    width: 550px
+  #content .entry-archive .page-member-profile
+    width: 510px
+
+.prettyprint
+  background: #222
+  padding: 10px 20px
+  white-space: pre-wrap
+  word-wrap: break-word
+  border-radius: 5px
+  color: #ccc
+  line-height: 1.5
+  font-size: .95rem
+  font-family: "Source Code Pro",Monaco,Consolas,"Courier New",Courier,monospace,sans-serif
+
+.pln
+  color: #eaeaea
+
+@media screen
+  .str
+    color: #b9ca4a
+  .kwd
+    color: #c397d8
+  .com
+    color: #969896
+  .typ
+    color: #7aa6da
+  .lit
+    color: #e78c45
+  .clo, .opn, .pun
+    color: #eaeaea
+  .tag
+    color: #d54e53
+  .atn
+    color: #e78c45
+  .atv
+    color: #70c0b1
+  .dec
+    color: #e78c45
+  .var
+    color: #d54e53
+  .fun
+    color: #7aa6da
+
+@media print, projection
+  .str
+    color: #060
+  .kwd
+    color: #006
+    font-weight: 700
+  .com
+    color: #600
+    font-style: italic
+  .typ
+    color: #404
+    font-weight: 700
+  .lit
+    color: #044
+  .clo, .opn, .pun
+    color: #440
+  .tag
+    color: #006
+    font-weight: 700
+  .atn
+    color: #404
+  .atv
+    color: #060
+
+ol.linenums
+  margin-top: 0
+  margin-bottom: 0

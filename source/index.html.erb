@@ -33,10 +33,10 @@ per_page: 6
     <div id="entry-link">
       <ul>
         <% if next_page %>
-            <li id="older-link"><%= link_to 'Previous page', next_page %></li>
+            <li id="older-link"><%= link_to '< Older posts', next_page %></li>
         <% end %>
         <% if prev_page %>
-            <li id="newer-link"><%= link_to 'Next page', prev_page %></li>
+            <li id="newer-link"><%= link_to 'Newer posts >', prev_page %></li>
         <% end %>
       </ul>
     </div>

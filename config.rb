@@ -1,39 +1,50 @@
 require 'helpers/custom'
 
 ###
-# Blog settings
+# Timezone
 ###
+Time.zone = 'Tokyo'
 
-Time.zone = "Tokyo"
 
+###
+# Page URL Path
+###
+activate :directory_indexes
+
+
+###
+# Middleman Blog Setting
+###
 activate :blog do |blog|
   # This will add a prefix to all links, template references and source paths
   # blog.prefix = "posts"
 
-  blog.permalink = "{title}.html"
+  blog.permalink = '{title}.html'
   # Matcher for blog source files
-  blog.sources = "posts/{year}-{month}-{day}-{title}.html"
-  # blog.taglink = "tags/{tag}.html"
-  blog.layout = "blog"
+  blog.sources = 'posts/{year}-{month}-{day}-{title}.html'
+  blog.taglink = 'category/{tag}/index.html'
+  blog.layout = 'blog'
   # blog.summary_separator = /(READMORE)/
   # blog.summary_length = 250
   # blog.year_link = "{year}.html"
   # blog.month_link = "{year}/{month}.html"
   # blog.day_link = "{year}/{month}/{day}.html"
-  blog.default_extension = ".md"
+  blog.default_extension = '.md'
 
-  blog.tag_template = "category.html"
+  blog.tag_template = 'category.html'
   # blog.calendar_template = "archive.html"
 
   # Enable pagination
   blog.paginate = true
   # blog.per_page = 10
-  blog.page_link = "page/{num}"
+  blog.page_link = 'page/{num}'
 
   blog.new_article_template = 'templates/article.tt'
 end
 
-page "/feed.xml", layout: false
+page '/feed.xml', layout: false
+page '/sitemap.xml', layout: false
+
 
 ###
 # Compass
@@ -43,6 +54,7 @@ page "/feed.xml", layout: false
 # compass_config do |config|
 #   config.output_style = :compact
 # end
+
 
 ###
 # Page options, layouts, aliases and proxies
@@ -65,6 +77,7 @@ page "/feed.xml", layout: false
 # proxy "/this-page-has-no-template.html", "/template-file.html", locals: {
 #  which_fake_page: "Rendering a fake page with a local variable" }
 
+
 ###
 # Helpers
 ###
@@ -82,6 +95,16 @@ activate :livereload
 #   end
 # end
 
+
+###
+# Custom Helper
+###
+activate :custom_helper
+
+
+###
+# Directory Setting
+###
 set :css_dir, 'css'
 
 set :js_dir, 'js'
@@ -94,7 +117,10 @@ set :partials_dir, 'partials'
 
 set :helpers_dir, 'helpers'
 
+
+###
 # Build-specific configuration
+###
 configure :build do
   # For example, change the Compass output style for deployment
   activate :minify_css
@@ -112,22 +138,26 @@ configure :build do
   # set :http_prefix, "/Content/images/"
 end
 
-###
-# Custom Helper
-###
-activate :custom_helper
 
 ###
 # Middleman Blog Authors
 ###
 activate :authors do |authors|
-  authors.author_path = 'author/:author.html'
+  authors.author_path = 'author/:author/index.html'
   authors.author_template = 'author.html'
 end
 
 ignore '/author.html'
 
+
 ###
 # Bower Components Support
 ###
 sprockets.append_path '../bower_components'
+
+
+###
+# Markdown Setting
+###
+set :markdown, :tables => true, :autolink => true, :gh_blockcode => true, :fenced_code_blocks => true, :smartypants => true
+set :markdown_engine, :redcarpet

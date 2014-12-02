@@ -4,36 +4,39 @@ require 'helpers/custom'
 # Blog settings
 ###
 
-Time.zone = "Tokyo"
+Time.zone = 'Tokyo'
+
+activate :directory_indexes
 
 activate :blog do |blog|
   # This will add a prefix to all links, template references and source paths
   # blog.prefix = "posts"
 
-  blog.permalink = "{title}.html"
+  blog.permalink = '{title}.html'
   # Matcher for blog source files
-  blog.sources = "posts/{year}-{month}-{day}-{title}.html"
-  # blog.taglink = "tags/{tag}.html"
-  blog.layout = "blog"
+  blog.sources = 'posts/{year}-{month}-{day}-{title}.html'
+  blog.taglink = 'category/{tag}/index.html'
+  blog.layout = 'blog'
   # blog.summary_separator = /(READMORE)/
   # blog.summary_length = 250
   # blog.year_link = "{year}.html"
   # blog.month_link = "{year}/{month}.html"
   # blog.day_link = "{year}/{month}/{day}.html"
-  blog.default_extension = ".md"
+  blog.default_extension = '.md'
 
-  blog.tag_template = "category.html"
+  blog.tag_template = 'category.html'
   # blog.calendar_template = "archive.html"
 
   # Enable pagination
   blog.paginate = true
   # blog.per_page = 10
-  blog.page_link = "page/{num}"
+  blog.page_link = 'page/{num}'
 
   blog.new_article_template = 'templates/article.tt'
 end
 
-page "/feed.xml", layout: false
+page '/feed.xml', layout: false
+page '/sitemap.xml', layout: false
 
 ###
 # Compass
@@ -121,7 +124,7 @@ activate :custom_helper
 # Middleman Blog Authors
 ###
 activate :authors do |authors|
-  authors.author_path = 'author/:author.html'
+  authors.author_path = 'author/:author/index.html'
   authors.author_template = 'author.html'
 end
 

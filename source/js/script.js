@@ -70,21 +70,9 @@ FF_BLOG.Common.PageTop = {
   }
 };
 
-FF_BLOG.Common.PrettyCode = {
-  ADD_CLASS_NAME: 'prettyprint',
-  init: function () {
-    this.bindEvent();
-  },
-  bindEvent: function () {
-    $('html, body').find('pre').addClass(this.ADD_CLASS_NAME);
-    prettyPrint();
-  }
-};
-
 $(function () {
   FF_BLOG.Common.Menu.init();
   FF_BLOG.Common.PageTop.init();
-  FF_BLOG.Common.PrettyCode.init();
 });
 
 !function (d, i) {

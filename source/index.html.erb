@@ -9,7 +9,7 @@ per_page: 6
         <ul>
           <li class="entry-time"><%= article.date.strftime('%Y.%m.%e') %></li>
           <li class="entry-cat"><%= article.tags.map {|tag| link_to "#{slug_to_japanese(tag)}", tag_path(tag)}.join(', ').html_safe %></li>
-          <li class="entry-author"><%= link_to article.data.authors, '/author/' + article.data.authors + '.html' %></li>
+          <li class="entry-author"><%= link_to article.data.authors, '/author/' + article.data.authors %></li>
         </ul>
       </div>
       <div class="entry-author-image">
@@ -21,7 +21,7 @@ per_page: 6
              author_thumbnail = 'no-image.png'
            end
         %>
-        <%= link_to "#{image_tag "authors/#{author_thumbnail}"}", "/author/#{article.data.authors}.html" %>
+        <%= link_to "#{image_tag "authors/#{author_thumbnail}"}", "/author/#{article.data.authors}" %>
       </div>
       <div class="entry-body">
         <%= article_excerpt(article.body) %>

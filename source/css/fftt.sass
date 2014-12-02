@@ -1,22 +1,59 @@
 @charset "UTF-8"
 
-#headline a
+@import compass
+
+/*  css sprites mixin
+=sprite-background($name, $sprites, $sprites-img, $box-size: true)
+  background-image: $sprites-img
+  background-repeat: no-repeat
+  display: block
+  $height: image-height(sprite-file($sprites, $name)) / 2
+  $width: image-width(sprite-file($sprites, $name)) / 2
+  @if $box-size
+    height: $height
+    width: $width
+    background-size: 262px 198px
+  @else
+    height: $height
+    background-size: 262px 198px
+  $ypos: round(nth(sprite-position($sprites, $name), 2) / 2)
+  background-position: 0 $ypos
+
+$normal: sprite-map("sprites/*.png")
+$sprites-normal: sprite-url($normal)
+
+$retina: sprite-map("retina/*.png")
+$sprites-retina: sprite-url($retina)
+
+%replace
   overflow: hidden
   text-indent: 100%
   white-space: nowrap
 
-article, aside, figcaption, figure, footer, header, nav, section, summary
+=clearfixes
+  *zoom: 1
+  &:after
+    content: ""
+    display: block
+    clear: both
+
+/*====================================================
+ *  reset
+ *====================================================
+/* html5
+article, aside, footer, header, nav, section, figure, figcaption, summary
   display: block
   margin: 0
 
-audio, canvas, svg, video
+audio, canvas, video, svg
   display: inline-block
 
+/* block ------------
 html
   -webkit-text-size-adjust: 100%
   -ms-text-size-adjust: 100%
 
-body, dd, dl, form, h1, h2, h3, h4, h5, h6, ol, ul
+body, h1, h2, h3, h4, h5, h6, ul, ol, dl, dd, form
   margin: 0
 
 h1, h2, h3, h4, h5, h6, small
@@ -33,18 +70,19 @@ table
 th
   text-align: left
 
-address, dfn, dt, em
+dt, dfn, address, em
   font-weight: 700
   font-style: normal
 
 q
   quotes: none
 
+/* inline ------------
 img
   border: none
 
 #content a:hover img
-  opacity: .6
+  opacity: 0.6
   filter: alpha(opacity = 60)
 
 abbr[title], dfn[title]
@@ -54,44 +92,42 @@ abbr[title], dfn[title]
 iframe
   vertical-align: middle
 
+/* form ------------
 fieldset
-  border: 1px solid silver
+  border: 1px solid #c0c0c0
   margin: 0 2px
-  padding: .35em .625em .75em
+  padding: 0.35em 0.625em 0.75em
 
 legend
   border: 0
   padding: 0
 
-button, input, select, textarea
+button,
+input,
+select,
+textarea
   font-size: 100%
   margin: 0 2px
   vertical-align: baseline
   *vertical-align: middle
 
-.buttonClass, button
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"],
+.buttonClass
   cursor: pointer
   -webkit-appearance: button
 
-input
-  &[type=button], &[type=reset], &[type=submit]
-    cursor: pointer
-    -webkit-appearance: button
-
+input[type="checkbox"],
+input[type="radio"],
 .inputBox
-  -moz-box-sizing: border-box
   box-sizing: border-box
   padding: 0
   *height: 13px
   *width: 13px
 
-input
-  &[type=checkbox], &[type=radio]
-    -moz-box-sizing: border-box
-    box-sizing: border-box
-    padding: 0
-    *height: 13px
-    *width: 13px
+/* default selector  --------
 
 a:hover .alpha
   opacity: .75
@@ -104,57 +140,77 @@ a:hover .alpha
   max-width: 100%
   height: auto
 
+/* page set  --------
 a
-  outline: 0
+  outline: none
   text-decoration: underline
   color: #1D8DCC
-  &:hover
-    text-decoration: none
+
+a:visited,
+a:hover
+  text-decoration: none
+
+/*====================================================
+ *  top
+ *====================================================
+//common
+$img_pc: "../img/normal/"
+$img_sp: "../img/2x/"
+$base_width: 94%
+$keyColor_black: #2C2F32
+$borderColor: #EBF2F6
+$mb: 18px
+$codefont: "Source Code Pro", "Monaco", "Consolas", "Courier New", Courier, monospace, sans-serif
+
+//smartphone
+=linkIcon($color: #333)
+  &:before
+    content: ""
+    position: absolute
+    top: 50%
+    right: 15px
+    width: 10px
+    height: 10px
+    margin-top: -7px
+    border-top: 3px solid $color
+    border-right: 3px solid $color
+    transform: rotate(45deg)
 
 body
   font-size: 90%
   line-height: 1.6
-  font-family: 'Lucida Grande','Hiragino Kaku Gothic ProN',Meiryo,sans-serif
+  font-family: 'Lucida Grande','Hiragino Kaku Gothic ProN', Meiryo, sans-serif
   color: #343434
-  background: #fff
+  background: #ffffff
 
 p
   margin-top: 0
-  margin-bottom: 18px
+  margin-bottom: $mb
   margin-left: 0
   margin-right: 0
 
-#content
-  #entry-link ul, .entry .entry-date ul
-    *zoom: 1
-
-#single-entry-link, footer .foot-menu
+%clearfix
   *zoom: 1
-
-#content
-  #entry-link ul:after, .entry .entry-date ul:after
+  &:after
     content: ""
     display: block
     clear: both
 
-#single-entry-link:after, footer .foot-menu:after
-  content: ""
-  display: block
-  clear: both
-
 .clear
   clear: both
 
-#content, .wrapper
-  width: 94%
+.wrapper, #content
+  width: #{$base_width}
   margin: 0 auto
 
 header
   background: #F5F5F5
   padding-bottom: 1em
-  ul li a
-    text-decoration: none
-    color: #2C2A2B
+  ul
+    li
+      a
+        text-decoration: none
+        color: #2C2A2B
   #search
     margin: 1em auto 0
     #search-box
@@ -171,7 +227,7 @@ header
       top: 2px
       left: 6px
       border: none
-      background: 0 0
+      background: none
       display: block
       zoom: 1
       color: #666
@@ -179,15 +235,13 @@ header
       position: absolute
       top: 6px
       right: 1%
-      background-image: url(../images/retina-sbb5d9a22e7.png)
-      background-repeat: no-repeat
-      display: block
-      height: 12px
-      background-size: 262px 198px
-      background-position: 0 -145px
+      +sprite-background(icon_search_2x, $retina, $sprites-retina, false)
       text-indent: -9999px
       background-color: #fff
       border: 0
+  //searches
+
+//header
 
 h1
   text-align: center
@@ -197,13 +251,8 @@ h1
 #headline
   margin: 40px 0
   a
-    background-image: url(../images/retina-sbb5d9a22e7.png)
-    background-repeat: no-repeat
-    display: block
-    height: 34px
-    width: 262px
-    background-size: 262px 198px
-    background-position: 0 0
+    +sprite-background(logo_2x, $retina, $sprites-retina)
+    @extend %replace
     margin-left: auto
     margin-right: auto
 
@@ -223,36 +272,29 @@ h1
             text-decoration: underline
       ul
         margin-bottom: 14px
+        @extend %clearfix
         li
           color: #aaa
           margin-right: 6px
           line-height: 1
           display: block
           float: left
-          margin-bottom: 4px
           a
             color: #aaa
             text-decoration: none
             &:hover
               text-decoration: underline
           &.entry-time
-            background-image: url(../images/retina-sbb5d9a22e7.png)
-            background-repeat: no-repeat
-            display: block
-            height: 16px
-            background-size: 262px 198px
-            background-position: 0 -113px
+            +sprite-background(icon_date_2x, $retina, $sprites-retina, false)
             padding-left: 20px
           &.entry-cat
-            background-image: url(../images/retina-sbb5d9a22e7.png)
-            background-repeat: no-repeat
-            display: block
-            height: 16px
-            background-size: 262px 198px
-            background-position: 0 -182px
+            +sprite-background(icon_category_2x, $retina, $sprites-retina, false)
             padding-left: 20px
           &.entry-author
             display: none
+        //li
+      //ul
+    //entry-date
     .entry-author-image
       margin-top: 2px
       float: right
@@ -268,10 +310,10 @@ h1
       clear: both
       padding-bottom: 15px
       margin-bottom: 30px
-      border-bottom: 1px solid #ebf2f6
+      border-bottom: 1px solid $borderColor
     .sns-btn
       text-align: right
-      padding: 10px 0
+      padding: 10px 0px
       clear: both
       li
         display: inline
@@ -279,68 +321,83 @@ h1
       .pocket-btn
         display: inline
       .twitter-share-button
-        width: 100px!important
+        width: 100px !important
       .pocket-btn iframe
-        width: 100px!important
+        width: 100px !important
         margin-top: 3px
-  #single-entry-bnr
-    padding-top: 5px
-    margin-bottom: 20px
-    img
-      max-width: 100%
-  #entry-link ul
-    margin-bottom: 30px
-    li
-      background: none repeat scroll 0 0 rgba(0, 0, 0, 0)
-      border: 3px solid #D3E2EB
-      border-radius: 999em
-      cursor: pointer
-      display: inline-block
-      font-style: normal
-      height: 32px
-      letter-spacing: -0.02em
-      line-height: 31px
-      outline: 0 none
-      padding: 0 16px
-      position: relative
-      text-align: center
-      text-rendering: optimizelegibility
-      -webkit-transition: background-color 0.1s ease 0s, border-color 0.1s ease 0s, color 0.1s ease 0s
-      transition: background-color 0.1s ease 0s, border-color 0.1s ease 0s, color 0.1s ease 0s
-      vertical-align: bottom
-      white-space: nowrap
-      a
-        text-decoration: none
-        color: #8DBACD
-      &#older-link
-        float: left
-      &#newer-link
-        float: right
-      &:hover
-        border-color: #BBEAEA
+  //entry
+  #entry-link
+    ul
+      @extend %clearfix
+      margin-bottom: 30px
+      li
+        background: none repeat scroll 0 0 rgba(0, 0, 0, 0)
+        border: 3px solid #D3E2EB
+        border-radius: 999em
+        cursor: pointer
+        display: inline-block
+        font-style: normal
+        height: 32px
+        letter-spacing: -0.02em
+        line-height: 31px
+        outline: 0 none
+        padding: 0 16px
+        position: relative
+        text-align: center
+        text-rendering: optimizelegibility
+        transition: background-color 0.1s ease 0s, border-color 0.1s ease 0s, color 0.1s ease 0s
+        vertical-align: bottom
+        white-space: nowrap
+        a
+          text-decoration: none
+          color: #8DBACD
+        //a
+        &#older-link
+          float: left
+        &#newer-link
+          float: right
+        &:hover
+          border-color: #BBEAEA
+      //li
+    //ul
+  //#entry-link
+
+//content
 
 footer
   .foot-menu
     background: #2C2A2B
+    @extend %clearfix
     a
       color: #BEE1F4
       text-decoration: none
     h2
       color: #fff
+  //foot-menu
   .copy
-    ul li a
-      color: #888
-      text-decoration: none
-    p small
-      color: #bbb
-      font-size: .7rem
+    ul
+      li
+        a
+          color: #888888
+          text-decoration: none
+    p
+      small
+        color: #bbb
+        font-size: 0.7rem
+  //copy
+
+//footer
 
 .pagetop
   display: none
 
-.single #content .entry .entry-body
-  border-bottom: none
-  margin-bottom: 10px
+/* single
+.single
+  #content
+    .entry
+      .entry-body
+        border-bottom: none
+        margin-bottom: 10px
 
 .entry-body
   border-bottom: none
@@ -354,112 +411,107 @@ footer
     border-bottom: 3px solid #EBEBEB
     margin-bottom: 14px
     padding-bottom: 4px
-    font-size: .95rem
+    font-size: 0.95rem
   h3
     border-left: 7px solid #EBEBEB
     border-bottom: 1px dotted #ccc
-    padding: 0 .8em .4em
+    padding: 0em .8em .4em
     margin: 30px 0 34px
-    font-size: .95rem
+    font-size: 0.95rem
   h4
-    font-size: .95rem
+    font-size: 0.95rem
     margin-bottom: 14px
     background: #eee
     padding: .3em 1em .3em 40px
     border-radius: 4px
     position: relative
-    &:before
-      position: absolute
-      top: 13px
-      left: 15px
-      width: 12px
-      height: 12px
-      background: #fff
-      border-radius: 50%
-      box-shadow: 1px 1px 1px #ccc inset
-      content: ""
+  h4:before
+    position: absolute
+    top: 13px
+    left: 15px
+    width: 12px
+    height: 12px
+    background: #fff
+    border-radius: 50%
+    box-shadow: 1px 1px 1px #ccc inset
+    content: ""
   h5
-    font-size: .9rem
+    font-size: 0.9rem
     color: #111
-  ol
+  ul, ol
     list-style: none
     margin: 10px 5px 20px
-  ul
-    list-style: none
-    margin: 10px 5px 20px
-    li
-      margin: .5em 4%
-      padding: 0
-      list-style: disc
-      line-height: 1.6
+  ul li
+    margin: 0.5em 4%
+    padding: 0
+    list-style: disc
+    line-height: 1.2
   ol li
-    margin: .5em 0 .5em 20px
+    margin: 0.5em 0 0.5em 20px
     list-style: decimal
-    ol
-      margin: 0
-      padding: 0
-  ul li ul
+  ul li ul, ol li ol
     margin: 0
     padding: 0
-    li
-      list-style: circle
-  a
-    word-wrap: break-word
+  ul li ul li
+    list-style: circle
   pre
     margin-bottom: 30px
   p
     code
-      background: #222
+      background: #222222
       border-radius: 4px
       color: #fff
       padding: .2em .4em
     .caption-text
-      font-size: .8rem
+      font-size: 0.8rem
       color: #999
       margin-top: 4px
       text-align: center
       display: block
   code
-    font-family: "Source Code Pro",Monaco,Consolas,"Courier New",Courier,monospace,sans-serif
+    font-family: $codefont
   blockquote
-    quotes: "“" "”"
+    quotes: "“" "”" "《" "》" "【" "】"
     margin: 30px 0
-    &:before
-      content: open-quote
-      font-size: 64pt
-      text-align: center
-      line-height: 42px
-      float: left
-      position: relative
-      top: 10px
-      color: #ddd
-      padding-right: 10px
-      font-family: Georgia,"Times New Roman",Times,serif
-    h2, h3, h4
-      font-size: 14px
-      background: 0 0
-      margin-bottom: 5px
+  blockquote:before
+    content: open-quote
+    font-size: 64pt
+    text-align: center
+    line-height: 42px
+    float: left
+    position: relative
+    top: 10px
+    color: #ddd
+    padding-right: 10px
+    font-family: Georgia, "Times New Roman", Times, serif
+  blockquote h2, blockquote h3, blockquote h4
+    font-size: 14px
+    background: none
+    margin-bottom: 5px
   cite
     padding-left: 3em
     font-style: normal
-    &:before
-      content: "―"
-      padding-right: 10px
+  cite:before
+    content: "―"
+    padding-right: 10px
   a.sup
-    font-size: .6em
+    font-size: 0.6em
     vertical-align: super
   .refs
     border: 1px dotted #ccc
     border-radius: 5px
     padding: 10px 15px 0
-    font-size: .8rem
+    font-size: 0.8rem
     margin-bottom: 20px
     h2
-      font-size: .9rem
+      font-size: 0.9rem
       margin: 0 0 10px
       border-bottom: 1px dotted #ccc
-    ol li
-      margin-bottom: 10px
+    ol
+      li
+        margin-bottom: 10px
+
+//entry-body
 
 #entry-form
   margin-bottom: 30px
@@ -475,21 +527,23 @@ footer
       margin-bottom: 20px
       cite
         font-style: normal
-        font-weight: 700
+        font-weight: bold
         display: block
-        font-size: .75rem
+        font-size: 0.75rem
         color: #333
-      .comment-author img
-        width: 40px
-        height: 40px
-        border-radius: 40px
-        border: 1px solid #D6E4ED
-        vertical-align: bottom
+      .comment-author
+        img
+          width: 40px
+          height: 40px
+          border-radius: 40px
+          border: 1px solid #D6E4ED
+          vertical-align: bottom
       .comment-meta
-        font-size: .75rem
+        font-size: 0.75rem
         color: #999
         span
           display: inline
+      .comment-meta-all,
       .comment-main-text
         background: #F9F9F9
         padding: 1em 1.2em .1em
@@ -498,39 +552,34 @@ footer
         border-left: none
         border-right: 4px solid #EBEBEB
         padding: 0 20px 0 0
+    //li
+  //commentlist
 
 #form
   border: 3px solid #EBEBEB
   border-radius: 4px
   padding: 4%
-  color: #666
+  color: #666666
   margin-bottom: 20px
   table
     width: 95%
-    td
-      font-weight: 400
+    th, td
+      font-weight: normal
       padding: 5px
       text-align: left
     th
-      font-weight: 400
-      padding: 5px
-      text-align: left
-      font-family: Verdana,Geneva,sans-serif
+      font-family: Verdana, Geneva, sans-serif
       padding-right: 20px
       vertical-align: top
       width: 27%
       span
-        color: #F99
+        color: #FF9999
+  //table
   input
     width: 80%
+  input, textarea, textarea.comment
     border: 1px solid #ccc
     display: inline
-  textarea
-    border: 1px solid #ccc
-    display: inline
-    &.comment
-      border: 1px solid #ccc
-      display: inline
   #commentsubmit
     margin-left: 28%
     padding: 8px
@@ -539,22 +588,24 @@ footer
     border-radius: 5px
     color: #fff
     width: 180px
-    font-family: Verdana,Geneva,sans-serif
+    font-family: Verdana, Geneva, sans-serif
   textarea
     width: 100%
     resize: none
-  #comment-author-login #commentsubmit
-    margin-top: 10px
-    margin-left: 0
+  #comment-author-login
+    #commentsubmit
+      margin-top: 10px
+      margin-left: 0
 
 #tburl
   width: 70%
   border: 1px solid #ccc
 
 #single-entry-link
-  border-top: solid 3px #ebf2f6
+  border-top: solid 3px $borderColor
   padding: 10px 0
   color: #8CB9CC
+  @extend %clearfix
   li
     display: block
     a
@@ -567,16 +618,26 @@ footer
     &#newer-link
       float: right
 
-.entry-page h1
-  font-size: 1.3rem
-  border-bottom: 1px solid #ebf2f6
-  padding-bottom: 10px
+#single-entry-bnr
+  padding-top: 5px
   margin-bottom: 20px
+  img
+    max-width: 100%
+
+/* pages
+.entry-page
+  h1
+    font-size: 1.3rem
+    border-bottom: 1px solid $borderColor
+    padding-bottom: 10px
+    margin-bottom: 20px
+
+/* member
 
 ul.page-member
   font-size: .85rem
   li
-    border-top: 1px solid #ebf2f6
+    border-top: 1px solid $borderColor
     padding-top: 20px
     &:first-child
       border: none
@@ -596,7 +657,7 @@ ul.page-member
 .page-member-name
   margin: 0 0 8px 100px
   h2, p
-    font-weight: 700
+    font-weight: bold
     margin: 0
 
 .page-member-profile
@@ -632,47 +693,36 @@ ul.page-member
         a
           background-color: #1895CF
           span
-            background-image: url(../images/retina-sbb5d9a22e7.png)
-            background-repeat: no-repeat
-            display: block
-            height: 22px
-            width: 22px
-            background-size: 262px 198px
-            background-position: 0 -91px
+            +sprite-background(icon_forkwell_2x, $retina, $sprites-retina)
             padding-left: 30px
           &:hover
             background-color: #3DA6D7
+      //fork
       &#github
         float: left
         a
-          background-color: #000
+          background-color: #000000
           span
-            background-image: url(../images/retina-sbb5d9a22e7.png)
-            background-repeat: no-repeat
-            display: block
-            height: 22px
-            width: 22px
-            background-size: 262px 198px
-            background-position: 0 -69px
+            +sprite-background(icon_github_2x, $retina, $sprites-retina)
             padding-left: 30px
           &:hover
             background-color: #333
+      //git
       &#qiita
         float: left
         margin-right: 2%
         a
           background-color: #5EC328
           span
-            background-image: url(../images/retina-sbb5d9a22e7.png)
-            background-repeat: no-repeat
-            display: block
-            height: 22px
-            width: 22px
-            background-size: 262px 198px
-            background-position: 0 -47px
+            +sprite-background(icon_qiita_2x, $retina, $sprites-retina)
             padding-left: 30px
           &:hover
             background-color: #62D02A
+      //qiita
+    //li
+  //ul
+
+//page-member-links
 
 .page-member-archive
   background: #F4F8FA
@@ -687,42 +737,39 @@ ul.page-member
   p
     margin-bottom: 0
 
+/* archives
 .entry-archive
   margin-bottom: 50px
   h1#entry-archive-head
     font-size: 1.25rem
     color: #666
-    border-bottom: 3px solid #ebf2f6
-    padding: 0 0 10px
-    margin: 0 0 10px
+    border-bottom: 3px solid $borderColor
+    padding: 0 0 10px 0
+    margin: 0 0 10px 0
     text-align: left
     clear: both
   .entry
     overflow: hidden
-    border-bottom: 1px solid #ebf2f6
+    border-bottom: 1px solid $borderColor
     padding: 10px 0 2px
 
 .entry-archive-yearlist
   h2
     font-size: 1rem
-  dl dt
-    color: #999
-    font-weight: 400
+  dl
+    dt
+      color: #999
+      font-weight: normal
 
-@media screen and (min-width: 0) and (max-width: 765px)
+@media screen and (min-width: 0px) and (max-width: 765px)
   header
     padding: .4em 0 .2em
     .wrapper
       width: 100%
     .menubtn
       margin: 0 3% .4em
-      background-image: url(../images/retina-sbb5d9a22e7.png)
-      background-repeat: no-repeat
       display: block
-      height: 25px
-      width: 29px
-      background-size: 262px 198px
-      background-position: 0 -157px
+      +sprite-background(menu_2x, $retina, $sprites-retina)
       cursor: pointer
       span
         display: none
@@ -739,29 +786,19 @@ ul.page-member
           position: relative
           display: block
           padding: 10px 3%
-          padding-right: 27px
-          &:before
-            content: ""
-            position: absolute
-            top: 50%
-            right: 15px
-            width: 10px
-            height: 10px
-            margin-top: -7px
-            border-top: 3px solid #ccc
-            border-right: 3px solid #ccc
-            -webkit-transform: rotate(45deg)
-            -ms-transform: rotate(45deg)
-            transform: rotate(45deg)
+            right: 27px
+          +linkIcon($color: #ccc)
     #search
       padding-bottom: 1em
+  //header
   footer
     .wrapper
       width: 100%
-    #widget_text .textwidget
-      width: 200px
-      margin: 0 auto
-      padding: 10px 0
+    #widget_text
+      .textwidget
+        width: 200px
+        margin: 0 auto
+        padding: 10px 0
     h2
       border-top: 1px solid #333
       border-bottom: 1px solid #333
@@ -779,21 +816,9 @@ ul.page-member
           position: relative
           display: block
           padding: 10px 3%
-          padding-right: 27px
+            right: 27px
           text-decoration: none
-          &:before
-            content: ""
-            position: absolute
-            top: 50%
-            right: 15px
-            width: 10px
-            height: 10px
-            margin-top: -7px
-            border-top: 3px solid #bee1f4
-            border-right: 3px solid #bee1f4
-            -webkit-transform: rotate(45deg)
-            -ms-transform: rotate(45deg)
-            transform: rotate(45deg)
+          +linkIcon($color: #BEE1F4)
     .copy
       ul
         margin: 4px 0
@@ -801,38 +826,24 @@ ul.page-member
           border-bottom: 1px solid #ccc
           border-top: none
           a
-            color: #888
-            &:before
-              content: ""
-              position: absolute
-              top: 50%
-              right: 15px
-              width: 10px
-              height: 10px
-              margin-top: -7px
-              border-top: 3px solid #ccc
-              border-right: 3px solid #ccc
-              -webkit-transform: rotate(45deg)
-              -ms-transform: rotate(45deg)
-              transform: rotate(45deg)
+            color: #888888
+            +linkIcon($color: #ccc)
       p
-        background-image: url(../images/retina-sbb5d9a22e7.png)
-        background-repeat: no-repeat
-        display: block
-        height: 13px
-        background-size: 262px 198px
-        background-position: 0 -34px
+        +sprite-background(foot_logo_2x, $retina, $sprites-retina, false)
         margin: 10px 3%
         small
           display: block
           padding: 20px 0 10px
-  #content .entry .entry-date
-    width: 82%
+  //footer
+  #content
+    .entry
+      .entry-date
+        width: 82%
   .entry-archive-yearlist
     h2
-      border-bottom: 1px solid #ebf2f6
+      border-bottom: 1px solid $borderColor
       padding-bottom: 4px
-      margin: 0 0 4px
+      margin: 0px 0 4px
     dl
       padding-top: 10px
       margin-bottom: 30px
@@ -844,55 +855,81 @@ ul.page-member
           text-decoration: none
         &:last-child
           border-bottom: none
-  #entry-form .commentlist li
-    .comment-author
-      float: left
-      margin: 0 10px 10px 0
-    .comment-meta
-      padding-top: 4px
-      float: left
-      span
-        display: inline
-    .comment-main-text
-      clear: both
+  #entry-form
+    .commentlist
+      li
+        .comment-author
+          float: left
+          margin: 0 10px 10px 0
+        .comment-meta
+          padding-top: 4px
+          float: left
+          span
+            display: inline
+        .comment-meta-all,
+        .comment-main-text
+          clear: both
+      //li
+    //commentlist
+  //entry-form
   #form
     table
       width: 100%
-      td, th
+      th, td
         display: block
         width: 100%
         margin: 0
         padding: 0
+    //table
     input
       width: 97%
     #commentsubmit
-      margin: 10px 0 0
+      margin: 10px 0 0 0
       padding: .4em
     textarea
       width: 97%
       resize: none
 
-@media only screen and (min-width: 481px)
-  header #search #search-text
-    width: 91%
-  #content .entry .entry-date ul li.entry-author
-    background-image: url(../images/retina-sbb5d9a22e7.png)
-    background-repeat: no-repeat
-    display: block
-    height: 16px
-    background-size: 262px 198px
-    background-position: 0 -129px
-    padding-left: 20px
-  .entry-archive-yearlist dl
-    font-size: 1.1rem
-    dt
-      position: absolute
-      width: 4em
-    dd
-      padding-left: 4em
+//only-smartphone
 
+/*==============================================
+ *  for Landscape
+ *==============================================
+@media only screen and (min-width: 481px)
+  header
+    #search
+      #search-text
+        width: 91%
+  //header
+  #content
+    .entry
+      .entry-date
+        ul
+          li
+            &.entry-author
+              +sprite-background(icon_member_2x, $retina, $sprites-retina, false)
+              padding-left: 20px
+          //li
+        //ul
+      //entry-date
+    //entry
+  //content
+  .entry-archive-yearlist
+    dl
+      font-size: 1.1rem
+      dt
+        position: absolute
+        width: 4em
+      dd
+        padding-left: 4em
+
+//for-Landscape
+
+/*==============================================
+ *  for Tablet
+ *==============================================
 @media only screen and (min-width: 768px)
-  #content, .wrapper
+  .wrapper, #content
     width: 650px
     margin: 0 auto
   header
@@ -909,7 +946,7 @@ ul.page-member
           color: #2C2A2B
           display: block
           width: 90px
-          font-size: .8rem
+          font-size: 0.8rem
           font-family: Georgia,serif
           float: left
           text-align: center
@@ -917,9 +954,10 @@ ul.page-member
           &:hover
             background: #fff
             color: #ccc
-        &.current_page_item a
-          background: #fff
-          color: #1D8ECC
+        &.current_page_item
+          a
+            background: #fff
+            color: #1D8ECC
     #search
       float: right
       margin: .6em 0 0
@@ -930,6 +968,8 @@ ul.page-member
         width: 130px
       #search-btn
         top: 5px
+    //searches
+  //header
   footer
     .foot-menu
       padding: 1.6em 0
@@ -939,16 +979,20 @@ ul.page-member
       overflow: hidden
       position: relative
       > div
+        //float: left;
         margin-right: 20px
         h2
-          font-size: .95rem
+          font-size: 0.95rem
           margin-bottom: 6px
         &#widget_text
           float: left
           width: 200px
-        &#popular-posts, &#widget_recent_entries
+        &#widget_recent_entries
           margin-left: 230px
-          margin-right: 180px
+          margin-right: 120px
+        &#popular-posts
+          margin-left: 230px
+          margin-right: 120px
         &#widget_categories
           position: absolute
           top: 0
@@ -962,16 +1006,16 @@ ul.page-member
               text-decoration: underline
               &:hover
                 text-decoration: none
-          &.wpp-list li
-            clear: none
+          //li
+          &.wpp-list
+            li
+              clear: none
+        //ul
+      //div
+    //wrapper
     .copy
       ul
-        background-image: url(../images/retina-sbb5d9a22e7.png)
-        background-repeat: no-repeat
-        display: block
-        height: 13px
-        background-size: 262px 198px
-        background-position: 0 -34px
+        +sprite-background(foot_logo_2x, $retina, $sprites-retina, false)
         margin: 14px 0 4px
         padding-left: 90px
         line-height: 1
@@ -979,33 +1023,34 @@ ul.page-member
           padding: 0 6px 0 10px
           display: inline
           border-left: 1px dotted #c1c1c1
-          font-size: .8rem
-          a:hover
-            text-decoration: underline
+          font-size: 0.8rem
+          a
+            &:hover
+              text-decoration: underline
           &:first-child
             border: none
+      //ul
       p
         margin-bottom: 6px
+    //copy
+  //footer
   #single-entry-link
     margin: 0
     padding: 10px 0
-  #content .entry
-    .entry-date
-      width: 90%
-      h1
-        font-size: 1.45rem
-    .entry-body
-      padding-bottom: 20px
-      margin-bottom: 40px
+  #content
+    .entry
+      .entry-date
+        width: 90%
+        h1
+          font-size: 1.45rem
+      .entry-body
+        padding-bottom: 20px
+        margin-bottom: 40px
   .entry-body
     font-size: 1rem
     line-height: 1.8
     p
       margin-bottom: 20px
-    img.aligncenter
-      margin-left: auto
-      margin-right: auto
-      display: block
     h2
       font-size: 1.2rem
       margin: 30px 0 10px
@@ -1014,12 +1059,14 @@ ul.page-member
     h4, h5
       font-size: 1rem
     .refs
-      font-size: .85rem
+      font-size: 0.85rem
       padding: 15px 25px 0
       h2
         font-size: 1rem
+  //entry-body
   #headline
     margin: 70px auto 80px
+  /* member
   .page-member-links
     padding: 1.5em 2em
     overflow: hidden
@@ -1035,10 +1082,11 @@ ul.page-member
       padding-top: 2px
       width: 72%
       float: right
-  ul.page-member li
-    clear: both
-    overflow: hidden
-    padding: 12px 0
+  ul.page-member
+    li
+      clear: both
+      overflow: hidden
+      padding: 12px 0
   .page-member-image
     margin-right: 20px
   .page-member-name
@@ -1053,21 +1101,25 @@ ul.page-member
     width: 440px
   .page-member-archive
     padding: 1.5em
-  #content .entry-archive
-    .entry .entry-date h1
-      font-size: 1.1rem
-    .page-member-profile
-      width: 400px
+  /* archives
+  #content
+    .entry-archive
+      .entry
+        .entry-date
+          h1
+            font-size: 1.1rem
+      .page-member-profile
+        width: 400px
   .entry-archive-yearlist
     section
-      border-bottom: 1px solid #ebf2f6
+      border-bottom: 1px solid $borderColor
       padding: 20px 0 5px
     h2
       padding-bottom: 4px
       position: absolute
       width: 5em
       font-size: 1.4rem
-      font-weight: 400
+      font-weight: normal
     dl
       padding: .2em 0 0 5em
       dd
@@ -1076,63 +1128,89 @@ ul.page-member
     h2
       font-size: 1rem
       margin-bottom: 14px
-    .commentlist li
-      cite
-        font-size: .75rem
-        margin-bottom: 4px
-      .comment-author
-        margin-bottom: 4px
-        img
-          width: 40px
-          height: 40px
-          border-radius: 40px
-          border: 1px solid #D6E4ED
-          vertical-align: bottom
-      .comment-meta
-        font-size: .75rem
-        span
-          display: block
-      .comment-meta-all
-        float: left
-        width: 12%
-        text-align: center
-      .comment-main-text
-        float: right
-        width: 80%
-      &.byuser
+    .commentlist
+      li
+        cite
+          font-size: 0.75rem
+          margin-bottom: 4px
+        .comment-author
+          margin-bottom: 4px
+          img
+            width: 40px
+            height: 40px
+            border-radius: 40px
+            border: 1px solid #D6E4ED
+            vertical-align: bottom
+        .comment-meta
+          font-size: 0.75rem
+          span
+            display: block
         .comment-meta-all
-          float: right
-        .comment-main-text
           float: left
+          width: 12%
+          text-align: center
+        .comment-main-text
+          float: right
+          width: 80%
+        &.byuser
+          .comment-meta-all
+            float: right
+          .comment-main-text
+            float: left
+      //li
+    //commentlist
+
+//for-Tablet
+
+/*==============================================
+ *  for pc
+ *==============================================
 
 @media only screen and (min-width: 1000px)
-  #content, .wrapper
+  .wrapper, #content
     width: 760px
     margin: 0 auto
-  #content .entry .entry-author-image img
-    width: 50px
-    height: 50px
+  #content
+    .entry
+      .entry-author-image
+        img
+          width: 50px
+          height: 50px
+    //entry
+  //content
   header
-    ul li a
-      width: 100px
+    ul
+      li
+        a
+          width: 100px
     #search
       #search-box
         width: 190px
       #search-text
         width: 150px
+    //searches
+  //header
   footer
     .wrapper
       width: 760px
       div
         margin-right: 30px
+        &#widget_recent_entries
+          //width:280px;
+        &#popular-posts
+          //width:280px;
         &#widget_categories
           margin-right: 0
+      //div
+    //wrapper
     .copy
       ul
         float: left
       p
         float: right
         margin-top: 10px
+    //copy
+  //footer
   .pagetop
     position: fixed
     bottom: -70px
@@ -1149,6 +1227,7 @@ ul.page-member
       font-size: 10px
       text-decoration: none
       line-height: 50px
+  /* member
   .page-member-links
     h2
       width: 26%
@@ -1158,19 +1237,29 @@ ul.page-member
         width: 32%
   .page-member-profile
     width: 550px
-  #content .entry-archive .page-member-profile
-    width: 510px
+  /* archives
+  #content
+    .entry-archive
+      .page-member-profile
+        width: 510px
 
+//for-pc
+
+/*====================================================
+ *  common google code
+ *====================================================
+/* Tomorrow Night Bright Theme
+/* Original theme - https://github.com/chriskempson/tomorrow-theme
 .prettyprint
-  background: #222
+  background: #222222
   padding: 10px 20px
   white-space: pre-wrap
   word-wrap: break-word
   border-radius: 5px
   color: #ccc
   line-height: 1.5
-  font-size: .95rem
-  font-family: "Source Code Pro",Monaco,Consolas,"Courier New",Courier,monospace,sans-serif
+  font-size: 0.95rem
+  font-family: $codefont
 
 .pln
   color: #eaeaea
@@ -1186,7 +1275,11 @@ ul.page-member
     color: #7aa6da
   .lit
     color: #e78c45
-  .clo, .opn, .pun
+  .pun
+    color: #eaeaea
+  .opn
+    color: #eaeaea
+  .clo
     color: #eaeaea
   .tag
     color: #d54e53
@@ -1203,28 +1296,50 @@ ul.page-member
 
 @media print, projection
   .str
-    color: #060
+    color: #006600
   .kwd
     color: #006
-    font-weight: 700
+    font-weight: bold
   .com
     color: #600
     font-style: italic
   .typ
     color: #404
-    font-weight: 700
+    font-weight: bold
   .lit
-    color: #044
-  .clo, .opn, .pun
-    color: #440
+    color: #004444
+  .pun, .opn, .clo
+    color: #444400
   .tag
     color: #006
-    font-weight: 700
+    font-weight: bold
   .atn
-    color: #404
+    color: #440044
   .atv
-    color: #060
+    color: #006600
 
+/* Specify class=linenums on a pre to get line numbering
 ol.linenums
   margin-top: 0
   margin-bottom: 0
+
+/* IE indents via margin-left
+li.L0,
+li.L1,
+li.L2,
+li.L3,
+li.L4,
+li.L5,
+li.L6,
+li.L7,
+li.L8,
+li.L9
+  /*
+
+/* Alternate shading for lines
+li.L1,
+li.L3,
+li.L5,
+li.L7,
+li.L9
+  /*

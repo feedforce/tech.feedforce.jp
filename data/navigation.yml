@@ -1,6 +1,6 @@
 - label: "Home"
   url: "/"
 - label: "Archives"
-  url: "/archives.html"
+  url: "/archives"
 - label: "Member"
-  url: "/member.html"
+  url: "/member"

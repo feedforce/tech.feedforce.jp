@@ -10,7 +10,7 @@ title: #{slug_to_japanese(tagname)}
           <ul>
             <li class="entry-time"><%= article.date.strftime('%Y.%m.%e') %></li>
             <li class="entry-cat"><%= article.tags.map { |tag| link_to "#{slug_to_japanese(tag)}", tag_path(tag) }.join(', ').html_safe %></li>
-            <li class="entry-author"><%= link_to article.data.authors, '/author/' + article.data.authors + '.html' %></li>
+            <li class="entry-author"><%= link_to article.data.authors, '/author/' + article.data.authors %></li>
           </ul>
         </div>
       </article>

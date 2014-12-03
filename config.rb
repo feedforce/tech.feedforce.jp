@@ -155,11 +155,9 @@ ignore '/author.html'
 ###
 sprockets.append_path '../bower_components'
 
-
 ###
 # Markdown Setting
 ###
-set :markdown, :tables => true, :autolink => true, :gh_blockcode => true, :fenced_code_blocks => true, :smartypants => true
-set :markdown_engine, :redcarpet
-
 activate :syntax
+set :markdown, :tables => true, :autolink => true, :gh_blockcode => true, :fenced_code_blocks => true
+set :markdown_engine, :redcarpet

@@ -15,7 +15,7 @@ FF_BLOG.Common.Menu = {
     var _self = this;
 
     this.$openTrigger.on('click', function () {
-      _self.$openTrigger.toggleClass(_self.SET_CLASS_NAME)
+      _self.$menu.toggleClass(_self.SET_CLASS_NAME)
     })
   }
 };

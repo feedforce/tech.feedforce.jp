@@ -59,17 +59,21 @@ tags: resume,
 
 <h4><a name="l3"> </a>使い方</h4>
 <h5><a name="l4"> </a>3つのクラスを使う場合</h5>
-<pre><code>
+```
+
 &lt;div class="geo"&gt;後楽園: &lt;span class="latitude"&gt;35.707898&lt;/span&gt;;&lt;span class="longitude"&gt;139.751864&lt;/span&gt;&lt;/div&gt;
-</code></pre>
+
+```
 
 <h5><a name="l5"> </a>1つのクラスを使う場合</h5>
 <p>セミコロン区切りで緯度;経度の順に記述します。</p>
-<pre><code>
+```
+
 後楽園は&lt;span class="geo"&gt;52.686; -2.193&lt;/span&gt;の地点にあります。
 後楽園は&lt;abbr class="geo" title="52.686;-2.193"&gt;52.686, -2.193&lt;/abbr&gt;の地点にあります。
 後楽園は&lt;abbr class="geo" title="52.686;-2.193"&gt;素敵な場所&lt;/abbr&gt;です。
-</code></pre>
+
+```
 
 <h5><a name="l6"> </a>注意</h5>
 <ul>
@@ -107,17 +111,20 @@ GPSなどを利用した全地球的な宝探し。位置情報をキャッシ�
 </ul>
 
 <h4><a name="l11"> </a>ウェブサイトをGeoTagging</h4>
-<pre><code>
+```
+
 &lt;meta name="ICBM" content="XXX.XXXXX, XXX.XXXXX"&gt;
 &lt;meta name="DC.title" content="THE NAME OF YOUR SITE"&gt;
-</code></pre>
+
+```
 
 <p><a href="http://geourl.org/add.html" class="external">Adding yourself to GeoURL - GeoURL (2.0)</a></p>
 <h4><a name="l12"> </a>GeoURLへpingを送信</h4>
 <p><a href="http://geourl.org/ping/" class="external">GeoURL (2.0) ping</a></p>
 
 <h4><a name="l13"> </a>GeoURLでRSSフィードにGeoTagging</h4>
-<pre><code>
+```
+
 &lt;item rdf:about="http://ericrichardson.com/"&gt;
  &lt;title&gt;eWorld: eric richardson meets the web&lt;/title&gt;
  &lt;link&gt;http://ericrichardson.com/&lt;/link&gt;
@@ -126,7 +133,8 @@ GPSなどを利用した全地球的な宝探し。位置情報をキャッシ�
  &lt;geourl:latitude&gt;34.0456&lt;/geourl:latitude&gt;
 &lt;/item&gt;
 (ref [[GeoURL Log: Latitude and longitude data in the RSS feeds - GeoURL (2.0)|http://geourl.org/news/2005/04/26/rssplus.html]])
-</code></pre>
+
+```
 
 <h4><a name="l14"> </a>さらにRSSフィードにGeoTagging</h4>
 <p><a href="http://hiki.koshigoe.jp/?%5BFeed%5Dgeourl%A4%C7%C3%CF%CD%FD%BE%F0%CA%F3" class="external">koshigoe hiki - [Feed]geourlで地理情報</a></p>
@@ -135,18 +143,22 @@ GPSなどを利用した全地球的な宝探し。位置情報をキャッシ�
 <p><a href="http://www.georss.org/" class="external">GeoRSS Home</a></p>
 
 <h4><a name="l16"> </a>Simple GeoRSS</h4>
-<pre><code>
+```
+
 &lt;georss:point&gt;45.256 -71.92&lt;/georss:point&gt;
-</code></pre>
+
+```
 
 <h4><a name="l17"> </a>GML</h4>
-<pre><code>
+```
+
 &lt;georss:where&gt;
  &lt;gml:Point&gt;
   &lt;gml:pos&gt;45.256 -71.92&lt;/gml:pos&gt;
  &lt;/gml:Point&gt;
 &lt;/georss:where&gt;
-</code></pre>
+
+```
 
 <p><a href="http://www.opengeospatial.org/groups/?iid=31" class="external">GML</a>はAtom1.0, RSS2.0, RSS1.0での利用を想定していますが、RSS以外の通常のXMLファイルでも使用することができます。</p>
 
@@ -155,11 +167,13 @@ GPSなどを利用した全地球的な宝探し。位置情報をキャッシ�
 <h2><span class="date"><a name="l18"> </a></span><span class="title">Google Maps APIでのKML/GeoRSS対応</span></h2>
 <p><a href="http://www.google.com/apis/maps/documentation/#XML_Overlays" class="external">KML/GeoRSS Overlays</a>
 Google Maps APIでKMLやGeoRSSのファイルを取得して利用するには、GGeoXmlオブジェクトを利用します。GGeoXmlはGOverlayオブジェクトを返します。</p>
-<pre><code>
+```
+
 var map = new GMap2(document.getElementById("map")); 
 var geoXml = new GGeoXml("http://www.example.com/rss.xml");
 map.addOverlay(geoXml);
-</code></pre>
+
+```
 
 <h2><span class="date"><a name="l19"> </a></span><span class="title">参考資料</span></h2>
 <ul>

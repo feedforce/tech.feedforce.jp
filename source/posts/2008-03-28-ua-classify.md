@@ -50,7 +50,8 @@ tags: resume,
 
 <p>このタイプで代表的なRSSリーダーのユーザーエージェントは次のようなものです。</p>
 
-<pre><code>livedoor Reader<br />
+```
+livedoor Reader<br />
 livedoor FeedFetcher/0.01 (http://reader.livedoor.com/; 9 subscribers)<br />
 <br />
 Google Reader<br />
@@ -61,7 +62,8 @@ Bloglines/3.1 (http://www.bloglines.com; 2 subscribers)<br />
 <br />
 はてなRSS<br />
 Hatena RSS/0.3 (http://r.hatena.ne.jp; 21 subscribers)<br />
-</code></pre>
+
+```
 
 <p>このようにユーザーエージェントの情報を元にすれば購読者数を把握できるのですが、逆にいうとその情報を信用する以外に購読者数を知る術がないというのが現状です。</p>
 
@@ -82,13 +84,17 @@ Hatena RSS/0.3 (http://r.hatena.ne.jp; 21 subscribers)<br />
 
 <p>IEのレンダリングエンジンを利用しているブラウザの多くは、ユーザーエージェントの文字列がIEのものと酷似しています。たとえば<a href="http://www.lunascape.jp/">Lunascape</a>は次のようなユーザーエージェントを持っています。</p>
 
-<pre><code>Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727; .NET CLR 3.0.04324.17; Lunascape 4.1.3)</code></pre>
+```
+Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727; .NET CLR 3.0.04324.17; Lunascape 4.1.3)
+```
 
 <p>上記の場合、IE7.0ではなく Lunascape 4と判別しなければなりません。</p>
 
 <p>また、IEのユーザーエージェントには見たことのない文字列が多数入っていることが多く、その中に特定のブラウザを示す文字列があるかどうかを見つける必要があります。</p>
 
-<pre><code>Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; FunWebProducts-AskJeevesJapan; .NET CLR 1.1.4322; SpamBlockerUtility 4.8.4)</code></pre>
+```
+Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; FunWebProducts-AskJeevesJapan; .NET CLR 1.1.4322; SpamBlockerUtility 4.8.4)
+```
 
 <p>上記の場合、FunWebProductsやSpamBlockerUtilityという文字列がありますが、これらはブラウザを示すものではないため、上記のユーザーエージェントはIE7.0と判別される必要があります。</p>
 

@@ -92,7 +92,8 @@ L4での負荷分散を行うLinuxカーネルの機能。</p>
 <h3><a name="l11"><span class="sanchor"> </span></a>LB機</h3>
 <p>バーチャルホストを作ってそこに設定を書いていく。
 （バーチャルホストを定義しなくてもいいが、今回はバーチャルホストにする）</p>
-<pre><code>
+```
+
 &lt;VirtualHost *:80&gt;
   ProxyRequest Off
   ProxyPass / balancer://cluster/
@@ -111,7 +112,8 @@ L4での負荷分散を行うLinuxカーネルの機能。</p>
     BalancerMember http://192.168.1.102/ loadfactor=10
   &lt;/Proxy&gt;
 &lt;/VirtualHost&gt;
-</code></pre>
+
+```
     </div>
   </div>
 </div>
@@ -130,9 +132,11 @@ L4での負荷分散を行うLinuxカーネルの機能。</p>
 <h3><a name="l15"><span class="sanchor"> </span></a>バックエンド全部落ちた</h3>
 <p>Service Temporarily Unavailable</p>
 <p>そんな時<a href="http://blog.fkoji.com/2007/03261000.html" class="external">猫メソッド</a>。</p>
-<pre><code>
+```
+
 ErrorDocument 503 (猫のURL）
-</code></pre>
+
+```
 <h3><a name="l16"><span class="sanchor"> </span></a>ロードバランサ落ちた</h3>
 
 <p>冗長化しときましょう。</p>
@@ -149,27 +153,35 @@ ErrorDocument 503 (猫のURL）
     <div class="section">
       <h3><a name="l19"><span class="sanchor"> </span></a>stickysession</h3>
 <p>以下の行更新。</p>
-<pre><code>
+```
+
   ProxyPass / balancer://cluster/ stickysession=backendid
-</code></pre>
-<pre><code>
+
+```
+```
+
     BalancerMember http://192.168.1.101/ loadfactor=10 route=1
     BalancerMember http://192.168.1.102/ loadfactor=10 route=2
-</code></pre>
+
+```
 <p>次のようなファイルをそれぞれのサーバに置く。</p>
 <p>101</p>
 
-<pre><code>
+```
+
 &lt;?php
   setcookie('backendid', "hogehoge.1");
 ?&gt;
-</code></pre>
+
+```
 <p>102</p>
-<pre><code>
+```
+
 &lt;?php
   setcookie('backendid', "hogehoge.2");
 ?&gt;
-</code></pre>
+
+```
 <p>「hogehoge.n」が「route=n」に対応する。</p>
 <h4><a name="l20"> </a>stickysession張った状態で101が落ちたら</h4>
 <p>ギャース！猫再び。</p>
@@ -177,15 +189,19 @@ ErrorDocument 503 (猫のURL）
 
 <h4><a name="l21"> </a>落ちても平気なように</h4>
 <p>redirectを指定する。</p>
-<pre><code>
+```
+
     BalancerMember http://192.168.1.101/ loadfactor=10 route=1 redirect=2
     BalancerMember http://192.168.1.102/ loadfactor=10 route=2
-</code></pre>
+
+```
 <p>101が落ちていると102の方へつながる。</p>
 <p>しかし相互リダイレクトはうまくいかないので、以下のようには書けない。</p>
-<pre><code>
+```
+
     BalancerMember http://192.168.1.102/ loadfactor=10 route=2 redirect=1
-</code></pre>
+
+```
 <p>だから102の方が落ちたらやっぱり猫。</p>
 
 <p>バランサマネージャの設定更新がGETで手軽に叩けるようなので、バックエンドをNagiosなどで監視して、落ちていたらリダイレクト先を動的に設定するようなスクリプトを書いたりしておくといいかもしれない。</p>
@@ -194,10 +210,12 @@ ErrorDocument 503 (猫のURL）
 <p>バックエンドが動的ファイルを扱うサーバの場合、そのサーバに静的ファイルを扱わせるとリソースがもったいない。
 なので静的なファイルはロードバランサが返すようにするとお得。</p>
 <p>以下の行追加。</p>
-<pre><code>
+```
+
    ProxyPass /img !
    ProxyPass /css !
-</code></pre>
+
+```
 <p>静的ファイルは動的ファイルに比べて負荷が数十分の一から百分の一以下なので、全部ロードバランサでさばいてもけっこういける。</p>
 
 <h3><a name="l23"><span class="sanchor"> </span></a>バックエンドのログのリモートIP</h3>
@@ -211,13 +229,15 @@ ErrorDocument 503 (猫のURL）
 <p>参考 : <a href="http://www.drk7.jp/MT/archives/000573.html" class="external">リバースプロキシを導入する際はmod_rpaf :: Drk7jp</a></p>
 
 <p>バックエンド側で以下の設定を追記。</p>
-<pre><code>
+```
+
    &lt;IfModule mod_rpaf-2.0.c&gt;
        RPAFenable On
        RPAFsethostname Off
        RPAFproxy_ips 192.168.1.100
    &lt;/IfModule&gt;
-</code></pre>
+
+```
     </div>
   </div>
 </div>

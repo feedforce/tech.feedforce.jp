@@ -99,9 +99,11 @@ memcachedのキャッシュは有効期限が過ぎるか明示的に削除し�
   <h2><span class="date"><a name="l12"> </a></span><span class="title">起動</span></h2>
   <div class="body">
     <div class="section">
-      <pre><code>
+      ```
+
 $ memcached -d -m 128 -l 127.0.0.1 -p 11211
-</code></pre>
+
+```
 <h3><a name="l13"><span class="sanchor"> </span></a>オプション</h3>
 
 <p>manの内容は古いのでmemcached -hの方を優先的に信用。<br>
@@ -144,35 +146,44 @@ $ memcached -d -m 128 -l 127.0.0.1 -p 11211
       <h3><a name="l15"><span class="sanchor"> </span></a>導入</h3>
 <h4><a name="l16"> </a>ライブラリのインストール</h4>
 <p>5.2.1で試しました。</p>
-<pre><code>
+```
+
 $ pecl install memcache
-</code></pre>
+
+```
 <h4><a name="l17"> </a>php.iniの編集</h4>
 <p>以下の一行追加。</p>
 
-<pre><code>
+```
+
 extension=memcache.so
-</code></pre>
+
+```
 <p>これでMemcacheモジュールが使えるようになる。</p>
 <ul>
 <li><a href="http://jp.php.net/memcache" class="external">PHP: Memcache 関数</a></li>
 </ul>
 <h4><a name="l18"> </a>httpdの再起動</h4>
-<pre><code>
+```
+
 $ /etc/init.d/httpd restart
-</code></pre>
+
+```
 <p>オブジェクトはシリアライズされてから保存されるのでリソース型などのオブジェクトは保存できない</p>
 
 <h3><a name="l19"><span class="sanchor"> </span></a>使い方</h3>
 <p>つ <a href="http://jp.php.net/memcache" class="external">マニュアル</a></p>
 <p>とりあえず接続テストだけ。</p>
-<pre><code>
+```
+
 $memcache = new Memcache;
 $memcache-&gt;connect('localhost', 11211) or die ("接続できませんでした");
-</code></pre>
+
+```
 <p>マニュアルのコピペですみません。</p>
 <p>じゃあもう少し。</p>
-<pre><code>
+```
+
 
 if (($res = $memcache-&gt;get('key')) === false) {
     $now = date('Y-m-d H:i:s');
@@ -181,7 +192,8 @@ if (($res = $memcache-&gt;get('key')) === false) {
 }
 
 echo $res;
-</code></pre>
+
+```
 <p>最初のアクセス日時がキャッシュされる分かりやすい例。</p>
 <p>キャッシュがなければキャッシュする。あればキャッシュを取ってくる。<br>
 $memcache-&gt;setの引数のfalseは圧縮するかどうか。3600はキャッシュの有効期限を秒で指定。0にすると期限なし。</p>

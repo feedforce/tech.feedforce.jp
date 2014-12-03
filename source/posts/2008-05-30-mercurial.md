@@ -26,7 +26,8 @@ tags: resume,
 <h2>使ってみる</h2>
 <h3>リポジトリの作成</h3>
 試しに<a href="http://www.rubyonrails.org/">Rails</a>アプリケーションを作成して、リポジトリに格納してみます。
-<pre><code>$ rails -q hgdemo (管理対象作成)
+```
+$ rails -q hgdemo (管理対象作成)
 $ cd hgdemo
 $ ls -a
 ./  README   app/     db/   lib/  public/ test/ vendor/
@@ -34,9 +35,11 @@ $ ls -a
 $ hg init (リポジトリ初期化)
 $ ls -a
 ./  .hg/       Rakefile config/ doc/ log/     script/ tmp/
-../ README app/      db/      lib/   public/ test/    vendor/</code></pre>
+../ README app/      db/      lib/   public/ test/    vendor/
+```
 管理用ディレクトリ .hg/ が出来ました。
-<pre><code>$ hg add (ファイルを追加)
+```
+$ hg add (ファイルを追加)
 adding README
 adding Rakefile
 adding app/controllers/application.rb
@@ -44,9 +47,12 @@ adding app/controllers/application.rb
 :
 adding script/runner
 adding script/server
-adding test/test_helper.rb</code></pre>
+adding test/test_helper.rb
+```
 引数なしのaddでカレントディレクトリ以下の全てのファイルが追加対象になりました。
-<pre><code>$ hg commit (コミット)</code></pre>
+```
+$ hg commit (コミット)
+```
 コミットログの入力を求められます。
 
 この状態で、このディレクトリはレポジトリになっています。
@@ -55,25 +61,35 @@ adding test/test_helper.rb</code></pre>
 分散バージョン管理システムでは、作業コピーを作る代わりに、リポジトリ自体を複製します。複製されたリポジトリに自身による変更を行った後で、他のリポジトリと変更点のやりとりを行うことで開発を進めます。
 
 とりあえずローカルで別のディレクトリに複製をしてみます。
-<pre><code>$ hg clone hgdemo hgdemo-clone</code></pre>
+```
+$ hg clone hgdemo hgdemo-clone
+```
 sshやhttpを使ってネットワーク越しに複製することも出来ます。
 <h3>変更点の伝搬</h3>
 hgdemo-clone上で何か変更を行ってみます。
-<pre><code>$ ruby script/generate model User
+```
+$ ruby script/generate model User
 $ hg add
-$ hg commit -m 'Add user model'</code></pre>
+$ hg commit -m 'Add user model'
+```
 リポジトリhgdemo-cloneにコミットが行われました。
 
 これを複製元のhgdemoに反映するには、
-<pre><code>$ hg push</code></pre>
+```
+$ hg push
+```
 を行います。
 
 複製元リポジトリを読み込めるが書き込めない場合などは
-<pre><code>$ hg export &gt; changes.diff</code></pre>
+```
+$ hg export &gt; changes.diff
+```
 として変更点をパッチファイルとして取り出し、メールで複製元の管理者に送るなどします。
 
 他の人が同じように各自が複製したリポジトリから変更を反映している場合、それを手元に持ってくるには
-<pre><code>$ hg pull</code></pre>
+```
+$ hg pull
+```
 とします。
 <h2>利用例</h2>
 普通に共同開発作業に使えるのは当然なのですが、分散バージョン管理システムならではの利用方法を考えてみました。

@@ -15,7 +15,8 @@ tags: resume,
     <div>
       <h3><a name="l2"> </a>ウェブ検索サンプル</h3>
 
-<pre><code>
+```
+
 Window.onload = function() {
  // seach control 生成
  var sc = new GSearchControl();
@@ -29,7 +30,8 @@ Window.onload = function() {
  // 検索実行
  sc.execute(“ルート・コミュニケーションズ”);
 }
-</code></pre>
+
+```
 <ul>
 <li><a href="http://map.fkoji.com/gas/helloworld.html">サンプル</a></li>
 </ul>
@@ -62,7 +64,8 @@ Window.onload = function() {
 
     <div>
       <h3><a name="l5"> </a>addSearcherに放り込む</h3>
-<pre><code>
+```
+
 Window.onload = function() {
  // seach control 生成
  var sc = new GSearchControl();
@@ -79,7 +82,8 @@ Window.onload = function() {
  // 検索実行
  sc.execute(“ルート・コミュニケーションズ”);
 }
-</code></pre>
+
+```
 <ul>
 <li><a href="http://map.fkoji.com/gas/allsearch.html">サンプル</a></li>
 </ul>
@@ -97,7 +101,8 @@ Window.onload = function() {
 
 <li>DRAW_MODE_LINEAR</li>
 </ul>
-<pre><code>
+```
+
 // draw options
 var opt = new GdrawOptions();
 
@@ -106,7 +111,8 @@ opt.setDrawMode(GSearchControl.DRAW_MODE_TABBED);
 
 // オプションつけて描画
 sc.draw(document.getElementById(“search-control”), opt);
-</code></pre>
+
+```
 <ul>
 <li><a href="http://map.fkoji.com/gas/tabbed.html">サンプル</a></li>
 </ul>
@@ -119,7 +125,8 @@ sc.draw(document.getElementById(“search-control”), opt);
   <div>
     <div>
       <h3><a name="l9"> </a>setRoot(element)</h3>
-<pre><code>
+```
+
 // searcher options
 var opt = new GsearcherOptions();
 
@@ -131,7 +138,8 @@ sc.addSearcher(new GwebSearchControl(), opt);
 
 // ブログ検索はデフォルト位置に
 sc.addSearcher(new GblogSearchControl);
-</code></pre>
+
+```
 <ul>
 <li><a href="http://map.fkoji.com/gas/setroot.html">サンプル</a></li>
 </ul>
@@ -144,7 +152,8 @@ sc.addSearcher(new GblogSearchControl);
   <div>
     <div>
       <h3><a name="l11"> </a>setOnKeepCallback</h3>
-<pre><code>
+```
+
 
 // establish a keep callback
 sc.setOnKeepCallback(this, function(result) {
@@ -159,7 +168,8 @@ sc.setOnKeepCallback(this, function(result) {
  // pタグをappend
  titles.appendChild(p);
 });
-</code></pre>
+
+```
 <ul>
 <li><a href="http://map.fkoji.com/gas/keepcallback.html">サンプル</a></li>
 </ul>
@@ -172,7 +182,8 @@ sc.setOnKeepCallback(this, function(result) {
 
     <div>
       <h3><a name="l13"> </a>サイト内検索などで重宝するよ</h3>
-<pre><code>
+```
+
 // create a web search
 var ws = new GwebSearch();
 
@@ -184,7 +195,8 @@ ws.setUserDefinedLabel(“楽天商品検索”);
 
 // add searcher
 sc.addSearcher(ws);
-</code></pre>
+
+```
 <ul>
 <li><a href="http://map.fkoji.com/gas/siterestrict.html">サンプル</a></li>
 </ul>

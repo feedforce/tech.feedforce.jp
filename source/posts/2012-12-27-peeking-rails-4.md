@@ -69,7 +69,8 @@ Rails 3以降では依存するgemはbundlerを使って管理しますが、Rai
 以下の内容でGemfileを作成します。
 
 <pre class="linenums"><code>source :rubygems
-gem 'rails', github: 'rails/rails'</code></pre>
+gem 'rails', github: 'rails/rails'
+```
 
 --pathオプションを付けて、bundle installを実行します。
 
@@ -117,7 +118,8 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 gem 'jquery-rails'
-gem 'turbolinks'</code></pre>
+gem 'turbolinks'
+```
 
 <h4>サーバ起動</h4>
 
@@ -166,12 +168,14 @@ Completed 200 OK in 19ms (Views: 18.1ms | ActiveRecord: 0.0ms)</pre>
 
 マイグレーションファイルを修正して、admin 属性のデフォルトを false に変更。
 
-<pre class="linenums"><code>t.boolean :admin, default: false</code></pre>
+<pre class="linenums"><code>t.boolean :admin, default: false
+```
 
 db/seeds.rb で初期データを与えておきます。
 
 <pre class="linenums"><code>User.where(name: 'Alice', admin: false).first_or_create
-User.where(name: 'Bob', admin: true).first_or_create</code></pre>
+User.where(name: 'Bob', admin: true).first_or_create
+```
 
 初期データベースを構築します。
 
@@ -181,11 +185,13 @@ User.where(name: 'Bob', admin: true).first_or_create</code></pre>
 
 レコードの検索条件で条件の否定を簡潔に書けるようになりました。配列にも対応しています。
 
-<pre><code>>> User.where.not(name: 'Alice').to_sql.display
+```
+>> User.where.not(name: 'Alice').to_sql.display
 SELECT "users".* FROM "users"  WHERE ("users"."name" != 'Alice')=> nil
 >> User.where.not(name: ['Alice', 'Bob']).to_sql.display
 SELECT "users".* FROM "users"  WHERE ("users"."name" NOT IN ('Alice', 'Bob'))=> nil
-#nilはdisplayメソッドの返値であってSQLの結果ではありません。</code></pre>
+#nilはdisplayメソッドの返値であってSQLの結果ではありません。
+```
 
 <h3>TurboLinks</h3>
 
@@ -214,12 +220,14 @@ Rails 4では、Strong Parametersという仕組みを導入し、外界との�
 createメソッド冒頭
 <pre class="linenums"><code>def create
   @user = User.new(user_params)
-  :</code></pre>
+  :
+```
 
 末尾
 <pre class="linenums"><code>def user_params
   params.require(:user).permit(:name, :admin)
-end</code></pre>
+end
+```
 
 これがStrong Parametersの使用例です。
 
@@ -242,7 +250,8 @@ Scaffoldで作られた user_params のままだと、全てのパラメータ�
 
 <pre class="linenums"><code>def user_params
   params.require(:user).permit(:name)
-end</code></pre>
+end
+```
 
 生成してみます。
 

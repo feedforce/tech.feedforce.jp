@@ -19,7 +19,8 @@ tags: ruby, test, resume,
 <p>通常、Mockオブジェクトに対してstub定義していないメソッドを呼ぶとMockExpectationErrorが発生します。ですがテストによっては、ある特定のメソッド呼び出し以外を無視したいケースもあるでしょう。（例えばログ出力内容の検証など）<br />
 その場合はMockオブジェクトに対してas_null_objectメソッドを呼んでおくことで、特定のメソッド呼び出し以外を無視することができます。</p>
 
-<pre><code>def start(logger)
+```
+def start(logger)
   logger.debug('debug message.')  # as_null_objectによりinfo呼び出し以外は無視される
   logger.info('start')
   # ...
@@ -60,7 +61,8 @@ describe 'ディレクタ' do
   subject { Director.new }
   it_should_behave_like 'Feedforce社員'
 end
-</code></pre>
+
+```
 
 <h4>参考</h4>
 
@@ -74,7 +76,8 @@ end
 
 <h4>have(n)</h4>
 
-<pre><code>
+```
+
 columns = [1, 2, 3]
 
 # これでも悪くはないですが...
@@ -82,11 +85,13 @@ columns.size.should == 4      # &quot;expected: 4, got: 3 (using ==)&quot;
 
 # こちらの方が良い
 columns.should have(4).items  # &quot;expected 4 items, got 3&quot;
-</code></pre>
+
+```
 
 <h4>be(*args)</h4>
 
-<pre><code>
+```
+
 result = 11
 
 # これでも間違いではないですが...
@@ -94,7 +99,8 @@ result = 11
 
 # こちらの方が良い
 result.should be &lt; 10         # &quot;expected &lt; 10, got 11&quot;
-</code></pre>
+
+```
 
 <p>ちなみにbeの実装はMatchers::Beのインスタンスを返してMatchers::Beは演算子"&lt;"の実装をオーバーライドしてるからMatchers::BeComparedToのインスタンスを返して、それがshouldの引数になって...という具合です。</p>
 
@@ -103,7 +109,8 @@ result.should be &lt; 10         # &quot;expected &lt; 10, got 11&quot;
 <p>stub_chainメソッドを使うことで、あるオブジェクトの関連オブジェクトのさらに関連オブジェクト...のようにネストしたスタブを一度に定義できます。<br />
 あまりにネストした関連は設計を改善した方が良さそうですが...。</p>
 
-<pre><code>
+```
+
 # こう書いても良いが...
 boss = mock('ボス', :policy =&gt; 'みんながんばれ')
 member.stub!(:boss).and_return(boss)
@@ -112,7 +119,8 @@ member.boss.policy  # 'みんながんばれ'
 # こう書ける
 member.stub_chain(:boss, :policy).and_return('みんながんばれ')
 member.boss.policy  # 'みんながんばれ'
-</code></pre>
+
+```
 
 <h4>参考</h4>
 
@@ -164,7 +172,8 @@ member.boss.policy  # 'みんながんばれ'
 <li>トランザクションやファイルのオープン・クローズセットなど、なった前処理、後処理を書くのに使える。</li>
 </ul>
 
-<pre><code>
+```
+
 describe &quot;around hook&quot; do
   around(:each) do |example|
     puts &quot;around each before&quot;
@@ -176,7 +185,8 @@ describe &quot;around hook&quot; do
     puts &quot;in the example&quot;
   end
 end
-</code></pre>
+
+```
 
 <h3>RSpec Rails2</h3>
 
@@ -186,7 +196,8 @@ end
 <li>webratのhave_tag(have_selector)を使う</li>
 </ul>
 
-<pre><code>
+```
+
 require &quot;nokogiri&quot;
 require &quot;webrat/core/matchers&quot;
 
@@ -198,7 +209,8 @@ it 'aタグの組み立てテスト' do
   tag = '...'
   tag.should have_selector('a', :href =&gt; '...', :content =&gt; 'text')
 end
-</code></pre>
+
+```
 
 <h4>Rails2系では使えません</h4>
 

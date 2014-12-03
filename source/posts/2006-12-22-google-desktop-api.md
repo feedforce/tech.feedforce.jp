@@ -65,11 +65,14 @@ tags: resume,
       <p>ファイルを展開</p>
 
 <h3><a name="l9"> </a>Hello Worldのサンプル</h3>
-<pre><code>
+```
+
 GD_SDK\api\samples\scripts\display\HelloWorld
-</code></pre>
+
+```
 <h4><a name="l10"> </a>内容</h4>
-<pre><code>
+```
+
 -1033/
  -strings.xml
 -gadget.gmanifest
@@ -77,21 +80,25 @@ GD_SDK\api\samples\scripts\display\HelloWorld
 -plugin.js
 -plugin_large.gif
 -plugin_small.gif
-</code></pre>
+
+```
 <p>説明していきます</p>
 <h5><a name="l11"> </a>main.xml</h5>
 
 <p>メインビューを定義するXML</p>
-<pre><code>
+```
+
 &lt;view width="100" height="100" resizable="true" showCaptionAlways="true" &gt;
   &lt;contentArea name="contentArea" width="100%" height="100%" /&gt;
   &lt;script src="plugin.js"/&gt;
 &lt;/view&gt;
-</code></pre>
+
+```
 <h5><a name="l12"> </a>1033/strings.xml</h5>
 
 <p>言語ファイルです。各国の言語でstrings.xmlファイルを用意することで国際化が容易にできます。JavaScriptの変数としても使えます。</p>
-<pre><code>
+```
+
 &lt;strings&gt;
 &lt;strTitle&gt;HelloWorld!&lt;/strTitle&gt;
 &lt;strHello&gt;HelloWorld!&lt;/strHello&gt;
@@ -102,7 +109,8 @@ Copyright goes here.
 More description here&lt;/strAboutText&gt;
 &lt;strDescription&gt;Says Hello World&lt;/strDescription&gt;
 &lt;/strings&gt;
-</code></pre>
+
+```
 <p>1033はLocal ID(言語ID)で、1033は"English - United States"</p>
 <h6><a name="l13"> </a>Microsoftの定義に従ってます</h6>
 <p><a href="http://www.microsoft.com/globaldev/reference/lcid-all.mspx">List of Locale ID (LCID) Values as Assigned by Microsoft</a></p>
@@ -115,7 +123,8 @@ More description here&lt;/strAboutText&gt;
 ディレクトリの strings.xml ファイルが読み込まれます。</p>
 <h5><a name="l15"> </a>gadget.gmanifest</h5>
 <p>メタ情報を含むXMLです。マニフェストです。</p>
-<pre><code>
+```
+
 &lt;gadget minimumGoogleDesktopVersion="4.2006.508.0"&gt;
   &lt;about&gt;
     &lt;id&gt;5F1AAC6B-83B9-48e2-804B-E77AD19C9EC8&lt;/id&gt;
@@ -134,12 +143,14 @@ More description here&lt;/strAboutText&gt;
     &lt;icon&gt;plugin_large.gif&lt;/icon&gt;
   &lt;/about&gt;
 &lt;/gadget&gt;
-</code></pre>
+
+```
 <p>&amp;と;で囲まれた文字はstrings.xmlで定義した変数になってます。</p>
 
 <h5><a name="l16"> </a>plugin.js</h5>
 <p>ガジェットの動作はJavaScriptで記述します。</p>
-<pre><code>
+```
+
 // Copyright (c) 2006 Google Inc.
 // All rights reserved
 //
@@ -157,7 +168,8 @@ item.heading = strHello;    // this string is shown in the item
 item.snippet = strSnippet;  // this string shown in details view
 contentArea.addContentItem(item, gddItemDisplayInSidebar); // add the
 item to the display
-</code></pre>
+
+```
 <h6><a name="l17"> </a>viewオブジェクト</h6>
 <p>全体の概観</p>
 <h6><a name="l18"> </a>contentAreaオブジェクト</h6>
@@ -176,9 +188,11 @@ item to the display
   <div>
     <div>
       <h3><a name="l22"> </a>ガジェット作成ツールを使いましょう</h3>
-<pre><code>
+```
+
 GD_SDK\api\designer\designer_ja.exe
-</code></pre>
+
+```
 <h3><a name="l23"> </a>サンプルのソースとリファレンスを見ながらゴリゴリ</h3>
 <p><a href="http://fkoji.com/gadget/fkoji_sample.zip">http://fkoji.com/gadget/fkoji_sample.zip</a></p>
     </div>

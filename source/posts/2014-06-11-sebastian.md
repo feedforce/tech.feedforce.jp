@@ -18,7 +18,7 @@ HipChatで好きな emoticon は <img src="/images/2014/06/429bf35a-97ae-e2ee-f3
 弊社フィードフォースは後楽園駅徒歩五分、窓を開ければ東京ドームシティのジェットコースターの歓声と絶叫。
 便利で素敵なロケーションなのですが、東京ドームでコンサートや野球の試合がある日には混雑に巻き込まれる悲劇も多々。
 
-[caption id="attachment_887" width="760"] <img src="/images/2014/06/crowd.jpg" alt="" width="760" height="430" class="size-full wp-image-887" /> 「あれ、今日何かイベントやってるんだっけ？ うわ、お店どこも混んでる……」※ 写真はイメージです[/caption]
+<img src="/images/2014/06/crowd.jpg" alt="" width="760" height="430" class="size-full wp-image-887" /> 「あれ、今日何かイベントやってるんだっけ？ うわ、お店どこも混んでる……」※ 写真はイメージです
 
 そんな悲劇を防ぐのが、セバスチャンの仕事のひとつです。
 
@@ -49,7 +49,8 @@ HipChat 上でいくつかの仕事をこなしています。
 
 Ruby の場合 <a href="https://github.com/hipchat/hipchat-rb">hipchat-rb</a> を使えば、
 
-<pre><code>client = HipChat::Client.new(access_token, api_version: 'v1')
+```
+client = HipChat::Client.new(access_token, api_version: 'v1')
 room = client[room_id_or_name]
 room.send(
   'Sebastian',
@@ -57,7 +58,8 @@ room.send(
   color: 'yellow',
   notify: true,
   message_format: 'text'
-)</code></pre>
+)
+```
 
 これだけのコードで、
 
@@ -130,13 +132,15 @@ room_name の指定でも構わないのですが、 room_name はユーザが�
 
 さて、実際に投稿を行っているのは以下の部分です。
 
-<pre><code>room.send(
+```
+room.send(
   'Sebastian',
   'おはようございます。5月9日金曜日でございます。',
   color: 'yellow',
   notify: true,
   message_format: 'text'
-)</code></pre>
+)
+```
 
 第一引数は投稿者名、
 これは hipchat-rb の仕様では必須なのですが、 v2 の API を使っている場合は、何を指定しても無視されます。
@@ -152,9 +156,11 @@ room_name の指定でも構わないのですが、 room_name はユーザが�
 
 それでは、
 
-<pre><code>  color: 'yellow',
+```
+  color: 'yellow',
   notify: true,
-  message_format: 'text'</code></pre>
+  message_format: 'text'
+```
 
 この部分は何を指定しているのか、ここからはその話になります。
 

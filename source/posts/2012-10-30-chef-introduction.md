@@ -40,8 +40,10 @@ tags: infrastructure, resume,
 
 <p>開発元のOpscodeが提供するインストーラを利用するのが手軽です。</p>
 
-<pre><code>$ sudo true &amp;&amp; curl -L http://opscode.com/chef/install.sh | sudo bash
-</code></pre>
+```
+$ sudo true &amp;&amp; curl -L http://opscode.com/chef/install.sh | sudo bash
+
+```
 
 <p>依存するRubyなども含め /opt/chef 以下にインストールされるので、既存環境の汚染を最少限にできるというメリットもあります。</p>
 
@@ -71,10 +73,12 @@ chef-solo はデフォルトで /var/chef/cookbooks にCookbookがあると仮�
 
 <p>以下の手順でgithubから雛形をダウンロードします。もちろんgitがインストールされているのであればgit cloneで構いません。</p>
 
-<pre><code>$ curl -o chef-repo.tar.gz -L https://github.com/opscode/chef-repo/tarball/master
+```
+$ curl -o chef-repo.tar.gz -L https://github.com/opscode/chef-repo/tarball/master
 $ tar zxvf chef-repo.tar.gz
 $ mv opscode-chef-repo-xxxxxxx /var/chef
-</code></pre>
+
+```
 
 <p><a href="http://wiki.opscode.com/display/chef/Chef+Repository">Chef Repository - Opscode  Open Source Wiki</a></p>
 
@@ -88,9 +92,11 @@ $ mv opscode-chef-repo-xxxxxxx /var/chef
 
 <p>まずchefに含まれるknifeというユーティリティで空のcookbookを作ります。</p>
 
-<pre><code>$ cd /var/chef
+```
+$ cd /var/chef
 $ knife cookbook create ntp -o cookbooks
-</code></pre>
+
+```
 
 <h3>"Recipe" の編集</h3>
 
@@ -98,7 +104,8 @@ $ knife cookbook create ntp -o cookbooks
 
 <p>cookbooks/ntp/recipes/default.rb</p>
 
-<pre><code>package &quot;ntp&quot; do  # (1)
+```
+package &quot;ntp&quot; do  # (1)
   action [:install]
 end
 
@@ -111,13 +118,15 @@ end
 service &quot;ntpd&quot; do  # (3)
   action [:enable, :start]
 end
-</code></pre>
+
+```
 
 <p>レシピから利用するテンプレートも以下のように作成します。</p>
 
 <p>cookbooks/ntp/templates/default/ntp.conf.erb</p>
 
-<pre><code>restrict default kod nomodify notrap nopeer noquery
+```
+restrict default kod nomodify notrap nopeer noquery
 restrict -6 default kod nomodify notrap nopeer noquery
 restrict 127.0.0.1
 restrict -6 ::1
@@ -125,7 +134,8 @@ server &lt;%= @ntp_server %&gt;
 server  127.127.1.0
 driftfile /var/lib/ntp/drift
 keys /etc/ntp/keys
-</code></pre>
+
+```
 
 <p>上記のようにレシピを記述することにより、以下の構成が実現できます。</p>
 
@@ -148,19 +158,23 @@ ResourceはChefで管理する構成内容を抽象化したもので、それ�
 <p>対象のサーバー(Node)に対してどのRecipeを適用するかJSONで記述したファイルが必要です。<br />
 今回は /var/chef/node.json として作成します。</p>
 
-<pre><code>{
+```
+{
   &quot;run_list&quot;: [ &quot;recipe[ntp]&quot; ]
 }
-</code></pre>
+
+```
 
 <h3>chef-soloの実行</h3>
 
 <p>以上でchef-soloを実行する準備が整いました。<br />
 何が実行されるか確認するため、オプションを指定してログをdebugレベルで出力してみましょう。</p>
 
-<pre><code>$ cd /var/chef
+```
+$ cd /var/chef
 $ sudo chef-solo -j node.json -l debug
-</code></pre>
+
+```
 
 <p>ntpのインストール、設定ファイルの配備、サービスの有効化と起動がされるでしょうか。</p>
 

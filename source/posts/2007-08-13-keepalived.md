@@ -58,7 +58,8 @@ HAクラスタのマスタ機とバックアップ機の両方で動作させる
 </ul>
 <h3><a name="l7"><span class="sanchor"> </span></a>MASTER側</h3>
 <p>MASTERである192.168.1.11のサーバには以下の内容のファイルを置く。</p>
-<pre><code>
+```
+
 # Configuration File for keepalived
 global_defs {
 	notification_email {
@@ -84,10 +85,12 @@ vrrp_instance VI_1 {
         }
 }
 
-</code></pre>
+
+```
 <h3><a name="l8"><span class="sanchor"> </span></a>BACKUP側</h3>
 <p>BACKUPである192.168.1.12のサーバには以下の内容のファイルを置く。</p>
-<pre><code>
+```
+
 # Configuration File for keepalived
 global_defs {
 	notification_email {
@@ -112,7 +115,8 @@ vrrp_instance VI_1 {
                 192.168.1.10
         }
 }
-</code></pre>
+
+```
 <h3><a name="l9"><span class="sanchor"> </span></a>設定値の意味</h3>
 <p>以下少しだけ説明とか設定上の注意点とか。</p>
 <h4><a name="l10"> </a>global_defs</h4>
@@ -141,7 +145,8 @@ vrrp_instance VI_1 {
 <ul>
 <li>設定ファイルの編集</li>
 </ul>
-<pre><code>
+```
+
 vrrp_instance VI_1 {
 ...
         virtual_ipaddress {
@@ -153,25 +158,30 @@ vrrp_instance VI_1 {
         }
 ...
 }
-</code></pre>
+
+```
 <h3><a name="l17"><span class="sanchor"> </span></a>フェイルオーバー - マスタからバックアップへの切り替え</h3>
 
 <ul>
 <li>片方ケーブルを抜く</li>
 <li>両機のIPを確認する</li>
 </ul>
-<pre><code>
+```
+
 $ /sbin/ip address list
-</code></pre>
+
+```
 <h3><a name="l18"><span class="sanchor"> </span></a>フェイルバック - バックアップからマスタへの切り替え</h3>
 <ul>
 <li>抜いたケーブルを戻す</li>
 <li>両機のIPを確認する</li>
 
 </ul>
-<pre><code>
+```
+
 $ /sbin/ip address list
-</code></pre>
+
+```
 <h3><a name="l19"><span class="sanchor"> </span></a>マスタとバックアップの設定を入れ替えて切り替え作業をしてみる</h3>
 <ul>
 <li>設定ファイルの編集</li>
@@ -191,29 +201,34 @@ $ /sbin/ip address list
 
 <li>自分がマスタになった場合（主にマスタの起動時やフェイルオーバー時）にhoge.shを実行</li>
 </ul>
-<pre><code>
+```
+
 vrrp_instance VI_1 {
 ...
    notify_master /etc/keepalived/hoge.sh
 ...
 }
-</code></pre>
+
+```
 <ul>
 <li>自分がバックアップになった場合（主にフェイルバック時）にhage.shを実行</li>
 </ul>
-<pre><code>
+```
+
 vrrp_instance VI_1 {
 ...
    notify_backup /etc/keepalived/hage.sh
 ...
 }
-</code></pre>
+
+```
 <h3><a name="l22"><span class="sanchor"> </span></a>21個以上の仮想IP</h3>
 <ul>
 
 <li>virtual_ipaddressに21個以上追加してどうなるか試す</li>
 </ul>
-<pre><code>
+```
+
 vrrp_instance VI_1 {
 ...
         virtual_ipaddress {
@@ -226,11 +241,13 @@ vrrp_instance VI_1 {
         }
 ...
 }
-</code></pre>
+
+```
 <ul>
 <li>21個目以上はvirtual_ipaddress_excludedに追加する</li>
 </ul>
-<pre><code>
+```
+
 vrrp_instance VI_1 {
 ...
         virtual_ipaddress {
@@ -245,7 +262,8 @@ vrrp_instance VI_1 {
         }
 ...
 }
-</code></pre>
+
+```
     </div>
   </div>
 

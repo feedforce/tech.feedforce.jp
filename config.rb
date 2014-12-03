@@ -55,6 +55,13 @@ page '/sitemap.xml', layout: false
 #   config.output_style = :compact
 # end
 
+###
+# Autoprefixer
+###
+activate :autoprefixer do |config|
+  config.browsers = ['last 3 versions', 'Explorer >= 8']
+end
+
 
 ###
 # Page options, layouts, aliases and proxies
@@ -161,3 +168,12 @@ sprockets.append_path '../bower_components'
 activate :syntax
 set :markdown, :tables => true, :autolink => true, :gh_blockcode => true, :fenced_code_blocks => true
 set :markdown_engine, :redcarpet
+
+
+###
+# Google Analytics
+###
+activate :google_analytics do |ga|
+  ga.tracking_id = 'UA-50937-9'
+  ga.minify = true
+end

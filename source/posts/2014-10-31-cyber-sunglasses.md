@@ -47,14 +47,15 @@ tags: resume,
 
 <h3>ニンジャスレイヤーって何?</h3>
 
-<div class="code-frame"><div class="highlight"><pre><code class="dos">全米を震撼させているサイバーパンクニンジャ活劇小説「ニンジャスレイヤー」。
+```
+全米を震撼させているサイバーパンクニンジャ活劇小説「ニンジャスレイヤー」。
 原作者はアメリカ人のブラッドレー・ボンドとフィリップ・ニンジャ・モーゼズ。
 現在twitter上にて日本語翻訳版が連載されておりじわじわと人気を集めている。
 
 Twitterアカウントでリアルタイム連載されているほか、有志の方によりTogetterのまとめも整備されている。詳しくはリンク集を参照。
 
-<span class="number">2012</span>年に晴れて書籍化。<span class="number">2013</span>年にドラマ<span class="keyword">CD</span>化やコミカライズ、<span class="number">2014</span>年にフィギュア化を果たし、<span class="number">2015</span>年のアニメ化が決定するなど多方面にメディアミックスを展開し続けている。
-</code></pre></div></div>
+2012年に晴れて書籍化。2013年にドラマCD化やコミカライズ、2014年にフィギュア化を果たし、2015年のアニメ化が決定するなど多方面にメディアミックスを展開し続けている。
+```
 
 <p><a href="http://wikiwiki.jp/njslyr/?%A5%CB%A5%F3%A5%B8%A5%E3%A5%B9%A5%EC%A5%A4%A5%E4%A1%BC%A4%C8%A4%CF%A1%A9" title="http://wikiwiki.jp/njslyr/?%A5%CB%A5%F3%A5%B8%A5%E3%A5%B9%A5%EC%A5%A4%A5%E4%A1%BC%A4%C8%A4%CF%A1%A9">ニンジャスレイヤーとは？ - ニンジャスレイヤー Wiki*</a></p>
 

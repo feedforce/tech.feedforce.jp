@@ -149,8 +149,12 @@
     - label: Qiita
       url: http://qiita.com/TasukuNakano
 #------------------------------------------
-#- id: hszmtmhr
-#  name: hszmtmhr
-#  thumbnail: no-image.png
-#  profile: "2015卒内定者。<br>
-#            ボードゲームやマジック：ザ・ギャザリングでエンジニアの方々と仲良くなりたい。"
+- id: hszmtmhr
+  name: hszmtmhr
+  thumbnail: hszmtmhr.jpg
+  profile: "2015卒内定者。<br>
+            ボードゲームやマジック：ザ・ギャザリングでエンジニアの方々と仲良くなりたい。"
+  media:
+    - label: Twitter
+      url: https://twitter.com/hszmtmhr
+#------------------------------------------

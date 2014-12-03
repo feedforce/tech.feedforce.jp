@@ -76,18 +76,21 @@ tags: resume,
 RFC3229(Delta encoding in HTTP)にA-IMに関する記述があります。
 </p>
 <blockquote>
-<pre><code>
+```
+
 10.5.3 A-IM
 
 The A-IM request-header field is similar to Accept, but restricts the instance-manipulations (section 10.1) that are acceptable in the response.  As specified in section 10.5.2, a response may be the result of applying multiple instance-manipulations.
 
    A-IM = "A-IM" ":" #( instance-manipulation
                             [ ";" "q" "=" qvalue ] )
-</code></pre>
+
+```
 <a href="http://ietf.org/rfc/rfc3229.txt" target="_blank">Delta encoding in HTTP</a>
 </blockquote>
 <blockquote>
-<pre><code>
+```
+
 10.5.3 A-IM
 
 A-IM リクエストヘッダフィールドは Accept に似ているが、レスポンス中に受け入れ可能な instance-manipulation (section 10.1) を制限する。
@@ -95,7 +98,8 @@ section 10.5.2 にて明示されるように、レスポンスは複数の inst
 
    A-IM = "A-IM" ":" #( instance-manipulation
                             [ ";" "q" "=" qvalue ] )
-</code></pre>
+
+```
 <a href="http://www.studyinghttp.net/cgi-bin/rfc.cgi?3229#Sec10.5.3" target="_blank">HTTP における差分エンコーディング</a>
 </blockquote>
 <p>
@@ -121,40 +125,48 @@ Atom用の仕様で、クライアントが最後に取得したエントリー�
 それでは、最後に"Te: deflate,gzip;q=0.3"です。どうもAccept-Encodingのようなにおいがしますが、どうでしょうか。
 </p>
 <blockquote>
-<pre><code>
+```
+
 14.39 TE
 
 The TE request-header field indicates what extension transfer-codings it is willing to accept in the response and whether or not it is willing to accept trailer fields in a chunked transfer-coding. Its value may consist of the keyword "trailers" and/or a comma-separated list of extension transfer-coding names with optional accept parameters (as described in section 3.6).
-</code></pre>
+
+```
 <a href="http://ietf.org/rfc/rfc2616.txt" target="_blank">Hypertext Transfer Protocol -- HTTP/1.1</a>
 </blockquote>
 <blockquote>
-<pre><code>
+```
+
 14.39 TE
 
 TE リクエストヘッダフィールドは、レスポンスとしてどんな拡張転送コーディングを受け入れられるか、またチャンク形式転送コーディング内の trailer フィールドを受け入れられるかどうかを示す。
 この値は、"trailers" というキーワードや、 (section 3.6 にて定義される) 拡張転送コーディングの名前と省略可能な受け入れパラメータをコンマで区切ったリストからなるだろう。
-</code></pre>
+
+```
 <a href="http://www.studyinghttp.net/cgi-bin/rfc.cgi?2616#Sec14.39" target="_blank">ハイパーテキスト転送プロトコル -- HTTP/1.1</a>
 </blockquote>
 <p>
 "転送コーディング"が鍵のようです。
 </p>
 <blockquote>
-<pre><code>
+```
+
 3.6 Transfer Codings
 
 Transfer-coding values are used to indicate an encoding transformation that has been, can be, or may need to be applied to an entity-body in order to ensure "safe transport" through the network. This differs from a content coding in that the transfer-coding is a property of the message, not of the original entity.
-</code></pre>
+
+```
 <a href="http://ietf.org/rfc/rfc2616.txt" target="_blank">Hypertext Transfer Protocol -- HTTP/1.1</a>
 </blockquote>
 <blockquote>
-<pre><code>
+```
+
 3.6 転送コーディング
 
 転送コーディング値は、ネットワークを通して "安全な転送" を保証するために、エンティティボディに適用されている、する事のできる、する必要のあるエンコーディング変換を示すために使われる。
 転送コーディングは、元のエンティティではなくメッセージの特性である、という点で内容コーディングとは異なる。
-</code></pre>
+
+```
 <a href="http://www.studyinghttp.net/cgi-bin/rfc.cgi?2616#Sec3.6" target="_blank">ハイパーテキスト転送プロトコル -- HTTP/1.1</a>
 </blockquote>
 <p>

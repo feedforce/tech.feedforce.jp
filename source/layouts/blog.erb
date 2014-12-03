@@ -49,12 +49,12 @@ directory_index: false
     <ul>
       <% if current_article.next_article %>
           <li id="newer-link">
-            <a href="<%= current_article.next_article.url %>" rel="next"><%= current_article.next_article.title %></a>
+            <a href="<%= current_article.next_article.url %>" rel="next"><%= current_article.next_article.title %></a>&nbsp;&raquo;
           </li>
       <% end %>
       <% if current_article.previous_article %>
-          <li id="older-link">«
-            <a href="<%= current_article.previous_article.url %>" rel="prev"><%= current_article.previous_article.title %></a>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="<%= current_article.previous_article.url %>" rel="prev"><%= current_article.previous_article.title %></a>
           </li>
       <% end %>
     </ul>

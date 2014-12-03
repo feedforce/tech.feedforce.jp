@@ -29,9 +29,11 @@ Rails起源なのでRailsに特化した部分もあるが、ほかのアプリ�
 </ul>
 
 <h4>例えば</h4>
-<pre><code><code> $ cap httpd_config_update
+```
+<code> $ cap httpd_config_update
  $ cap restart
-</code></code></pre>
+</code>
+```
 
 これだけですべてのサーバが新しい設定で再起動したり。
 新しい設定ファイルはsubversionとかからとってくるとかね。
@@ -60,19 +62,24 @@ Rails起源なのでRailsに特化した部分もあるが、ほかのアプリ�
 ソース落としてきて。バイナリはないみたい。
 
 <h4>Capistrano</h4>
-<pre><code><code> $ sudo gem install capistrano -y
-</code></code></pre>
+```
+<code> $ sudo gem install capistrano -y
+</code>
+```
 
 以下のコマンドでヘルプが表示されればオッケー
 
-<pre><code><code> $ cap -h
-</code></code></pre>
+```
+<code> $ cap -h
+</code>
+```
 
 <h3>男の簡単レシピ</h3>
 インストールできたらCapistranoのレシピを書いて使ってみる。
 
 <h4>otoko.rb</h4>
-<pre><code><code> set :application, "ff_tools"
+```
+<code> set :application, "ff_tools"
  set :user, "kan"
  set :password, "pasuwa-do"
 
@@ -82,22 +89,27 @@ Rails起源なのでRailsに特化した部分もあるが、ほかのアプリ�
  task :hellowello do
    run "echo Hello, $HOSTNAME for #{application}"
  end
-</code></code></pre>
+</code>
+```
 
 <h3>実行</h3>
 -f でレシピファイルを指定します。（昔は -r でした）
 -f を指定しないとデフォルトで./config/deploy.rbを読もうとします。
 
-<pre><code><code> $ cap -f otoko.rb hellowello
-</code></code></pre>
+```
+<code> $ cap -f otoko.rb hellowello
+</code>
+```
 
 ローカルホストでechoするだけのつまらないレシピ。
 まあでも動かないともっとつまらないからね。とりあえずはこれで勘弁。
 
 追加できるリモートサーバがあればちょっと面白くなる。
 
-<pre><code><code> role :local, "localhost", "192.168.1.101", "192.168.1.102"
-</code></code></pre>
+```
+<code> role :local, "localhost", "192.168.1.101", "192.168.1.102"
+</code>
+```
 
 <h2>レシピを書こう</h2>
 レシピに含まれるのは基本的に以下の三つの要素。
@@ -112,24 +124,30 @@ Rails起源なのでRailsに特化した部分もあるが、ほかのアプリ�
 収拾がつかなくならない程度に好きに書けと。
 
 <h3>変数</h3>
-<pre><code><code> set :変数名, 値
-</code></code></pre>
+```
+<code> set :変数名, 値
+</code>
+```
 
 <ul>
 <li>setキーワードで定義</li>
 <li>Rubyの変数として参照</li>
 </ul>
 
-<pre><code><code> set :application, "ff_tools"
+```
+<code> set :application, "ff_tools"
  set :hellocommand, "echo Hello, $HOSTNAME"
 
  run "echo #{application}"
  run hellocommand
-</code></code></pre>
+</code>
+```
 
 <h3>ロール</h3>
-<pre><code><code> role :ロール名, "host"[, "host2", ...]
-</code></code></pre>
+```
+<code> role :ロール名, "host"[, "host2", ...]
+</code>
+```
 
 <ul>
 <li>ロール名は好きに（基本はrailsにのっとってapp, web, db）</li>
@@ -138,20 +156,24 @@ Rails起源なのでRailsに特化した部分もあるが、ほかのアプリ�
 <li>ロールの中でもprimaryのようなフラグが作れる</li>
 </ul>
 
-<pre><code><code> role :app, "app01.feedforce.jp", "app02.feedforce.jp"
+```
+<code> role :app, "app01.feedforce.jp", "app02.feedforce.jp"
  role :web, "web01.feedforce.jp"
  role :web, "web02.feedforce.jp"
  role :db,  "db01.feedforce.jp", :primary => true
  role :db,  "db02.feedforce.jp"
  role :spider,  "spider01.feedforce.jp"
-</code></code></pre>
+</code>
+```
 
 <h3>タスク</h3>
-<pre><code><code> task :タスク名 do ... end
+```
+<code> task :タスク名 do ... end
  task :タスク名, :roles => :ロール名 do ... end
  task :タスク名, :roles => [:ロール名1, :ロール名2] do ... end
  task :タスク名, :roles => :ロール名, :only => { :primary => true } do
-</code></code></pre>
+</code>
+```
 
 <ul>
 <li>タスクはメソッドと同じようにほかのタスク内で使える</li>
@@ -160,11 +182,13 @@ Rails起源なのでRailsに特化した部分もあるが、ほかのアプリ�
 <li>taskの直前の行にdescで説明を書ける</li>
 </ul>
 
-<pre><code><code> desc "say hello to all hosts"
+```
+<code> desc "say hello to all hosts"
  task :hellowello do
    run "echo Hello, $HOSTNAME"
  end
-</code></code></pre>
+</code>
+```
 
 <h4>豆の知識 : タスク内でタスクを呼び出したときのロール</h4>
 タスクをメソッド気分で使おうとするとロールで若干はまるかもしれないので注意。
@@ -174,7 +198,8 @@ Rails起源なのでRailsに特化した部分もあるが、ほかのアプリ�
 例えば以下のようなコードがあったとする。
 
 <h5>roletest.rb</h5>
-<pre><code><code> role :app, "app01.feedforce.jp", "app02.feedforce.jp"
+```
+<code> role :app, "app01.feedforce.jp", "app02.feedforce.jp"
  role :web, "web01.feedforce.jp"
  set :application, "hogehoge"
 
@@ -186,18 +211,22 @@ Rails起源なのでRailsに特化した部分もあるが、ほかのアプリ�
    hellowello
    run "echo $HOSTNAME is apps?"
  end
-</code></code></pre>
+</code>
+```
 
 このコードにはhelloappsを実行したときにhellowelloがappだけに適用されて欲しいという願いを込めてみた。
 
 <h5>実行</h5>
-<pre><code><code> $ cap -f roletest.rb helloapps
-</code></code></pre>
+```
+<code> $ cap -f roletest.rb helloapps
+</code>
+```
 
 期待通りの結果になることを念じつつ実行。
 
 <h5>実行結果</h5>
-<pre><code><code> loading configuration /usr/local/lib/ruby/gems/1.8/gems/capistrano-1.1.0/lib/capistrano/recipes/standard.rb
+```
+<code> loading configuration /usr/local/lib/ruby/gems/1.8/gems/capistrano-1.1.0/lib/capistrano/recipes/standard.rb
     loading configuration ./roletest.rb
   * executing task helloapps
   * executing task hellowello
@@ -217,7 +246,8 @@ Rails起源なのでRailsに特化した部分もあるが、ほかのアプリ�
  ** [out :: app01.feedforce.jp] app01.rsssuite.jp is apps?
  ** [out :: app02.feedforce.jp] app02.rsssuite.jp is apps?
     command finished
-</code></code></pre>
+</code>
+```
 
 残念ながら願いもむなしくhellowelloはすべてのロールで実行されてしまったようだ。
 その下のrunはappだけを対象に実行されたのに。
@@ -233,7 +263,8 @@ Rails起源なのでRailsに特化した部分もあるが、ほかのアプリ�
 
 以下のようにする。
 
-<pre><code><code> def prepare_hellowello(target_roles)
+```
+<code> def prepare_hellowello(target_roles)
    task :hellowello, :roles => target_roles do
      run "echo Hello, $HOSTNAME"
    end
@@ -243,16 +274,20 @@ Rails起源なのでRailsに特化した部分もあるが、ほかのアプリ�
    prepare_hellowello :app
    hellowello
  end
-</code></code></pre>
+</code>
+```
 
 <h5>実行</h5>
-<pre><code><code> $ cap -f roletest.rb helloapps
-</code></code></pre>
+```
+<code> $ cap -f roletest.rb helloapps
+</code>
+```
 
 さてどうなるか。
 
 <h5>実行結果</h5>
-<pre><code><code> loading configuration /usr/local/lib/ruby/gems/1.8/gems/capistrano-1.1.0/lib/capistrano/recipes/standard.rb
+```
+<code> loading configuration /usr/local/lib/ruby/gems/1.8/gems/capistrano-1.1.0/lib/capistrano/recipes/standard.rb
     loading configuration ./roletest.rb
   * executing task helloapps
   * executing task hellowello
@@ -263,7 +298,8 @@ Rails起源なのでRailsに特化した部分もあるが、ほかのアプリ�
  ** [out :: app01.feedforce.jp] Hello, app01.rsssuite.jp
  ** [out :: app02.feedforce.jp] Hello, app02.rsssuite.jp
     command finished
-</code></code></pre>
+</code>
+```
 
 期待通り。
 
@@ -273,10 +309,12 @@ Rails起源なのでRailsに特化した部分もあるが、ほかのアプリ�
 <h3>拡張タスク before_* - after_*</h3>
 タスクの前後に何か処理を実行したい場合はbefore_*とafter_で拡張できる
 
-<pre><code><code> task: before_setup do ... end
+```
+<code> task: before_setup do ... end
  task: setup do ... end
  task: after_setup do ... end
-</code></code></pre>
+</code>
+```
 
 使いどころは
 
@@ -298,10 +336,13 @@ rake -T のような存在。
 
 roleとして定義してあるすべてのサーバに対して対話的シェルを実行できる。
 
-<pre><code><code> $ cap -f otoko.rb shell
-</code></code></pre>
+```
+<code> $ cap -f otoko.rb shell
+</code>
+```
 
-<pre><code><code> * executing task shell
+```
+<code> * executing task shell
 ====================================================================
 Welcome to the interactive Capistrano shell! This is an experimental
 feature, and is liable to change in future releases.
@@ -339,7 +380,8 @@ cap> cat date.txt
     command finished
 cap> exit
 exiting
-</code></code></pre>
+</code>
+```
 
 あんまり複雑なことすると何がなんだかわからなくなるけど、サービスの再起動みたいな単純なコマンド投入とか確認に使える。
 
@@ -382,14 +424,18 @@ exiting
 </ul>
 
 <h4>ファイル</h4>
-<pre><code><code> cap_task_lib.rb
-</code></code></pre>
+```
+<code> cap_task_lib.rb
+</code>
+```
 
 中身はレシピと同様にタスクを定義。
 
 <h4>使うとき</h4>
-<pre><code><code> require 'cap_task_lib'
-</code></code></pre>
+```
+<code> require 'cap_task_lib'
+</code>
+```
 
 レシピ内でrequire。
 

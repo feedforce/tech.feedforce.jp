@@ -24,7 +24,8 @@ Emacs内でファイル間を移動するには、ウィンドウとバッファ
 <h3>Easy-Mmode</h3>
 単純なマイナーモードであればEasy-Mmodeパッケージを利用すると便利です。
 以下のように書くと、test-modeというマイナーモードを定義できます。
-<pre><code> ;; マイナーモードの定義
+```
+ ;; マイナーモードの定義
  (easy-mmode-define-minor-mode test-mode
  ;; モード名は、-mode
  ;; ドキュメント
@@ -34,7 +35,8 @@ Emacs内でファイル間を移動するには、ウィンドウとバッファ
  ;; on の時のモード行への表示
  " TestMode"
  ;; マイナーモード用キーマップの初期値
- '(("C-cf" . test-function))</code></pre>
+ '(("C-cf" . test-function))
+```
 「M-x test-mode」でモードのオン/オフを切り替えることができ、test-modeがオンの時はキーバインド「C-c f」で関数test-functionを呼び出すことができるようになります。
 この設定の場合、test-modeがオンのときは"TestMode"がモード行に表示されます。
 
@@ -52,7 +54,8 @@ Emacs内でファイル間を移動するには、ウィンドウとバッファ
 </ul>
 <p align="justify">命名規則からファイル名をうまく変換して、現在開いているファイルから対応するファイルへと移動できるようにします。</p>
  まず、Easy-Mmodeを利用して、RSS Suiteモードを定義します。
-<pre><code> (easy-mmode-define-minor-mode rsssuite-mode
+```
+ (easy-mmode-define-minor-mode rsssuite-mode
 ;; ドキュメント
  "This is RSS Suite Mode."
  ;; 初期値
@@ -62,33 +65,41 @@ Emacs内でファイル間を移動するには、ウィンドウとバッファ
  '(("C-cf" . suite-open-formprocess)
    ("C-cp" . suite-open-pagecontents)
    ("C-cq" . suite-open-qfd)
-   ("C-ct" . suite-open-template)))</code></pre>
+   ("C-ct" . suite-open-template)))
+```
 ここではそれぞれ4つの対応ファイルを開くためのキーマップを定義しています。
 次に、切り替えるファイルへのパスをそれぞれ定義しておきます。
-<pre><code> (defvar suite-qfd-path "lib/qfd/")
+```
+ (defvar suite-qfd-path "lib/qfd/")
  (defvar suite-formprocess-path "lib/FormProcess/")
  (defvar suite-pagecontents-path "lib/PageContents/")
  (defvar suite-template-path "template/rss_admin/")
- (defvar suite-lib-path "lib/")</code></pre>
+ (defvar suite-lib-path "lib/")
+```
 関数defvarで変数に値を定義しています。
 次に関連ファイルを開いた時にrsssuite-modeをオンにするためhookを定義します。
 この設定は必須ではありませんが、rss_suiteディレクトリ以下のファイルを開いた時に自動でrsssuite-modeがオンになる方がラクなのでそのようにします。
-<pre><code>;; ファイルを開いた時のhook
+```
+;; ファイルを開いた時のhook
 (add-hook 'find-file-hooks
           (function (lambda ()
-                      (suite-on-rsssuite-mode))))</code></pre>
+                      (suite-on-rsssuite-mode))))
+```
 find-file-hooksはファイルを訪問後に呼び出されます。
 
 ここで実行しているsuite-on-rsssuite-mode関数は以下のように定義してあります。
-<pre><code>;; RSS Suiteのディレクトリ配下であればrsssuite-modeにする
+```
+;; RSS Suiteのディレクトリ配下であればrsssuite-modeにする
 (defun suite-on-rsssuite-mode ()
   (if (string-match "rss_suite[^/]*/" default-directory)
-      (unless rsssuite-mode (rsssuite-mode))))</code></pre>
+      (unless rsssuite-mode (rsssuite-mode))))
+```
 変数rsssuite-modeはモードがオンになっていてばt, オフであればnilとなります。
 関数rsssuite-modeはオン・オフを切り替える関数で、ここではオフの時のみオンにする処理にしています。
 
 次に、マイナーモードのキーマップで定義した関数suite-open-formprocessを見ていきます。
-<pre><code>;; 対応するFormProcessファイルを開く
+```
+;; 対応するFormProcessファイルを開く
 (defun suite-open-formprocess ()
   (interactive)
   (setq suite-formprocess-file-path (concat (suite-get-top-dir)
@@ -97,7 +108,8 @@ find-file-hooksはファイルを訪問後に呼び出されます。
                                             (suite-get-capitalized-name)
                                             ".php"))
   (set-window-buffer (selected-window) (find-file-noselect suite-formprocess-file-path))
-  (suite-on-rsssuite-mode))</code></pre>
+  (suite-on-rsssuite-mode))
+```
 <p align="justify">defunで関数を定義しています。interactiveが含まれていると、 「M-x 関数名」で実行できるコマンドになります。
 変数suite-formprocess-file-pathに、対応するFormProcessファイルの絶対パスを格納しています。
 関数set-window-bufferは指定したウィンドウにバッファの内容を表示させます。ここでは選択されているウィンドウ(selected-windnow)に、確保したファイルsuite-formprocess-file-pathに対応するバッファを表示させています。
@@ -111,45 +123,56 @@ suite-formprocess-file-pathを求める部分では、関数concatで以下の�
 	<li>".php"</li>
 </ul>
 関数suite-get-top-dirの定義は以下です。
-<pre><code> ;; RSS Suiteのトップディレクトリの絶対パスを取得
+```
+ ;; RSS Suiteのトップディレクトリの絶対パスを取得
  (defun suite-get-top-dir ()
    (string-match "rss_suite[^/]*/" default-directory)
-   (substring default-directory 0 (match-end 0)))</code></pre>
+   (substring default-directory 0 (match-end 0)))
+```
 match-endには、string-matchの結果である終端のポイント位置が入ります。
 
 関数suite-get-capitalized-nameの定義は以下です。
-<pre><code> ;; キャメルケースのファイル名を取得
+```
+ ;; キャメルケースのファイル名を取得
 (defun suite-get-capitalized-name ()
   (cond
    ((suite-formprocessp) (string-match "FormProcess(.+).php" (suite-get-file-name)) (suite-get-main-name))
    ((suite-pagecontentsp) (string-match "PageContents(.+).php" (suite-get-file-name)) (suite-get-main-name))
    ((suite-qfdp)  (string-match "(.+).qfd" (suite-get-file-name)) (suite-dot-to-capitalize-string (suite-get-main-name)))
    ((suite-templatep) (string-match "(.+).html" (suite-get-file-name)) (suite-dot-to-capitalize-string (suite-get-main-name)))
-   (t nil)))</code></pre>
+   (t nil)))
+```
 現在開いているファイルがqfdファイル(xxx.yyy.zzz.qfd)やtemplateファイル(xxx.yyy.zzz.html)の場合、キャメルケースに変換して(XxxYyyZzz)返します。
 変換しているのは、関数suite-dot-to-capitalize-stringの部分です。
-<pre><code> ;; ファイル名からメインとなる部分の名前を切り出す
+```
+ ;; ファイル名からメインとなる部分の名前を切り出す
 (defun suite-get-main-name ()
   (substring (suite-get-file-name) (match-beginning 1) (match-end 1))
-  )</code></pre>
+  )
+```
 match-beginningやmatch-endには直前に評価しているstring-matchの結果が入ります。
-<pre><code>;; ドットで連結されたファイル名をリストに変換
+```
+;; ドットで連結されたファイル名をリストに変換
 ;; foo.bar.baz =&gt; (foo bar baz)
 (defun suite-dot-to-capitalize-string (str)
   (suite-concat-capitalize-string-list (split-string str "."))
-  )</code></pre>
+  )
+```
 split-stringはドットで区切ってリストにしています。
-<pre><code>;; 文字列のリストをキャピタライズして連結する
+```
+;; 文字列のリストをキャピタライズして連結する
 ;; (foo bar baz) -&gt; FooBarBaz
 (defun suite-concat-capitalize-string-list (list)
   (cond
    ((= (length list) 1) (capitalize (car list)))
-   (t (concat (capitalize (car list)) (suite-concat-capitalize-string-list (cdr list))))))</code></pre>
+   (t (concat (capitalize (car list)) (suite-concat-capitalize-string-list (cdr list))))))
+```
 listの長さが1であれば、carでlistの先頭要素をキャピタライズして返します。
 listの要素が2つ以上の場合は先頭要素をキャピタライズした文字列と、cdrで先頭要素を取り除いたlistを自身の関数suite-concat-capitalize-string-listに渡した結果の文字列と連結します。
 
 逆に、ドットで区切られた名前から、キャピタライズした名前を取得する処理は以下です。
-<pre><code>;; ドットで連結されたファイル名を取得
+```
+;; ドットで連結されたファイル名を取得
 (defun suite-get-concatenated-name ()
   (cond
    ((suite-formprocessp) (string-match "FormProcess(.+).php" (suite-get-file-name)) (suite-split-capitalize-string (suite-get-main-name )))
@@ -169,14 +192,16 @@ listの要素が2つ以上の場合は先頭要素をキャピタライズした
    (t  (concat
 	(concat (downcase (substring str (match-beginning 0) (match-end 0))) ".")
 	(suite-split-capitalize-string (substring str (match-end 0) (length str)))
-	))))</code></pre>
+	))))
+```
 関数suite-split-capitalize-stringでは、受け取った文字列を先頭が大文字でそれ以降小文字が続く正規表現でマッチさせます。
 もしstring-matchの結果の終端ポイント位置とstrの長さが同じであれば、downcaseして返します。
 長さが異る場合は、downcaseした最初の単語に'.'を連結したものと、マッチ以降の文字を自身の関数suite-split-capitalize-stringに渡して返される文字列を連結します。
 
 <p align="justify">以上で対応したファイル間を移動できるマイナーモードができました。
 最後にソース全体を載せておきます。
-<pre><code>
+```
+
  ;; RSS Suite モード
 (easy-mmode-define-minor-mode rsssuite-mode
                               ;; ドキュメント
@@ -347,4 +372,5 @@ listの要素が2つ以上の場合は先頭要素をキャピタライズした
 (defun suite-get-file-name ()
   (if buffer-file-name
       (file-name-nondirectory buffer-file-name)
-    (error "there are not respond file")))</code></pre>
+    (error "there are not respond file")))
+```

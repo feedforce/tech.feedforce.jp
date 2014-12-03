@@ -88,7 +88,8 @@ tags: infrastructure, test,
 
 <h3>Gemfile</h3>
 
-<pre><code>source 'https://rubygems.org'
+```
+source 'https://rubygems.org'
 ruby '2.1.3'
 
 gem 'knife-solo'
@@ -96,13 +97,15 @@ gem 'rake'
 gem 'serverspec'
 gem 'aws-sdk'
 gem 'ci_reporter_rspec'
-</code></pre>
+
+```
 
 <h3>Vagrantfile</h3>
 
 一部伏せ字です。
 
-<pre><code># -*- mode: ruby -*-
+```
+# -*- mode: ruby -*-
 # vi: set ft=ruby :
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
@@ -140,13 +143,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 end
-</code></pre>
+
+```
 
 <h3>script/ci.sh</h3>
 
 <p>エラーがあれば即時終了しますが(-e)、これだけだとテスト失敗でEC2インスタンスが増え続けるため、trapで捕捉しvagrant destroyしています。</p>
 
-<pre><code>#!/bin/sh -e
+```
+#!/bin/sh -e
 
 if [ ! $(which vagrant) ]; then
     echo '  x You need to install Vagrant:'
@@ -189,4 +194,5 @@ bundle exec knife solo bootstrap ci-gw -F vagrant-ssh.conf
 sed -i -e 's@User root$@User dev@' vagrant-ssh.conf
 
 bundle exec rake ci:setup:rspec spec:ci:gw
-</code></pre>
+
+```

@@ -43,15 +43,18 @@ tags: resume,
 
 <h4>ソースをチェックアウト</h4>
 
-<pre><code>$ mkdir /var/www/shindig
+```
+$ mkdir /var/www/shindig
 $ cd /var/www/shindig
-$ svn co http://svn.apache.org/repos/asf/incubator/shindig/trunk/ .</code></pre>
+$ svn co http://svn.apache.org/repos/asf/incubator/shindig/trunk/ .
+```
 
 <h4>バーチャルホストを立てる</h4>
 
 <p>ここでは dev.shindig.jp というドメインとします。</p>
 
-<pre><code>&lt;VirtualHost 192.168.1.142:80&gt;
+```
+&lt;VirtualHost 192.168.1.142:80&gt;
     DocumentRoot /var/www/shindig/php
     DirectoryIndex index.html index.php
     ServerName dev.shindig.jp
@@ -60,23 +63,30 @@ $ svn co http://svn.apache.org/repos/asf/incubator/shindig/trunk/ .</code></pre>
     &lt;Directory /var/www/shindig/php&gt;
         AllowOverride All
     &lt;/Directory&gt; 
-&lt;/VirtualHost&gt;</code></pre>
+&lt;/VirtualHost&gt;
+```
 
 <h4>PECL json インストール</h4>
 
 <p>個人の環境にPECL jsonが入っていなかったのでインストールしました。</p>
 
-<pre><code>$ sudo pecl install json</code></pre>
+```
+$ sudo pecl install json
+```
 
 <h3>ガジェットを実行してみる</h3>
 
 <p>ここまでできれば、すぐにガジェットを実行することができます。エンドポイントは、</p>
 
-<pre><code>http://dev.shindig.jp/gadgets/ifr?</code></pre>
+```
+http://dev.shindig.jp/gadgets/ifr?
+```
 
 <p>です。urlパラメータを与えてガジェットを実行します。</p>
 
-<pre><code>http://dev.shindig.jp/gadgets/ifr?url=[ガジェットのXMLファイルのURL]</code></pre>
+```
+http://dev.shindig.jp/gadgets/ifr?url=[ガジェットのXMLファイルのURL]
+```
 
 <p><img src='/images/2008/09/shindig-example.gif' alt='shindig-example.gif' /></p>
 

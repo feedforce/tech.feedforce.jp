@@ -31,7 +31,8 @@ tags: ruby, resume,
 <h2><font class="Apple-style-span" size="6"><span class="Apple-style-span" style="font-size: 19px">準備</span></font></h2>
 <p align="justify">Xcodeを使うので、あらかじめインストールしておく必要があります。MacOSXのインストールDVDに含まれているのでそこからインストールするか、もしくは<a href="http://developer.apple.com/">ADC</a>(Apple Developer Connection)のサイトからダウンロードすることもできます。また、RubyからTwitterにポストする部分でRuby Twitter Gemを使いましたので、それもインストールしておきます。 ターミナルを開いて、</p>
 
-<pre style="font-family: 'Courier New',fixed; font-size: 11px; line-height: 13px">$ sudo gem install twitter</code></pre>
+<pre style="font-family: 'Courier New',fixed; font-size: 11px; line-height: 13px">$ sudo gem install twitter
+```
 でインストールします。
 <h2><font class="Apple-style-span" size="6"><span class="Apple-style-span" style="font-size: 19px">プロジェクト作成</span></font></h2>
 <p align="justify">まず、プロジェクトを作成します。/Developer/Applications/Xcode.appを開きます。 File-&gt;New Projectを選択し、 Cocoa-Ruby Applicationを選択します(1)。</p>
@@ -42,7 +43,8 @@ tags: ruby, resume,
 
 <p align="justify"> <a href="/images/2008/06/2008-06-26_0032.png" title="Ruby NSObject subclass"><img src="/images/2008/06/2008-06-26_0032.thumbnail.png" alt="Ruby NSObject subclass" /></a> (3)
 ここではAppController.rbというファイル名で保存します。 今回は次のようなコードにしました。
-<pre><code>require 'osx/cocoa'
+```
+require 'osx/cocoa'
 require 'rubygems'
 require 'twitter'
 
@@ -55,7 +57,8 @@ class AppController &lt; OSX::NSObject
     twit.update(@message.stringValue.to_s)
     @message.setStringValue ''
   end
-end</code></pre>
+end
+```
 <p align="justify"> ib_outletで、コントローラからウィンドウへの参照を定義しています。 ib_actionで、アクションを定義します。</p>
 ボタンがクリックされたときにここで定義したアクシ ョンが呼ばれるように後で設定します。
 def post … end にアクションpostの処理内容を書きます。 Twitterクラスのインスタンスを生成し、ウィンドウに入力してあるメッセージをポストします。@nameで参照しているオブジェクトを取得し、stringValueメソッドでそのオブジェクトの文字列を取得します。 stringValueで取得した文字列はCocoaの文字列クラスのオブジェクトなので、to_sメソッドで Rubyの文字列に変換しています。

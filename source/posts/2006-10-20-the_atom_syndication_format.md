@@ -57,11 +57,13 @@ tags: resume,
 <li>子要素を含んではいけない。</li>
 
 </ul>
-<pre><code>
+```
+
 &lt;title type="text"&gt;
   Less: &amp;lt;
 &lt;/title&gt;
-</code></pre>
+
+```
 <h4><a name="l4"> </a>HTML</h4>
 <ul>
 <li>子要素を含んではいけない。</li>
@@ -69,25 +71,29 @@ tags: resume,
 
 <li>HTML の &lt;div&gt; の中に直接現れる形にすべき</li>
 </ul>
-<pre><code>
+```
+
 &lt;title type="html"&gt;
   Less: &amp;lt;em&gt; &amp;amp;lt; &amp;lt;/em&gt;
 &lt;/title&gt;
 
-</code></pre>
+
+```
 <h4><a name="l5"> </a>XHTML</h4>
 <ul>
 <li>1 つ の XHTML div 要素でなければならない。</li>
 <li>div 要素そのものをコンテンツの一部とみなしてはならない。</li>
 </ul>
-<pre><code>
+```
+
 &lt;title type="xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml"&gt;
   &lt;xhtml:div&gt;
     Less: &lt;xhtml:em&gt; &amp;lt; &lt;/xhtml:em&gt;
 
   &lt;/xhtml:div&gt;
 &lt;/title&gt;
-</code></pre>
+
+```
 <h3><a name="l6"> </a>Person コンストラクト</h3>
 <p>Person コンストラクト内には、1 個の atom:name 要素と
 0 個または 1 個の atom:uri 要素、atom:email 要素を含む。</p>
@@ -100,13 +106,15 @@ tags: resume,
 <p>人物に関連付けられたメールアドレス。</p>
 <h3><a name="l10"> </a>Date コンストラクト</h3>
 <p>RFC3339 の date-time 形式</p>
-<pre><code>
+```
+
 &lt;updated&gt;2003-12-13T18:30:02Z&lt;/updated&gt;
 
 &lt;updated&gt;2003-12-13T18:30:02.25Z&lt;/updated&gt;
 &lt;updated&gt;2003-12-13T18:30:02+01:00&lt;/updated&gt;
 &lt;updated&gt;2003-12-13T18:30:02.25+01:00&lt;/updated&gt;
-</code></pre>
+
+```
     </div>
   </div>
 

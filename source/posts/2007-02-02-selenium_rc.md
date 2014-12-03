@@ -48,7 +48,8 @@ tags: test, resume,
 2007/02/02現在、<a href="http://www.apache.org/licenses/LICENSE-2.0" class="external">Apache License, Version 2.0</a>の下に配布されています。</p>
 <p>Selenium RCは、<strong>Selenium Remote Control</strong>という名が表すとおり、Seleniumテストを遠隔操作するための製品です。<br>
 これは、JAVAの<a href="http://www.mortbay.org/" class="external">Jetty Web Server</a>を利用した<strong>Selenium Server</strong>を利用して実現されています。</p>
-<pre><code>
+```
+
 /---------------------\\      /------------------------\\
 |                     |      |                        |
 | /-----------------\\ | HTTP | /--------------------\\ |
@@ -60,7 +61,8 @@ tags: test, resume,
 | \\-----------------/ |      | \\--------------------/ |
 |                     |      |                        |
 \\---------------------/      \\------------------------/
-</code></pre>
+
+```
 
     </div>
   </div>
@@ -108,11 +110,13 @@ tags: test, resume,
 <li>過去のPHPUnit(v1,v2)をアンインストールするする必要があります</li>
 </ol></li>
 </ol>
-<pre><code>
+```
+
 $ pear install -a Testing_Selenium-beta
 $ pear channel-discover pear.phpunit.de
 $ pear install -a phpunit/PHPUnit
-</code></pre>
+
+```
     </div>
   </div>
 </div>
@@ -144,7 +148,8 @@ $ pear install -a phpunit/PHPUnit
 <li>テストを終了してブラウザを閉じる</li>
 <li>Selenium Server終了</li>
 </ul>
-<pre><code>
+```
+
 (DOS)C:\~&gt; java -jar C:\selenium-remote-control-0.9.0\server/selenium-server.jar -interactive
 ... 起動メッセージ...
 (SRC)cmd=getNewBrowserSession&amp;1=*iexplore&amp;2=http://www.google.com
@@ -165,7 +170,8 @@ Got result: OK,SeleniumRC - Google 検索 on session 221234
 Shutting down...
 (DOS)C:\~&gt;
 
-</code></pre>
+
+```
     </div>
   </div>
 </div>
@@ -178,15 +184,18 @@ Shutting down...
 インタラクティブモードで実行した内容をPHPUnitのテストケースにして実行します。</p>
 <h3><a name="l6"><span class="sanchor"> </span></a>Selenium Serverをデーモンとして実行</h3>
 <p>テスト実行の前に、Selenium Serverをデーモンとして起動しておきます。<br></p>
-<pre><code>
+```
+
 (HOST[A]/DOS)C:\~&gt; java -jar C:\selenium-remote-control-0.9.0\server/selenium-server.jar
-</code></pre>
+
+```
 <h3><a name="l7"><span class="sanchor"> </span></a>サンプルコード</h3>
 <dl>
 <dt>SeleniumRCTest.php(UTF-8)</dt>
 
 </dl>
-<pre><code>
+```
+
 &lt;?php
 require_once 'PHPUnit/Extensions/SeleniumTestCase.php';
 
@@ -210,9 +219,11 @@ class SeleniumRCTest extends PHPUnit_Extensions_SeleniumTestCase
 }
 
 ?&gt;
-</code></pre>
+
+```
 <h4><a name="l8"> </a>実行</h4>
-<pre><code>
+```
+
 
 (HOST[B]/DOS)C:\~&gt; phpunit path\to\SeleniumRCTest.php
 PHPUnit 3.0.3 by Sebastian Bergmann.
@@ -222,7 +233,8 @@ PHPUnit 3.0.3 by Sebastian Bergmann.
 Time: 00:12
 
 OK (1 test)
-</code></pre>
+
+```
 <p>HOST[B]上のDOSプロンプトからphpunitコマンドでテストケースファイルを実行すると、HOST[A]上で起動させたSelenium Serverにリクエストを行い、HOST[A]上でブラウザを立ち上げSeleniumテストが実行されます。</p>
     </div>
   </div>
@@ -234,9 +246,11 @@ OK (1 test)
     <div class="section">
       <p>今回の資料の中では、Selenium Serverの起動オプションについては省略しています。</p>
 <p>以下のように、<strong>-help</strong>オプションをつけて実行することでヘルプが表示されます。</p>
-<pre><code>
+```
+
 (DOS)C:\~&gt;java -jar c:\selenium-remote-control-0.9.0\server\selenium-server.jar -help
-</code></pre>
+
+```
 <p>HTMLで記述したテストスイートを利用するオプションや、マルチウィンドウモードでテストを実行するオプション、Selenium Serverのポートやタイムアウトを設定するオプションなどがあります。ほかにも、実運用の際に役立ちそうなオプションがあるので、試してみてはいかがでしょうか。</p>
 <p>また、いくつか既知の問題もあるようですので、問題にぶつかった際は以下のページなどを参考にしてください。</p>
 

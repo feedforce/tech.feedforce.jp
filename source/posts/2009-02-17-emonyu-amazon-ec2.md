@@ -39,18 +39,24 @@ EC2のインスタンスで起動させているAMI(イメージ)は、<a href="
 このイメージを利用する際の注意点は、EC2のSmall Instanceで利用可能な160GBのうちの10GBしかルートにマウントされていない点です。
 
 残りの150GBは /mnt に割り当てられています。MySQL を yum でインストールすると /var/lib/mysql にデータディレクトリが作成されますが、上記の通り /var 以下では 10GB までしか利用できないため、 /mnt の下に mysql用のディレクトリを作成して、シンボリックリンクを貼るといった対処が必要になります。
-<pre><code>$ cd /var/lib
+```
+$ cd /var/lib
 $ rm mysql
 $ ln -s /mnt/var/lib/mysql mysql
-$ lllrwxrwxrwx 1 root   root      18  1月  8 22:30 mysql -&gt; /mnt/var/lib/mysql</code></pre>
+$ lllrwxrwxrwx 1 root   root      18  1月  8 22:30 mysql -&gt; /mnt/var/lib/mysql
+```
 my.cnf の内容もそれにあわせて書き換えました。
-<pre><code>[mysqld]
+```
+[mysqld]
 datadir=/mnt/var/lib/mysql
 socket=/mnt/var/lib/mysql/mysql.sock
 [mysql.server]
-basedir=/mnt/var/lib</code></pre>
+basedir=/mnt/var/lib
+```
 また、タイムゾーンが米国時間となっているため、最初に日本時間に変更しておく必要があります。
-<pre><code>lrwxrwxrwx 1 root root 30  1月 16 11:16 /etc/localtime -&gt; /usr/share/zoneinfo/Asia/Tokyo</code></pre>
+```
+lrwxrwxrwx 1 root root 30  1月 16 11:16 /etc/localtime -&gt; /usr/share/zoneinfo/Asia/Tokyo
+```
 <h3>CloudFrontでスタティックファイルをホスティングする際の注意点</h3>
 CloudFrontのサーバは日本に置かれているためアクセスは速いのですが、キャッシュの有効時間を24時間未満に設定することができないため、キャッシュのコントロールがうまくいかないという問題があります。
 
@@ -59,25 +65,33 @@ CloudFrontのサーバは日本に置かれているためアクセスは速い�
 そこで、スタティックファイルのディレクトリにバージョン番号を付与し、リリースのたびにそのバージョン番号を変更していくという、少々めんどくさい方法で対応することにしました。
 
 イメージとしては、
-<pre><code>&lt;img src="/img/title.gif" alt="..." /&gt;</code></pre>
+```
+&lt;img src="/img/title.gif" alt="..." /&gt;
+```
 という img タグがあったら、
-<pre><code>&lt;img src="http://static.emonyu.jp/24/img/title.gif" alt="..." /&gt;</code></pre>
+```
+&lt;img src="http://static.emonyu.jp/24/img/title.gif" alt="..." /&gt;
+```
 のようにテンプレートを書き換え、画像ファイル等はその番号のディレクトリに配備する、というものです。バージョン番号はデータベースで管理しています。
 <h3>S3にファイルを転送する際の注意点</h3>
 EC2からS3へファイルを転送するのに、<a href="http://undesigned.org.za/2007/10/22/amazon-s3-php-class">Amazon S3 PHP Class</a>というライブラリを利用しています。このライブラリは以下のようにして利用できるのですが、
-<pre><code>$s3-&gt;putObjectFile(
+```
+$s3-&gt;putObjectFile(
                    '/path/to/style.css',
                    'bucket-name',
                    's3/file/path/css/style.css',
-                   S3::ACL_PUBLIC_READ);</code></pre>
+                   S3::ACL_PUBLIC_READ);
+```
 putObjectFile() の6番目の引数に適切に Content-Type を与えてあげる必要があります。たとえば上記のように Content-Type なしで転送してしまうと、ライブラリがデフォルトの Content-Type として text/plain を適用してしまうために、ブラウザでページを表示したときにCSSが適用されなくなります。そのため、
-<pre><code>$s3-&gt;putObjectFile(
+```
+$s3-&gt;putObjectFile(
                    '/path/to/style.css',
                    'bucket-name',
                    's3/file/path/css/style.css',
                    S3::ACL_PUBLIC_READ,
                    array(),
-                   'text/css');</code></pre>
+                   'text/css');
+```
 のように、最後の引数で Content-Type を与える必要があります。もしくはファイルの拡張子から Content-Type を自動的に判別できるように、ライブラリ自身を修正してもよいと思います。
 <h3>まとめ</h3>
 以上のように少し手間と工夫が必要ですが、Amazon EC2, S3, CloudFrontを利用して日本向けのサービスを提供することができます。

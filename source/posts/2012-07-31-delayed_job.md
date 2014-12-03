@@ -31,7 +31,9 @@ tags: ruby, resume,
   <div>
     <h4>ワーカーの名前はどう決まる？</h4>
     <p>基本的にはうまいこと決めてくれます。</p>
-    <pre><code>"#{@name_prefix}host:#{Socket.gethostname} pid:#{Process.pid}" rescue "#{@name_prefix}pid:#{Process.pid}"</code></pre>
+    ```
+"#{@name_prefix}host:#{Socket.gethostname} pid:#{Process.pid}" rescue "#{@name_prefix}pid:#{Process.pid}"
+```
     <p>デーモンスクリプトの -p/--prefix を使ってプレフィクスを指定する事もできます。</p>
   </div>
 </div>

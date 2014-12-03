@@ -33,9 +33,11 @@ tags: resume,
       <h3><a name="l3"> </a>グローバル・オブジェクト</h3>
 <p><a href="http://developer.yahoo.com/yui/yahoo/">http://developer.yahoo.com/yui/yahoo/</a></p>
 
-<pre><code>
+```
+
 &lt;script type="text/javascript" src="yahoo.js" &gt;&lt;/script&gt;
-</code></pre>
+
+```
 <p>YAHOO というオブジェクトが生成。</p>
 <h3><a name="l4"> </a>ユーティリティ</h3>
 <h4><a name="l5"> </a>Animation</h4>
@@ -43,16 +45,20 @@ tags: resume,
 <p><a href="http://developer.yahoo.com/yui/animation/">http://developer.yahoo.com/yui/animation/</a></p>
 
 <p>例</p>
-<pre><code>
+```
+
 var attributes = {
  width: { to: 400 },
  height: { to: 400 }
 };
-</code></pre>
-<pre><code>
+
+```
+```
+
 var myAnim = new YAHOO.util.Anim('test', attributes);
 myAnim.animate();
-</code></pre>
+
+```
 <ul>
 <li>toは絶対値</li>
 <li>byは相対値</li>
@@ -61,26 +67,33 @@ myAnim.animate();
 
 <li>イベント・リスニング</li>
 </ul>
-<pre><code>
+```
+
 myAnim.onComplete.subscribe(removeElement);
-</code></pre>
+
+```
 <ul>
 <li>backgroundColorもOK</li>
 </ul>
-<pre><code>
+```
+
 new YAHOO.util.ColorAnim
-</code></pre>
+
+```
 <ul>
 <li>2次元のアニメ</li>
 </ul>
 
-<pre><code>
+```
+
 new YAHOO.util.Motion
-</code></pre>
+
+```
 <ul>
 <li>カーブの軌跡も描けます</li>
 </ul>
-<pre><code>
+```
+
 var attributes = {
  points: {
   to: [400, 400],
@@ -89,7 +102,8 @@ var attributes = {
 };
 var myAnim = new YAHOO.util.Motion('test', attributes);
 myAnim.animate();
-</code></pre>
+
+```
 <ul>
 <li>自動スクロール</li>
 </ul>
@@ -161,21 +175,25 @@ FireBug, Safari JavaScript Console</p>
 <li>ソースの順序に依存していません</li>
 
 </ul>
-<pre><code>
+```
+
 &lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
 "http://www.w3.org/TR/html4/strict.dtd"&gt;
 &lt;!-- layouts require "Standards Mode" rendering,
 which the 401-strict doctype triggers --&gt;
 
 &lt;link rel="stylesheet" type="text/css" href="grids.css"&gt;
-</code></pre>
+
+```
 <p>詳細はこちら</p>
 <p><a href="http://developer.yahoo.com/yui/grids/">http://developer.yahoo.com/yui/grids/</a></p>
 <h4><a name="l20"> </a>Standard CSS Fonts</h4>
 
-<pre><code>
+```
+
 &lt;link rel="stylesheet" type="text/css" href="fonts.css"&gt;
-</code></pre>
+
+```
 <ul>
 <li>一貫したfont-sizeとline-height</li>
 <li>OSごとに適切なfont-family</li>
@@ -186,55 +204,71 @@ which the 401-strict doctype triggers --&gt;
 
 <h3><a name="l21"> </a>Standard CSS Reset</h3>
 <p>ブラウザ間のHTMLデフォルトスタイルの差を取り払ってくれます。</p>
-<pre><code>
+```
+
 &lt;link rel="stylesheet" type="text/css" href="reset.css"&gt;
-</code></pre>
+
+```
 <ul>
 <li>h1, h2, ... , h6のfont-sizeを100%</li>
 </ul>
-<pre><code>
+```
+
 h1,h2,h3,h4,h5,h6{font-size:100%;}
-</code></pre>
+
+```
 <ul>
 
 <li>margin, paddingを0, borderのリセット</li>
 </ul>
-<pre><code>
+```
+
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquote,th,td{margin:0;padding:0;}
 table{border-collapse:collapse;border-spacing:0;}
-</code></pre>
+
+```
 <ul>
 <li>strong, em, citeなどのfont-styleとfont-weightをnormalに</li>
 </ul>
-<pre><code>
+```
+
 address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}
-</code></pre>
+
+```
 <ul>
 <li>fieldsetとimgからボーダを除去</li>
 </ul>
 
-<pre><code>
+```
+
 fieldset,img{border:0;}
-</code></pre>
+
+```
 <ul>
 <li>リストからlist-styleを除去</li>
 </ul>
-<pre><code>
+```
+
 ol,ul {list-style:none;}
-</code></pre>
+
+```
 <ul>
 <li>q要素の引用符を除去</li>
 </ul>
-<pre><code>
+```
+
 q:before,q:after{content:'';}
-</code></pre>
+
+```
 
 <ul>
 <li>captionとthを左寄せ</li>
 </ul>
-<pre><code>
+```
+
 caption,th {text-align:left;}
-</code></pre>
+
+```
     </div>
   </div>
 </div>

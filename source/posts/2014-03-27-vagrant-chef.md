@@ -27,13 +27,17 @@ Chefがどんなものか試してみたい、自分でcookbookを作ってみ�
 <h2>vagrant init</h2>
 作業用のディレクトリを作成し、vagrant initをします。
 
-<pre><code>$ mkdir cookbook-test
+```
+$ mkdir cookbook-test
 $ cd cookbook-test
-$ vagrant init opscode-centos-6.5 http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-6.5_chef-provisionerless.box</code></pre>
+$ vagrant init opscode-centos-6.5 http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-6.5_chef-provisionerless.box
+```
 
 vagrant 1.5.0以上であれば<a href="https://vagrantcloud.com/chef/" title="vagrantcloud" target="_blank">Vagrant Cloud</a>が利用できるので下記のように実行します。
 
-<pre><code>$ vagrant init chef/centos-6.5</code></pre>
+```
+$ vagrant init chef/centos-6.5
+```
 
 初回はboxのダウンロードに時間がかかります。
 boxにはchef社が公開しているcentos6.5を使用します。
@@ -42,8 +46,10 @@ boxにはchef社が公開しているcentos6.5を使用します。
 
 最後にVMを起動させます。
 
-<pre><code>$ vagrant up
-$ vagrant status</code></pre>
+```
+$ vagrant up
+$ vagrant status
+```
 
 ここまででChefを試すサーバの用意ができました。
 
@@ -51,18 +57,21 @@ $ vagrant status</code></pre>
 実際にrecipeを作っていきましょう。
 サンプルレシピとしてapacheをインストールするレシピを書きます。
 
-<pre><code>$ mkdir -p cookbooks/apache/recipe/
+```
+$ mkdir -p cookbooks/apache/recipe/
 $ vi cookbooks/apache/recipe/default.rb
 
 package 'httpd' do
   action :install
-end</code></pre>
+end
+```
 
 <h2> プロビジョニングする </h2>
 さっそく作ったrecipeをサーバに適用してみましょう。
 Vagrantfileにchef-soloを使う設定を記述します。
 
-<pre><code>$ vi Vagrantfile
+```
+$ vi Vagrantfile
 
 VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -70,11 +79,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      chef.cookbooks_path = "./cookbooks"    # cookbooksの場所を指定します
      chef.add_recipe "apache"               # apacheというrecipeを適用
    end
-end</code></pre>
+end
+```
 
 では実際にrecipeを適用してみます。簡単ですね。
 
-<pre><code>$ vagrant provision</code></pre>
+```
+$ vagrant provision
+```
 
 おそらくchef-solo または chef-client が見つからないというエラーが出たと思います。
 さきほど起動させたVMにchefが入っていないために出るエラーですのでchefをインストールする必要があります。
@@ -83,11 +95,14 @@ end</code></pre>
 <h2> vagrant-omnibusプラグインのインストール </h2>
 このプラグインはプロビジョニング時にchef-clientがインストールされているかを検出し、指定したバージョンのchef-clientをインストールしてくれます。
 
-<pre><code>$ vagrant plugin install vagrant-omnibus</code></pre>
+```
+$ vagrant plugin install vagrant-omnibus
+```
 
 インストールができたらVagrantfileに下記を追記します。
 
-<pre><code>$ vi Vagrantfile
+```
+$ vi Vagrantfile
 
 VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -96,7 +111,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
    chef.cookbooks_path = "./cookbooks"
      chef.add_recipe "apache"
    end
-end</code></pre>
+end
+```
 
 :latestのところは任意のバージョンを指定できます。:latestとした場合は最新バージョンが入ります。
 
@@ -104,16 +120,20 @@ end</code></pre>
 
 追記をしたらもう一度同じコマンドを実行しましょう。
 
-<pre><code>$ vagrant provision</code></pre>
+```
+$ vagrant provision
+```
 
 すると vagrant-omnibus プラグインによってchefのインストールが始まります。
 その後はchefによって apache レシピが実行され、VMにapacheがインストールされます。
 
 さっそくVMにログインして確認してみましょう。
 
-<pre><code>$ vagrant ssh
+```
+$ vagrant ssh
 $ rpm -q httpd
-httpd-2.2.15-29.el6.centos.x86_64</code></pre>
+httpd-2.2.15-29.el6.centos.x86_64
+```
 
 ちゃんとapacheがインストールされています！
 基本的にはこれを繰り返し、レシピを作成していきます。
@@ -124,7 +144,9 @@ Vagrantfileでchefのloglevelをdebugにしておくと出力が細かくなる�
 
 config.vm.provision ... の下あたりに下記を追記します。
 
-<pre><code>chef.log_level = "debug"</code></pre>
+```
+chef.log_level = "debug"
+```
 
 <h2> この後は... </h2>
 

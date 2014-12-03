@@ -25,6 +25,7 @@ FF_BLOG.Common.PageTop = {
     SHOW_HIDE: 200,
     PAGE_TOP: 500
   },
+  VISIBLE_POSITION: 700,
   init: function () {
     this.setParameter();
     this.bindEvent();
@@ -43,7 +44,7 @@ FF_BLOG.Common.PageTop = {
         return;
       }
 
-      if ($(this).scrollTop() > 0) {
+      if ($(this).scrollTop() > _self.VISIBLE_POSITION) {
         _self.showPageTopTarget();
       } else {
         _self.hidePageTopTarget();

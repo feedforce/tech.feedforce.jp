@@ -1,0 +1,29 @@
+general:
+  branches:
+    ignore:
+      - gh-pages
+
+machine:
+  timezone: Asia/Tokyo
+
+dependencies:
+  pre:
+    - bundle install --path vendor/bundle
+    - npm install -g bower
+    - bower install
+
+test:
+  override:
+    - bundle exec middleman build
+
+#deployment:
+#  gh-pages:
+#    branch: master
+#    commands:
+#      - git config --global user.name "CircleCI"
+#      - git config --global user.email "circleci@feedforce.jp"
+#
+#      - git checkout gh-pages
+#      - cd build
+#      - git commit -a -m 'Update'
+#      - git push

@@ -1,4 +1,6 @@
-# FeedForce Middleman Blog
+# feedforce Engineers' blog
+
+powered by [Middleman](http://middlemanapp.com/)
 
 ## Requirement
 

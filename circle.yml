@@ -16,14 +16,10 @@ test:
   override:
     - bundle exec middleman build
 
-#deployment:
-#  gh-pages:
-#    branch: master
-#    commands:
-#      - git config --global user.name "CircleCI"
-#      - git config --global user.email "circleci@feedforce.jp"
-#
-#      - git checkout gh-pages
-#      - cd build
-#      - git commit -a -m 'Update'
-#      - git push
+deployment:
+  publish:
+    branch: master
+    commands:
+      - git config --global user.name "circleci"
+      - git config --global user.email "circleci@feedforce.jp"
+      - bundle exec middleman deploy

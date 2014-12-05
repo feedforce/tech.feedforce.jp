@@ -1,3 +1,4 @@
-test:
-  override:
-    - echo 'Fixed'
+general:
+  branches:
+    ignore:
+      - gh-pages

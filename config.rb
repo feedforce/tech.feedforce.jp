@@ -177,3 +177,13 @@ activate :google_analytics do |ga|
   ga.tracking_id = 'UA-50937-9'
   ga.minify = true
 end
+
+##
+# middleman-deploy settings
+##
+activate :deploy do |deploy|
+  deploy.method = :git
+  # Project ページであるため 'gh-pages' default
+  # Run Automatically
+  # deploy.build_before = true
+end

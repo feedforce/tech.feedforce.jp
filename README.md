@@ -22,7 +22,7 @@ npm install -g bower
 
 ```
 $ bower install
-$ bundle install --path vender/bundle
+$ bundle install --path vendor/bundle
 ```
 
 ## Middleman Command

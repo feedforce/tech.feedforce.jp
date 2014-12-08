@@ -1,3 +1,6 @@
 {
-    "name": "tech.feedforce.jp"
+    "name": "tech.feedforce.jp",
+    "env": {
+        "BUILDPACK_URL": "git://github.com/ddollar/heroku-buildpack-multi"
+    }
 }

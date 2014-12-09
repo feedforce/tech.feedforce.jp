@@ -125,6 +125,7 @@ configure :build do
   activate :minify_javascript
 
   activate :asset_host, host: '/tech.feedforce.jp'
+  set :relative_links, true
 
   # Enable cache buster
   # activate :asset_hash

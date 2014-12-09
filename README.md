@@ -36,3 +36,11 @@ Edit `data/author.yml`
 ## Deployment
 
 Every push to master will deploy to http://feedforce-tech-blog.herokuapp.com
+
+or
+
+Every pull request will deploy to https://feedforce-tech-blog-pr-NUMBER.herokuapp.com
+
+or
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)

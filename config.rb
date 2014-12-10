@@ -1,21 +1,20 @@
 require 'helpers/custom'
 
-###
-# Timezone
-###
-Time.zone = 'Tokyo'
-
+set :site_url, 'http://feedforce.github.io/tech.feedforce.jp'
+set :site_author, 'feedforce Inc.'
+set :site_title, "feedforce Engineers' blog"
+set :site_description, "株式会社フィードフォース技術チームのサイト。社内勉強会資料や開発の様子および成果の公開など。"
 
 ###
 # Page URL Path
 ###
 activate :directory_indexes
 
-
 ###
 # Middleman Blog Setting
 ###
 activate :blog do |blog|
+  Time.zone = 'Tokyo'
   # This will add a prefix to all links, template references and source paths
   # blog.prefix = "posts"
 
@@ -108,32 +107,25 @@ activate :livereload
 ###
 activate :custom_helper
 
-
 ###
 # Directory Setting
 ###
 set :css_dir, 'css'
-
 set :js_dir, 'js'
-
 set :images_dir, 'images'
-
 set :layouts_dir, 'layouts'
-
 set :partials_dir, 'partials'
-
 set :helpers_dir, 'helpers'
-
 
 ###
 # Build-specific configuration
 ###
 configure :build do
-  # For example, change the Compass output style for deployment
   activate :minify_css
-
-  # Minify Javascript on build
   activate :minify_javascript
+
+  activate :asset_host, host: '/tech.feedforce.jp'
+  set :relative_links, true
 
   # Enable cache buster
   # activate :asset_hash
@@ -176,4 +168,14 @@ set :markdown_engine, :redcarpet
 activate :google_analytics do |ga|
   ga.tracking_id = 'UA-50937-9'
   ga.minify = true
+end
+
+##
+# middleman-deploy settings
+##
+activate :deploy do |deploy|
+  deploy.method = :git
+  # Project ページであるため 'gh-pages' default
+  # Run Automatically
+  # deploy.build_before = true
 end

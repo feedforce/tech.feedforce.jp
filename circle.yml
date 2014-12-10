@@ -1,0 +1,25 @@
+general:
+  branches:
+    ignore:
+      - gh-pages
+
+machine:
+  timezone: Asia/Tokyo
+
+dependencies:
+  pre:
+    - bundle install --path vendor/bundle
+    - npm install -g bower
+    - bower install
+
+test:
+  override:
+    - bundle exec middleman build
+
+deployment:
+  publish:
+    branch: master
+    commands:
+      - git config --global user.name "circleci"
+      - git config --global user.email "circleci@feedforce.jp"
+      - bundle exec middleman deploy

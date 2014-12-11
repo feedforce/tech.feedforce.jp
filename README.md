@@ -1,5 +1,7 @@
 # feedforce Engineers' blog
 
+[tech.feedforce.jp](http://tech.feedforce.jp)
+
 powered by [Middleman](http://middlemanapp.com/)
 
 ## Requirement
@@ -7,7 +9,7 @@ powered by [Middleman](http://middlemanapp.com/)
 * [Node.js](http://nodejs.org/)
 * [Ruby](https://www.ruby-lang.org/)
 
-## Getting Started
+## Getting Setup
 
     $ ./script/bootstrap
 
@@ -18,10 +20,6 @@ powered by [Middleman](http://middlemanapp.com/)
     $ bundle exec middleman
     or
     $ bundle exec middleman server
-
-### Build
-
-    $ bundle exec middleman build
 
 ### Create a Post
 
@@ -44,3 +42,9 @@ Every pull request will deploy to https://feedforce-tech-blog-pr-NUMBER.herokuap
 or
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+### Automate Publishing
+
+:dart: When PR merged to `master`, these build and deploy to GitHub Pages (gh-pages) branch by CircleCI.
+
+[![Circle CI](https://circleci.com/gh/feedforce/tech.feedforce.jp.svg?style=svg)](https://circleci.com/gh/feedforce/tech.feedforce.jp)

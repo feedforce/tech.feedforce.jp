@@ -1,10 +1,5 @@
 require 'helpers/custom'
 
-set :site_url, 'http://tech.feedforce.jp'
-set :site_author, 'feedforce Inc.'
-set :site_title, "feedforce Engineers' blog"
-set :site_description, "株式会社フィードフォース技術チームのサイト。社内勉強会資料や開発の様子および成果の公開など。"
-
 ###
 # Page URL Path
 ###

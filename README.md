@@ -45,6 +45,6 @@ or
 
 ### Automate Publishing
 
-:dart: When PR merged to `master`, these build and deploy to GitHub Pages (gh-pages) branch by CircleCI.
+:dart: When a PR is merged to `master`, CircleCI will build and push it to `gh-pages`.
 
 [![Circle CI](https://circleci.com/gh/feedforce/tech.feedforce.jp.svg?style=svg)](https://circleci.com/gh/feedforce/tech.feedforce.jp)

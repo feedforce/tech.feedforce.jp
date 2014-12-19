@@ -41,8 +41,7 @@ tags: infrastructure, resume,
 <p>開発元のOpscodeが提供するインストーラを利用するのが手軽です。</p>
 
 ```
-$ sudo true &amp;&amp; curl -L http://opscode.com/chef/install.sh | sudo bash
-
+$ sudo true && curl -L http://opscode.com/chef/install.sh | sudo bash
 ```
 
 <p>依存するRubyなども含め /opt/chef 以下にインストールされるので、既存環境の汚染を最少限にできるというメリットもあります。</p>
@@ -77,7 +76,6 @@ chef-solo はデフォルトで /var/chef/cookbooks にCookbookがあると仮�
 $ curl -o chef-repo.tar.gz -L https://github.com/opscode/chef-repo/tarball/master
 $ tar zxvf chef-repo.tar.gz
 $ mv opscode-chef-repo-xxxxxxx /var/chef
-
 ```
 
 <p><a href="http://wiki.opscode.com/display/chef/Chef+Repository">Chef Repository - Opscode  Open Source Wiki</a></p>
@@ -95,7 +93,6 @@ $ mv opscode-chef-repo-xxxxxxx /var/chef
 ```
 $ cd /var/chef
 $ knife cookbook create ntp -o cookbooks
-
 ```
 
 <h3>"Recipe" の編集</h3>
@@ -105,20 +102,19 @@ $ knife cookbook create ntp -o cookbooks
 <p>cookbooks/ntp/recipes/default.rb</p>
 
 ```
-package &quot;ntp&quot; do  # (1)
+package "ntp" do  # (1)
   action [:install]
 end
 
-template &quot;/etc/ntp.conf&quot; do  # (2)
-  source &quot;ntp.conf.erb&quot;
-  variables( ntp_server: &quot;ntp.nict.jp&quot; )
-  notifies :restart, &quot;service[ntpd]&quot;
+template "/etc/ntp.conf" do  # (2)
+  source "ntp.conf.erb"
+  variables( ntp_server: "ntp.nict.jp" )
+  notifies :restart, "service[ntpd]"
 end
 
-service &quot;ntpd&quot; do  # (3)
+service "ntpd" do  # (3)
   action [:enable, :start]
 end
-
 ```
 
 <p>レシピから利用するテンプレートも以下のように作成します。</p>
@@ -130,11 +126,10 @@ restrict default kod nomodify notrap nopeer noquery
 restrict -6 default kod nomodify notrap nopeer noquery
 restrict 127.0.0.1
 restrict -6 ::1
-server &lt;%= @ntp_server %&gt;
+server <%= @ntp_server %>
 server  127.127.1.0
 driftfile /var/lib/ntp/drift
 keys /etc/ntp/keys
-
 ```
 
 <p>上記のようにレシピを記述することにより、以下の構成が実現できます。</p>
@@ -160,9 +155,8 @@ ResourceはChefで管理する構成内容を抽象化したもので、それ�
 
 ```
 {
-  &quot;run_list&quot;: [ &quot;recipe[ntp]&quot; ]
+  "run_list": [ "recipe[ntp]" ]
 }
-
 ```
 
 <h3>chef-soloの実行</h3>
@@ -173,7 +167,6 @@ ResourceはChefで管理する構成内容を抽象化したもので、それ�
 ```
 $ cd /var/chef
 $ sudo chef-solo -j node.json -l debug
-
 ```
 
 <p>ntpのインストール、設定ファイルの配備、サービスの有効化と起動がされるでしょうか。</p>

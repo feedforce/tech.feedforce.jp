@@ -101,6 +101,15 @@
     - label: Blog
       url: http://lorentzca.blogspot.jp/
 #------------------------------------------
+- id: tmd45
+  name: tmd45
+  thumbnail: tmd45.png
+  profile: "神々に愛されし地で遺留品集めをしています。<br />
+            好きなお酒は四ツ谷酒造さんの兼八です。<br />"
+  media:
+    - label: Twitter
+      url: https://twitter.com/tmd45
+#------------------------------------------
 - id: inoue
   name: inoue
   thumbnail: inoue.jpg

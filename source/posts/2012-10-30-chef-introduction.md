@@ -41,7 +41,7 @@ tags: infrastructure, resume,
 <p>開発元のOpscodeが提供するインストーラを利用するのが手軽です。</p>
 
 ```
-$ sudo true &amp;&amp; curl -L http://opscode.com/chef/install.sh | sudo bash
+$ sudo true && curl -L http://opscode.com/chef/install.sh | sudo bash
 
 ```
 
@@ -105,17 +105,17 @@ $ knife cookbook create ntp -o cookbooks
 <p>cookbooks/ntp/recipes/default.rb</p>
 
 ```
-package &quot;ntp&quot; do  # (1)
+package "ntp" do  # (1)
   action [:install]
 end
 
-template &quot;/etc/ntp.conf&quot; do  # (2)
-  source &quot;ntp.conf.erb&quot;
-  variables( ntp_server: &quot;ntp.nict.jp&quot; )
-  notifies :restart, &quot;service[ntpd]&quot;
+template "/etc/ntp.conf" do  # (2)
+  source "ntp.conf.erb"
+  variables( ntp_server: "ntp.nict.jp" )
+  notifies :restart, "service[ntpd]"
 end
 
-service &quot;ntpd&quot; do  # (3)
+service "ntpd" do  # (3)
   action [:enable, :start]
 end
 
@@ -130,7 +130,7 @@ restrict default kod nomodify notrap nopeer noquery
 restrict -6 default kod nomodify notrap nopeer noquery
 restrict 127.0.0.1
 restrict -6 ::1
-server &lt;%= @ntp_server %&gt;
+server <%= @ntp_server %>
 server  127.127.1.0
 driftfile /var/lib/ntp/drift
 keys /etc/ntp/keys
@@ -160,7 +160,7 @@ ResourceはChefで管理する構成内容を抽象化したもので、それ�
 
 ```
 {
-  &quot;run_list&quot;: [ &quot;recipe[ntp]&quot; ]
+  "run_list": [ "recipe[ntp]" ]
 }
 
 ```

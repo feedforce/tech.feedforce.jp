@@ -1,4 +1,4 @@
-# feedforce Engineers' blog
+# feedforce Engineers' blog [![Circle CI](https://circleci.com/gh/feedforce/tech.feedforce.jp.svg?style=svg)](https://circleci.com/gh/feedforce/tech.feedforce.jp)
 
 [tech.feedforce.jp](http://tech.feedforce.jp)
 
@@ -47,4 +47,3 @@ or
 
 :dart: When a PR is merged to `master`, CircleCI will build and push it to `gh-pages`.
 
-[![Circle CI](https://circleci.com/gh/feedforce/tech.feedforce.jp.svg?style=svg)](https://circleci.com/gh/feedforce/tech.feedforce.jp)

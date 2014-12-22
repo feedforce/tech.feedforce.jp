@@ -4,75 +4,61 @@ date: 2006-12-22 17:49 JST
 authors: fukunaga
 tags: resume, 
 ---
-<div><div>
+先日筑波で開催されたGoogleエンジニアの講演を聴いてきたので、今回はGoogle Desktop APIを学習します。
 
-  <div>
-    <div>
-      <p>先日筑波で開催されたGoogleエンジニアの講演を聴いてきたので、今回はGoogle Desktop APIを学習します。</p>
 <dl>
-<dt>OpenCollege4 - PukiWiki</dt><dd><a href="http://www.osss.cs.tsukuba.ac.jp/kato/wiki/kato/index.php?OpenCollege4">http://www.osss.cs.tsukuba.ac.jp/kato/wiki/kato/index.php?OpenCollege4</a></dd>
+<dt>OpenCollege4 - PukiWiki</dt>
+<dd><a href="http://www.osss.cs.tsukuba.ac.jp/kato/wiki/kato/index.php?OpenCollege4">http://www.osss.cs.tsukuba.ac.jp/kato/wiki/kato/index.php?OpenCollege4</a></dd>
 </dl>
-    </div>
-  </div>
 
-</div>
-<!--more-->
-<div>
-  <h2><a name="l0"> </a>関連記事</h2>
-  <div>
-    <div>
-      <ul>
-<li><a href="http://codezine.jp/a/article/aid/804.aspx">CodeZine：Google流プログラミングの真髄を筑波大学で見てきた（google）</a></li>
-</ul>
-    </div>
+<!--more-->  
 
-  </div>
-</div>
-<div>
-  <h2><a name="l1"> </a>ガジェットについて</h2>
-  <div>
-    <div>
-      <p>Googleのガジェットは2種類あります。</p>
-<h3><a name="l2"> </a>Universal Gadget</h3>
+## 関連記事
 
-<p>Googleのパーソナライズドホームに設置できるガジェット</p>
-<h3><a name="l3"> </a>Google Desktop Gadget</h3>
-<p>Google デスクトップ で動くガジェット</p>
-<h3><a name="l4"> </a>今回は後者のほうを扱います。</h3>
-    </div>
-  </div>
-</div>
-<div>
-  <h2><a name="l5"> </a>はじめに</h2>
+- [CodeZine：Google流プログラミングの真髄を筑波大学で見てきた（google）](http://codezine.jp/a/article/aid/804.aspx)
 
-  <div>
-    <div>
-      <h3><a name="l6"> </a>Google Desktopが必要です</h3>
-<p><a href="http://desktop.google.com/">http://desktop.google.com/</a></p>
-<h3><a name="l7"> </a>Google Desktop SDKを入手します</h3>
-<p><a href="http://desktop.google.com/dev/index.html">http://desktop.google.com/dev/index.html</a></p>
+## ガジェットについて
+
+Googleのガジェットは2種類あります。
+
+### Universal Gadget
+
+Googleのパーソナライズドホームに設置できるガジェット
+
+### Google Desktop Gadget
+
+Google デスクトップ で動くガジェット
+
+### 今回は後者のほうを扱います。
+
+## はじめに
+
+### Google Desktopが必要です
+
+[http://desktop.google.com/](http://desktop.google.com/)
+
+### Google Desktop SDKを入手します
+
+[http://desktop.google.com/dev/index.html](http://desktop.google.com/dev/index.html)
+
 <dl>
-<dt>SDK のダウンロード</dt><dd><a href="http://desktop.google.com/downloadsdksubmit">http://desktop.google.com/downloadsdksubmit</a></dd>
-
+<dt>SDK のダウンロード</dt>
+<dd><a href="http://desktop.google.com/downloadsdksubmit">http://desktop.google.com/downloadsdksubmit</a></dd>
 </dl>
-    </div>
-  </div>
-</div>
-<div>
-  <h2><a name="l8"> </a>サンプルを見てみる</h2>
-  <div>
-    <div>
-      <p>ファイルを展開</p>
 
-<h3><a name="l9"> </a>Hello Worldのサンプル</h3>
+## サンプルを見てみる
+
+ファイルを展開
+
+### Hello Worldのサンプル
+
 ```
-
 GD_SDK\api\samples\scripts\display\HelloWorld
-
-```
-<h4><a name="l10"> </a>内容</h4>
 ```
 
+#### 内容
+
+```
 -1033/
  -strings.xml
 -gadget.gmanifest
@@ -80,77 +66,80 @@ GD_SDK\api\samples\scripts\display\HelloWorld
 -plugin.js
 -plugin_large.gif
 -plugin_small.gif
-
-```
-<p>説明していきます</p>
-<h5><a name="l11"> </a>main.xml</h5>
-
-<p>メインビューを定義するXML</p>
 ```
 
-&lt;view width="100" height="100" resizable="true" showCaptionAlways="true" &gt;
-  &lt;contentArea name="contentArea" width="100%" height="100%" /&gt;
-  &lt;script src="plugin.js"/&gt;
-&lt;/view&gt;
+説明していきます
+
+##### main.xml
+
+メインビューを定義するXML
 
 ```
-<h5><a name="l12"> </a>1033/strings.xml</h5>
-
-<p>言語ファイルです。各国の言語でstrings.xmlファイルを用意することで国際化が容易にできます。JavaScriptの変数としても使えます。</p>
+<view width="100" height="100" resizable="true" showCaptionAlways="true" >
+  <contentArea name="contentArea" width="100%" height="100%" />
+  <script src="plugin.js"/>
+</view>
 ```
 
-&lt;strings&gt;
-&lt;strTitle&gt;HelloWorld!&lt;/strTitle&gt;
-&lt;strHello&gt;HelloWorld!&lt;/strHello&gt;
-&lt;strSnippet&gt;Some item information.&lt;/strSnippet&gt;
+##### 1033/strings.xml
 
-&lt;strAboutText&gt;HelloWorld! plugin.
+言語ファイルです。各国の言語でstrings.xmlファイルを用意することで国際化が容易にできます。JavaScriptの変数としても使えます。
+
+```
+<strings>
+<strTitle>HelloWorld!</strTitle>
+<strHello>HelloWorld!</strHello>
+<strSnippet>Some item information.</strSnippet>
+
+<strAboutText>HelloWorld! plugin.
 Copyright goes here.
-More description here&lt;/strAboutText&gt;
-&lt;strDescription&gt;Says Hello World&lt;/strDescription&gt;
-&lt;/strings&gt;
-
-```
-<p>1033はLocal ID(言語ID)で、1033は"English - United States"</p>
-<h6><a name="l13"> </a>Microsoftの定義に従ってます</h6>
-<p><a href="http://www.microsoft.com/globaldev/reference/lcid-all.mspx">List of Locale ID (LCID) Values as Assigned by Microsoft</a></p>
-
-<h6><a name="l14"> </a>どの言語が選択されるのか</h6>
-<p>サイドバーでは、現在のシステムと同じ言語 ID のディレクトリが存在するかど
-うかを最初に確認します。 存在する場合は、そのディレクトリの strings.xml
-ファイルが読み込まれます。 同じ言語 ID のディレクトリが存在しない場合
-で、1033 (アメリカ英語) ディレクトリが存在する場合は、デフォルトでその
-ディレクトリの strings.xml ファイルが読み込まれます。</p>
-<h5><a name="l15"> </a>gadget.gmanifest</h5>
-<p>メタ情報を含むXMLです。マニフェストです。</p>
+More description here</strAboutText>
+<strDescription>Says Hello World</strDescription>
+</strings>
 ```
 
-&lt;gadget minimumGoogleDesktopVersion="4.2006.508.0"&gt;
-  &lt;about&gt;
-    &lt;id&gt;5F1AAC6B-83B9-48e2-804B-E77AD19C9EC8&lt;/id&gt;
+1033はLocal ID(言語ID)で、1033は"English - United States"
 
-    &lt;version&gt;1.0.0.0&lt;/version&gt;
-    &lt;author&gt;Google&lt;/author&gt;
-    &lt;authorEmail&gt;&lt;/authorEmail&gt;
-    &lt;authorWebsite&gt;http://desktop.google.com/plugins.html&lt;/authorWebsite&gt;
+###### Microsoftの定義に従ってます
 
-    &lt;copyright&gt;Copyright (c) 2006 Google Inc.&lt;/copyright&gt;
-    &lt;description&gt;&amp;strDescription;&lt;/description&gt;
-    &lt;name&gt;&amp;strTitle;&lt;/name&gt;
-    &lt;aboutText&gt;&amp;strAboutText;&lt;/aboutText&gt;
+[List of Locale ID (LCID) Values as Assigned by Microsoft](http://www.microsoft.com/globaldev/reference/lcid-all.mspx)
 
-    &lt;smallIcon&gt;plugin_small.gif&lt;/smallIcon&gt;
-    &lt;icon&gt;plugin_large.gif&lt;/icon&gt;
-  &lt;/about&gt;
-&lt;/gadget&gt;
+###### どの言語が選択されるのか
+
+サイドバーでは、現在のシステムと同じ言語 ID のディレクトリが存在するかど うかを最初に確認します。 存在する場合は、そのディレクトリの strings.xml ファイルが読み込まれます。 同じ言語 ID のディレクトリが存在しない場合 で、1033 (アメリカ英語) ディレクトリが存在する場合は、デフォルトでその ディレクトリの strings.xml ファイルが読み込まれます。
+
+##### gadget.gmanifest
+
+メタ情報を含むXMLです。マニフェストです。
 
 ```
-<p>&amp;と;で囲まれた文字はstrings.xmlで定義した変数になってます。</p>
+<gadget minimumGoogleDesktopVersion="4.2006.508.0">
+  <about>
+    <id>5F1AAC6B-83B9-48e2-804B-E77AD19C9EC8</id>
 
-<h5><a name="l16"> </a>plugin.js</h5>
-<p>ガジェットの動作はJavaScriptで記述します。</p>
+ <version>1.0.0.0</version>
+    <author>Google</author>
+    <authorEmail></authorEmail>
+    <authorWebsite>http://desktop.google.com/plugins.html</authorWebsite>
+
+ <copyright>Copyright (c) 2006 Google Inc.</copyright>
+    <description>&strDescription;</description>
+    <name>&strTitle;</name>
+    <aboutText>&strAboutText;</aboutText>
+
+ <smallIcon>plugin_small.gif</smallIcon>
+    <icon>plugin_large.gif</icon>
+  </about>
+</gadget>
 ```
 
+&と;で囲まれた文字はstrings.xmlで定義した変数になってます。
+
+##### plugin.js
+
+ガジェットの動作はJavaScriptで記述します。
+
+```
 // Copyright (c) 2006 Google Inc.
 // All rights reserved
 //
@@ -164,39 +153,37 @@ contentArea.contentFlags = gddContentFlagHaveDetails;
 
 // Create 1 content item and make it say hello.
 var item = new ContentItem();
-item.heading = strHello;    // this string is shown in the item
-item.snippet = strSnippet;  // this string shown in details view
+item.heading = strHello; // this string is shown in the item
+item.snippet = strSnippet; // this string shown in details view
 contentArea.addContentItem(item, gddItemDisplayInSidebar); // add the
 item to the display
-
-```
-<h6><a name="l17"> </a>viewオブジェクト</h6>
-<p>全体の概観</p>
-<h6><a name="l18"> </a>contentAreaオブジェクト</h6>
-<p>一般的なコンテンツ格納オブジェクト</p>
-
-<h6><a name="l19"> </a>gddContentFlagHaveDetails</h6>
-<p>ユーザーがコンテンツ アイテムをクリックしたときに詳細ビューを表示します。</p>
-<h4><a name="l20"> </a>実行</h4>
-<p>これらのファイルをZIP圧縮して拡張子をggに変更すると、Google デスクトップ で実行できるファイルになります。</p>
-    </div>
-  </div>
-</div>
-<div>
-  <h2><a name="l21"> </a>作ってみます？</h2>
-
-  <div>
-    <div>
-      <h3><a name="l22"> </a>ガジェット作成ツールを使いましょう</h3>
 ```
 
+###### viewオブジェクト
+
+全体の概観
+
+###### contentAreaオブジェクト
+
+一般的なコンテンツ格納オブジェクト
+
+###### gddContentFlagHaveDetails
+
+ユーザーがコンテンツ アイテムをクリックしたときに詳細ビューを表示します。
+
+#### 実行
+
+これらのファイルをZIP圧縮して拡張子をggに変更すると、Google デスクトップ で実行できるファイルになります。
+
+## 作ってみます？
+
+### ガジェット作成ツールを使いましょう
+
+```
 GD_SDK\api\designer\designer_ja.exe
-
 ```
-<h3><a name="l23"> </a>サンプルのソースとリファレンスを見ながらゴリゴリ</h3>
-<p><a href="http://fkoji.com/gadget/fkoji_sample.zip">http://fkoji.com/gadget/fkoji_sample.zip</a></p>
-    </div>
 
-  </div>
-</div>
-</div>
+### サンプルのソースとリファレンスを見ながらゴリゴリ
+
+[http://fkoji.com/gadget/fkoji\_sample.zip](http://fkoji.com/gadget/fkoji_sample.zip)
+

@@ -4,19 +4,19 @@ date: 2006-07-07 14:48 JST
 authors: fukunaga
 tags: resume, 
 ---
-<p>Official Site
-<a href="http://code.google.com/apis/ajaxsearch/">http://code.google.com/apis/ajaxsearch/</a></p>
-<p>Developer Forum
-<a href="http://groups.google.com/group/Google-AJAX-Search-API">http://groups.google.com/group/Google-AJAX-Search-API</a></p>
-<!--more-->
-<div>
-  <h2><a name="l1"> </a>どうやって使うの？</h2>
-  <div>
-    <div>
-      <h3><a name="l2"> </a>ウェブ検索サンプル</h3>
+Official Site
+[http://code.google.com/apis/ajaxsearch/](http://code.google.com/apis/ajaxsearch/)
 
-```
+Developer Forum
+[http://groups.google.com/group/Google-AJAX-Search-API](http://groups.google.com/group/Google-AJAX-Search-API)
 
+<!--more-->  
+
+## どうやって使うの？
+
+### ウェブ検索サンプル
+
+```javascript
 Window.onload = function() {
  // seach control 生成
  var sc = new GSearchControl();
@@ -25,47 +25,28 @@ Window.onload = function() {
  sc.addSearcher(new GwebSearch());
 
  // search control 描画
- sc.draw(document.getElementById(“search-control”));
+ sc.draw(document.getElementById("search-control"));
 
  // 検索実行
- sc.execute(“ルート・コミュニケーションズ”);
+ sc.execute("ルート・コミュニケーションズ");
 }
-
-```
-<ul>
-<li><a href="http://map.fkoji.com/gas/helloworld.html">サンプル</a></li>
-</ul>
-    </div>
-  </div>
-</div>
-<div>
-  <h2><a name="l3"> </a>CSS重要</h2>
-
-  <div>
-    <div>
-      <ul>
-<li>スタイルシートをあてないと<a href="http://map.fkoji.com/gas/nostyle.html">こうなる</a></li>
-</ul>
-<ul>
-<li>スタイル自由なのでサイトにあわせてスタイルシートを適用できる</li>
-</ul>
-<ul>
-<li>要素はGoogleのスタイルシート参照</li>
-
-</ul>
-<p><a href="http://www.google.com/uds/css/gsearch.css">http://www.google.com/uds/css/gsearch.css</a>
-(使っていいか分からんけど使ってます。)</p>
-    </div>
-  </div>
-</div>
-<div>
-  <h2><a name="l4"> </a>ウェブ検索以外は？</h2>
-  <div>
-
-    <div>
-      <h3><a name="l5"> </a>addSearcherに放り込む</h3>
 ```
 
+- [サンプル](http://map.fkoji.com/gas/helloworld.html)
+
+## CSS重要
+
+- スタイルシートをあてないと [こうなる](http://map.fkoji.com/gas/nostyle.html)
+- スタイル自由なのでサイトにあわせてスタイルシートを適用できる
+- 要素はGoogleのスタイルシート参照
+
+[http://www.google.com/uds/css/gsearch.css](http://www.google.com/uds/css/gsearch.css)(使っていいか分からんけど使ってます。)
+
+## ウェブ検索以外は？
+
+### addSearcherに放り込む
+
+```
 Window.onload = function() {
  // seach control 生成
  var sc = new GSearchControl();
@@ -77,32 +58,23 @@ Window.onload = function() {
  sc.addSearcher(new GvideoSearch());
 
  // search control 描画
- sc.draw(document.getElementById(“search-control”));
+ sc.draw(document.getElementById("search-control"));
 
  // 検索実行
- sc.execute(“ルート・コミュニケーションズ”);
+ sc.execute("ルート・コミュニケーションズ");
 }
-
-```
-<ul>
-<li><a href="http://map.fkoji.com/gas/allsearch.html">サンプル</a></li>
-</ul>
-    </div>
-  </div>
-
-</div>
-<div>
-  <h2><a name="l6"> </a>タブにできるよ</h2>
-  <div>
-    <div>
-      <h3><a name="l7"> </a>GdrawOption</h3>
-<ul>
-<li>DRAW_MODE_TABBED</li>
-
-<li>DRAW_MODE_LINEAR</li>
-</ul>
 ```
 
+- [サンプル](http://map.fkoji.com/gas/allsearch.html)
+
+## タブにできるよ
+
+### GdrawOption
+
+- DRAW\_MODE\_TABBED
+- DRAW\_MODE\_LINEAR
+
+```javascript
 // draw options
 var opt = new GdrawOptions();
 
@@ -110,126 +82,82 @@ var opt = new GdrawOptions();
 opt.setDrawMode(GSearchControl.DRAW_MODE_TABBED);
 
 // オプションつけて描画
-sc.draw(document.getElementById(“search-control”), opt);
-
-```
-<ul>
-<li><a href="http://map.fkoji.com/gas/tabbed.html">サンプル</a></li>
-</ul>
-    </div>
-  </div>
-</div>
-<div>
-  <h2><a name="l8"> </a>検索結果を任意の場所に</h2>
-
-  <div>
-    <div>
-      <h3><a name="l9"> </a>setRoot(element)</h3>
+sc.draw(document.getElementById("search-control"), opt);
 ```
 
+- [サンプル](http://map.fkoji.com/gas/tabbed.html)
+
+## 検索結果を任意の場所に
+
+### setRoot(element)
+
+```javascript
 // searcher options
 var opt = new GsearcherOptions();
 
-// id=“web-search” をセット
-opt.setRoot(document.getElementById(“web-search”));
+// id="web-search" をセット
+opt.setRoot(document.getElementById("web-search"));
 
 // ウェブ検索はweb-searchの場所に表示
 sc.addSearcher(new GwebSearchControl(), opt);
 
 // ブログ検索はデフォルト位置に
 sc.addSearcher(new GblogSearchControl);
-
-```
-<ul>
-<li><a href="http://map.fkoji.com/gas/setroot.html">サンプル</a></li>
-</ul>
-    </div>
-
-  </div>
-</div>
-<div>
-  <h2><a name="l10"> </a>True Potentialはこれらしい</h2>
-  <div>
-    <div>
-      <h3><a name="l11"> </a>setOnKeepCallback</h3>
 ```
 
+- [サンプル](http://map.fkoji.com/gas/setroot.html)
 
+## True Potentialはこれらしい
+
+### setOnKeepCallback
+
+```javascript
 // establish a keep callback
 sc.setOnKeepCallback(this, function(result) {
  // 要素取得
- var titles = document.getElementById(“result-title”);
+ var titles = document.getElementById("result-title");
 
  // pタグ生成
- var p = document.createElement(“p”);
+ var p = document.createElement("p");
  // 検索結果のタイトルをappend
  p.appendChild(document.createTextNode(result.titleNoFormatting));
 
  // pタグをappend
  titles.appendChild(p);
 });
-
-```
-<ul>
-<li><a href="http://map.fkoji.com/gas/keepcallback.html">サンプル</a></li>
-</ul>
-    </div>
-  </div>
-</div>
-<div>
-  <h2><a name="l12"> </a>ラベルを変えられます</h2>
-  <div>
-
-    <div>
-      <h3><a name="l13"> </a>サイト内検索などで重宝するよ</h3>
 ```
 
+- [サンプル](http://map.fkoji.com/gas/keepcallback.html)
+
+## ラベルを変えられます
+
+### サイト内検索などで重宝するよ
+
+```javascript
 // create a web search
 var ws = new GwebSearch();
 
 // サイト内検索設定
-ws.setSiteRestriction(“item.rakuten.co.jp”);
+ws.setSiteRestriction("item.rakuten.co.jp");
 
 // ラベル
-ws.setUserDefinedLabel(“楽天商品検索”);
+ws.setUserDefinedLabel("楽天商品検索");
 
 // add searcher
 sc.addSearcher(ws);
-
 ```
-<ul>
-<li><a href="http://map.fkoji.com/gas/siterestrict.html">サンプル</a></li>
-</ul>
-    </div>
-  </div>
 
-</div>
-<div>
-  <h2><a name="l14"> </a>まだv0.1なので・・・</h2>
-  <div>
-    <div>
-      <ul>
-<li>バグあり<ul>
-<li>英語以外のローカル検索に不具合</li>
-</ul></li>
+- [サンプル](http://map.fkoji.com/gas/siterestrict.html)
 
-</ul>
-<ul>
-<li>Googleの検索だけどGoogleの検索結果と一致してません</li>
-</ul>
-<ul>
-<li>undocumentedな機能</li>
-</ul>
-    </div>
-  </div>
-</div>
-<div>
-  <h2><a name="l15"> </a>参考ドキュメント</h2>
+## まだv0.1なので・・・
 
-  <div>
-    <div>
-      <p>Google AJAX Search API Documentation
-<a href="http://code.google.com/apis/ajaxsearch/documentation/">http://code.google.com/apis/ajaxsearch/documentation/</a></p>
-    </div>
-  </div>
-</div>
+- バグあり
+  - 英語以外のローカル検索に不具合
+- Googleの検索だけどGoogleの検索結果と一致してません
+- undocumentedな機能
+
+## 参考ドキュメント
+
+Google AJAX Search API Documentationjavascript
+[http://code.google.com/apis/ajaxsearch/documentation/](http://code.google.com/apis/ajaxsearch/documentation/)
+

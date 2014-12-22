@@ -4,62 +4,54 @@ date: 2007-08-13 16:34 JST
 authors: akahige
 tags: infrastructure, resume, 
 ---
-<div class="day">
-  <h2><span class="date"><a name="l0"> </a></span><span class="title">ゴール</span></h2>
-  <div class="body">
-    <div class="section">
-      <ul>
-<li>VRRPによる仮想IP持ち回りの仕組みを理解する</li>
-<li>keepalivedを利用したHAクラスタが構築できる</li>
-</ul>
+## ゴール
+- VRRPによる仮想IP持ち回りの仕組みを理解する
+- keepalivedを利用したHAクラスタが構築できる
 
-<p>LVS周りはナシで。</p>
-    </div>
-  </div>
-</div>
-<!--more-->
-<div class="day">
-  <h2><span class="date"><a name="l1"> </a></span><span class="title">基礎知識編</span></h2>
-  <div class="body">
-    <div class="section">
-      <h3><a name="l2"><span class="sanchor"> </span></a>基本的な資料</h3>
+LVS周りはナシで。
 
-<ul>
-<li><a href="http://www.keepalived.org/" class="external">keepalived 本家</a></li>
-<li><a href="http://dsas.blog.klab.org/archives/50665382.html" class="external">こんなに簡単！ Linuxでロードバランサ (2) - DSAS開発者の部屋</a></li>
-</ul>
-<p>あとは昔まとめた社外秘の資料</p>
-<h3><a name="l3"><span class="sanchor"> </span></a>keepalivedって何スか</h3>
-<p>LinuxにおけるVRRPの実装のひとつ。HAクラスタを実現するデーモン。<br>
+<!--more-->  
 
-HAクラスタのマスタ機とバックアップ機の両方で動作させることで簡単にHAクラスタができる。</p>
-<p>またLVSを利用した負荷分散クラスタの稼動をサポートする機能もある。</p>
-<h3><a name="l4"><span class="sanchor"> </span></a>VRRP</h3>
-<p>仮想IPを複数機器で共有し、一番プライオリティの高い機器がそのIPを持つ仕組み。</p>
-<p>本来はルータ冗長化のためのプロトコルだが、サーバの冗長化にも使用できる。<br>
-つまりHAクラスタが作成可能。</p>
-<p>参考 : <a href="http://ja.wikipedia.org/wiki/Virtual_Router_Redundancy_Protocol" class="external">Virtual Router Redundancy Protocol - Wikipedia</a></p>
-    </div>
+## 基礎知識編
 
-  </div>
-</div>
-<div class="day">
-  <h2><span class="date"><a name="l5"> </a></span><span class="title">設定ファイルの書き方</span></h2>
-  <div class="body">
-    <div class="section">
-      <p>設定ファイルは/etc/keepalived/keepalived.conf。</p>
-<h3><a name="l6"><span class="sanchor"> </span></a>設定の前提</h3>
+### 基本的な資料
+- [keepalived 本家](http://www.keepalived.org/)
+- [こんなに簡単！ Linuxでロードバランサ (2) - DSAS開発者の部屋](http://dsas.blog.klab.org/archives/50665382.html)
 
-<ul>
-<li>クラスタの仮想IPは192.168.1.10</li>
-<li>MASTERの実IPは192.168.1.11</li>
-<li>BACKUPの実IPは192.168.1.12</li>
-<li>あとでたくさんの仮想IPを持たせる</li>
-</ul>
-<h3><a name="l7"><span class="sanchor"> </span></a>MASTER側</h3>
-<p>MASTERである192.168.1.11のサーバには以下の内容のファイルを置く。</p>
+あとは昔まとめた社外秘の資料
+
+### keepalivedって何スか
+
+LinuxにおけるVRRPの実装のひとつ。HAクラスタを実現するデーモン。  
+
+HAクラスタのマスタ機とバックアップ機の両方で動作させることで簡単にHAクラスタができる。
+
+またLVSを利用した負荷分散クラスタの稼動をサポートする機能もある。
+
+### VRRP
+
+仮想IPを複数機器で共有し、一番プライオリティの高い機器がそのIPを持つ仕組み。
+
+本来はルータ冗長化のためのプロトコルだが、サーバの冗長化にも使用できる。  
+つまりHAクラスタが作成可能。
+
+参考 : [Virtual Router Redundancy Protocol - Wikipedia](http://ja.wikipedia.org/wiki/Virtual_Router_Redundancy_Protocol)
+
+## 設定ファイルの書き方
+
+設定ファイルは/etc/keepalived/keepalived.conf。
+
+### 設定の前提
+- クラスタの仮想IPは192.168.1.10
+- MASTERの実IPは192.168.1.11
+- BACKUPの実IPは192.168.1.12
+- あとでたくさんの仮想IPを持たせる
+
+### MASTER側
+
+MASTERである192.168.1.11のサーバには以下の内容のファイルを置く。
+
 ```
-
 # Configuration File for keepalived
 global_defs {
 	notification_email {
@@ -85,12 +77,13 @@ vrrp_instance VI_1 {
         }
 }
 
-
-```
-<h3><a name="l8"><span class="sanchor"> </span></a>BACKUP側</h3>
-<p>BACKUPである192.168.1.12のサーバには以下の内容のファイルを置く。</p>
 ```
 
+### BACKUP側
+
+BACKUPである192.168.1.12のサーバには以下の内容のファイルを置く。
+
+```
 # Configuration File for keepalived
 global_defs {
 	notification_email {
@@ -115,38 +108,41 @@ vrrp_instance VI_1 {
                 192.168.1.10
         }
 }
-
-```
-<h3><a name="l9"><span class="sanchor"> </span></a>設定値の意味</h3>
-<p>以下少しだけ説明とか設定上の注意点とか。</p>
-<h4><a name="l10"> </a>global_defs</h4>
-
-<p>keepalivedの動作全般に関係し、クラスタ内のサーバに異常が生じた際にメールを飛ばす設定などを行うセクション。</p>
-<h4><a name="l11"> </a>vrrp_instance</h4>
-<p>仮想ルータを定義するセクション。<br>
-仮想ルータはいくつでも定義でき、またひとつの仮想ルータが複数の仮想IPを持つことが出来る。</p>
-<h4><a name="l12"> </a>advert_int</h4>
-<p>死活確認のインターバル。</p>
-<h4><a name="l13"> </a>virtual_router_id</h4>
-
-<p>属してる仮想ルータの識別ID。</p>
-<p>同一ネットワーク内にvrrpで動作している仮想ルータがある場合、virtual_router_idは他の仮想ルータとかぶらない値である必要がある。</p>
-<h4><a name="l14"> </a>state, priority</h4>
-<p>MASTERのpriorityにはBACKUPのpriorityの値より大きなものを設定する。</p>
-    </div>
-  </div>
-</div>
-<div class="day">
-  <h2><span class="date"><a name="l15"> </a></span><span class="title">実践編 - 基本 -</span></h2>
-
-  <div class="body">
-    <div class="section">
-      <h3><a name="l16"><span class="sanchor"> </span></a>設定ファイルを編集して仮想IPを増やしたり減らしたりしてみよう</h3>
-<ul>
-<li>設定ファイルの編集</li>
-</ul>
 ```
 
+### 設定値の意味
+
+以下少しだけ説明とか設定上の注意点とか。
+
+#### global\_defs
+
+keepalivedの動作全般に関係し、クラスタ内のサーバに異常が生じた際にメールを飛ばす設定などを行うセクション。
+
+#### vrrp\_instance
+
+仮想ルータを定義するセクション。  
+仮想ルータはいくつでも定義でき、またひとつの仮想ルータが複数の仮想IPを持つことが出来る。
+
+#### advert\_int
+
+死活確認のインターバル。
+
+#### virtual\_router\_id
+
+属してる仮想ルータの識別ID。
+
+同一ネットワーク内にvrrpで動作している仮想ルータがある場合、virtual\_router\_idは他の仮想ルータとかぶらない値である必要がある。
+
+#### state, priority
+
+MASTERのpriorityにはBACKUPのpriorityの値より大きなものを設定する。
+
+## 実践編 - 基本 -
+
+### 設定ファイルを編集して仮想IPを増やしたり減らしたりしてみよう
+- 設定ファイルの編集
+
+```
 vrrp_instance VI_1 {
 ...
         virtual_ipaddress {
@@ -158,77 +154,55 @@ vrrp_instance VI_1 {
         }
 ...
 }
-
-```
-<h3><a name="l17"><span class="sanchor"> </span></a>フェイルオーバー - マスタからバックアップへの切り替え</h3>
-
-<ul>
-<li>片方ケーブルを抜く</li>
-<li>両機のIPを確認する</li>
-</ul>
 ```
 
+### フェイルオーバー - マスタからバックアップへの切り替え
+- 片方ケーブルを抜く
+- 両機のIPを確認する
+
+```
 $ /sbin/ip address list
-
-```
-<h3><a name="l18"><span class="sanchor"> </span></a>フェイルバック - バックアップからマスタへの切り替え</h3>
-<ul>
-<li>抜いたケーブルを戻す</li>
-<li>両機のIPを確認する</li>
-
-</ul>
 ```
 
+### フェイルバック - バックアップからマスタへの切り替え
+- 抜いたケーブルを戻す
+- 両機のIPを確認する
+
+```
 $ /sbin/ip address list
-
-```
-<h3><a name="l19"><span class="sanchor"> </span></a>マスタとバックアップの設定を入れ替えて切り替え作業をしてみる</h3>
-<ul>
-<li>設定ファイルの編集</li>
-<li>最初の状態でマスタが入れ替わっていることを確認する</li>
-<li>フェイルオーバーとフェイルバックを確認する</li>
-</ul>
-    </div>
-
-  </div>
-</div>
-<div class="day">
-  <h2><span class="date"><a name="l20"> </a></span><span class="title">実践編 - 応用 -</span></h2>
-  <div class="body">
-    <div class="section">
-      <h3><a name="l21"><span class="sanchor"> </span></a>フェイルオーバー時とフェイルバック時にスクリプトを実行する</h3>
-<ul>
-
-<li>自分がマスタになった場合（主にマスタの起動時やフェイルオーバー時）にhoge.shを実行</li>
-</ul>
 ```
 
+### マスタとバックアップの設定を入れ替えて切り替え作業をしてみる
+- 設定ファイルの編集
+- 最初の状態でマスタが入れ替わっていることを確認する
+- フェイルオーバーとフェイルバックを確認する
+
+## 実践編 - 応用 -
+
+### フェイルオーバー時とフェイルバック時にスクリプトを実行する
+- 自分がマスタになった場合（主にマスタの起動時やフェイルオーバー時）にhoge.shを実行
+
+```
 vrrp_instance VI_1 {
 ...
    notify_master /etc/keepalived/hoge.sh
 ...
 }
+```
+- 自分がバックアップになった場合（主にフェイルバック時）にhage.shを実行
 
 ```
-<ul>
-<li>自分がバックアップになった場合（主にフェイルバック時）にhage.shを実行</li>
-</ul>
-```
-
 vrrp_instance VI_1 {
 ...
    notify_backup /etc/keepalived/hage.sh
 ...
 }
-
-```
-<h3><a name="l22"><span class="sanchor"> </span></a>21個以上の仮想IP</h3>
-<ul>
-
-<li>virtual_ipaddressに21個以上追加してどうなるか試す</li>
-</ul>
 ```
 
+### 21個以上の仮想IP
+- virtual\_ipaddressに21個以上追加してどうなるか試す
+
+```
 vrrp_instance VI_1 {
 ...
         virtual_ipaddress {
@@ -241,13 +215,10 @@ vrrp_instance VI_1 {
         }
 ...
 }
+```
+- 21個目以上はvirtual\_ipaddress\_excludedに追加する
 
 ```
-<ul>
-<li>21個目以上はvirtual_ipaddress_excludedに追加する</li>
-</ul>
-```
-
 vrrp_instance VI_1 {
 ...
         virtual_ipaddress {
@@ -262,20 +233,12 @@ vrrp_instance VI_1 {
         }
 ...
 }
-
 ```
-    </div>
-  </div>
 
-</div>
-<div class="day">
-  <h2><span class="date"><a name="l23"> </a></span><span class="title">備考</span></h2>
-  <div class="body">
-    <div class="section">
-      <p>vrrpはネットワークな死活確認しか行わない。<br>
-なのでサービスの死活確認を行いたい場合は別途なんらかの仕組みが必要。</p>
-<p>これに関してはクラスタ上の各サーバが自己のサービス監視を行って、サービスがダウンしたらkeepalivedを停止させる、といった事を行えば、サービスが停止したサーバをクラスタから切り離すことができる。</p>
+## 備考
 
-    </div>
-  </div>
-</div>
+vrrpはネットワークな死活確認しか行わない。  
+なのでサービスの死活確認を行いたい場合は別途なんらかの仕組みが必要。
+
+これに関してはクラスタ上の各サーバが自己のサービス監視を行って、サービスがダウンしたらkeepalivedを停止させる、といった事を行えば、サービスが停止したサーバをクラスタから切り離すことができる。
+

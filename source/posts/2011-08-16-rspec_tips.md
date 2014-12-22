@@ -4,22 +4,20 @@ date: 2011-08-16 17:22 JST
 authors: r-suzuki
 tags: ruby, test, resume, 
 ---
-<p>弊社内のRubyを使ったプロジェクトでは、自動テストツールのひとつとしてRSpec(バージョン2と1両方)を使っています。<br />
-先日社内勉強会でRSpecのトピックを取り上げたので、いくつか紹介したいと思います。<br />
-</p>
 
-<!--more-->
+弊社内のRubyを使ったプロジェクトでは、自動テストツールのひとつとしてRSpec(バージョン2と1両方)を使っています。
+ 先日社内勉強会でRSpecのトピックを取り上げたので、いくつか紹介したいと思います。
 
-<h2>Tipsなど</h2>
+ <!--more-->
 
-(以下のコードはバージョン1でも動作します)
+## Tipsなど
+ (以下のコードはバージョン1でも動作します) 
+### as\_null\_object
 
-<h3>as_null_object</h3>
+通常、Mockオブジェクトに対してstub定義していないメソッドを呼ぶとMockExpectationErrorが発生します。ですがテストによっては、ある特定のメソッド呼び出し以外を無視したいケースもあるでしょう。（例えばログ出力内容の検証など）  
+ その場合はMockオブジェクトに対してas\_null\_objectメソッドを呼んでおくことで、特定のメソッド呼び出し以外を無視することができます。
 
-<p>通常、Mockオブジェクトに対してstub定義していないメソッドを呼ぶとMockExpectationErrorが発生します。ですがテストによっては、ある特定のメソッド呼び出し以外を無視したいケースもあるでしょう。（例えばログ出力内容の検証など）<br />
-その場合はMockオブジェクトに対してas_null_objectメソッドを呼んでおくことで、特定のメソッド呼び出し以外を無視することができます。</p>
-
-```
+```ruby
 def start(logger)
   logger.debug('debug message.')  # as_null_objectによりinfo呼び出し以外は無視される
   logger.info('start')
@@ -32,20 +30,19 @@ it '処理開始がログに記録されること' do
   start(logger)
 end</code>
 </pre>
+```
 
-<h4>参考</h4>
+#### 参考
 
-<ul>
-<li><a href="http://en.wikipedia.org/wiki/Null_Object_pattern">Null Objectパターン</a></li>
-<li><a href="http://rdoc.info/gems/rspec/1.3.2/Spec/Mocks/Methods:as_null_object">Method: Spec::Mocks::Methods#as_null_object</a></li>
-</ul>
+- [Null Objectパターン](http://en.wikipedia.org/wiki/Null_Object_pattern)
+- [Method: Spec::Mocks::Methods#as\_null\_object](http://rdoc.info/gems/rspec/1.3.2/Spec/Mocks/Methods:as_null_object)
 
-<h3>Shared Examples</h3>
+### Shared Examples
 
-<p>例えばダックタイピングを適用して、同じように振る舞うクラスを複数実装したとしましょう。その共通する振る舞いのテストコードを別々に用意すると、重複が発生してしまいますし保守が面倒です。<br />
-RSpecではそういった共通するexample群に名前を付けて、example group間で共有することができます。</p>
+例えばダックタイピングを適用して、同じように振る舞うクラスを複数実装したとしましょう。その共通する振る舞いのテストコードを別々に用意すると、重複が発生してしまいますし保守が面倒です。  
+ RSpecではそういった共通するexample群に名前を付けて、example group間で共有することができます。
 
-<pre class="prettyprint "><code>
+```ruby
 shared_examples_for &quot;Feedforce社員&quot; do
   it &quot;なぜか社長の誕生日を覚えていること&quot; do
     should ...
@@ -61,23 +58,19 @@ describe 'ディレクタ' do
   subject { Director.new }
   it_should_behave_like 'Feedforce社員'
 end
-
 ```
 
-<h4>参考</h4>
+#### 参考
 
-<ul>
-<li><a href="http://rdoc.info/gems/rspec/1.3.2/Spec/DSL/Main:share_examples_for">Method: Spec::DSL::Main#share_examples_for</a></li>
-</ul>
+- [Method: Spec::DSL::Main#share\_examples\_for](http://rdoc.info/gems/rspec/1.3.2/Spec/DSL/Main:share_examples_for)
 
-<h3>マッチャいろいろ</h3>
+### マッチャいろいろ
 
-<p>「should ==」ばかり使ってテストを書くこともできますが、適したマッチャを使うことでテストの内容がより明確になり、分かりやすい失敗メッセージを得ることができます。</p>
+「should ==」ばかり使ってテストを書くこともできますが、適したマッチャを使うことでテストの内容がより明確になり、分かりやすい失敗メッセージを得ることができます。
 
-<h4>have(n)</h4>
+#### have(n)
 
-```
-
+```ruby
 columns = [1, 2, 3]
 
 # これでも悪くはないですが...
@@ -85,13 +78,11 @@ columns.size.should == 4      # &quot;expected: 4, got: 3 (using ==)&quot;
 
 # こちらの方が良い
 columns.should have(4).items  # &quot;expected 4 items, got 3&quot;
-
 ```
 
-<h4>be(*args)</h4>
+#### be(\*args)
 
-```
-
+```ruby
 result = 11
 
 # これでも間違いではないですが...
@@ -99,18 +90,16 @@ result = 11
 
 # こちらの方が良い
 result.should be &lt; 10         # &quot;expected &lt; 10, got 11&quot;
-
 ```
 
-<p>ちなみにbeの実装はMatchers::Beのインスタンスを返してMatchers::Beは演算子"&lt;"の実装をオーバーライドしてるからMatchers::BeComparedToのインスタンスを返して、それがshouldの引数になって...という具合です。</p>
+ちなみにbeの実装はMatchers::Beのインスタンスを返してMatchers::Beは演算子"<"の実装をオーバーライドしてるからMatchers::BeComparedToのインスタンスを返して、それがshouldの引数になって...という具合です。
 
-<h3>Stub chain</h3>
+### Stub chain
 
-<p>stub_chainメソッドを使うことで、あるオブジェクトの関連オブジェクトのさらに関連オブジェクト...のようにネストしたスタブを一度に定義できます。<br />
-あまりにネストした関連は設計を改善した方が良さそうですが...。</p>
+stub\_chainメソッドを使うことで、あるオブジェクトの関連オブジェクトのさらに関連オブジェクト...のようにネストしたスタブを一度に定義できます。  
+ あまりにネストした関連は設計を改善した方が良さそうですが...。
 
-```
-
+```ruby
 # こう書いても良いが...
 boss = mock('ボス', :policy =&gt; 'みんながんばれ')
 member.stub!(:boss).and_return(boss)
@@ -119,61 +108,45 @@ member.boss.policy  # 'みんながんばれ'
 # こう書ける
 member.stub_chain(:boss, :policy).and_return('みんながんばれ')
 member.boss.policy  # 'みんながんばれ'
-
 ```
 
-<h4>参考</h4>
+#### 参考
 
-<ul>
-<li><a href="http://rdoc.info/gems/rspec/1.3.2/Spec/Mocks/Methods:stub_chain">Method: Spec::Mocks::Methods#stub_chain</a></li>
-</ul>
+- [Method: Spec::Mocks::Methods#stub\_chain](http://rdoc.info/gems/rspec/1.3.2/Spec/Mocks/Methods:stub_chain)
 
-<h2>RSpec2の話</h2>
+## RSpec2の話
 
-<h3>RSpec1からの主な変更点</h3>
+### RSpec1からの主な変更点
 
-<ul>
-<li>実行コマンドがspecからrspecに</li>
-<li>Rakeタスクでのオプション指定方法が変更に<ul>
-<li>spec_opts → rspec_opts など</li>
-</ul>
-</li>
-<li>コマンドラインオプションが .rspec ファイルで指定できるように<ul>
-<li>~/.rspec とプロジェクトのルートにあるものが参照される</li>
-</ul></li>
-</ul>
+- 実行コマンドがspecからrspecに
+- Rakeタスクでのオプション指定方法が変更に
+  - spec\_opts → rspec\_opts など
 
-<h4>参考</h4>
+- コマンドラインオプションが .rspec ファイルで指定できるように
+  - ~/.rspec とプロジェクトのルートにあるものが参照される
 
-<ul>
-<li><a href="http://relishapp.com/rspec/rspec-core/file/upgrade">http://relishapp.com/rspec/rspec-core/file/upgrade</a></li>
-</ul>
+#### 参考
 
-<h3>新機能いくつか</h3>
+- [http://relishapp.com/rspec/rspec-core/file/upgrade](http://relishapp.com/rspec/rspec-core/file/upgrade)
 
-<h4>--profileオプション</h4>
+### 新機能いくつか
 
-<ul>
-<li>時間がかかったテストを報告してくれる</li>
-</ul>
+#### --profileオプション
 
-<h4>Metadata</h4>
+- 時間がかかったテストを報告してくれる
 
-<ul>
-<li>各exampleがメタデータを持つ</li>
-<li>example内でexample.metadataとして参照可能</li>
-<li>describe, itのオプションとして任意の値を設定可能</li>
-<li>実行対象の絞り込み等に使える</li>
-</ul>
+#### Metadata
 
-<h4>around(:each)</h4>
+- 各exampleがメタデータを持つ
+- example内でexample.metadataとして参照可能
+- describe, itのオプションとして任意の値を設定可能
+- 実行対象の絞り込み等に使える
 
-<ul>
-<li>トランザクションやファイルのオープン・クローズセットなど、なった前処理、後処理を書くのに使える。</li>
-</ul>
+#### around(:each)
 
-```
+- トランザクションやファイルのオープン・クローズセットなど、なった前処理、後処理を書くのに使える。
 
+```ruby
 describe &quot;around hook&quot; do
   around(:each) do |example|
     puts &quot;around each before&quot;
@@ -185,19 +158,15 @@ describe &quot;around hook&quot; do
     puts &quot;in the example&quot;
   end
 end
-
 ```
 
-<h3>RSpec Rails2</h3>
+### RSpec Rails2
 
-<h4>have_tag マッチャが提供されなくなった</h4>
+#### have\_tag マッチャが提供されなくなった
 
-<ul>
-<li>webratのhave_tag(have_selector)を使う</li>
-</ul>
+- webratのhave\_tag(have\_selector)を使う
 
-```
-
+```ruby
 require &quot;nokogiri&quot;
 require &quot;webrat/core/matchers&quot;
 
@@ -209,17 +178,11 @@ it 'aタグの組み立てテスト' do
   tag = '...'
   tag.should have_selector('a', :href =&gt; '...', :content =&gt; 'text')
 end
-
 ```
 
-<h4>Rails2系では使えません</h4>
+#### Rails2系では使えません
+> rspec-rails-2 supports rails-3.0.0 and later. For earlier versions of Rails, you need rspec-rails-1.3.
+[http://relishapp.com/rspec/rspec-rails](http://relishapp.com/rspec/rspec-rails)
 
-<blockquote><p>rspec-rails-2 supports rails-3.0.0 and later. For earlier versions of Rails, you need rspec-rails-1.3.</p></blockquote>
-
-<p><a href="http://relishapp.com/rspec/rspec-rails">http://relishapp.com/rspec/rspec-rails</a></p>
-
-<h2>参考書籍</h2>
-
-<ul>
-<li><a href="http://www.amazon.co.jp/gp/product/1934356379/ref=as_li_ss_tl?ie=UTF8&amp;tag=htmlmmg-22&amp;linkCode=as2&amp;camp=247&amp;creative=7399&amp;creativeASIN=1934356379">The RSpec Book: Behaviour Driven Development With RSpec, Cucumber, and Friends</a><img src="http://www.assoc-amazon.jp/e/ir?t=&amp;l=as2&amp;o=9&amp;a=1934356379" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
-</ul>
+## 参考書籍
+- [The RSpec Book: Behaviour Driven Development With RSpec, Cucumber, and Friends](http://www.amazon.co.jp/gp/product/1934356379/ref=as_li_ss_tl?ie=UTF8&tag=htmlmmg-22&linkCode=as2&camp=247&creative=7399&creativeASIN=1934356379) ![](http://www.assoc-amazon.jp/e/ir?t=&l=as2&o=9&a=1934356379)

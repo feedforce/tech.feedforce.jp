@@ -4,7 +4,7 @@ date: 2010-01-21 11:42 JST
 authors: fukunaga
 tags: resume, 
 ---
-先日社内でおこなった勉強会で Twitter の <a href="http://apiwiki.twitter.com/Streaming-API-Documentation" target="_blank">Streaming API</a> について紹介しましたので、以下にそのスライドを貼っておきます。
+先日社内でおこなった勉強会で Twitter の [Streaming API](http://apiwiki.twitter.com/Streaming-API-Documentation) について紹介しましたので、以下にそのスライドを貼っておきます。
 
 <!--more-->
 
@@ -15,3 +15,4 @@ Streaming API はつい最近正式版となりました。ただ、全公開ス
 しかし、Streaming API はコネクションをひとつ張れば切断されるまでリアルタイムにデータを取得することができます。従来の REST API では定期的にリクエストを投げてデータを取得する必要がありましたので、その分のコストが削減できます。
 
 ですので、これから Twitter のデータを取得して新しいアプリケーションを構築しようとする場合は、Streaming API の利用を考慮に入れておくとよいかなと思います。
+

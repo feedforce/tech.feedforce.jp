@@ -4,90 +4,113 @@ date: 2008-10-27 11:07 JST
 authors: fukunaga
 tags: resume, 
 ---
-前回はOpenSocialガジェットのホスティング環境を構築できる <a href="http://incubator.apache.org/shindig/">Shindig</a> について説明しました。
+前回はOpenSocialガジェットのホスティング環境を構築できる [Shindig](http://incubator.apache.org/shindig/) について説明しました。
 
-» <a href="/shindig-partuza-opensocial-1.html">FFTT : ShindigとPartuzaでOpenSocialガジェットのテスト環境を構築(その1)</a>
+» [FFTT : ShindigとPartuzaでOpenSocialガジェットのテスト環境を構築(その1)](http://tech.feedforce.jp/shindig-partuza-opensocial-1.html)
 
-今回は、その Shindig を利用して OpenSocial 機能を実装している <a href="http://www.partuza.nl/">Partuza</a> を紹介します。
+今回は、その Shindig を利用して OpenSocial 機能を実装している [Partuza](http://www.partuza.nl/) を紹介します。  
+
 <!--more-->
-<h2>Partuza</h2>
-<a href="http://www.partuza.nl/">Partuza</a> はオープンソースのSNSです。PHPで書かれています。読み方はよくわかりません。ソースをダウンロードして個人の環境に設置することで使えるようになります。ライセンスは Apache License 2.0 です。
-<h3>こんなとき参考になります</h3>
-<ul>
-	<li>Apache Shindigを利用してOpen Social対応SNSを作りたい</li>
-	<li>すでにあるSNSにApache Shindigを利用したOpen Social機能を実装したい</li>
-</ul>
-というわけで、早速 Partuza をインストールしてみます。ソースコードは <a href="http://code.google.com/p/partuza/">partuza - Google Code</a> から入手できます。
-<h3>Partuza のインストール</h3>
-<h4>checkout</h4>
+
+## Partuza
+
+ [Partuza](http://www.partuza.nl/) はオープンソースのSNSです。PHPで書かれています。読み方はよくわかりません。ソースをダウンロードして個人の環境に設置することで使えるようになります。ライセンスは Apache License 2.0 です。  
+
+### こんなとき参考になります
+
+- Apache Shindigを利用してOpen Social対応SNSを作りたい
+- すでにあるSNSにApache Shindigを利用したOpen Social機能を実装したい
+
+というわけで、早速 Partuza をインストールしてみます。ソースコードは [partuza - Google Code](http://code.google.com/p/partuza/) から入手できます。  
+
+### Partuza のインストール
+
+#### checkout
+
 ```
 $ mkdir /var/www/partuza
 $ cd /var/www/partuza
 $ svn co http://partuza.googlecode.com/svn/trunk .
 ```
-<h4>バーチャルホストを設定</h4>
+
+#### バーチャルホストを設定
+
 ```
-&lt;VirtualHost 192.168.1.142:80&gt;
+<VirtualHost 192.168.1.142:80>
     DocumentRoot /var/www/partuza/html
     ServerName dev.partuza.jp
     ErrorLog /var/log/httpd/partuza_error_log
     CustomLog /var/log/httpd/partuza_access_log combined
 
-    AddDefaultCharset UTF-8
+ AddDefaultCharset UTF-8
 
-    &lt;Directory /var/www/partuza/html&gt;
+ <Directory /var/www/partuza/html>
         AllowOverride All
-    &lt;/Directory&gt;
-&lt;/VirtualHost&gt;
+    </Directory>
+</VirtualHost>
 ```
-<h4>必要であれば</h4>
-/etc/php.ini に以下の記述があるか。
+
+#### 必要であれば
+/etc/php.ini に以下の記述があるか。  
+
 ```
 short_open_tag = On
 ```
-<a href="http://www.libgd.org/Main_Page">gd</a>をインストールしていなければインストール。
-<h4>パーミッション変更</h4>
+
+ [gd](http://www.libgd.org/Main_Page)をインストールしていなければインストール。  
+
+#### パーミッション変更
+
 ```
 $ chmod 777 /var/www/partuza/images/people
 ```
-<h4>SQL実行(MySQL)</h4>
+
+#### SQL実行(MySQL)
+
 ```
 $ cd /var/www/partuza
 $ mysqladmin -u root -p create partuza
-$ mysql -u root -p -D partuza &lt; partuza.sql
+$ mysql -u root -p -D partuza < partuza.sql
 ```
 ここまで設定すれば、Partuza が動きます。
 
-しかし、まだ Shindig が組み込まれていませんので、Shindig を Partuza に組み込む設定をします。
-<h4>Shindig に local.php を作成</h4>
+しかし、まだ Shindig が組み込まれていませんので、Shindig を Partuza に組み込む設定をします。  
+
+#### Shindig に local.php を作成
+
 ```
 $ vi /var/www/shindig/config/local.php
 ```
-local.phpファイルの中身は次のようにする。
+local.phpファイルの中身は次のようにする。  
+
 ```
-&lt;?php
+<?php
 
 $shindigConfig = array(
-                       'people_service' =&gt; 'PartuzaPeopleService',
-                       'activity_service' =&gt; 'PartuzaActivitiesService',
-                       'app_data_service' =&gt; 'PartuzaAppDataService',
-                       'extension_class_paths' =&gt; '/var/www/partuza/Shindig',);
+                       'people_service' => 'PartuzaPeopleService',
+                       'activity_service' => 'PartuzaActivitiesService',
+                       'app_data_service' => 'PartuzaAppDataService',
+                       'extension_class_paths' => '/var/www/partuza/Shindig',);
 ```
-<h4>Partuza の config.php を編集</h4>
-Shindig が動く環境のホスト名を設定します。
+
+#### Partuza の config.php を編集
+Shindig が動く環境のホスト名を設定します。  
+
 ```
 $ vi /var/www/partuza/html/config.php
 ```
+
 ```
-- 'gadget_server'    =&gt; 'http://shindig',
-+ 'gadget_server'    =&gt; 'http://dev.shindig.jp',
+- 'gadget_server' => 'http://shindig',
++ 'gadget_server' => 'http://dev.shindig.jp',
 ```
 ここまで設定できれば、PartuzaでOpenSocialガジェットが動くようになります。
 
-<img src="/images/2008/10/partuza-home.gif" alt="Partuza" />
+ ![Partuza](/images/2008/10/partuza-home.gif)
 
-↑ テストで<a href="http://www.google.co.jp/ig/directory?hl=ja&amp;url=map.fkoji.com/kusayakyu/search.xml">このガジェット</a>を追加してみました。(※ このガジェットにOpenSocialの機能はありません。)
-<h2>まとめ</h2>
+↑ テストで [このガジェット](http://www.google.co.jp/ig/directory?hl=ja&url=map.fkoji.com/kusayakyu/search.xml)を追加してみました。(※ このガジェットにOpenSocialの機能はありません。)  
+
+## まとめ
 このように、 Shindig と Partuza を利用すると、OpenSocial対応のガジェットおよびSNSの開発環境を簡単に構築することができます。興味のある方はぜひ利用してみてください。
 
-» <a href="/shindig-partuza-opensocial-1.html">FFTT : ShindigとPartuzaでOpenSocialガジェットのテスト環境を構築(その1)</a>
+» [FFTT : ShindigとPartuzaでOpenSocialガジェットのテスト環境を構築(その1)](http://tech.feedforce.jp/shindig-partuza-opensocial-1.html)

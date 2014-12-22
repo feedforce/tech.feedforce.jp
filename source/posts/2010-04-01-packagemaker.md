@@ -4,166 +4,161 @@ date: 2010-04-01 11:22 JST
 authors: nakano
 tags: resume, 
 ---
-MacOSXのアプリケーションはコピーしてインストールが済んでしまうものも多いですが、動作するシステム条件があったり、複数の製品を一度にインストールしたい場合などはインストーラからのインストールが便利です。
-今回はインストーラからインストールするために必要となるパッケージの作成方法について説明します。<!--more-->
-<h2>アプリケーションの配布</h2>
-<p align="justify">Appleはアプリケーションの配布方法として以下の2つを推奨しています。</p>
+MacOSXのアプリケーションはコピーしてインストールが済んでしまうものも多いですが、動作するシステム条件があったり、複数の製品を一度にインストールしたい場合などはインストーラからのインストールが便利です。 今回はインストーラからインストールするために必要となるパッケージの作成方法について説明します。<!--more-->
 
-<h3><a title="web" name="web"></a><span class="sanchor"> </span>マニュアルインストール</h3>
-対象のファイルをドラッグ&amp;ドロップなどでインストール先のフォルダにコピーする方法です。コピーするだけなのでとても簡単です。
+## アプリケーションの配布
 
-<h3 align="justify"><a title="web" name="web"></a><span class="sanchor"> </span>インストーラを使ったインストール</h3>
-<p align="justify">インストーラアプリケーションを起動してインストールする方法です。</p>
-<p align="justify"> このインストール方法を利用するとOSやCPUなどのシステム条件を指定したり、インストール先のフォルダの指定、複数のファイルを配置することなど、細かなオプションを設定して自動でインストール作業を行うことができます。</p>
-インストーラからインストールするためにはパッケージを作成する必要があります。
-<h2><span class="Apple-style-span" style="font-size: 16px; font-weight: normal"><span class="Apple-style-span" style="font-size: 24px; font-weight: bold">PackageMaker</span></span></h2>
-<p align="justify">パッケージの作成にはPackageMakerを利用します。Xcodeがインストール済みであれば、/Developer/Applications/Utilitiesの下にPackageMaker.appがあります。</p>
-<p align="justify">今回の説明はバージョン3.0.4を対象にしています。</p>
+Appleはアプリケーションの配布方法として以下の2つを推奨しています。
 
-<h2 align="justify"><span class="Apple-style-span" style="font-size: 16px; font-weight: normal"><span class="Apple-style-span" style="font-size: 24px; font-weight: bold">パッケージの作成</span></span></h2>
-<p align="justify"> ここからはパッケージを作成する手順を説明します。</p>
+### マニュアルインストール
+対象のファイルをドラッグ&ドロップなどでインストール先のフォルダにコピーする方法です。コピーするだけなのでとても簡単です。
 
-<h2 align="justify"><font class="Apple-style-span" size="6"><span class="Apple-style-span" style="font-size: 19px">プロジェクト作成</span></font></h2>
-<p align="justify">まず、PackageMakerを開いてプロジェクトを作成します。</p>
-<p align="justify"><a href="/images/2010/03/100326-0001.png" title="100326-0001.png"><img src="/images/2010/03/100326-0001.thumbnail.png" alt="100326-0001.png" /></a></p>
-<p align="justify">&nbsp;</p>
+### インストーラを使ったインストール
 
-<p align="justify">Organization : 逆DNS形式の組織名
-Minimum Target : OSのバージョン
-<h2><font class="Apple-style-span" size="6"><span class="Apple-style-span" style="font-size: 19px">コンテンツを追加する</span></font></h2>
-アプリケーションやドキュメント、Spotlightプラグインなどパッケージに含める製品を追加します。
-<p align="justify"> メニューの[Project]&gt;[Add Contents]で指定します。</p>
+インストーラアプリケーションを起動してインストールする方法です。
 
-<h2 align="justify"><font class="Apple-style-span" size="6"><span class="Apple-style-span" style="font-size: 19px">パッケージコンポーネントの設定</span></font></h2>
-<p align="justify">パッケージに含めるそれぞれの製品についての設定です。</p>
+このインストール方法を利用するとOSやCPUなどのシステム条件を指定したり、インストール先のフォルダの指定、複数のファイルを配置することなど、細かなオプションを設定して自動でインストール作業を行うことができます。
 
-<h3><a title="web" name="web"></a><span class="sanchor"> </span>Configuration</h3>
-<a href="/images/2010/03/100120-0002.png" title="100120-0002.png"><img src="/images/2010/03/100120-0002.thumbnail.png" alt="100120-0002.png" /></a>
+インストーラからインストールするためにはパッケージを作成する必要があります。  
 
-Insatll: インストールするファイル
-Destination: インストール先のファルダ
-Allow custom location: インストール先の変更を許可
-Package Identifier: パッケージの識別子
-Package Version: バージョン番号
-Restart Action: 再起動の要求
-- None : いらない
-- Require Logout :  ログアウト
-- Require Restart : 再起動
-- Require Shoutdown : シャットダウン
-Require admin authentication: 管理者権限が必要
-<p align="justify">Allow custom location にチェックを入れるとユーザがインストール時にインストール先を指定できるようになります。</p>
+## PackageMaker
 
-<h3><a title="web" name="web"></a><span class="sanchor"> </span>Contents</h3>
-<a href="/images/2010/03/100120-0003.png" title="100120-0003.png"><img src="/images/2010/03/100120-0003.thumbnail.png" alt="100120-0003.png" /></a>
+パッケージの作成にはPackageMakerを利用します。Xcodeがインストール済みであれば、/Developer/Applications/Utilitiesの下にPackageMaker.appがあります。
 
-<p align="justify">Owner: ファイルのオーナー
-Group: ファイルのグループ
-Mode: ファイルのパーミッション
-File Filters: パッケージに含めないファイルの指定
+今回の説明はバージョン3.0.4を対象にしています。
 
-File Filtersでは正規表現を用いてパッケージに入れたくないファイルやフォルダの指定ができます。
-デフォルトでは、.svnやCVSなどが指定されています。
+## パッケージの作成
 
-<a href="/images/2010/03/100326-0002.png" title="100326-0002.png"><img src="/images/2010/03/100326-0002.thumbnail.png" alt="100326-0002.png" /></a>
-<h3><a title="web" name="web"></a><span class="sanchor"> </span>Components</h3>
-<a href="/images/2010/03/100121-0001.png" title="100121-0001.png"><img src="/images/2010/03/100121-0001.thumbnail.png" alt="100121-0001.png" /></a>
+ ここからはパッケージを作成する手順を説明します。
 
-<p align="justify">Allow Relocation : インストール後に移動したコンポーネントを探すことを許可
-Allow Downgrade : ダウングレードを許可
-<p align="justify">ダウングレードの判断はConfigurationのPackage Versionで指定してある値から判断されます。</p>
+## プロジェクト作成
 
-<h3><a title="web" name="web"></a><span class="sanchor"> </span>Scripts</h3>
-<a href="/images/2010/03/100121-0002.png" title="100121-0002.png"><img src="/images/2010/03/100121-0002.thumbnail.png" alt="100121-0002.png" /></a>
+まず、PackageMakerを開いてプロジェクトを作成します。
 
-scripts directory : 実行スクリプトがあるフォルダを指定する
-Preinstall : インストール前に実行するスクリプト
-Postinstall : インストール後に実行するスクリプト
+[![100326-0001.png](/images/2010/03/100326-0001.thumbnail.png)](/images/2010/03/100326-0001.png "100326-0001.png")
 
-スクリプトはシェルスクリプトやperlスクリプトでも可能です。
-<p align="justify">MacOSX10.5ではPreinstallとPostinstallの指定したスクリプトしか実行されないようなので注意が必要です。</p>
-<p align="justify">&nbsp;</p>
+ 
 
-<h2 align="justify"><font class="Apple-style-span" size="6"><span class="Apple-style-span" style="font-size: 19px">インストールパッケージの設定</span></font></h2>
-パッケージ全体に関する設定を行ないます。
-<h3><a title="web" name="web"></a><span class="sanchor"> </span>Configuration</h3>
-<a href="/images/2010/03/100121-0003.png" title="100121-0003.png"><img src="/images/2010/03/100121-0003.thumbnail.png" alt="100121-0003.png" /></a>
+Organization : 逆DNS形式の組織名 Minimum Target : OSのバージョン
 
-Title : タイトル
-User Sees : インストールオプション
-- Easy Install Only :簡易インストールのみ
-- Custom Install Only : カスタムインストールのみ
-- Easy and Custom Install : 簡易インストールとカスタムインストールの両方
-Install Destination : インストール先
-- Volume selected by user : ユーザが選択可能
-- System volume : システムのボリュームのみ
-- User home directory : ホームディレクトリ
-Description : 概要
-<p align="justify">Custom Installにチェックが入っている場合、ユーザがパッケージに入っている製品を選択してインストールしたいものだけをインストールできるようになります。</p>
+## コンテンツを追加する
+アプリケーションやドキュメント、Spotlightプラグインなどパッケージに含める製品を追加します。  
 
-<h3><a title="web" name="web"></a><span class="sanchor"> </span>Requirements</h3>
-<p align="justify"> システムの条件を指定します。以下、ここで指定できるいくつかの例です。</p>
-<p align="justify"> <a href="/images/2010/03/100121-0004.png" title="100121-0004.png"><img src="/images/2010/03/100121-0004.thumbnail.png" alt="100121-0004.png" /></a></p>
-Megabytes Available on Target : 空きディスク容量
-Maximum CPU Frequency(Hz) : CPUのクロック周波数
-Number of CPUs  : CPUの数
-USB Device Exists : USBデバイスの有無
-Result of Script : 指定したスクリプトの実行結果
+メニューの[Project]>[Add Contents]で指定します。
 
-Result of Scriptで指定できるように、自前のスクリプトの結果からインストールするかどうかを判断することもできます。
-<h3><a title="web" name="web"></a><span class="sanchor"> </span>Actions</h3>
-<p align="justify">インストール前とインストール後での動作を指定します。</p>
-<a href="/images/2010/03/100121-0005.png" title="100121-0005.png"><img src="/images/2010/03/100121-0005.thumbnail.png" alt="100121-0005.png" /></a>
+## パッケージコンポーネントの設定
+
+パッケージに含めるそれぞれの製品についての設定です。
+
+### Configuration
+
+[![100120-0002.png](/images/2010/03/100120-0002.thumbnail.png)](/images/2010/03/100120-0002.png "100120-0002.png")
+
+Insatll: インストールするファイル Destination: インストール先のファルダ Allow custom location: インストール先の変更を許可 Package Identifier: パッケージの識別子 Package Version: バージョン番号 Restart Action: 再起動の要求 - None : いらない - Require Logout :  ログアウト - Require Restart : 再起動 - Require Shoutdown : シャットダウン Require admin authentication: 管理者権限が必要  
+
+Allow custom location にチェックを入れるとユーザがインストール時にインストール先を指定できるようになります。
+
+### Contents
+
+[![100120-0003.png](/images/2010/03/100120-0003.thumbnail.png)](/images/2010/03/100120-0003.png "100120-0003.png")
+
+Owner: ファイルのオーナー Group: ファイルのグループ Mode: ファイルのパーミッション File Filters: パッケージに含めないファイルの指定
+
+File Filtersでは正規表現を用いてパッケージに入れたくないファイルやフォルダの指定ができます。 デフォルトでは、.svnやCVSなどが指定されています。
+
+[![100326-0002.png](/images/2010/03/100326-0002.thumbnail.png)](/images/2010/03/100326-0002.png "100326-0002.png")
+
+### Components
+
+[![100121-0001.png](/images/2010/03/100121-0001.thumbnail.png)](/images/2010/03/100121-0001.png "100121-0001.png")
+
+Allow Relocation : インストール後に移動したコンポーネントを探すことを許可 Allow Downgrade : ダウングレードを許可
+
+ダウングレードの判断はConfigurationのPackage Versionで指定してある値から判断されます。
+
+### Scripts
+
+[![100121-0002.png](/images/2010/03/100121-0002.thumbnail.png)](/images/2010/03/100121-0002.png "100121-0002.png")
+
+scripts directory : 実行スクリプトがあるフォルダを指定する Preinstall : インストール前に実行するスクリプト Postinstall : インストール後に実行するスクリプト
+
+スクリプトはシェルスクリプトやperlスクリプトでも可能です。  
+
+MacOSX10.5ではPreinstallとPostinstallの指定したスクリプトしか実行されないようなので注意が必要です。
+
+ 
+
+## インストールパッケージの設定
+パッケージ全体に関する設定を行ないます。  
+
+### Configuration
+
+[![100121-0003.png](/images/2010/03/100121-0003.thumbnail.png)](/images/2010/03/100121-0003.png "100121-0003.png")
+
+Title : タイトル User Sees : インストールオプション - Easy Install Only :簡易インストールのみ - Custom Install Only : カスタムインストールのみ - Easy and Custom Install : 簡易インストールとカスタムインストールの両方 Install Destination : インストール先 - Volume selected by user : ユーザが選択可能 - System volume : システムのボリュームのみ - User home directory : ホームディレクトリ Description : 概要  
+
+Custom Installにチェックが入っている場合、ユーザがパッケージに入っている製品を選択してインストールしたいものだけをインストールできるようになります。
+
+### Requirements
+
+ システムの条件を指定します。以下、ここで指定できるいくつかの例です。
+
+[![100121-0004.png](/images/2010/03/100121-0004.thumbnail.png)](/images/2010/03/100121-0004.png "100121-0004.png")
+
+Megabytes Available on Target : 空きディスク容量 Maximum CPU Frequency(Hz) : CPUのクロック周波数 Number of CPUs  : CPUの数 USB Device Exists : USBデバイスの有無 Result of Script : 指定したスクリプトの実行結果
+
+Result of Scriptで指定できるように、自前のスクリプトの結果からインストールするかどうかを判断することもできます。  
+
+### Actions
+
+インストール前とインストール後での動作を指定します。
+
+[![100121-0005.png](/images/2010/03/100121-0005.thumbnail.png)](/images/2010/03/100121-0005.png "100121-0005.png")
 
 以下は設定できる項目の例です。
 
-Show File in Finder : ファインダーで指定のパスを開く
-Open URL : ブラウザで指定のURLを開く
-Create Alias : エイリアスの作成
+Show File in Finder : ファインダーで指定のパスを開く Open URL : ブラウザで指定のURLを開く Create Alias : エイリアスの作成
 
-<a href="/images/2010/03/100121-0006.png" title="100121-0006.png"><img src="/images/2010/03/100121-0006.thumbnail.png" alt="100121-0006.png" /></a>
-<h2 align="justify"><font class="Apple-style-span" size="6"><span class="Apple-style-span" style="font-size: 19px">選択項目の設定</span></font></h2>
-<p align="justify">インストール時にユーザが必要な製品のみインストールできるように選択項目についての設定を行います。</p>
+[![100121-0006.png](/images/2010/03/100121-0006.thumbnail.png)](/images/2010/03/100121-0006.png "100121-0006.png")
 
-<h3><a title="web" name="web"></a><span class="sanchor"> </span>Configuration</h3>
-<a href="/images/2010/03/100121-0007.png" title="100121-0007.png"><img src="/images/2010/03/100121-0007.thumbnail.png" alt="100121-0007.png" /></a>
+## 選択項目の設定
 
-Choice Name : 選択時の名前
-identifier : 選択識別子
-initial state デフォルト状態
-- Selected : 選択されている
-- Enabled : 選択変更が可能
-- Hidden : ユーザに選択状態を見せない
-Destination : インストール先
-Tooltip : 短かいメッセージの表示
-Description : 説明
+インストール時にユーザが必要な製品のみインストールできるように選択項目についての設定を行います。
 
-ここでDestinationを指定した場合、パッケージの設定で指定したインストール先は上書きされるので注意が必要です。
-<h3><a title="web" name="web"></a><span class="sanchor"> </span>Requirements</h3>
-選択パッケージの個別にシステム条件を設定します。
-条件項目については、パッケージ設定のActionsタブ中のものと同じです。
+### Configuration
 
-<a href="/images/2010/03/100121-0008.png" title="100121-0008.png"><img src="/images/2010/03/100121-0008.thumbnail.png" alt="100121-0008.png" /></a>
-<p align="justify">ここではシステム条件を満たせなかった場合の選択項目の動きを指定できます。</p>
- Selected, Enabled, Hiddenのそれぞれに対して、
-- Yes : チェックを入れる
-- No : チェックを外す
-- Unchanged : 変更しない
-<p align="justify">を設定します。</p>
+[![100121-0007.png](/images/2010/03/100121-0007.thumbnail.png)](/images/2010/03/100121-0007.png "100121-0007.png")
 
-<h2 align="justify"><font class="Apple-style-span" size="6"><span class="Apple-style-span" style="font-size: 19px">インタフェースの編集</span></font></h2>
-<p style="text-align: justify">インストーラの起動後に表示される背景画像やライセンスの文言などをここで設定します。</p>
-<p style="text-align: justify"> <a href="/images/2010/03/100122-0001.png" title="100122-0001.png"><img src="/images/2010/03/100122-0001.thumbnail.png" alt="100122-0001.png" /></a></p>
+Choice Name : 選択時の名前 identifier : 選択識別子 initial state デフォルト状態 - Selected : 選択されている - Enabled : 選択変更が可能 - Hidden : ユーザに選択状態を見せない Destination : インストール先 Tooltip : 短かいメッセージの表示 Description : 説明
 
-<p align="justify">background : 背景画像
-Introduction : 前書き
-Read Me : 注意書き
-License : ライセンス
-Finish Up : 完了後のメッセージ
-<h2 align="justify"><font class="Apple-style-span" size="6"><span class="Apple-style-span" style="font-size: 19px">パッケージのビルド
-</span></font></h2>
-<p style="text-align: justify">メニューの[Project] -&gt; [Build and Run]を選択するとパッケージが作成され、インストーラが起動して確認することができます。</p>
-<p style="text-align: justify">&nbsp;</p>
+ここでDestinationを指定した場合、パッケージの設定で指定したインストール先は上書きされるので注意が必要です。  
 
-<h2>おわりに</h2>
-<p style="text-align: justify" align="justify"> Macアプリをインストーラからインストールするためのパッケージ作成方法について説明しました。
-設定項目がたくさんありますが、パッケージを作ることでユーザはより簡単にインストール作業を行うことができるようになります。
+### Requirements
+選択パッケージの個別にシステム条件を設定します。 条件項目については、パッケージ設定のActionsタブ中のものと同じです。
+
+[![100121-0008.png](/images/2010/03/100121-0008.thumbnail.png)](/images/2010/03/100121-0008.png "100121-0008.png")
+
+ここではシステム条件を満たせなかった場合の選択項目の動きを指定できます。
+
+ Selected, Enabled, Hiddenのそれぞれに対して、 - Yes : チェックを入れる - No : チェックを外す - Unchanged : 変更しない  
+
+を設定します。
+
+## インタフェースの編集
+
+インストーラの起動後に表示される背景画像やライセンスの文言などをここで設定します。
+
+[![100122-0001.png](/images/2010/03/100122-0001.thumbnail.png)](/images/2010/03/100122-0001.png "100122-0001.png")
+
+background : 背景画像 Introduction : 前書き Read Me : 注意書き License : ライセンス Finish Up : 完了後のメッセージ
+
+## パッケージのビルド
+
+メニューの[Project] ->[Build and Run]を選択するとパッケージが作成され、インストーラが起動して確認することができます。
+
+ 
+
+## おわりに
+
+Macアプリをインストーラからインストールするためのパッケージ作成方法について説明しました。 設定項目がたくさんありますが、パッケージを作ることでユーザはより簡単にインストール作業を行うことができるようになります。
+

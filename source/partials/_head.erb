@@ -3,10 +3,11 @@
   <title><%= current_page.data.title + ' | ' unless current_page.data.title.nil? %><%= data.site.name %></title>
   <% if is_blog_article? %>
       <meta name="description" content="<%= strip_tags(article_excerpt(current_article.body)).gsub(/(\r\n|\r|\n)/, '') %>">
+      <link rel="canonical" href="<%= data.site.url %><%= current_article.url %>">
   <% else %>
       <meta name="description" content="<%= data.site.description %>">
+      <link rel="canonical" href="<%= data.site.url %>">
   <% end %>
-  <link rel="canonical" href="<%= data.site.url %>">
   <meta name="author" content="<%= data.site.name %>">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
   <meta property="og:title" content="<%= current_page.data.title + ' | ' unless current_page.data.title.nil? %><%= data.site.name %>">

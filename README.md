@@ -4,6 +4,8 @@
 
 powered by [Middleman](http://middlemanapp.com/)
 
+see: :black_nib: [How to write article](https://github.com/feedforce/tech.feedforce.jp/wiki/%E6%8A%80%E8%A1%93%E8%80%85%E3%83%96%E3%83%AD%E3%82%B0%E8%A8%98%E4%BA%8B%E5%9F%B7%E7%AD%86%E3%83%88%E3%83%A9%E3%81%AE%E5%B7%BB)
+
 ## Requirement
 
 * [Node.js](http://nodejs.org/)

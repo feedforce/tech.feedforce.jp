@@ -139,7 +139,8 @@ activate :authors do |authors|
 end
 
 ignore '/author.html'
-
+ignore '/images/retina/*.png'
+ignore '/images/sprites/*.png'
 
 ###
 # Bower Components Support

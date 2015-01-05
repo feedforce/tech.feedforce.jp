@@ -27,13 +27,13 @@ Debian GNU/Linux好きだけど、最近rpmの作り方を習得した増田で�
 
 これでは使いものにならないということで、重い腰を上げて作ったrpmがこちら。Rubyは https://github.com/hansode/ruby-2.1.x-rpm からのforkです。ありがとうございます。
 
-* https://github.com/feedforce/ruby-2.1.x-rpm
+* https://github.com/feedforce/ruby-rpm
 * https://github.com/feedforce/kyototycoon-rpm
 * https://github.com/feedforce/kyotocabinet-rpm
 
 それぞれSRPMとRPMもダウンロードできます。ご利用は自己責任で。
 
-* https://github.com/feedforce/ruby-2.1.x-rpm/releases
+* https://github.com/feedforce/ruby-rpm/releases
 * https://github.com/feedforce/kyototycoon-rpm/releases
 * https://github.com/feedforce/kyotocabinet-rpm/releases
 
@@ -47,10 +47,10 @@ Debian GNU/Linux好きだけど、最近rpmの作り方を習得した増田で�
 
 これだけだと芸がないので、[Vagrant](https://www.vagrantup.com/)と[VirtualBox](https://www.virtualbox.org/)を使って簡単にSRPMとRPMを作れるようにしました。
 
-このように機械的に作れます([README.md](https://github.com/feedforce/ruby-2.1.x-rpm/blob/master/README.md)から抜粋)。
+このように機械的に作れます([README.md](https://github.com/feedforce/ruby-rpm/blob/master/README.md)から抜粋)。
 
 ```shell-session
-$ git clone git@github.com:feedforce/ruby-2.1.x-rpm.git
+$ git clone git@github.com:feedforce/ruby-rpm.git
 $ cd ruby-2.1.x-rpm
 $ vagrant up
 $ vagrant ssh
@@ -77,9 +77,9 @@ $ rpmbuild -ba ~/rpmbuild/SPECS/ruby21x.spec
 書き込み完了: /home/vagrant/rpmbuild/RPMS/x86_64/ruby-2.1.5-2.el6.x86_64.rpm
 ```
 
-実際の手順を貼り付けているのでごちゃっとしてますが、付属の[ruby21x.spec](https://github.com/feedforce/ruby-2.1.x-rpm/blob/master/ruby21x.spec)を~/rpmbuild/SPECSにコピーして、rpmbuildしているだけです。
+実際の手順を貼り付けているのでごちゃっとしてますが、付属の[ruby21x.spec](https://github.com/feedforce/ruby-rpm/blob/master/ruby21x.spec)を~/rpmbuild/SPECSにコピーして、rpmbuildしているだけです。
 
-Rubyバージョンアップによるruby21x.specの変更も[このような些細なもの](https://github.com/feedforce/ruby-2.1.x-rpm/commit/4064fe0655cf9dc1427760ee48ef19be8a3a0366)です。
+Rubyバージョンアップによるruby21x.specの変更も[このような些細なもの](https://github.com/feedforce/ruby-rpm/commit/4064fe0655cf9dc1427760ee48ef19be8a3a0366)です。
 
 ## まとめ
 

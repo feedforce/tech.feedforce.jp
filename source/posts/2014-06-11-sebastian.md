@@ -2,7 +2,7 @@
 title: 執事のセバスチャンが東京ドームのイベントをHipChatで教えてくれる
 date: 2014-06-11 11:45 JST
 authors: e-takano
-tags: ruby, 
+tags: ruby
 ---
 こんにちは、 kano-e です。 HipChatで好きな emoticon は ![(ghost)](/images/2014/06/429bf35a-97ae-e2ee-f374-f9364cbc885f.png "(ghost)") です。
 

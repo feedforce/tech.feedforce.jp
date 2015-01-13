@@ -17,7 +17,7 @@ title: "Archives"
           <h2><%= year %></h2>
           <% articles.each do |article, value| %>
               <dl>
-                <dt><%= article.date.strftime('%m/%e') %></dt>
+                <dt><%= article.date.strftime('%m/%d') %></dt>
                 <dd><%= link_to article.title, article.url %></dd>
               </dl>
           <% end %>

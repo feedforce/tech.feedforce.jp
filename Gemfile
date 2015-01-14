@@ -8,7 +8,7 @@ gem 'middleman', '~> 3.3.7'
 gem 'middleman-blog', '~> 3.5.3'
 gem 'middleman-blog-authors', '~> 0.0.1'
 gem 'middleman-autoprefixer', '~> 2.3.0'
-gem 'middleman-livereload', '~> 3.3.4'
+gem 'middleman-livereload', '~> 3.4.2'
 gem 'middleman-deploy', '~> 1.0.0'
 
 gem 'middleman-syntax', '~> 2.0.0'

@@ -1,6 +1,6 @@
 ---
 title: AWSで請求情報をIAMユーザーでも閲覧できるようにする
-date: 2015-01-13 16:28 JST
+date: 2015-01-14 12:30 JST
 authors: sugiuchi
 tags: aws
 ---

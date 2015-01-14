@@ -12,7 +12,7 @@ directory_index: false
     <div class="entry-date">
       <h1><%= link_to current_article.title, current_article %></h1>
       <ul>
-        <li class="entry-time"><%= current_article.date.strftime('%Y.%m.%e') %></li>
+        <li class="entry-time"><%= current_article.date.strftime('%Y.%m.%d') %></li>
         <li class="entry-cat"><%= current_article.tags.map { |tag| link_to "#{slug_to_japanese(tag)}", tag_path(tag) }.join(', ').html_safe %></li>
         <li class="entry-author"><%= link_to current_article.data.authors, '/author/' + current_article.data.authors %></li>
       </ul>

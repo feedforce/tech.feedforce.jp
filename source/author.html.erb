@@ -34,7 +34,7 @@ title: #{author.name}
         <div class="entry-date">
           <h1><%= link_to article.title, article %></h1>
           <ul>
-            <li class="entry-time"><%= article.date.strftime('%Y.%m.%e') %></li>
+            <li class="entry-time"><%= article.date.strftime(('%Y.%m.%d')) %></li>
             <li class="entry-cat"><%= article.tags.map { |tag| link_to "#{slug_to_japanese(tag)}", tag_path(tag) }.join(', ').html_safe %></li>
             <li class="entry-author"><%= link_to article.data.authors, '/author/' + article.data.authors %></li>
           </ul>

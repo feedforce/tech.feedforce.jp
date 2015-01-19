@@ -5,7 +5,7 @@ authors: dkimura
 tags: ruby, resume
 ---
 
-お初にお目にかかります。鉛球を敵の眉間にブチ込むゲームが好きなdkimuraです。
+お初にお目にかかります。鉛弾を敵の眉間にブチ込むゲームが好きなdkimuraです。
 
 先月末に当ブログを、[WordPress](https://wordpress.org/)から[Middleman](https://middlemanapp.com/)へ移行いたしました。
 その際にハマった/悩んだところをご紹介させていただきます。
@@ -25,7 +25,7 @@ tags: ruby, resume
 ## エクスポートした記事データをMarkdownに変換
 
 既に記事移行用に、Rubyスクリプトが公開されていたのでForkして使用しました。
-大半の記事は上手くMarkdownに変換できましたが、変換後の最終確認/調整は必要です。
+大半の記事は上手くMarkdownに変換できましたが、変換後の確認と調整は必要です。
 
 > salmansqadeer/wordpress-to-middleman
 > https://github.com/salmansqadeer/wordpress-to-middleman
@@ -52,7 +52,7 @@ tags: ruby, resume
 ### ハマり/悩みどころ
 
 1. カテゴリの表示名とスラッグが別のものをどうするか
-1. 検索機能どうするか
+1. 検索機能をどうするか
 
 #### カテゴリ(タグ)の表示名とスラッグが別のものをどうするか
 
@@ -107,7 +107,7 @@ end
 <% end %>
 ```
 
-#### 検索機能どうするか
+#### 検索機能をどうするか
 
 Middlemanは静的サイトであるため、サイト内検索機能がありません。
 

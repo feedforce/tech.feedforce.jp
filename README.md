@@ -42,6 +42,6 @@ You can deploy to http://feedforce-tech-blog.herokuapp.com for checking a new ar
 * Deploy using Heroku Git
     * `$ git push -f heroku <branch name>:master`
 
-### Automate Publishing
+## Automate Publishing
 
 :dart: When a PR is merged to `master`, CircleCI will build and push it to `gh-pages`.

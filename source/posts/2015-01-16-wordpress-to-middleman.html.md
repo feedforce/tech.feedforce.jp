@@ -30,6 +30,10 @@ tags: ruby, resume
 > salmansqadeer/wordpress-to-middleman
 > https://github.com/salmansqadeer/wordpress-to-middleman
 
+### Forkしたもの
+
+Diffは、[こちら](https://github.com/dkimura/wordpress-to-middleman/compare/salmansqadeer:master...master)からご確認ください。
+
 > dkimura/wordpress-to-middleman
 > https://github.com/dkimura/wordpress-to-middleman
 

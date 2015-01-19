@@ -5,7 +5,7 @@ authors: dkimura
 tags: ruby, resume
 ---
 
-お初にお目にかかります。鉛球を敵の眉間にブチ込むゲームが好きなdkimuraです。
+お初にお目にかかります。鉛弾を敵の眉間にブチ込むゲームが好きなdkimuraです。
 
 先月末に当ブログを、[WordPress](https://wordpress.org/)から[Middleman](https://middlemanapp.com/)へ移行いたしました。
 その際にハマった/悩んだところをご紹介させていただきます。
@@ -107,7 +107,7 @@ end
 <% end %>
 ```
 
-#### 検索機能どうするか
+#### 検索機能をどうするか
 
 Middlemanは静的サイトであるため、サイト内検索機能がありません。
 

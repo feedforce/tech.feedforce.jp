@@ -8,7 +8,6 @@ machine:
 
 dependencies:
   pre:
-    - bundle install --path vendor/bundle
     - npm install -g bower
     - bower install
 

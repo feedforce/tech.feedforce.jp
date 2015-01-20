@@ -158,15 +158,6 @@
     - label: Qiita
       url: http://qiita.com/TasukuNakano
 #------------------------------------------
-- id: hszmtmhr
-  name: hszmtmhr
-  thumbnail: hszmtmhr.jpg
-  profile: "2015卒内定者。<br>
-            ボードゲームやマジック：ザ・ギャザリングでエンジニアの方々と仲良くなりたい。"
-  media:
-    - label: Twitter
-      url: https://twitter.com/hszmtmhr
-#------------------------------------------
 - id: dkimura
   name: dkimura
   thumbnail: dkimura.png
@@ -177,4 +168,13 @@
       url: https://github.com/dkimura
     - label: Twitter
       url: https://twitter.com/habu0104
+#------------------------------------------
+- id: hszmtmhr
+  name: hszmtmhr
+  thumbnail: hszmtmhr.jpg
+  profile: "2015卒内定者。<br>
+            ボードゲームやマジック：ザ・ギャザリングでエンジニアの方々と仲良くなりたい。"
+  media:
+    - label: Twitter
+      url: https://twitter.com/hszmtmhr
 #------------------------------------------

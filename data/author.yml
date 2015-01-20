@@ -167,3 +167,14 @@
     - label: Twitter
       url: https://twitter.com/hszmtmhr
 #------------------------------------------
+- id: dkimura
+  name: dkimura
+  thumbnail: dkimura.png
+  profile: "ゆるふわフロントエンドエンジニア。<br>
+            趣味は、仮想世界でドンパチすること。"
+  media:
+    - label: Github
+      url: https://github.com/dkimura
+    - label: Twitter
+      url: https://twitter.com/habu0104
+#------------------------------------------

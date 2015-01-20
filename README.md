@@ -33,19 +33,15 @@ see: :black_nib: [How to write article](https://github.com/feedforce/tech.feedfo
 
 Edit `data/author.yml`
 
-## Deployment
+## Heroku
 
-Every push to master will deploy to http://feedforce-tech-blog.herokuapp.com
+You can deploy to http://feedforce-tech-blog.herokuapp.com for checking a new article.
 
-or
+* Manual deploy
+    * https://dashboard.heroku.com/apps/feedforce-tech-blog/code/github
+* Deploy using Heroku Git
+    * `$ git push -f heroku <branch name>:master`
 
-Every pull request will deploy to https://feedforce-tech-blog-pr-NUMBER.herokuapp.com
-
-or
-
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
-### Automate Publishing
+## Automate Publishing
 
 :dart: When a PR is merged to `master`, CircleCI will build and push it to `gh-pages`.
-

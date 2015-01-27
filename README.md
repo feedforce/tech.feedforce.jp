@@ -45,3 +45,7 @@ You can deploy to http://feedforce-tech-blog.herokuapp.com for checking a new ar
 ## Automate Publishing
 
 :dart: When a PR is merged to `master`, CircleCI will build and push it to `gh-pages`.
+
+## Automatically `$ bundle update`
+
+Automatically update by http://tachikoma.io/

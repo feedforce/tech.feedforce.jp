@@ -52,7 +52,7 @@ A pull request regularly opens by http://tachikoma.io/
 
 But CircleCI doesn't run at that time. Because the origin of the pull request is from a forked repository.
 
-You can run CircleCI. For example of #55,
+You can manually run CircleCI. For example of #55,
 
     $ git remote add tachikoma git@github.com:tachikomapocket/feedforce-_-tech.feedforce.jp.git
     $ git checkout -t tachikoma/tachikoma/update-20150205021418

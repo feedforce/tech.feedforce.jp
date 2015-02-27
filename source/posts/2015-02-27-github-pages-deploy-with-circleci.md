@@ -87,4 +87,5 @@ general:
 
 * [feedforce/tech.feedforce.jp](https://github.com/feedforce/tech.feedforce.jp)
 
-最近では [Tachikoma.io](http://tachikoma.io/) を利用した自動 bundle update も行うようになりました。春には Middleman v4 のリリースもあるし楽しみです。[硝煙にまみれたゆるふわフロントエンジニア氏](http://tech.feedforce.jp/author/dkimura/)の関心は別のフレームワークに移っているようですが…それはそれで楽しみです٩(๑❛ᴗ❛๑)۶
+最近では [Tachikoma.io](http://tachikoma.io/) を利用した[自動 bundle update も行うようになりました](https://github.com/feedforce/tech.feedforce.jp/pull/60)。
+春には Middleman v4 のリリースもあるし楽しみです。[硝煙にまみれたゆるふわフロントエンジニア氏](http://tech.feedforce.jp/author/dkimura/)の関心は別のフレームワークに移っているようですが…それはそれで楽しみです٩(๑❛ᴗ❛๑)۶

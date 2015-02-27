@@ -62,7 +62,7 @@ deployment:
 ポイントは、以下のような部分です。
 
 * 公開用ブランチである `gh-pages` は処理対象から除外
-* CircleCI は test が無いと怒られるので `middleman build` でHTMLソースが生成できることを実施
+* CircleCI の test は `middleman build` で代用
 * `middleman-deploy` gem を導入し、デプロイを設定＋ワンラインで解決
 
 これで、トピックブランチはすべてtestまで実行され、`master` ブランチにマージされたものは自動的に `gh-pages` ブランチにデプロイされます。
@@ -77,7 +77,7 @@ general:
       - gh-pages
 ```
 
-また、CircleCI 上の警告をなくすために test で `middleman build` を実行していますが、実際のところこれはかなり無駄なことをしています。CircleCI はいくつかのフレームワークを判断して、とくに設定などを書かなくても[自動で適当な compile などを実施してくれます](https://circleci.com/gh/feedforce/tech.feedforce.jp/157)。Log を見ると、build コマンドが2回実行されているのがわかります。
+また、CircleCI では test が無いと警告が出てしまうため `middleman build` を実行していますが、実際のところこれはかなり無駄なことをしています。CircleCI はいくつかのフレームワークを判断して、とくに設定などを書かなくても[自動で適当な compile などを実施してくれます](https://circleci.com/gh/feedforce/tech.feedforce.jp/157)。Log を見ると、build コマンドが2回実行されているのがわかります。
 
 これをもっと良さげに解決する方法はいくつかあります。test 内でコマンドの実行結果が正常終了と判断されるようにすれば良いです。ただ今回はいちおうのテストとして「静的ファイルが build できること」を確認するものとして、この記述を残しました。こじつけですね。
 

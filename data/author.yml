@@ -169,6 +169,21 @@
     - label: Twitter
       url: https://twitter.com/habu0104
 #------------------------------------------
+- id: ff_koshigoe
+  name: koshigoe
+  thumbnail: koshigoe.png
+  profile: "肩こり部名誉顧問。<br>
+            基本装備はミートテック。<br>
+            流浪の旅より奇跡の帰還。"
+  media:
+    - label: GitHub
+      url: https://github.com/koshigoe
+    - label: Qiita
+      url: http://qiita.com/koshigoe
+#--------------------------------------------
+# エンジニアが追記する場合はここより上に挿入してください
+# 以下、ゲスト
+#--------------------------------------------
 - id: hszmtmhr
   name: hszmtmhr
   thumbnail: hszmtmhr.jpg

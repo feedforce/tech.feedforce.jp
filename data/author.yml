@@ -169,15 +169,6 @@
     - label: Twitter
       url: https://twitter.com/habu0104
 #------------------------------------------
-- id: hszmtmhr
-  name: hszmtmhr
-  thumbnail: hszmtmhr.jpg
-  profile: "2015卒内定者。<br>
-            ボードゲームやマジック：ザ・ギャザリングでエンジニアの方々と仲良くなりたい。"
-  media:
-    - label: Twitter
-      url: https://twitter.com/hszmtmhr
-#------------------------------------------
 - id: ff_koshigoe
   name: koshigoe
   thumbnail: koshigoe.png
@@ -189,4 +180,16 @@
       url: https://github.com/koshigoe
     - label: Qiita
       url: http://qiita.com/koshigoe
+#--------------------------------------------
+# エンジニアが追記する場合はここより上に挿入してください
+# 以下、ゲスト
+#--------------------------------------------
+- id: hszmtmhr
+  name: hszmtmhr
+  thumbnail: hszmtmhr.jpg
+  profile: "2015卒内定者。<br>
+            ボードゲームやマジック：ザ・ギャザリングでエンジニアの方々と仲良くなりたい。"
+  media:
+    - label: Twitter
+      url: https://twitter.com/hszmtmhr
 #------------------------------------------

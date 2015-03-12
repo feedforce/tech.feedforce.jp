@@ -7,6 +7,8 @@ tags: resume,
  GitHub で使われているジョブキューの Resque の概要について、社内勉強会で発表しました。以下が発表に利用したスライドです。 
 - [Introduction to Resque](http://www.slideshare.net/koshigoe/introduction-to-resque)
 
+<!--more-->
+
  スライドの内容は大分省略しているので、以下に補足資料へのリンクを追記します。 
 - [KOSHIGOE学習帳 - [BackgroundJob][Ruby] Resque とは](http://w.koshigoe.jp/study/?%5BBackgroundJob%5D%5BRuby%5D+Resque+%A4%C8%A4%CF)
 - [KOSHIGOE学習帳 - [BackgroundJob][Ruby] Resque の README より](http://w.koshigoe.jp/study/?%5BBackgroundJob%5D%5BRuby%5D+Resque+%A4%CE+README+%A4%E8%A4%EA)

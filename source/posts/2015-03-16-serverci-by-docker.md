@@ -7,6 +7,10 @@ tags: infrastructure, test
 
 はじめまして！今年１月からジョインしましたtjinjinです。feedforceでは<s>アニメ</s>インフラを担当しています。ちなみに今季オススメアニメはSHIROBAKOです。
 
+今回サーバCIにDockerを導入しましたので、実際の設定や工夫した点など投稿したいと思います。
+
+<!--more-->
+
 ## feedforceのサーバCI
 
 弊社ではこれまでCircleCI + AWSを組み合わせてサーバのCIを行って参りました。
@@ -22,7 +26,6 @@ tags: infrastructure, test
 ### Dockerfileを準備する
 
 DockerfileとはオリジナルのDocker imageを作成するための設定ファイルのようなものです。この設定に従いDocker imageが作成されます。主にやっていることとして3点あります。
-
 
 - 公式のDocker imageを元に既存で使っていたイメージと比較を行い、足りないパッケージを事前にインストール（ここは今後改善したい
 - Dockerfileの中でChefを事前にインストールさせる

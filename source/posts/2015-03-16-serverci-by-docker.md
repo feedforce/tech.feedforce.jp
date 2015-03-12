@@ -5,9 +5,9 @@ authors: tjinjin
 tags: infrastructure, test
 ---
 
-はじめまして！今年１月からFFにジョインしましたtjinjinです。FFでは<s>アニメ</s>インフラを担当しています。ちなみに今季オススメアニメはSHIROBAKOです。
+はじめまして！今年１月からジョインしましたtjinjinです。feedforceでは<s>アニメ</s>インフラを担当しています。ちなみに今季オススメアニメはSHIROBAKOです。
 
-## フィードフォースでのサーバCI
+## feedforceのサーバCI
 
 弊社ではこれまでCircleCI + AWSを組み合わせてサーバのCIを行って参りました。
 

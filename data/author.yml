@@ -180,6 +180,17 @@
       url: https://github.com/koshigoe
     - label: Qiita
       url: http://qiita.com/koshigoe
+#------------------------------------------
+- id: tjinjin
+  name: tjinjin
+  thumbnail: tjinjin.png
+  profile: "文系出身インフラエンジニア。<br>
+            暇さえあればアニメを見ている。"
+  media:
+    - label: GitHub
+      url: https://github.com/tjinjin
+    - label: Qiita
+      url: http://qiita.com/tjinjin
 #--------------------------------------------
 # エンジニアが追記する場合はここより上に挿入してください
 # 以下、ゲスト

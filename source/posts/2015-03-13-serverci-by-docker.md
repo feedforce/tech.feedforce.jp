@@ -13,25 +13,21 @@ tags: infrastructure, test
 
 ## feedforceのサーバCI
 
-弊社ではこれまでCircleCI + AWSを組み合わせてサーバのCIを行って参りました。
+弊社ではこれまでCircleCIまたはJenkinsとAWSを組み合わせてサーバのCIを行って参りました。
+参考: [JenkinsでサーバのCIを始めました](http://tech.feedforce.jp/jenkins-server-ci.html)
 
-しかし、CircleCIを利用するプロジェクトが増えるにつれ、CircleCIに実行待ちが発生するようになりました。お金の力があればすぐ解決できるのですが（コンテナを増やす）、せっかくだしDockerにしてみない？ということでDockerを業務で採用することにしました。
-
-## Dockerとは
-[Docker](https://www.docker.com/) はDocker社が開発しているコンテナ型の仮想化ソフトウェアです。ゲスト型のVMより軽量であり、起動が速いなどの特徴があります。
-
-これまでのCircleCIでの実行ログからAWSのセットアップ時間が遅いということがわかっていたため、Dockerを利用することで環境のセットアップ時間を改善することが今回のポイントになります。
+しかし、CircleCIを利用するプロジェクトが増えるにつれ、CircleCIに実行待ちが発生するようになりました。CircleCIの実行ログを確認したところ、AWSのセットアップに時間がかかっていることがわかったので、環境のセットアップ時間を短縮できるもののはないかと探していました。そんな折、Dockerがいいのではという話を耳にしました。[Docker](https://www.docker.com/) はDocker社が開発しているコンテナ型の仮想化ソフトウェアで、ゲスト型のVMより軽量であり、起動が速いなどの特徴があります。そこで、今回サーバCIにDockerが使えそうか検証しました。
 
 ## Dockerの設定
 ### Dockerfileを準備する
 
 DockerfileとはオリジナルのDocker imageを作成するための設定ファイルのようなものです。この設定に従いDocker imageが作成されます。主にやっていることとして3点あります。
 
-- 公式のDocker imageを元に既存で使っていたイメージと比較を行い、足りないパッケージを事前にインストール（ここは今後改善したい
+- 公式のDocker imageを元に既存で使っていたイメージと比較を行い、足りないパッケージを事前にインストール（ここは今後改善したい）
 - Dockerfileの中でChefを事前にインストールさせる
 - SSHログイン用するための設定
 
-実際の設定は下記のようになります。（一部修正しています。
+実際の設定は下記のようになります。（一部修正しています。）
 
 ```sh
 FROM centos:6.6
@@ -102,9 +98,6 @@ circle.ymlについては以下のように設定しています。
 machine:
   timezone:
     Asia/Tokyo
-  ruby:
-    version:
-      2.1.4
   services:
     - docker
 checkout:

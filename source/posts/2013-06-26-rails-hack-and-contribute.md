@@ -8,3 +8,4 @@ tags: ruby, resume,
 
 [Railsを改造しよう(speakerdeck)](https://speakerdeck.com/sakuro/railswogai-zao-siyou "Railsを改造しよう(speakerdeck)")
 
+<!--more-->

@@ -13,7 +13,7 @@ dependencies:
 
 test:
   override:
-    - bundle exec middleman build
+    - ./script/spec.sh
 
 deployment:
   publish:

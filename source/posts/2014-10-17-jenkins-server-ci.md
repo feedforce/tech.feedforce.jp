@@ -2,7 +2,7 @@
 title: JenkinsでサーバのCIを始めました
 date: 2014-10-17 15:42 JST
 authors: masutaka
-tags: infrastructure, test, 
+tags: infrastructure, test
 ---
  [![logo-title](/images/2014/10/logo-title.png)](http://jenkins-ci.org/)
 
@@ -27,7 +27,7 @@ tags: infrastructure, test,
     1. site-cookbooks
     2. cookbooks
     3. ff-cookbooks (git submodule)
-- ... 
+- ...
     1. site-cookbooks
     2. cookbooks
     3. ff-cookbooks (git submodule)

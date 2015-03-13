@@ -10,18 +10,30 @@ tags: infrastructure, test,
 
 プライベートではベヨネッタ2をやっています。3rdクライマックスはクリアできそうです。最高難易度はたぶん無理です。
 
+2015.3.13 追記
+社内で共有するレシピのリポジトリをsite-cookbooksからff-cookbooksに変更しました。
+
 <!--more-->
 
 ## フィードフォースのサーバリポジトリ
 
-弊社は今年の4月くらいから [serverspec](http://serverspec.org/)を導入しましたが、CIはしていませんでした。構成管理にはChef-soloを使っており、GitHubのリポジトリはこのようになっております。(通常site-cookbooksには自分で作ったレシピを入れますが、submodule化して社内で共有しています。)
+弊社は今年の4月くらいから [serverspec](http://serverspec.org/)を導入しましたが、CIはしていませんでした。構成管理にはChef-soloを使っており、GitHubのリポジトリはこのようになっております(数字は参照順です)。
+
 - server-social-plus
-  - site-cookbooks (git submodule)
+    1. site-cookbooks
+    2. cookbooks
+    3. ff-cookbooks (git submodule)
 - server-datafeed-plus
-  - site-cookbooks (git submodule)
+    1. site-cookbooks
+    2. cookbooks
+    3. ff-cookbooks (git submodule)
 - ... 
-  - site-cookbooks (git submodule)
-- site-cookbooks
+    1. site-cookbooks
+    2. cookbooks
+    3. ff-cookbooks (git submodule)
+- ff-cookbooks
+
+Chefデフォルトのcookbooks、site-cookbooksに加え、社内でff-cookbooksを共有しています。
 
 弊社はサービス毎にサーバのリポジトリを用意しているため、数が多いです。今数えたら9ありました(3月に入社してびっくりしたことの1つ)。
 
@@ -62,7 +74,7 @@ Jenkinsの設定とVagrantfile、テスト用のスクリプトはこの記事�
 
 サーバのCIも思うところがあって、少し前 [sugiuchi](http://tech.feedforce.jp/author/sugiuchi)、 [r-suzuki](http://tech.feedforce.jp/author/r-suzuki)とこんな話をしました。
 
-「確かにサーバはテスト出来ているけど、site-cookbooks自体のテストはないから、本当に正しいレシピなのか分からないよね。でもchefspec書くの？辛くない？」等々
+「確かにサーバはテスト出来ているけど、ff-cookbooks自体のテストはないから、本当に正しいレシピなのか分からないよね。でもchefspec書くの？辛くない？」等々
 
 どうなんでしょうね？
 

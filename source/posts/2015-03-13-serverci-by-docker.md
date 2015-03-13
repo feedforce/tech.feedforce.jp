@@ -1,6 +1,6 @@
 ---
 title: CircleCI + DockerでサーバCI始めました
-date: 2015-03-16 00:00 JST
+date: 2015-03-13 10:30 JST
 authors: tjinjin
 tags: infrastructure, test
 ---

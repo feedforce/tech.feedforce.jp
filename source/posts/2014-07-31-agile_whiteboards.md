@@ -2,7 +2,7 @@
 title: アジャイル開発で便利だったホワイトボードなどまとめ
 date: 2014-07-31 13:42 JST
 authors: masutaka
-tags: dev_style, 
+tags: dev_style
 ---
 はじめまして。アジャイル開発推進おじさんの増田です。プライベートでは [マスタカのChangeLogメモ](http://masutaka.net/chalow/)というブログを13年くらいやってます。
 

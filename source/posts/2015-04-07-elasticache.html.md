@@ -124,7 +124,7 @@ fluentd付属の[Monitoring Agent](http://docs.fluentd.org/articles/monitoring)�
 
 [PullRequestを送りました](https://github.com/mhat/zabbix-rb/pull/4)が、すでにメンテされていないようでマージされるか分かりません。
 
-そのため修正したzabbix gemを使うChefのレシピにしました。
+そのため[修正したzabbix gem](https://github.com/masutaka/zabbix-rb/releases/tag/v0.4.1)を使うChefのレシピにしました。
 
 これがtd-agentとpluginをインストールするためのレシピです。CentOS6で動作確認しています。CentOS7でも動くと思います。
 

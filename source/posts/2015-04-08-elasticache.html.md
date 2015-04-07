@@ -1,6 +1,6 @@
 ---
 title: ElastiCacheをCloudWatch+fluentd+Zabbixで監視する
-date: 2015-04-07 14:00 JST
+date: 2015-04-08 14:00 JST
 authors: masutaka
 tags: aws, operation
 ---

@@ -34,6 +34,7 @@ activate :blog do |blog|
   blog.page_link = 'page/{num}'
 
   blog.new_article_template = 'templates/article.tt'
+  blog.publish_future_dated = true
 end
 
 page '/feed.xml', layout: false

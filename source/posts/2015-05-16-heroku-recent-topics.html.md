@@ -5,6 +5,8 @@ authors: ff_koshigoe
 tags: operation
 ---
 
+[![Heroku logo](/images/2015/05/heroku-logotype-horizontal-purple.png)](https://heroku.com/)
+
 こんにちは。腰越と申します。
 
 最近、数年ぶりに仕事で Heroku を使う様になったので、久しぶりに使って感じたこと、Heroku で最近できる様になってうれしかった事などを書いてみたいと思います。

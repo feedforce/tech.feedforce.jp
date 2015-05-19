@@ -1,7 +1,7 @@
 ---
 title: Bugsnag はじめました
 date: 2015-05-15 21:10 JST
-authors: koshigoe
+authors: ff_koshigoe
 tags: resume, operation
 ---
 

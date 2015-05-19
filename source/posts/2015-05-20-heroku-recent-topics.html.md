@@ -18,12 +18,14 @@ tags: operation
 Heroku のデプロイ機能には GitHub 連携機能があり、GitHub にあるリポジトリから Heroku デプロイする事が可能です。
 
 - 自動デプロイ(Automatic deploys)
-- PRデプロイ(Pull request apps)
+- PRデプロイ(Review apps)
+    - 5/19 に Pull request apps から Review apps に名称が変わった様です
+    - [Heroku | Heroku Review Apps Beta](https://blog.heroku.com/archives/2015/5/19/heroku_review_apps_beta)
 - 手動デプロイ(Manual deploy)
 
 管理画面からデプロイできて便利なのですが、Rails アプリでおきまりのデプロイ後処理まで実行出来るわけではないのが残念です。PRデプロイの初回のみ、app.json の postdeploy で指定したコマンドを実行出来るのでおしいところです。
 
-### Pull request apps
+### Review apps
 
 PRデプロイでは app.json というアプリケーションの定義ファイルのようなものを使います。このファイルに書かれている、デプロイ後処理を指定する postdeploy や、環境変数の設定、利用するアドオンの設定を使って Heroku アプリケーションが作られる仕組みになっています。
 
@@ -62,7 +64,7 @@ free dyno という新しい無料プランでは、web と worker (heroku run, 
 
 ## まとめ
 
-- Pull request apps は便利だと思います
+- Review apps は便利だと思います
 - free dyno でジョブキューが使える様になってうれしいです
 - `docker:release`は気になりますが、まだ触れていません
 - 何年経っても Tokyo リージョンはないですね

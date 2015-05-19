@@ -1,7 +1,7 @@
 ---
 title: 数年ぶりに Heroku を使って感じたことなど
 date: 2015-05-16 02:02 JST
-authors: koshigoe
+authors: ff_koshigoe
 tags: operation
 ---
 

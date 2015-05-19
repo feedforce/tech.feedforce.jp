@@ -49,9 +49,9 @@ free dyno という新しい無料プランでは、web と worker (heroku run, 
 
 制限はありつつも、「プロジェクト初期段階でお客様に見ていただくためのプレビュー環境を手早く用意したい。」という用途でジョブキューも使える様になった事はうれしい限りです。
 
-## 余談：docker
+## 余談：docker:release
 
-Heroku も Docker サポートを始めた様ですね。
+最近発表された `docker:release` は、気になりつつも触れていません。デプロイ後の後処理(`rake db:migrate` など)をカスタマイズできる仕組みだとうれしいのですが。
 
 - [Heroku | Introducing 'heroku docker:release': Build & Deploy Heroku Apps with Docker](https://blog.heroku.com/archives/2015/5/5/introducing_heroku_docker_release_build_deploy_heroku_apps_with_docker)
 
@@ -59,5 +59,5 @@ Heroku も Docker サポートを始めた様ですね。
 
 - Pull request apps は便利だと思います
 - free dyno でジョブキューが使える様になってうれしいです
-- docker サポートは気になりますが、まだ触っていません
+- `docker:release`は気になりますが、まだ触れていません
 - 何年経っても Tokyo リージョンはないですね

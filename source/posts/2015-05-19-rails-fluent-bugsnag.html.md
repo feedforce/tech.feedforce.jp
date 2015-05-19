@@ -5,7 +5,7 @@ authors: ff_koshigoe
 tags: resume, operation
 ---
 
-![bugsnag logo](/images/2015/05/logo-bugsnag.png)
+[![bugsnag logo](/images/2015/05/logo-bugsnag.png)](https://bugsnag.com/)
 
 こんにちは。2月に入社して以来、とうとう勉強会の担当が回ってきた腰越です。
 

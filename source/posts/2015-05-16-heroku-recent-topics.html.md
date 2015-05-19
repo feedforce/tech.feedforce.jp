@@ -11,9 +11,9 @@ tags: operation
 
 <!--more-->
 
-## Github 連携
+## GitHub 連携
 
-Heroku のデプロイ機能には Github 連携機能があり、Github にあるリポジトリから Heroku デプロイする事が可能です。
+Heroku のデプロイ機能には GitHub 連携機能があり、GitHub にあるリポジトリから Heroku デプロイする事が可能です。
 
 - 自動デプロイ(Automatic deploys)
 - PRデプロイ(Pull request apps)

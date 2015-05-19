@@ -44,8 +44,11 @@ PRデプロイでは app.json というアプリケーションの定義ファ�
 
 - [Heroku | Heroku’s Free (as in beer) Dynos](https://blog.heroku.com/archives/2015/5/7/heroku-free-dynos)
 
-(自分の古い記憶が正しければ)これまでは web か worker の dyno どちらか 1 つまでが無料だったため、ウェブアプリケーションでジョブキューを使いたい場合はお金を払う必要がありました。
-free dyno という新しい無料プランでは、web と worker (heroku run, Schedule 含む) の dyno を 1 個ずつ無料で使える様になります。ただし、24時間のうち18時間までしか稼働できないという制限があります。
+これまでの料金体系では、アプリケーションあたり 750時間分の無料 dyno 時間が貰えていたため、dyno 1 つ分までなら無料で利用する事ができました(web のみ、worker のみ、など)。
+
+- [750 free dyno-hours per app](https://devcenter.heroku.com/articles/usage-and-billing#750-free-dyno-hours-per-app)
+
+free dyno という新しい無料プランでは、web と worker (heroku run, Schedule 含む) の dyno を 1 つずつ無料で使える様になります。ただし、24時間のうち18時間までしか稼働できないという制限があります。
 
 制限はありつつも、「プロジェクト初期段階でお客様に見ていただくためのプレビュー環境を手早く用意したい。」という用途でジョブキューも使える様になった事はうれしい限りです。
 

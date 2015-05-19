@@ -5,6 +5,8 @@ authors: ff_koshigoe
 tags: resume, operation
 ---
 
+![bugsnag logo](/images/2015/05/logo-bugsnag.png)
+
 こんにちは。2月に入社して以来、とうとう勉強会の担当が回ってきた腰越です。
 
 最近、現在進行中のプロジェクト(Rails)にて [Bugsnag](https://bugsnag.com/) というサービスを導入いたしましたので、導入までの経緯について発表させていただきました。

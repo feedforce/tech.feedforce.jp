@@ -1,6 +1,6 @@
 ---
 title: Rails のエラー通知を fluentd 経由で Bugsnag に送る
-date: 2015-05-15 21:10 JST
+date: 2015-05-19 12:00 JST
 authors: ff_koshigoe
 tags: resume, operation
 ---

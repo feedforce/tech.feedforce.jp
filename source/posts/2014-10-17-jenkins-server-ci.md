@@ -4,7 +4,7 @@ date: 2014-10-17 15:42 JST
 authors: masutaka
 tags: infrastructure, test
 ---
- [![logo-title](/images/2014/10/logo-title.png)](http://jenkins-ci.org/)
+![jenkins logo](/images/2014/10/logo-title.png)
 
 お久しぶりです。アジャイル推進おじさん改め、サーバCIおじさんの増田です。
 

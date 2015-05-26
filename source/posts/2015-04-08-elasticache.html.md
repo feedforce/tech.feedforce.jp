@@ -4,7 +4,7 @@ date: 2015-04-08 14:00 JST
 authors: masutaka
 tags: aws, operation
 ---
- [![fluentd logo](/images/2015/04/fluentd-logo.png)](http://www.fluentd.org/)
+![fluentd logo](/images/2015/04/fluentd-logo.png)
 
 ご無沙汰しております。増田でございます。
 
@@ -52,7 +52,7 @@ AOF（Append-Only File）を有効にして（appendonly=yes）トランザク�
 
 ソーシャルPLUSでは当初からZabbixを使っており、KyotoTycoonの時は監視用のスクリプトを用意してZabbixに登録していました。
 
-ElastiCacheではCloudWatchが使えるので、fluentd経由でZabbixに送信することでシンプルかつ既存の監視と馴染ませることが出来ました。
+ElastiCacheではCloudWatchが使えるので、[fluentd](http://www.fluentd.org/)経由でZabbixに送信することでシンプルかつ既存の監視と馴染ませることが出来ました。
 
 ![watch elasticache](/images/2015/04/watch-elasticache.png)
 

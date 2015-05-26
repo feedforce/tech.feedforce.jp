@@ -5,8 +5,6 @@ authors: yukiyan
 tags: operation
 ---
 
-<img src="/images/2015/05/bigquery_logo.jpg" alt="BigQuery logo" width="700" height="174" />
-
 初めまして！今年１月からジョインしたyukiyanです。
 
 feedforceではアプリケーションエンジニアを担当しています。

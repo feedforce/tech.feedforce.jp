@@ -98,8 +98,12 @@ client = Google::APIClient.new(application_name: 'sample', application_version: 
 api = client.discovered_api('bigquery', 'v2')
 parameters = {
   api_method: api.jobs.query,
-  parameters: { projectId: 'sample_project' },
-  body_object: { query: 'SELECT COUNT(*) FROM [publicdata:samples.wikipedia]' }
+  parameters: {
+    projectId: 'sample_project'
+  },
+  body_object: {
+    query: 'SELECT COUNT(*) FROM [publicdata:samples.wikipedia]'
+  }
 }
 
 # クエリを実行する
@@ -119,9 +123,16 @@ api = client.discovered_api('bigquery', 'v2')
 
 parameters = {
   api_method: api.jobs.insert,
-  parameters: { projectId: 'sample_project' },
-  body_object: { configuration: {
-    query: { query: 'SELECT COUNT(*) FROM [publicdata:samples.wikipedia]' } } }
+  parameters: {
+    projectId: 'sample_project'
+  },
+  body_object: {
+    configuration: {
+      query: {
+        query: 'SELECT COUNT(*) FROM [publicdata:samples.wikipedia]'
+      }
+    }
+  }
 }
 
 # クエリを実行する
@@ -129,7 +140,9 @@ response = client.execute(parameters)
 
 parameters = {
   api_method: api.jobs.get,
-  parameters: { projectId: 'sample_project', jobId: response.data.jobReference.jobId }
+  parameters: {
+    projectId: 'sample_project', jobId: response.data.jobReference.jobId
+  }
 }
 
 response = client.execute(parameters)
@@ -144,7 +157,8 @@ parameters = {
   api_method: api.jobs.get_query_results,
   parameters: {
     projectId: 'sample_project',
-    jobId: response.data.jobReference.jobId }
+    jobId: response.data.jobReference.jobId
+  }
 }
 
 # クエリの結果を取得する

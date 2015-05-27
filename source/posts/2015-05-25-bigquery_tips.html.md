@@ -8,15 +8,15 @@ tags: operation
 初めまして！今年１月からジョインしたyukiyanです。
 
 feedforceではアプリケーションエンジニアを担当しています。
-最近、弊社のあるプロジェクトにて [BigQuery](https://cloud.google.com/bigquery/what-is-bigquery) を導入しました。
+最近、弊社のあるプロジェクトにて [Google BigQuery](https://cloud.google.com/bigquery/what-is-bigquery) を導入しました。
 その際、学びがいくつかあったので知見として投下します。
 
 <!--more-->
 
 ## BigQueryとは
-BigQueryとは、[Google Cloud Platform](https://cloud.google.com/)が提供するクラウドサービスです。
+BigQueryとは、[Google Cloud Platform](https://cloud.google.com/)(以下、GCP)が提供するクラウドサービスです。
 超でかいデータをSQL風のクエリで数秒で解析できます。
-5億件のデータをフルスキャンしても3秒しかかかりません。
+5億件のデータを3秒程度でフルスキャンできます。
 もっと知りたいという方は、[hadoop - Googleの虎の子「BigQuery」をFluentdユーザーが使わない理由がなくなった理由 #gcpja - Qiita](http://qiita.com/kazunori279/items/10ac0066ac9b0b5aaaf3)を参照してください。
 
 
@@ -30,7 +30,7 @@ gemについては、[公式リファレンスで紹介](https://cloud.google.co
 しかし、使えないAPIメソッドがいくつかあり、PRを出してマージして頂いたりしましたが、結局プロダクションでの利用は断念しました。
 
 ## プロジェクトとデータセットという概念
-BigQueryにはプロジェクトとデータセットという概念があります。
+GCP 内の 1サービスである BigQuery にデータを投入し管理する際、その単位としておさえておきたい概念として、 "プロジェクト" と "データセット" というものがあります。
 
 ### プロジェクトとは
 プロジェクトとは、[Google Cloud Platformにおけるトップレベルコンテナです。](https://cloud.google.com/bigquery/what-is-bigquery#projects)

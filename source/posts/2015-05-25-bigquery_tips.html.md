@@ -5,7 +5,7 @@ authors: yukiyan
 tags: operation
 ---
 
-<img src="/images/2015/05/bigquery_logo.jpg" alt="BigQuery logo" width="700" height="174" />
+![BigQuery logo](/images/2015/05/bigquery_logo.jpg)
 
 初めまして！今年１月からジョインしたyukiyanです。
 

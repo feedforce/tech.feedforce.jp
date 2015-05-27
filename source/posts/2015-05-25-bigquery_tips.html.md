@@ -77,10 +77,79 @@ BigQueryはそのパフォーマンスゆえ、雑なクエリを投げること
 BigQueryではクエリを実行するAPIメソッドが２つあります。
 `Jobs.query()`と`Jobs.insert()`です。
 両者の違いはいくつかあります。
-その中でも代表的なのはポーリングが必要かどうかという点です。
+その中でも代表的なのはポーリング(クライアントから一定間隔でサーバに対し情報の取得要求を行うこと)が必要かどうかという点です。
+つまり、クエリの実行方法に同期と非同期の2種類があるということです。
 
 * [Jobs.query()](https://cloud.google.com/bigquery/docs/reference/v2/jobs/query)はポーリングが**不要**
 * [Jobs.insert()](https://cloud.google.com/bigquery/docs/reference/v2/jobs/insert)はポーリングが**必要**
+
+google-api-ruby-clientでは以下のように書きます。
+
+### Jobs.query()でクエリを実行する場合
+```ruby
+require 'google/api_client'
+
+client = Google::APIClient.new(application_name: 'sample', application_version: '0.0.1')
+# 〜認証まわりのコードは省略〜
+
+api = client.discovered_api('bigquery', 'v2')
+parameters = {
+  api_method: api.jobs.query,
+  parameters: { projectId: 'sample_project' },
+  body_object: { query: 'SELECT COUNT(*) FROM [publicdata:samples.wikipedia]' }
+}
+
+# クエリを実行する
+response = client.execute(parameters)
+response.data.rows[0].f[0].v.to_i
+# => 313797035
+```
+
+### Jobs.insert()でクエリを実行する場合
+```ruby
+require 'google/api_client'
+
+client = Google::APIClient.new(application_name: 'sample', application_version: '0.0.1')
+
+# 〜認証まわりのコードは省略〜
+api = client.discovered_api('bigquery', 'v2')
+
+parameters = {
+  api_method: api.jobs.insert,
+  parameters: { projectId: 'sample_project' },
+  body_object: { configuration: {
+    query: { query: 'SELECT COUNT(*) FROM [publicdata:samples.wikipedia]' } } }
+}
+
+# クエリを実行する
+response = client.execute(parameters)
+
+parameters = {
+  api_method: api.jobs.get,
+  parameters: { projectId: 'sample_project', jobId: response.data.jobReference.jobId }
+}
+
+response = client.execute(parameters)
+
+# ポーリングする
+while response.data.status.state != 'DONE'
+  sleep 30
+  response = client.execute(parameters)
+end
+
+parameters = {
+  api_method: api.jobs.get_query_results,
+  parameters: {
+    projectId: 'sample_project',
+    jobId: response.data.jobReference.jobId }
+}
+
+# クエリの結果を取得する
+response = client.execute(parameters)
+response.data.rows[0].f[0].v
+# => 313797035
+```
+
 
 ### 両者のユースケース
 `Jobs.query()`は、クエリが実行完了し結果が返ってくるまで待ってくれます。

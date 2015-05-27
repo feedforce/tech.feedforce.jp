@@ -27,7 +27,8 @@ gemについては、[公式リファレンスで紹介](https://cloud.google.co
 
 ### 公式以外の便利そうなgemも試してみた
 当初は、公式ではありませんが、google-api-ruby-clientをラップして作られた[abronte/BigQuery](https://github.com/abronte/BigQuery)というgemを使っていました。
-しかし、使えないAPIメソッドがいくつかあり、PRを出してマージして頂いたりしましたが、結局プロダクションでの利用は断念しました。
+このgemを使うことでgoogle-api-ruby-clientよりシンプルにBigQueryにAPIを投げられます。
+しかし、[使えないAPIメソッド](https://github.com/abronte/BigQuery/pull/16)や[公式で非推奨なメソッドを使っている箇所](https://github.com/abronte/BigQuery/issues/17)があり、issueやPRを出してマージして頂いたりしましたが、結局プロダクションでの利用は断念しました。
 
 ## プロジェクトとデータセットという概念
 GCP 内の 1サービスである BigQuery にデータを投入し管理する際、その単位としておさえておきたい概念として、 "プロジェクト" と "データセット" というものがあります。

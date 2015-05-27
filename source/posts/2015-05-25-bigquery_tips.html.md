@@ -12,6 +12,7 @@ tags: operation
 feedforceではアプリケーションエンジニアを担当しています。
 最近、弊社のあるプロジェクトにて [Google BigQuery](https://cloud.google.com/bigquery/what-is-bigquery) を導入しました。
 その際、学びがいくつかあったので知見として投下します。
+※ Railsのプロジェクトなので、一部のサンプルコードでRailsの表現も含まれます。
 
 <!--more-->
 
@@ -196,7 +197,6 @@ response.data.rows[0].f[0].v
 ### エラーハンドリングの例
 
 ```ruby
-
 # ポーリングする
 while response.data.status.state != 'DONE'
   sleep 30
@@ -206,8 +206,6 @@ end
 if error_result = response.data.status.try(:[], 'errorResult')
   raise "Failed. reason: #{error_result.to_json}"
 end
-
-# tryはRailsのActiveSupportのメソッドです
 ```
 
 ## 分割エクスポートの話

@@ -160,19 +160,38 @@ response.data.rows[0].f[0].v
 * `Jobs.insert()`は、クエリの結果が大きい場合や別テーブルに結果を保存したい場合に利用すべき
 
 ### ポーリングは自前で実装する
-弊社では、大まかには以下の流れでポーリングを行っています。
-基本的な流れは公式リファレンスに記載されている[例](https://cloud.google.com/bigquery/querying-data#asyncqueries)と同様です。
+上述のJobs.insert()のサンプルコードでも行ってますが、弊社では、以下の流れでポーリングを行っています。
 
 1. `Jobs.insert()`でクエリ実行ジョブを投げる
 2. レスポンスからジョブIDを取得
-3. 取得したジョブIDに紐づくジョブのステータスを取得
-4. ステータスが“DONE”になるまで3を繰り返す
+3. 取得したジョブIDに紐づくジョブのステータスを`Jobs.get()`で取得
+4. ステータスが"DONE"になるまで3を繰り返す
 5. エラー時の処理
+6. `Jobs.getQueryResults()`でジョブIDに紐づくクエリの結果を取得
 
+基本的な流れは公式リファレンスに記載されている[例](https://cloud.google.com/bigquery/querying-data#asyncqueries)と同様です。
+別テーブルにクエリの結果を保存する場合は6の手順は不要です。
 ジョブのステータスは、"PENDING"→"RUNNING"→"DONE"と遷移していきます。
 注意しなければならないのは、**ジョブの成否に関わらず**最終的に"DONE"になることです。
 5でエラー時の処理を行っているのはそのためです。
 エラーの場合は、ステータス取得時のレスポンスの["status.errorResult"](https://cloud.google.com/bigquery/docs/reference/v2/jobs#status.errorResult)というフィールドに値が入ってるのでその存在有無でエラーハンドリングを行います。
+
+### エラーハンドリングの例
+
+```ruby
+
+# ポーリングする
+while response.data.status.state != 'DONE'
+  sleep 30
+  response = client.execute(parameters)
+end
+
+if error_result = response.data.status.try(:[], 'errorResult')
+  raise "Failed. reason: #{error_result.to_json}"
+end
+
+# tryはRailsのActiveSupportのメソッドです
+```
 
 
 ## 分割エクスポートの話

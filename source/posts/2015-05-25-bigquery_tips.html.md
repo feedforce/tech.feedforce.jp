@@ -193,12 +193,12 @@ end
 # tryはRailsのActiveSupportのメソッドです
 ```
 
-
 ## 分割エクスポートの話
 BigQueryのテーブルは、エクスポート可能です。
-しかし、1つのファイルにエクスポートできるサイズは1GBまでです。
+[エクスポート方法やファイル形式等の詳しい説明](https://cloud.google.com/bigquery/exporting-data-from-bigquery)はリファレンスを参照してください。
+なお、1つのファイルにエクスポートできるサイズは1GBまでです。
 よって、1GB以上のテーブルをエクスポートする場合は、[分割してエクスポート](https://cloud.google.com/bigquery/exporting-data-from-bigquery#exportingmultiple)する必要があります。
-また、[gzip圧縮しながらのエクスポート](https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.extract.compression)もできます。
+また、[gzip形式に圧縮した上でのエクスポート](https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.extract.compression)もできます。
 Google Cloud Storageに5GBほどのテーブルをエクスポートしてみたところ、約20ファイル程のgzipファイルが出来上がりました。
 5GBだからなんとなく5ファイルできそうな気がしますが、BigQuery側が並列に複数ファイルに書き込むので1つのファイルのサイズはバラバラになりますし、サイズ指定もできません。
 

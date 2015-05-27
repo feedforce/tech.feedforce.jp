@@ -12,7 +12,7 @@ tags: operation
 feedforceではアプリケーションエンジニアを担当しています。
 最近、弊社のあるプロジェクトにて [Google BigQuery](https://cloud.google.com/bigquery/what-is-bigquery) を導入しました。
 その際、学びがいくつかあったので知見として投下します。
-※ Railsのプロジェクトなので、一部のサンプルコードでRailsの表現も含まれます。
+※ Railsのプロジェクトなので、一部のサンプルコードにRailsの表現も含まれています。
 
 <!--more-->
 

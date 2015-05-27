@@ -78,17 +78,17 @@ BigQueryはそのパフォーマンスゆえ、雑なクエリを投げること
 
 ## APIでのクエリの実行方法は2種類ある
 BigQueryではクエリを実行するAPIメソッドが２つあります。
-`Jobs.query()`と`Jobs.insert()`です。
+`Jobs.query`と`Jobs.insert`です。
 両者の違いはいくつかあります。
 その中でも代表的なのはポーリング(クライアントから一定間隔でサーバに対し情報の取得要求を行うこと)が必要かどうかという点です。
 つまり、クエリの実行方法に同期と非同期の2種類があるということです。
 
-* [Jobs.query()](https://cloud.google.com/bigquery/docs/reference/v2/jobs/query)はポーリングが**不要**
-* [Jobs.insert()](https://cloud.google.com/bigquery/docs/reference/v2/jobs/insert)はポーリングが**必要**
+* [Jobs.query](https://cloud.google.com/bigquery/docs/reference/v2/jobs/query)はポーリングが**不要**
+* [Jobs.insert](https://cloud.google.com/bigquery/docs/reference/v2/jobs/insert)はポーリングが**必要**
 
 google-api-ruby-clientでは以下のように書きます。
 
-### Jobs.query()でクエリを実行する場合
+### Jobs.queryでクエリを実行する場合
 ```ruby
 require 'google/api_client'
 
@@ -112,7 +112,7 @@ response.data.rows[0].f[0].v.to_i
 # => 313797035
 ```
 
-### Jobs.insert()でクエリを実行する場合
+### Jobs.insertでクエリを実行する場合
 ```ruby
 require 'google/api_client'
 
@@ -169,22 +169,22 @@ response.data.rows[0].f[0].v
 
 
 ### 両者のユースケース
-`Jobs.query()`は、クエリが実行完了し結果が返ってくるまで待ってくれます。
+`Jobs.query`は、クエリが実行完了し結果が返ってくるまで待ってくれます。
 よって、テーブルのデータ件数のカウント等、クエリの結果が小さい場合に利用すると良いです。
-逆に、クエリの結果が大きい場合や別テーブルに結果を保存したい場合は、[より柔軟なユースケースに対応](https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.query)できる`Jobs.insert()`を使うべきです。
+逆に、クエリの結果が大きい場合や別テーブルに結果を保存したい場合は、[より柔軟なユースケースに対応](https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.query)できる`Jobs.insert`を使うべきです。
 
-* `Jobs.query()`は、クエリの結果が小さい場合に利用すべき
-* `Jobs.insert()`は、クエリの結果が大きい場合や別テーブルに結果を保存したい場合に利用すべき
+* `Jobs.query`は、クエリの結果が小さい場合に利用すべき
+* `Jobs.insert`は、クエリの結果が大きい場合や別テーブルに結果を保存したい場合に利用すべき
 
 ### ポーリングは自前で実装する
-上述のJobs.insert()のサンプルコードでも行ってますが、弊社では、以下の流れでポーリングを行っています。
+上述のJobs.insertのサンプルコードでも行ってますが、弊社では、以下の流れでポーリングを行っています。
 
-1. `Jobs.insert()`でクエリ実行ジョブを投げる
+1. `Jobs.insert`でクエリ実行ジョブを投げる
 2. レスポンスからジョブIDを取得
-3. 取得したジョブIDに紐づくジョブのステータスを`Jobs.get()`で取得
+3. 取得したジョブIDに紐づくジョブのステータスを`Jobs.get`で取得
 4. ステータスが"DONE"になるまで3を繰り返す
 5. エラー時の処理
-6. `Jobs.getQueryResults()`でジョブIDに紐づくクエリの結果を取得
+6. `Jobs.getQueryResults`でジョブIDに紐づくクエリの結果を取得
 
 基本的な流れは公式リファレンスに記載されている[例](https://cloud.google.com/bigquery/querying-data#asyncqueries)と同様です。
 別テーブルにクエリの結果を保存する場合は6の手順は不要です。

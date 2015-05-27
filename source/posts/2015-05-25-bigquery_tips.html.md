@@ -206,9 +206,31 @@ Google Cloud Storageに5GBほどのテーブルをエクスポートしてみた
 BigQueryに対するクエリの実行はたまに失敗します。
 だいたいはリトライすれば解決しますが、そのためにはリトライ機構を自前実装しなければなりません。
 google-api-ruby-clientにはリトライの機能がありますが、[現時点では回数しか指定できません。](https://github.com/google/google-api-ruby-client#automatic-retries--backoff)
-よって、「5分間隔でリトライしたい」、「リトライは最大5回するが最初のリトライから1時間以上かかったらエラーとする」等の細かい指定はgoogle-api-ruby-clientではできません。
+よって、「5分間隔でリトライしたい」等の細かい指定はgoogle-api-ruby-clientではできません。
 弊社では、[kamui/retriable](https://github.com/kamui/retriable)というgemを使ってリトライの自前実装を行っています。
 また、このgemはgoogle-api-ruby-clientの内部でも使われているので、自前実装と言ってもモンキーパッチ的な実装で済むのでそれほど難しくはありません。
+
+### retriableを使う場合の注意点
+retriableはgoogle-api-ruby-clientの内部でも使われているgemですが、retriableのメジャーバージョンを[1.x系に固定してます。](https://github.com/google/google-api-ruby-client/blob/master/google-api-client.gemspec#L34)
+よって、retriableの使い方を調べる際は、[1.x系のREADME](https://github.com/kamui/retriable/tree/v1.4.0)を読んでください。
+
+### リトライのサンプルコード
+google-api-ruby-clientでは`execute`というメソッドでリクエストを投げているので、以下のように実装することで、失敗時にリトライができるようにしました。
+
+```ruby
+module RetryExecute
+  def execute(*args)
+    # 10分間隔で最大6回リトライする
+    Retriable.retriable tries: 6, interval: 10.minutes do
+      super
+    end
+  end
+end
+
+Google::APIClient.class_eval do
+  prepend RetryExecute
+end
+```
 
 ## 所感
 * [google/google-api-ruby-client](https://github.com/google/google-api-ruby-client)はalpha版にも関わらず、十分有用。

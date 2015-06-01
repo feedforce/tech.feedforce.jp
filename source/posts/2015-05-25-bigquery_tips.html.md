@@ -1,6 +1,6 @@
 ---
 title: RubyでBigQuery始めました
-date: 2015-05-25 14:47 JST
+date: 2015-06-01 14:30 JST
 authors: yukiyan
 tags: operation
 ---

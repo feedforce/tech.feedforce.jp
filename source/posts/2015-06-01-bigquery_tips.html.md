@@ -5,7 +5,7 @@ authors: yukiyan
 tags: operation
 ---
 
-![BigQuery logo](/images/2015/05/bigquery_logo.jpg)
+![BigQuery logo](/images/2015/06/bigquery_logo.jpg)
 
 初めまして！今年１月からジョインしたyukiyanです。
 
@@ -43,14 +43,14 @@ GCPは[OAuth 2.0を用いた認証方法](https://cloud.google.com/bigquery/bigq
 ### P12形式の秘密鍵の取得方法
 Google Developers Consoleから以下のようにして取得できます。
 
-![p12_image_01](/images/2015/05/p12_01.jpg)
+![p12_image_01](/images/2015/06/p12_01.jpg)
 「認証情報」を選択後、「新しいクライアントIDを作成」を押下。
 
-![p12_image_02](/images/2015/05/p12_02.jpg)
+![p12_image_02](/images/2015/06/p12_02.jpg)
 ポップアップ画面が表示されるので「サービスアカウント」を選択し、「クライアントIDを作成」を押下。
 
 
-![p12_image_03](/images/2015/05/p12_03.jpg)
+![p12_image_03](/images/2015/06/p12_03.jpg)
 「新しいP12キーを生成」を押下すると、p12形式の秘密鍵がダウンロードされます。
 
 ここで取得した秘密鍵を使って、google-api-ruby-clientから認証を行い、APIを叩きます。
@@ -99,7 +99,7 @@ GCP 内の 1サービスである BigQuery にデータを投入し管理する�
 プロジェクトIDは**あとで変更することが不可能**なので、慎重に命名してください。
 弊社では以下のように、3つのプロジェクトを作成しています。
 
-![project list](/images/2015/05/bigquery_project_list.jpg)
+![project list](/images/2015/06/bigquery_project_list.jpg)
 
 ### プロジェクトIDの命名
 弊社ではプロジェクトIDを以下のように命名しています。
@@ -115,7 +115,7 @@ GCP 内の 1サービスである BigQuery にデータを投入し管理する�
 データセットとは、[BigQueryで扱うテーブルの集合です。](https://cloud.google.com/bigquery/what-is-bigquery#datasets)
 テーブルを作成するときは、このデータセットを事前に作る必要があります。
 
-![project dataset table](/images/2015/05/bigquery_project_dataset_table.jpg)
+![project dataset table](/images/2015/06/bigquery_project_dataset_table.jpg)
 
 ### データセットの命名に関する注意点
 データセットを数字から始まる名前で作成した場合は、クエリを実行する際に下記のように`[]`で囲まないとエラーになるので注意が必要です。

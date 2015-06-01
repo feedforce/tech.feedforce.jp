@@ -33,6 +33,62 @@ gemについては、[公式リファレンスで紹介](https://cloud.google.co
 このgemを使うことでgoogle-api-ruby-clientよりシンプルにBigQueryにAPIを投げられます。
 しかし、[使えないAPIメソッド](https://github.com/abronte/BigQuery/pull/16)や[公式で非推奨なメソッドを使っている箇所](https://github.com/abronte/BigQuery/issues/17)があり、issueやPRを出してマージして頂いたりしましたが、結局プロダクションでの利用は断念しました。
 
+## 認証
+BigQueryのAPIを使う際には認証が必要です。
+これは、BigQueryだけでなくGCPのサービスのAPIを叩く際には、共通して必要な作業です。
+GCPは[OAuth 2.0を用いた認証方法](https://cloud.google.com/bigquery/bigquery-api-quickstart#authorizing)を提供しています。
+その中でも、Service Accountsという方式を使った認証方法をご紹介します。
+これは、サービス固有のP12([PKCS12](http://ja.wikipedia.org/wiki/PKCS))形式の秘密鍵を発行して認証を行い、APIを叩くという方式です。
+
+### P12形式の秘密鍵の取得方法
+Google Developers Consoleから以下のようにして取得できます。
+
+![p12_image_01](/images/2015/05/p12_01.jpg)
+「認証情報」を選択後、「新しいクライアントIDを作成」を押下。
+
+![p12_image_02](/images/2015/05/p12_02.jpg)
+ポップアップ画面が表示されるので「サービスアカウント」を選択し、「クライアントIDを作成」を押下。
+
+
+![p12_image_03](/images/2015/05/p12_03.jpg)
+「新しいP12キーを生成」を押下すると、p12形式の秘密鍵がダウンロードされます。
+
+ここで取得した秘密鍵を使って、google-api-ruby-clientから認証を行い、APIを叩きます。
+
+
+### google-api-ruby-clientを使った場合の認証のコード例
+[README](https://github.com/google/google-api-ruby-client#authorization)にも説明がありますが、以下のようにして認証を行います。
+
+```ruby
+
+require 'google/api_client'
+
+client = Google::APIClient.new(application_name: 'sample', application_version: '0.0.1')
+key = Google::APIClient::KeyUtils.load_from_pkcs12('p12のファイルパス', 'notasecret')
+scope = [
+  'https://www.googleapis.com/auth/bigquery',
+  'https://www.googleapis.com/auth/cloud-platform',
+  'https://www.googleapis.com/auth/devstorage.read_only',
+  'https://www.googleapis.com/auth/devstorage.read_write',
+  'https://www.googleapis.com/auth/devstorage.full_control'
+]
+client.authorization = Signet::OAuth2::Client.new(
+  token_credential_uri: 'https://accounts.google.com/o/oauth2/token',
+  audience: 'https://accounts.google.com/o/oauth2/token',
+  scope: scope,
+  issuer: '123456789@developer.gserviceaccount.com',
+  signing_key: key)
+client.authorization.fetch_access_token!
+
+api = client.discovered_api('bigquery', 'v2')
+
+```
+
+* `load_from_pkcs12`というメソッドの第一引数に先ほど取得した秘密鍵のファイルパスを渡します。
+* scopeとは、どのAPIを使用できるようにするか判断するためのパラメータです。各APIメソッドごとに必要なscopeはドキュメントに載ってます。上記のコードでは[Jobs.insertの場合のscope](https://cloud.google.com/bigquery/docs/reference/v2/jobs/insert#auth)を用いてます。
+* issuerは、サービスアカウントのメールアドレスです。Google Developers Consoleで確認できます。
+
+
 ## プロジェクトとデータセットという概念
 GCP 内の 1サービスである BigQuery にデータを投入し管理する際、その単位としておさえておきたい概念として、 "プロジェクト" と "データセット" というものがあります。
 

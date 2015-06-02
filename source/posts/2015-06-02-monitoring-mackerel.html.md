@@ -15,8 +15,6 @@ tags: resume,
 
 <script async class="speakerdeck-embed" data-id="5db48c62fb1247b3b03221d378286f3e" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
 
-# 補足
-
 いくつかポイントを絞って補足します。
 
 ## 監視ツール難しい問題

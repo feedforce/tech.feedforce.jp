@@ -1,6 +1,6 @@
 ---
 title: Mackerelでサーバ監視をはじめた話
-date: 2015-06-02 11:58 JST
+date: 2015-06-04 11:58 JST
 authors: sugiuchi
 tags: resume
 ---

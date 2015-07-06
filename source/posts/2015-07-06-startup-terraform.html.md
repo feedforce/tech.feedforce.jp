@@ -52,7 +52,6 @@ $ tree -a
 │   ├── main.tf
 │   └── terraform.tfvars
 └── stage
-    ├── .DS_Store
     ├── .envrc
     ├── .terraform
     │   ├── terraform.tfstate

@@ -17,7 +17,7 @@ gem 'middleman-google-analytics'
 gem 'builder', '~> 3.0'
 
 # for Heroku
-gem 'puma'
+gem 'puma', '~> 2.11.3'
 
 # Debug Tool
 # gem 'pry'

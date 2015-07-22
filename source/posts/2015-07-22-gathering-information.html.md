@@ -1,6 +1,6 @@
 ---
 title: 『最近の情報収集方法』というお題で発表しました
-date: 2015-07-23 13:00 JST
+date: 2015-07-22 13:00 JST
 authors: masutaka
 tags: resume
 ---

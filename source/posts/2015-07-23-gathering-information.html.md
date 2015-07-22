@@ -67,7 +67,7 @@ tags: resume
 * Twitter（9名）
     * [#gcpja](https://twitter.com/search?q=%23gcpja&src=typd&vertical=default&f=tweets) や [#gcpug](https://twitter.com/search?q=%23gcpug&src=typd&vertical=default&f=tweets)
     * tech-news リストとか、いくつかのリストを作って、[Tweetbot](http://tapbots.com/tweetbot/) でカラム別に表示して読んでる
-    * LIST（dev, ff, FFメル）
+    * LIST（dev, ff, FFXIV）
     * Search（ruby, rails, middleman,...）
     * すごい人の Twitter を見てると、なんとなく取捨選択後の情報が
     * 興味のある人をプライベートリストで

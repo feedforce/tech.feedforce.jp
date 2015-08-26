@@ -40,7 +40,7 @@ UDF Editorでは、UDFを入力します。
 SELECT
 CASE
     WHEN length(number) <= 3
-      THEN number
+      THEN '¥' + number
     WHEN length(number) <= 4
       THEN '¥' + REGEXP_REPLACE(number, r'(\d)(\d\d\d)', r'\1' + ',' + r'\2')
     WHEN length(number) <= 5

@@ -1,5 +1,5 @@
 ---
-title: BigQueryで待望のUDFがリリースされたので早速試してみた
+title: BigQueryで待望のUDF(user-defined function)がリリースされたので早速試してみた
 date: 2015-08-26 04:35 JST
 authors: yukiyan
 tags: BigQuery
@@ -14,8 +14,8 @@ tags: BigQuery
 <!--more-->
 
 ## UDFとは
-UDF(user-defined function)とは、BigQueryで実行するクエリ内にJavaScriptを書いて任意のロジックが実行できるようになる機能です。
-この機能によって、BigQueryで扱えるデータの幅がグッと広がります。
+UDFとは、BigQueryで実行するクエリ内にJavaScriptを書いて任意のロジックが実行できるようになる機能です。
+この機能によって、BigQueryのクエリでは表現しづらかったことも表現しやすくなります。
 
 ## UDFはすぐに試せる
 UDFを用いたクエリの実行は、以下のようにBigQueryのWebUIからすぐに試すことができます。

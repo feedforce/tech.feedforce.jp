@@ -1,6 +1,6 @@
 ---
 title: BigQueryで待望のUDF(user-defined function)がリリースされたので早速試してみた
-date: 2015-08-26 04:35 JST
+date: 2015-08-26 11:20 JST
 authors: yukiyan
 tags: BigQuery
 ---

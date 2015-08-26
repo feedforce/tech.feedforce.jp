@@ -2,7 +2,7 @@
 title: RubyでBigQuery始めました
 date: 2015-06-01 14:30 JST
 authors: yukiyan
-tags: operation
+tags: operation,BigQuery
 ---
 
 ![BigQuery logo](/images/2015/06/bigquery_logo.jpg)

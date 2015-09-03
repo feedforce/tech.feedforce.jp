@@ -1002,31 +1002,20 @@ ul.page-member
     .foot-menu
       padding: 1.6em 0
     .wrapper
+      display: table
       width: 650px
       margin: 0 auto
-      overflow: hidden
-      position: relative
       > div
-        //float: left;
-        margin-right: 20px
+        display: table-cell
+        & + div
+          padding-left: 20px
         h2
           font-size: 0.95rem
           margin-bottom: 6px
         &#widget_text
-          float: left
           width: 200px
         &#widget_recent_entries
-          margin-left: 230px
-          margin-right: 120px
-        &#popular-posts
-          margin-left: 230px
-          margin-right: 120px
-        &#widget_categories
-          position: absolute
-          top: 0
-          right: 0
-          float: right
-          margin-right: 0
+          width: 300px
         ul
           li
             padding-bottom: 6px
@@ -1221,15 +1210,9 @@ ul.page-member
   footer
     .wrapper
       width: 760px
-      div
-        margin-right: 30px
+      > div
         &#widget_recent_entries
-          //width:280px;
-        &#popular-posts
-          //width:280px;
-        &#widget_categories
-          margin-right: 0
-      //div
+          width: 410px
     //wrapper
     .copy
       ul

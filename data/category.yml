@@ -14,3 +14,5 @@
   ja: "AWS"
 - en: "BigQuery"
   ja: "BigQuery"
+- en: "terraform"
+  ja: "Terraform"

@@ -25,8 +25,6 @@ tags: aws, infrastructure, operation
 様々メリットを書きましたが、エクスポート機能が一番便利かもしれません。
 
 ## 実際に使ってみる
-DNSレコードの管理にroadworkerというツールを使ってみたいと思います。
-
 ### 準備
 #### roadworkerを導入する
 roadworkderはgemなので、Rubyがあれば`$ gem install roadworker`で導入できます。

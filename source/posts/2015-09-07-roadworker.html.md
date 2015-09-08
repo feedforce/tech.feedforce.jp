@@ -60,8 +60,6 @@ $ bundle exec roadwork -e --split
 追加したいhosted_zoneにレコードを追加します。
 
 ```
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
 hosted_zone "example.jp." do
   rrset "example.jp.", "A" do
     ttl 300

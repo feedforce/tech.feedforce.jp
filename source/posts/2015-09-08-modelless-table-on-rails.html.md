@@ -118,7 +118,7 @@ ActiveRecord::Base.connection.quote_column_name('column_name')
 
 モデルが存在する場合は `ModelClass.column_for_attribute(column_name)` で取得できるのですが、なにせ今回はモデルを作っていません。
 
-モデルを作りたくなる気持ちを無視して、まずはカラムの情報を取得します。
+モデルを作りたいような気持ちが湧き上がってきますが、それには気付かない振りをして、まずはカラムの情報を取得します。
 
 ```
 ActiveRecord::Base.connection.columns(table_name)

@@ -155,15 +155,15 @@ update_result.cmd_tuples #=> 2
 
 ## 行数の多い CSV のデータを DB に投入したい
 
-PostgreSQL には CSV のデータをテーブルに投入するための方法が、いくつか用意されています。
+### COPY 〜 FROM 〜 WITH csv
 
-例えば、PostgreSQL が動いているサーバ上に CSV が配置できるのであれば COPY にファイルパスを渡すことで、データ投入が可能です。
-残念ながら、この方法は RDS の場合にはできません。
+PostgreSQL の COPY コマンドは CSV のパスや標準入力などを受け取って、指定のテーブルにデータをコピーします。
 
-メタコマンドの `\copy` であればリモートの CSV も渡せるのですが、その場合 pg gem ではメタコマンドを使用できませんので、 pg を経由せずに直接 psql を操作しないといけません。
+ただし COPY コマンドはサーバ上で実行されるので、サーバ上からアクセス可能な場所に CSV を置かないといけません。
+そのため、例えば AWS を使っていて EC2 にある CSV ファイルの中身を RDS に投入したい、という時には使えません。
 
-`COPY` に標準入力を渡す SQL を書くことも可能です。
-例えば対象の CSV を元に以下のような SQL ファイルを作って
+標準入力を渡す場合は EC2 の `psql` 経由で、データの投入が可能です。
+CSV を元に以下のような SQL ファイルを用意して、
 
 ```
 COPY table_name (column1, column2, column3) FROM stdin WITH csv;
@@ -178,33 +178,23 @@ data1,data2,data3
 $ psql -U username -h host --dbname database --file=/path/to/copy.sql
 ```
 
-ただし、この場合も `\copy` と同じく、直接 psql コマンドを操作する必要があります。
+### \copy
 
-Rails プロセスから、手軽に COPY を使いたい場合は [postgres-copy](https://github.com/diogob/postgres-copy) という gem を使うのが良さそうです。
+メタコマンド `\copy` も COPY コマンドのように、 CSV のパスや標準入力からデータをコピーします。
 
-pg gem にはもともと COPY を実行するメソッドがあり、 postgres-copy はそれを柔軟に扱えるようにラッピングしてくれています。
+`\copy` に CSV のパスを渡した場合、 psql がファイルの読み書きを実行してサーバに送信するので、例えば AWS を使っていて EC2 にある CSV ファイルの中身を RDS に投入したい、という時にも使えます。
 
 ```
-ModelName.copy_from '/path/to/copy.csv', tabel: table_name, columns: [column1, column2, column3]
+\copy table_name (column1, column2, column3) from '/path/to/copy.sql' with csv;
 ```
 
-詳細な使い方はこの記事では省きますが、モデルのテーブルにデータ投入するだけであれば、`copy_from` にCSVのパスだけ渡せば使えます。
-今回のケースでは動的にテーブルが作成されているため table や columns などのオプションを渡しています。
+### Rails から実行する
 
-postgres-copy を使う利点としては、
+pg gem ではメタコマンドが扱えないため、 Rails からは `\copy` を手軽に扱うことはできません。
+どうしても実行したい場合は、 Rails から `psql` コマンドを実行するようなことをする必要があります。
 
-* CSV 以外にも、複数のフォーマットのデータを扱える
-* テーブルスキーマと CSV データのマッピングを手軽に行える
-* CSV の内容に手を加えた上で投入できるようになっている
-
-辺りでしょうか。
-
-ただし postgres-copy が CSV の毎行処理を行っている分、(多少ではありますが) CPU 負荷もかかります。
-
-* ファイルのフォーマットがある程度決まっていて
-* 手を加える必要なくデータ投入できる
-
-ようなケースでは、直接 pg の copy_data を使っても手間はさほど変わりません。
+COPY コマンドの方は pg gem に COPY を実行する `#copy_data`, `#put_copy_data` というメソッドがあります。
+Rails からであれば、
 
 ```
 connection = ActiveRecord::Base.connection
@@ -217,9 +207,35 @@ end
 io.close
 ```
 
-pg の connection を使った場合でも、 `\copy` と比べて CPU 負荷はかかりますが、実行時間に違いは見られませんでした。
+これで実行できます。
 
-Rails プロセス内から実行するのであれば、扱いやすさを考えて copy_data を使い、投入したいデータによっては postgres-copy で楽をする、というのが良さそうです。
+[postgres-copy](https://github.com/diogob/postgres-copy) という `#copy_data` を手軽に扱える gem もあります。
+実は pg gem の `#copy_data` の使い方は、この gem のコードを読んで ~~パクリ~~ 勉強しました。
+
+postgres-copy の詳細な使い方はこの記事では省きますが、モデルのテーブルにデータ投入するだけであれば `ModelName.copy_from '/path/to/copy.csv'` だけでできるようになります。
+今回はモデルを持たないテーブルが対象ですが、その場合も
+
+```
+ModelName.copy_from '/path/to/copy.csv', tabel: table_name, columns: [column1, column2, column3]
+```
+
+のように table_name や columns をオプションで渡すことができます。
+
+postgres-copy を使う利点としては、
+
+* CSV 以外にも、複数のフォーマットのデータを扱える
+* テーブルスキーマと CSV データのマッピングを手軽に行える
+* CSV の内容に手を加えた上で実行できるようになっている
+
+辺りでしょうか。
+
+逆に、
+
+* CSV ファイルのフォーマットがある程度決まっていて
+* 手を加える必要なくデータ投入できる
+
+ようなケースでは、直接 pg の `#copy_data` を使っても良いかと思います。
+多少ながら、いくつかの処理を省ける分 postgres-copy を使うよりも CPU 負荷を少なくすることができます。
 
 ## おまけ: 動的に作ったテーブルが db/schema.rb に含まれて面倒
 

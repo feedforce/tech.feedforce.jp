@@ -33,8 +33,6 @@ tags: rails
 
 ## 動的にテーブルを作成したり削除したりしたい
 
-### テーブルの作成: create_table
-
 Rails だと、動的にテーブルを作るのは簡単で
 
 ```
@@ -44,49 +42,43 @@ end
 ```
 
 のように書けば、テーブルを作れてしまいます。
-
 見ての通り、この書き方はいつもの migration と同じです。
+
+動的にテーブル生成をしていると、テーブルが作成済みかどうかを判断したくなる時があります。
+その場合は `#table_exists?` が使えます。
+
+```
+ActiveRecord::Base.cnnection.table_exists?(table_name)
+```
+
+テーブルの削除は、もうお分かりかと思いますが `#drop_table` です。
+
+```
+ActiveRecord::Base.connection.drop_table(table_name)
+```
 
 例えば
 
 * Product というモデルがあって
 * name というユニークな attributes を持っている時に
 * Product インスタンス毎にテーブルを作成したい
+* すでにテーブルが存在している時はテーブル作成前に古いテーブルを削除しておきたい
 
-という場合、以下のように書きます。
+という場合、以下のように書けます。
 
 ```
 class Product < ActiveRecord::Base
   def create_temporary_table
-    ActiveRecord::Base.connection.create_table("temporary_#{name}") do |t|
+    connection = ActiveRecord::Base.connection
+    table_name = "temporary_#{name}"
+    connection.drop_table(table_name) if connection.table_exists?(table_name)
+    ActiveRecord::Base.connection.create_table(table_name) do |t|
       t.string :title
       t.string :description
     end
   end
 end
 ```
-
-これで `Production#create_temporary_table` を呼ぶと `CREATE TABLE` が発行されて、新しいテーブルが作成されます。
-
-### テーブルの存在確認: table_exists?
-
-作成済みかどうかを判断したい場合は `#table_exists?` が使えます。
-
-```
-ActiveRecord::Base.cnnection.table_exists?(table_name)
-```
-
-テーブルが存在しなかった場合のみ新規作成する、といったことができるようになりました。
-
-### テーブルの削除: drop_table
-
-テーブルの削除は、もうお分かりかと思いますが `#drop_table` が使えます。
-
-```
-ActiveRecord::Base.connection.drop_table(table_name)
-```
-
-ここまでで「古いテーブルが存在した場合は削除してから、新しいテーブルを作成する」にも対応可能です。
 
 ## 動的に作成したテーブルの操作
 

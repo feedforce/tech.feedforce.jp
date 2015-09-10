@@ -1,6 +1,6 @@
 ---
 title: roadworkerを使ってRoute53を管理する
-date: 2015-09-07 11:37 JST
+date: 2015-09-10 16:30 JST
 authors: tjinjin
 tags: aws, infrastructure, operation
 ---

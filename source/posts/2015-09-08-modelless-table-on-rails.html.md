@@ -190,7 +190,7 @@ $ psql -U username -h host --dbname database --file=/path/to/copy.sql
 ### Rails から実行する
 
 pg gem ではメタコマンドが扱えないため、 Rails からは `\copy` を手軽に扱うことはできません。
-どうしても実行したい場合は、 Rails から `psql` コマンドを実行するようなことをする必要があります。
+どうしてもメタコマンドを実行したい場合、 Rails から `psql` コマンドを実行する、といった手段が必要になります。
 
 COPY コマンドの方は pg gem に COPY を実行する `#copy_data`, `#put_copy_data` というメソッドがあります。
 Rails からであれば、

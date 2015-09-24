@@ -103,8 +103,7 @@ Object.const_set(model_name, klass)
 
 `ActiveRecord::Base` を継承した Class は `ActiveRecord::Base.subclasses` に追加されるため、何度も `Class.new` で `ActiveRecord::Base` を継承していると、メモリリークの原因になりかねません。
 なので `Class.new` しないように、 `Object.const_defined?(model_name)` で確認して定義済みの場合は `Class.new` せずに `Object.const_get(model_name)` する、といった工夫が必要です。
-
-この辺りは社内の知見にだいぶ助けられました。
+(この辺りは社内の知見にだいぶ助けられています)
 
 動的にカラムが変わる可能性がある場合には、Class インスタンスを使いまわしているとスキーマに追随できなくなってしまうため、テーブルを作り直すなどのタイミングで `klass.reset_column_information` を呼ぶ必要があります。
 

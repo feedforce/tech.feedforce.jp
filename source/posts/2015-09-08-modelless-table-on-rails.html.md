@@ -2,7 +2,7 @@
 title: Rails で動的にテーブルを作成して、大きな CSV のデータをインポートする方法
 date: 2015-09-08 20:52 JST
 authors: e-takano
-tags: rails
+tags: ruby
 ---
 
 こんにちは！ SQL 大好き kano-e です。

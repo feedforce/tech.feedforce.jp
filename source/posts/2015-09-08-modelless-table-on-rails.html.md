@@ -9,9 +9,10 @@ tags: rails
 
 「データ更新のたびに新規にテーブルを作って、そこにデータを投入したい」とか。
 「お客様毎にテーブルを分けたいが、お客様情報は DB に保存されていて、増減するので migration で作っておくことができない」とか。
+「とにかくこのCSVの内容を DB に投入したい、100万件」とか。
 こんな状況、意外と遭遇していませんか？
 
-この記事では、そんな時に多分役立つ「Railsで動的にテーブルを作成して、大きな CSV のデータをインポートする方法」について、思いつくままにまとめてみました。
+この記事では、そんな時に多分役立つ「Railsで動的にテーブルを作成して、大きな CSV のデータを PostgreSQL にインポートする方法」について、思いつくままにまとめてみました。
 合わせて読みたい「動的に作成したテーブルを db/schema.rb に含めない方法」のおまけ付きです。
 
 
@@ -26,18 +27,19 @@ tags: rails
 * サイズの大きい CSV のデータを DB (PostgreSQL) に投入する
 * (おまけ) db/schema.rb に特定のテーブルを含めない方法
 
-Rails と PostgreSQL を使っていることが前提の記事なっていますので、ご注意くださいませ。
+全体的に Rails(ActiveRecord) と PostgreSQL を使っていることが前提の内容ですので、ご注意くださいませ。
+
 動作確認環境は以下の通りです。
 
 * Ruby 2.2.3
 * Rails 4.2.4
-* PostgreSQL 9.4.0
+* PostgreSQL 9.3.5
 
 ## 動的にテーブルを作成したり削除したりしたい
 
-マイグレーションが書けるなら、動的なテーブル操作はとても簡単です。
+動的なテーブル操作はとても簡単です。
 
-テーブルを作成したい場合は `#create_table`
+テーブルを作成したい場合は `#create_table` で
 
 ```
 ActiveRecord::Base.connection.create_table(table_name) do |t|
@@ -45,7 +47,9 @@ ActiveRecord::Base.connection.create_table(table_name) do |t|
 end
 ```
 
-テーブルの削除は、もちろん `#drop_table`
+マイグレーションと同じです。
+
+テーブルの削除は、もちろん `#drop_table` です。
 
 ```
 ActiveRecord::Base.connection.drop_table(table_name)
@@ -57,14 +61,14 @@ create や drop を繰り返していると「今現在テーブルが存在す�
 ActiveRecord::Base.cnnection.table_exists?(table_name)
 ```
 
-これで、例えば
+例えば
 
 * Product というモデルがあって
 * name というユニークな attributes を持っている時に
 * Product インスタンス毎にテーブルを作成したい
 * すでにテーブルが存在している時はテーブル作成前に古いテーブルを削除しておきたい
 
-のような要望に対応できるようになりました。
+という場合には、
 
 ```
 class Product < ActiveRecord::Base
@@ -79,6 +83,8 @@ class Product < ActiveRecord::Base
   end
 end
 ```
+
+このように書けます。
 
 ## 動的に作成したテーブルの操作
 
@@ -95,8 +101,10 @@ end
 Object.const_set(model_name, klass)
 ```
 
-何度も `Class.new` するのは効率が悪いので、あらかじめ `Object.const_get(model_name)` で確認し、何度も同じクラスを作らないようにした方が良いです。
-でないと、無駄に Class インスタンスが生成され続けてしまいます。
+`ActiveRecord::Base` を継承した Class は `ActiveRecord::Base.subclasses` に追加されるため、何度も `Class.new` で `ActiveRecord::Base` を継承していると、メモリリークの原因になりかねません。
+なので `Class.new` しないように、 `Object.const_defined?(model_name)` で確認して定義済みの場合は `Class.new` せずに `Object.const_get(model_name)` する、といった工夫が必要です。
+
+この辺りは社内の知見にだいぶ助けられました。
 
 動的にカラムが変わる可能性がある場合には、Class インスタンスを使いまわしているとスキーマに追随できなくなってしまうため、テーブルを作り直すなどのタイミングで `klass.reset_column_information` を呼ぶ必要があります。
 
@@ -116,15 +124,15 @@ ActiveRecord::Base.connection.quote_column_name('column_name')
 
 カラムに入れる値のクオートは、カラム情報が必要になるため、もう一手間かかります。
 
-このカラム情報、モデルが存在する場合は `ModelClass.column_for_attribute(column_name)` で取得できるのですが、なにせ今回はモデルを作っていません。
-モデルを作りたいような気持ちが湧き上がってきますが、目をつぶって、まずはカラム情報を取得します。
+モデルが存在する場合は `ModelClass.column_for_attribute(column_name)` でカラム情報を取得できますが、なにせ今回はモデルを作っていません。
+なんだかモデルを作りたいような気持ちが湧き上がってきますが、目をつぶって、まずはカラム情報を取得します。
 
 ```
 ActiveRecord::Base.connection.columns(table_name)
 ```
 
-これで対象テーブルのカラム情報が Array で返ってきます。
-Array の中から値を投入するカラムを見付け(`#name` が使えます)、それをクオートしたい値とともに `#quote` に渡します。
+これで対象テーブルのカラム情報が配列で返ってきます。
+配列の中から値を投入するカラムを見付け(`#name` が使えます)、それをクオートしたい値とともに `#quote` に渡します。
 
 ```
 columns = ActiveRecord::Base.connection.columns(table_name)
@@ -158,7 +166,7 @@ update_result.cmd_tuples #=> 2
 
 PostgreSQL の COPY コマンドは CSV のパスや標準入力などを受け取って、指定のテーブルにデータをコピーします。
 
-ただし、 CSV のパスを指定する場合、postgres サーバが直接 CSV を読み込むため postgres サーバからアクセス可能な場所に CSV を置かないといけません。
+CSV のパスを指定する場合、postgres サーバが直接 CSV を読み込むため postgres サーバからアクセス可能な場所に CSV を置かないといけません。
 そのため、 AWS を使っていて EC2 にある CSV ファイルの中身を RDS に投入したい、という時には使えません。
 
 標準入力を渡す場合は EC2 インスタンスからでも `psql` 経由で、データの投入が可能です。
@@ -190,10 +198,10 @@ $ psql -U username -h host --dbname database --file=/path/to/copy.sql
 ### Rails から実行する
 
 pg gem ではメタコマンドが扱えないため、 Rails からは `\copy` を手軽に扱うことはできません。
-どうしてもメタコマンドを実行したい場合、 Rails から `psql` コマンドを実行する、といった手段が必要になります。
+どうしてもメタコマンドを実行したい場合、 Rails から `psql` コマンドを実行する必要があります。
 
-COPY コマンドの方は pg gem に COPY を実行する `#copy_data`, `#put_copy_data` というメソッドがあります。
-Rails からであれば、
+一方 COPY コマンドですが、 pg gem には `#copy_data`, `#put_copy_data` という COPY コマンドを実行するためのメソッドがあります。
+なので Rails からは
 
 ```
 connection = ActiveRecord::Base.connection
@@ -235,7 +243,7 @@ postgres-copy を使う利点としては、
 * CSV ファイルのフォーマットがある程度決まっていて
 * 手を加える必要なくデータ投入できる
 
-ようなケースでは、直接 pg の `#copy_data` を使っても良いかと思います。
+といったケースでは、 postgres-copy の利点が活かせないため直接 pg の `#copy_data` を使っても良いかと思います。
 多少ながら、いくつかの処理を省ける分 postgres-copy を使うよりも CPU 負荷を少なくすることができます。
 
 ## おまけ: 動的に作ったテーブルが db/schema.rb に含まれて面倒
@@ -243,6 +251,7 @@ postgres-copy を使う利点としては、
 開発環境で動的なテーブル生成を試していると db/schema.rb に無駄な差分ができてしまい、面倒で悲しい気分になることがあります。
 
 そういう時は `ActiveRecord::SchemaDumper.ignore_tables` を設定することで、特定のテーブルを schema に含まないようにできます。
+(会社の Slack で困ってると呟いたら教えてもらいました！)
 
 複数指定可、正規表現での指定可なので、動的にテーブル名が変わるような場合でも、 prefix や suffix を決めておくことで、以下のように指定できます。
 

@@ -41,7 +41,7 @@ tags: ruby
 
 テーブルを作成したい場合は `#create_table` で
 
-```
+```ruby
 ActiveRecord::Base.connection.create_table(table_name) do |t|
   t.string :code   t.string :name
 end
@@ -51,13 +51,13 @@ end
 
 テーブルの削除は、もちろん `#drop_table` です。
 
-```
+```ruby
 ActiveRecord::Base.connection.drop_table(table_name)
 ```
 
 create や drop を繰り返していると「今現在テーブルが存在するか？」を確認したくなると思いますが、その場合には `#table_exists?` が使えます。
 
-```
+```ruby
 ActiveRecord::Base.cnnection.table_exists?(table_name)
 ```
 
@@ -70,7 +70,7 @@ ActiveRecord::Base.cnnection.table_exists?(table_name)
 
 という場合には、
 
-```
+```ruby
 class Product < ActiveRecord::Base
   def create_temporary_table
     connection = ActiveRecord::Base.connection
@@ -94,7 +94,7 @@ end
 
 テーブル名が固定できないのであれば、モデルも動的に定義することになります。
 
-```
+```ruby
 klass = Class.new(ActiveRecord::Base) do |c|
   c.table_name = table_name
 end
@@ -114,7 +114,7 @@ Object.const_set(model_name, klass)
 SQL 組み立て時に、埋め込む値を適宜クオートするために `#quote_table_name` と `#quote_column_name` が使えます。
 (クオートしなくても動くことは多いですが、クオートする方が安心ですよね)
 
-```
+```ruby
 ActiveRecord::Base.connection.quote_table_name('table_name')
 ActiveRecord::Base.connection.quote_column_name('column_name')
 ```
@@ -126,14 +126,14 @@ ActiveRecord::Base.connection.quote_column_name('column_name')
 モデルが存在する場合は `ModelClass.column_for_attribute(column_name)` でカラム情報を取得できますが、なにせ今回はモデルを作っていません。
 なんだかモデルを作りたいような気持ちが湧き上がってきますが、目をつぶって、まずはカラム情報を取得します。
 
-```
+```ruby
 ActiveRecord::Base.connection.columns(table_name)
 ```
 
 これで対象テーブルのカラム情報が配列で返ってきます。
 配列の中から値を投入するカラムを見付け (`#name` が使えます)、それをクオートしたい値とともに `#quote` に渡します。
 
-```
+```ruby
 columns = ActiveRecord::Base.connection.columns(table_name)
 column = columns.find{|c| c.name == column_name }
 ActiveRecord::Base.connection.quote(value, column)
@@ -141,7 +141,7 @@ ActiveRecord::Base.connection.quote(value, column)
 
 それらを利用して SQL を組み立て `ActiveRecord::Base.connection.execute` に渡せば SQL の結果が返ってきます。
 
-```
+```ruby
 connection = ActiveRecord::Base.connection
 
 count_sql = "SELECT COUNT(*) AS #{connection.quote_column_name('count')} FROM #{connection.quote_table_name(table_name)}"
@@ -202,7 +202,7 @@ pg gem ではメタコマンドが扱えないため、 Rails からは `\copy` 
 一方 COPY コマンドですが、 pg gem には `#copy_data`, `#put_copy_data` という COPY コマンドを実行するためのメソッドがあります。
 なので Rails からは
 
-```
+```ruby
 connection = ActiveRecord::Base.connection
 io = File.open('/path/to/copy.csv')
 connection.raw_connection.copy_data 'COPY table_name (column1, column2, column3) FROM stdin WITH csv' do
@@ -222,7 +222,7 @@ io.close
 そんな便利な postgres-copy の詳細な使い方はこの記事では省きますが、モデルのテーブルにデータ投入するだけであれば `ModelName.copy_from '/path/to/copy.csv'` だけでできるようになります。
 今回はモデルを持たないテーブルが対象ですが、その場合も
 
-```
+```ruby
 ModelName.copy_from '/path/to/copy.csv', tabel: table_name, columns: [column1, column2, column3]
 ```
 
@@ -253,7 +253,7 @@ postgres-copy を使う利点としては、
 
 複数指定可、正規表現での指定可なので、動的にテーブル名が変わるような場合でも、prefix や suffix を決めておくことで、以下のように指定できます。
 
-```
+```ruby
 # config/environments/development.rb
 
 Rails.application.configure do

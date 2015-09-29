@@ -5,14 +5,14 @@ authors: e-takano
 tags: ruby
 ---
 
-こんにちは！ SQL 大好き kano-e です。
+こんにちは！SQL 大好き kano-e です。
 
 「データ更新のたびに新規にテーブルを作って、そこにデータを投入したい」とか。
 「お客様毎にテーブルを分けたいが、その情報は DB に保存されていて増減するので migration で作っておくことができない」とか。
-「とにかくこのCSVの内容を DB に投入したい、10万件」とか。
+「とにかくこの CSV の内容を DB に投入したい、10万件」とか。
 こんな状況、意外と遭遇していませんか？
 
-この記事では、そんな時に多分役立つ「Railsで動的にテーブルを作成して、大きな CSV のデータを PostgreSQL にインポートする方法」について、思いつくままにまとめてみました。
+この記事では、そんな時に多分役立つ「Rails で動的にテーブルを作成して、大きな CSV のデータを PostgreSQL にインポートする方法」について、思いつくままにまとめてみました。
 合わせて読みたい「動的に作成したテーブルを db/schema.rb に含めない方法」のおまけ付きです。
 
 
@@ -27,7 +27,7 @@ tags: ruby
 * サイズの大きい CSV のデータを DB (PostgreSQL) に投入する
 * (おまけ) db/schema.rb に特定のテーブルを含めない方法
 
-全体的に Rails(ActiveRecord) と PostgreSQL を使っていることが前提の内容ですので、ご注意くださいませ。
+全体的に Rails (ActiveRecord) と PostgreSQL を使っていることが前提の内容ですので、ご注意くださいませ。
 
 動作確認環境は以下の通りです。
 
@@ -131,7 +131,7 @@ ActiveRecord::Base.connection.columns(table_name)
 ```
 
 これで対象テーブルのカラム情報が配列で返ってきます。
-配列の中から値を投入するカラムを見付け(`#name` が使えます)、それをクオートしたい値とともに `#quote` に渡します。
+配列の中から値を投入するカラムを見付け (`#name` が使えます)、それをクオートしたい値とともに `#quote` に渡します。
 
 ```
 columns = ActiveRecord::Base.connection.columns(table_name)
@@ -251,7 +251,7 @@ postgres-copy を使う利点としては、
 そういう時は `ActiveRecord::SchemaDumper.ignore_tables` を設定することで、特定のテーブルを schema に含まないようにできます。
 (会社の Slack で困ってると呟いたら教えてもらいました！)
 
-複数指定可、正規表現での指定可なので、動的にテーブル名が変わるような場合でも、 prefix や suffix を決めておくことで、以下のように指定できます。
+複数指定可、正規表現での指定可なので、動的にテーブル名が変わるような場合でも、prefix や suffix を決めておくことで、以下のように指定できます。
 
 ```
 # config/environments/development.rb

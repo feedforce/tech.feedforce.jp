@@ -63,10 +63,8 @@ ActiveRecord::Base.cnnection.table_exists?(table_name)
 
 例えば
 
-* Product というモデルがあって
-* name というユニークな attributes を持っている時に
-* Product インスタンス毎にテーブルを作成したい
-* すでにテーブルが存在している時はテーブル作成前に古いテーブルを削除しておきたい
+* Product インスタンス毎に `"temporary_#{name}"` という名前のテーブルを作成したい
+* すでにテーブルが存在している時は、テーブル作成前に古いテーブルを削除しておきたい
 
 という場合には、
 

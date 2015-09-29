@@ -207,6 +207,18 @@
     - label: Blog
       url: http://yukiyan.com/
 #--------------------------------------------
+- id: otofu_square
+  name: otofu_square
+  thumbnail: 
+  profile: "2016年卒内定者エンジニア。<br>
+            音楽大好き、ギター大好き。<br>
+            Steamでゲームを買っては積み重ねる日々を送っています…。"
+  media:
+    - label: GitHub
+      url: https://github.com/otofu-square
+    - label: Qiita
+      url: http://qiita.com/otofu_square
+#--------------------------------------------
 # エンジニアが追記する場合はここより上に挿入してください
 # 以下、ゲスト
 #--------------------------------------------

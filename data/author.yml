@@ -45,9 +45,9 @@
 - id: e-takano
   name: kano-e
   thumbnail: kano-e.png
-  profile: "お気に入りのレビュー依頼ぬいぐるみはラスカル。<br>
-            休日は、こどもとScratchやったり、プレーパークで焚き火したり。<br>
-            最近smalrubyが気になってる。"
+  profile: "SQL大好きでMapper属性持ち。<br>
+            お酒とボドゲで生きてる。<br>
+            好きな言葉は一期一会。"
   media:
     - label: Qiita
       url: http://qiita.com/kano-e

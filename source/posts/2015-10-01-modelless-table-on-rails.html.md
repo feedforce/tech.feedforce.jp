@@ -68,7 +68,7 @@ ActiveRecord::Base.cnnection.table_exists?(table_name)
 ```ruby
 connection = ActiveRecord::Base.connection
 product = Product.first
-table_name = "temporary_#{name}"
+table_name = "temporary_#{product.name}"
 
 connection.create_table(table_name) do |t|
   t.string :title

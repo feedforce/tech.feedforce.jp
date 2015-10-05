@@ -61,28 +61,44 @@ create や drop を繰り返していると「今現在テーブルが存在す�
 ActiveRecord::Base.cnnection.table_exists?(table_name)
 ```
 
-例えば
+例えば。
 
-* Product インスタンス毎に `"temporary_#{name}"` という名前のテーブルを作成したい
-* すでにテーブルが存在している時は、テーブル作成前に古いテーブルを削除しておきたい
-
-という場合には、
+「`Product#name` をテーブル名に使ってテーブルを作成し処理が終わったらテーブルを削除したい！」という時は
 
 ```ruby
-class Product < ActiveRecord::Base
-  def create_temporary_table
-    connection = ActiveRecord::Base.connection
-    table_name = "temporary_#{name}"
-    connection.drop_table(table_name) if connection.table_exists?(table_name)
-    ActiveRecord::Base.connection.create_table(table_name) do |t|
-      t.string :title
-      t.string :description
-    end
+connection = ActiveRecord::Base.connection
+product = Product.take
+table_name = "temporary_#{product.name}"
+
+connection.create_table(table_name) do |t|
+  t.string :title
+  t.string :description
+end
+
+connection.execute(...)
+
+connection.drop_table(table_name)
+```
+
+「テーブルが存在しない時だけ、テーブルを作成したい！」場合なら
+
+```ruby
+unless connection.table_exists?(table_name)
+  connection.create_table(table_name) do |t|
+    t.string :title
+    t.string :description
   end
 end
 ```
 
-このように書けます。
+ちなみに、これは社内で教えてもらったのですが、「テーブル作成前に既存のテーブルがあれば削除したい！」だけであれば、`#table_exists?` を使わなくても `#create_table` の force オプションが使えます。
+
+```ruby
+connection.create_table(table_name, force: true) do |t|
+  t.string :title
+  t.string :description
+end
+```
 
 ## 動的に作成したテーブルの操作
 

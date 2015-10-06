@@ -10,13 +10,13 @@ tags: ruby
 そこで今回は、弊社が利用するSlack上で動くruboty ボット『feedくん』と、そのボットに登録されたジョブをまとめて編集する方法についてご紹介します。
 <!--more-->
 
-## 背景
+## feedくんとは
 
 弊社では社内SNSとしてSlackを利用しており、その中にfeedくんというBOTが住んでいます。
 
 ![Slack上に住んでいる弊社マスコットキャラクター「feedくん」](/images/2015/09/feedkun.png)
 
-Slack上のfeedくんは[ruboty](https://github.com/r7kamura/ruboty)というチャットボットフレームワークで実装されheroku上で動作しており、[ruboty-cron](https://github.com/r7kamura/ruboty-cron)というプラグインを利用して必要に応じてジョブを登録して発言してもらっています。以前ruboty-cronのアップデートが入った際に、登録してあるジョブのフォーマットを全て変更する必要がありました。変更に当たってSlack上からfeedくんに登録されているジョブの一覧を参照したのですが、どのチャンネルで登録されたジョブか分からず、ジョブの再登録に当たっては結局登録した人の記憶頼りとなってしまいました。今回はそのような場合に、登録したジョブを取得してまとめて編集する方法をご紹介します。
+Slack上のfeedくんは[ruboty](https://github.com/r7kamura/ruboty)というチャットボットフレームワークで実装されheroku上で動作しており、[ruboty-cron](https://github.com/r7kamura/ruboty-cron)というプラグインを利用して必要に応じてジョブを登録して発言してもらっています。
 
 ## feedくんの生活環境（動作環境）
 
@@ -34,6 +34,9 @@ Slack上のfeedくんは[ruboty](https://github.com/r7kamura/ruboty)というチ
 
 [redis](http://redis.io)は、キーバリューモデルを採用するNoSQLとして有名です。メモリ上にデータを展開するので、読み書きが高速であるという特徴があります。[Redis To Go](http://redistogo.com)は、redisサーバーをクラウドから利用することができるサービスです。heorku上で[アドオン](https://addons.heroku.com/redistogo#nano)が提供されており、アプリケーションに対して簡単にredisを組み込むことができます。redisは、feedくんに登録したジョブを永続的に保持するために利用しています。
 
+## 背景
+
+以前ruboty-cronのアップデートが入った際に、登録してあるジョブのフォーマットを全て変更する必要がありました。変更に当たってSlack上からfeedくんに登録されているジョブの一覧を参照したのですが、どのチャンネルで登録されたジョブか分からず、ジョブの再登録に当たっては結局登録した人の記憶頼りとなってしまいました。今回はそのような場合に、登録したジョブを取得してまとめて編集する方法をご紹介します。
 
 ## feedくんの脳みそを解剖する（ジョブの取得）
 

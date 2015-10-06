@@ -29,7 +29,7 @@ Slack上のfeedくんは[ruboty](https://github.com/r7kamura/ruboty)というチ
 
 ### Heroku
 
-[Heroku](https://www.heroku.com/home)は、Webアプリケーションの開発から公開までを非常にスムーズに行うことができるプラットフォームを提供するクラウドサービスです。インフラには[AWS](http://aws.amazon.com/jp/), バージョン管理には[Git](http://git-scm.com)が使用されています。なんといっても寛大な無料枠があるのが特徴で、[1日18時間の利用制限](https://blog.heroku.com/archives/2015/5/7/heroku-free-dynos)などの制限はあるものの、無料で利用することができます。課金によってスペックを柔軟に変更することもできるので、スケーラビリティの点から見ても優れています。feedくんはherokuにデプロイされて動作しています。
+[Heroku](https://www.heroku.com/home)は、Webアプリケーションの開発から公開までを非常にスムーズに行うことができるプラットフォームを提供するクラウドサービスです。インフラには[AWS](http://aws.amazon.com/jp/)、バージョン管理には[Git](http://git-scm.com)が使用されています。なんといっても寛大な無料枠があるのが特徴で、[1日18時間の利用制限](https://blog.heroku.com/archives/2015/5/7/heroku-free-dynos)などの制限はあるものの、無料で利用することができます。課金によってスペックを柔軟に変更することもできるので、スケーラビリティの点から見ても優れています。feedくんはherokuにデプロイされて動作しています。
 
 ### redis(Redis To Go)
 
@@ -150,7 +150,7 @@ feedくんの脳みそから無事ジョブデータを取得することがで�
 どのボットに対してジョブを登録したか
 
 - *type*
-ジョブの登録先がチャンネルの場合は`groupchat`, ダイレクトメッセージの場合は`chat`
+ジョブの登録先がチャンネルの場合は`groupchat`、ダイレクトメッセージの場合は`chat`
 
 - *id*
 ジョブID（上記例だと0001や0002のこと）

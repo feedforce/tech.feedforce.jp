@@ -15,7 +15,7 @@ tags: ruby
 
 弊社では社内SNSとしてSlackを利用しており、その中にfeedくんというボットが住んでいます。
 
-![Slack上に住んでいる弊社マスコットキャラクター「feedくん」](/images/2015/09/feedkun.png)
+<img style="display: block; margin-left: auto; margin-right:auto;" src="/images/2015/09/feedkun.png" alt="Slack上に住んでいる弊社マスコットキャラクター「feedくん」"/>
 
 Slack上のfeedくんは[ruboty](https://github.com/r7kamura/ruboty)というチャットボットフレームワークで実装されheroku上で動作しており、[ruboty-cron](https://github.com/r7kamura/ruboty-cron)というプラグインを利用して必要に応じてジョブを登録して発言してもらっています。
 

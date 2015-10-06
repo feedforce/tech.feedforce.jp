@@ -13,7 +13,7 @@ tags: ruby
 
 ## feedくんとは
 
-弊社では社内SNSとしてSlackを利用しており、その中にfeedくんというボットが住んでいます。
+弊社では社内のコミュニケーションツールとしてSlackを利用しており、その中にfeedくんというボットが住んでいます。
 
 <img style="display: block; margin-left: auto; margin-right:auto;" src="/images/2015/09/feedkun.png" alt="Slack上に住んでいる弊社マスコットキャラクター「feedくん」"/>
 

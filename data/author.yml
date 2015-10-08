@@ -4,7 +4,8 @@
 # id: Markdown内で使う`authors`と同じ内容を設定
 # name: サイト上で表示する名前
 # thumbnail: サイト上で表示する画像Path。
-#           `/images/authors/`の下に格納してください。
+#           `/source/images/authors/`の下に格納してください。
+#           サイズは 100x100 が好ましいです。
 # profile: サイト上で表示する自己紹介内容
 # media: 各SNSとかその他の類。
 #--------------------------------------------

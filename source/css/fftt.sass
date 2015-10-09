@@ -612,45 +612,11 @@ footer
     &#newer-link
       float: right
 
-// entry bottom banner
-.entry-bnr
-  border-top: solid 4px #ebebeb
-  padding-top: 12px
-  padding-bottom: 30px
-
-  &__title
-    color: #414141
-    font-size: 1.4em
-    font-weight: bold
-    letter-spacing: 1px
-
-    + .entry-bnr__images
-      margin-top: 20px
-
-  &__images
-    @extend %clearfix
-    li
-      width: 49.5%
-      float: left
-
-      + li
-        margin-left: 1%
-
-      @media screen and (min-width: 0px) and (max-width: 765px)
-        width: 100%
-        float: none
-
-        + li
-          margin-top: 1%
-          margin-left: 0
-
-
-  &__image
-    width: 100%
-    height: auto
-    display: block
-
-
+#single-entry-bnr
+  padding-top: 5px
+  margin-bottom: 20px
+  img
+    max-width: 100%
 
 /* pages
 .entry-page

@@ -85,10 +85,10 @@ irb(main):002:0> pp ENV
 
 ```ruby
 require 'redis'
-redis = Redis.new(:url => )
+redis = Redis.new(url: ENV['REDISTOGO_URL'])
 ```
 
-`:url`には、先ほどの`ENV['REDISTOGO_URL']`を代入します。上のスクリプトを実行するとredisというインスタンスが生成されます。このインスタンスを通して、redisに対して様々な操作を行うことができます。
+上のスクリプトを実行するとredisというインスタンスが生成されます。このインスタンスを通して、redisに対して様々な操作を行うことができます。
 
 ### データを取得する
 

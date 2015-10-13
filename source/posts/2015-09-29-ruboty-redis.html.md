@@ -13,11 +13,14 @@ tags: ruby
 
 ## feedくんとは
 
-弊社では社内のコミュニケーションツールとしてSlackを利用しており、その中にfeedくんというボットが住んでいます。
+feedくんは、feedforceの公式ゆるキャラ（？）で、[弊社ホームページ](https://www.feedforce.jp)上でも所々に出てきては見ている人の心を和ませてくれる憎めないヤツです。
+弊社では社内のコミュニケーションツールとしてSlackを利用しており、その中にfeedくんがボットとして住んでいます。
 
 <img style="display: block; margin-left: auto; margin-right:auto;" src="/images/2015/09/feedkun.png" alt="Slack上に住んでいる弊社マスコットキャラクター「feedくん」"/>
 
 Slack上のfeedくんは[ruboty](https://github.com/r7kamura/ruboty)というチャットボットフレームワークで実装されheroku上で動作しており、[ruboty-cron](https://github.com/r7kamura/ruboty-cron)というプラグインを利用して必要に応じてジョブを登録して発言してもらっています。
+その他にも、話しかけるとその内容に応じた画像を返してくれたり、雑談に付き合ってくれたりもします。
+最近では、弊社の[技術書管理](https://github.com/rike422/ruboty-can_i_borrow)にもfeedくんを使ってみよう…！という動きもあるようです。
 
 ## feedくんの生活環境（動作環境）
 

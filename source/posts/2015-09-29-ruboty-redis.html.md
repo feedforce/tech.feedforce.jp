@@ -18,7 +18,7 @@ feedくんは、feedforceの公式ゆるキャラ（？）で、[弊社ホーム
 
 <img style="display: block; margin-left: auto; margin-right:auto;" src="/images/2015/09/feedkun.png" alt="Slack上に住んでいる弊社マスコットキャラクター「feedくん」"/>
 
-Slack上のfeedくんは[ruboty](https://github.com/r7kamura/ruboty)というチャットボットフレームワークで実装されheroku上で動作しており、[ruboty-cron](https://github.com/r7kamura/ruboty-cron)というプラグインを利用して必要に応じてジョブを登録して発言してもらっています。
+Slack上のfeedくんは[ruboty](https://github.com/r7kamura/ruboty)というチャットボットフレームワークで実装されHeroku上で動作しており、[ruboty-cron](https://github.com/r7kamura/ruboty-cron)というプラグインを利用して必要に応じてジョブを登録して発言してもらっています。
 その他にも、話しかけるとその内容に応じた画像を返してくれたり、雑談に付き合ってくれたりもします。
 最近では、弊社の[技術書管理](https://github.com/rike422/ruboty-can_i_borrow)にもfeedくんを使ってみよう…！という動きもあるようです。
 
@@ -32,11 +32,11 @@ Slack上のfeedくんは[ruboty](https://github.com/r7kamura/ruboty)というチ
 
 ### Heroku
 
-[Heroku](https://www.heroku.com/home)は、Webアプリケーションの開発から公開までを非常にスムーズに行うことができるプラットフォームを提供するクラウドサービスです。インフラには[AWS](http://aws.amazon.com/jp/)、バージョン管理には[Git](http://git-scm.com)が使用されています。なんといっても寛大な無料枠があるのが特徴で、[1日18時間の利用制限](https://blog.heroku.com/archives/2015/5/7/heroku-free-dynos)などの制限はあるものの、無料で利用することができます。課金によってスペックを柔軟に変更することもできるので、スケーラビリティの点から見ても優れています。feedくんはherokuにデプロイされて動作しています。
+[Heroku](https://www.heroku.com/home)は、Webアプリケーションの開発から公開までを非常にスムーズに行うことができるプラットフォームを提供するクラウドサービスです。インフラには[AWS](http://aws.amazon.com/jp/)、バージョン管理には[Git](http://git-scm.com)が使用されています。なんといっても寛大な無料枠があるのが特徴で、[1日18時間の利用制限](https://blog.heroku.com/archives/2015/5/7/heroku-free-dynos)などの制限はあるものの、無料で利用することができます。課金によってスペックを柔軟に変更することもできるので、スケーラビリティの点から見ても優れています。feedくんはHerokuにデプロイされて動作しています。
 
 ### redis(Redis To Go)
 
-[redis](http://redis.io)は、キーバリューモデルを採用するNoSQLとして有名です。メモリ上にデータを展開するので、読み書きが高速であるという特徴があります。[Redis To Go](http://redistogo.com)は、redisサーバーをクラウドから利用することができるサービスです。heroku上で[アドオン](https://addons.heroku.com/redistogo#nano)が提供されており、アプリケーションに対して簡単にredisを組み込むことができます。redisは、feedくんに登録したジョブを永続的に保持するために利用しています。
+[redis](http://redis.io)は、キーバリューモデルを採用するNoSQLとして有名です。メモリ上にデータを展開するので、読み書きが高速であるという特徴があります。[Redis To Go](http://redistogo.com)は、redisサーバーをクラウドから利用することができるサービスです。Heroku上で[アドオン](https://addons.heroku.com/redistogo#nano)が提供されており、アプリケーションに対して簡単にredisを組み込むことができます。redisは、feedくんに登録したジョブを永続的に保持するために利用しています。
 
 ## 「ジョブをまとめて編集する」ことが必要になった背景
 
@@ -46,16 +46,16 @@ Slack上のfeedくんは[ruboty](https://github.com/r7kamura/ruboty)というチ
 
 それでは実際に、feedくんの脳みそ（Redis To Go）から登録されているジョブを取り出してみましょう。弊社では開発言語としてrubyが使われることが多いので、今回紹介するスクリプトでもrubyを使用しています。
 
-### アクセス情報をherokuから取得する
+### アクセス情報をHerokuから取得する
 
-まずrubotyをデプロイしているherokuにアクセスして、Redis To Goのアクセス情報を取得します。アクセス情報はheroku上の環境変数に保存されているので、ターミナルからherokuにアクセスして環境変数を参照します。ターミナルからherokuを操作するには[Heroku Toolbelt](https://toolbelt.heroku.com)のインストールが必要なのでご注意ください。それでは実際にherokuにログインして、herokuのコンソールを立ち上げてみましょう。
+まずrubotyをデプロイしているHerokuにアクセスして、Redis To Goのアクセス情報を取得します。アクセス情報はHeroku上の環境変数に保存されているので、ターミナルからHerokuにアクセスして環境変数を参照します。ターミナルからHerokuを操作するには[Heroku Toolbelt](https://toolbelt.heroku.com)のインストールが必要なのでご注意ください。それでは実際にHerokuにログインして、Herokuのコンソールを立ち上げてみましょう。
 
 ```
 $ heroku login
 $ heroku run console --app アプリ名
 ```
 
-コマンドを実行すると、次のような表示になります。デフォルトではheroku上でirbが立ち上がるようになっています。
+コマンドを実行すると、次のような表示になります。デフォルトではHeroku上でirbが立ち上がるようになっています。
 
 ```
 Running console on アプリ名... up, run.xxxx
@@ -81,7 +81,7 @@ irb(main):002:0> pp ENV
 
 ### Redis To Goにアクセスする
 
-それではherokuのコンソール上でrubyを使ってredisにアクセスしてみましょう！今回はredisに簡単にアクセスするために、[redis-rb](https://github.com/redis/redis-rb)というgemを使います。
+それではHerokuのコンソール上でrubyを使ってredisにアクセスしてみましょう！今回はredisに簡単にアクセスするために、[redis-rb](https://github.com/redis/redis-rb)というgemを使います。
 
 ```ruby
 require 'redis'

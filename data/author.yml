@@ -35,13 +35,13 @@
 #------------------------------------------
 - id: r-suzuki
   name: r-suzuki
-  thumbnail: r-suzuki.png
-  profile: "チームマネージャー。<br>
-            3度のメシ並みにチームビルディングやファシリテーションが好き。<br>
-            レフトウィングおじさん。"
+  thumbnail: r-suzuki.jpg
+  profile: "CTO(最高技術責任者)<br>
+            趣味はサクソフォン(高校から)と和太鼓(2014年から)の演奏<br>
+            2児の父"
   media:
-    - label: Twitter
-      url: https://twitter.com/hapicky
+    - label: Contact
+      url: http://www.hapicky.com/
 #------------------------------------------
 - id: e-takano
   name: kano-e

@@ -21,7 +21,7 @@ feedくんは、feedforceの公式ゆるキャラ（？）で、[弊社ホーム
 
 feedくんは[ruboty](https://github.com/r7kamura/ruboty)というチャットボットフレームワークで実装されHeroku上で動作しており、[ruboty-cron](https://github.com/r7kamura/ruboty-cron)というプラグインを利用して必要に応じてジョブを登録して発言してもらっています。
 その他にも、画像を検索してくれたり、雑談に付き合ってくれたりもします。
-最近では、弊社の技術書管理に[ruboty-can\_i_borrow](https://github.com/rike422/ruboty-can_i_borrow)を使ってみよう…！という動きもあるようです。
+最近では、技術書管理に[ruboty-can\_i_borrow](https://github.com/rike422/ruboty-can_i_borrow)を使ってみよう…！という動きもあるようです。
 また、弊社エンジニアの[kano-e](author/e-takano)さんが以前実装した、[東京ドームのイベントをお知らせしてくれるセバスチャン](sebastian.html)の機能もfeedくんに移植されています。
 
 ## feedくんの生活環境（動作環境）

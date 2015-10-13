@@ -36,7 +36,7 @@ Slack上のfeedくんは[ruboty](https://github.com/r7kamura/ruboty)というチ
 
 ### redis(Redis To Go)
 
-[redis](http://redis.io)は、キーバリューモデルを採用するNoSQLとして有名です。メモリ上にデータを展開するので、読み書きが高速であるという特徴があります。[Redis To Go](http://redistogo.com)は、redisサーバーをクラウドから利用することができるサービスです。heorku上で[アドオン](https://addons.heroku.com/redistogo#nano)が提供されており、アプリケーションに対して簡単にredisを組み込むことができます。redisは、feedくんに登録したジョブを永続的に保持するために利用しています。
+[redis](http://redis.io)は、キーバリューモデルを採用するNoSQLとして有名です。メモリ上にデータを展開するので、読み書きが高速であるという特徴があります。[Redis To Go](http://redistogo.com)は、redisサーバーをクラウドから利用することができるサービスです。heroku上で[アドオン](https://addons.heroku.com/redistogo#nano)が提供されており、アプリケーションに対して簡単にredisを組み込むことができます。redisは、feedくんに登録したジョブを永続的に保持するために利用しています。
 
 ## 「ジョブをまとめて編集する」ことが必要になった背景
 

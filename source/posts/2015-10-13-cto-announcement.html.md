@@ -2,7 +2,7 @@
 title: マネージャー改め、CTOと名乗ることにしました
 date: 2015-10-13 12:26 JST
 authors: r-suzuki
-tags:
+tags: announcement
 ---
 
 「技術チーム マネージャー」と名乗ってきた鈴木です。

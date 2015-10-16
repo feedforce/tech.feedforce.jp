@@ -1,6 +1,6 @@
 ---
 title: マネージャー改め、CTOと名乗ることにしました
-date: 2015-10-13 12:26 JST
+date: 2015-10-16 12:00 JST
 authors: r-suzuki
 tags: announcement
 ---

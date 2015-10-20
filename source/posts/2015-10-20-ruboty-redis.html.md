@@ -1,6 +1,6 @@
 ---
 title: Slack上のrubotyに登録したジョブを編集する
-date: 2015-09-29 17:18 JST
+date: 2015-10-20 11:00 JST
 authors: otofu_square
 tags: ruby
 ---

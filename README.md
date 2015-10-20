@@ -58,13 +58,4 @@ Edit `data/author.yml`
 
 ## Automatic `$ bundle update`
 
-A pull request regularly opens by http://tachikoma.io/
-
-But CircleCI doesn't run at that time. Because the origin of the pull request is from a forked repository.
-
-You can manually run CircleCI. For example of #55,
-
-    $ git remote add -f tachikoma git@github.com:tachikomapocket/feedforce-_-tech.feedforce.jp.git
-    $ git checkout -t tachikoma/tachikoma/update-20150205021418
-    $ git push origin tachikoma/update-20150205021418
-    # => CircleCI starts to run.
+Automatically update by https://www.deppbot.com which the account is [@masutaka](https://github.com/masutaka).

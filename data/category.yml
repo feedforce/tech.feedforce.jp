@@ -1,5 +1,5 @@
 - en: "ruby"
-  ja: "Ruby"
+  ja: "Ruby/Rails"
 - en: "infrastructure"
   ja: "インフラ"
 - en: "resume"
@@ -16,3 +16,5 @@
   ja: "BigQuery"
 - en: "terraform"
   ja: "Terraform"
+- en: "announcement"
+  ja: "お知らせ"

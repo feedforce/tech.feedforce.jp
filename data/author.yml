@@ -4,7 +4,8 @@
 # id: Markdown内で使う`authors`と同じ内容を設定
 # name: サイト上で表示する名前
 # thumbnail: サイト上で表示する画像Path。
-#           `/images/authors/`の下に格納してください。
+#           `/source/images/authors/`の下に格納してください。
+#           サイズは 100x100 が好ましいです。
 # profile: サイト上で表示する自己紹介内容
 # media: 各SNSとかその他の類。
 #--------------------------------------------
@@ -34,20 +35,20 @@
 #------------------------------------------
 - id: r-suzuki
   name: r-suzuki
-  thumbnail: r-suzuki.png
-  profile: "チームマネージャー。<br>
-            3度のメシ並みにチームビルディングやファシリテーションが好き。<br>
-            レフトウィングおじさん。"
+  thumbnail: r-suzuki.jpg
+  profile: "CTO(最高技術責任者)<br>
+            趣味はサクソフォン(高校から)と和太鼓(2014年から)の演奏<br>
+            2児の父"
   media:
-    - label: Twitter
-      url: https://twitter.com/hapicky
+    - label: Contact
+      url: http://www.hapicky.com/
 #------------------------------------------
 - id: e-takano
   name: kano-e
   thumbnail: kano-e.png
-  profile: "お気に入りのレビュー依頼ぬいぐるみはラスカル。<br>
-            休日は、こどもとScratchやったり、プレーパークで焚き火したり。<br>
-            最近smalrubyが気になってる。"
+  profile: "SQL大好きでMapper属性持ち。<br>
+            お酒とボドゲで生きてる。<br>
+            好きな言葉は一期一会。"
   media:
     - label: Qiita
       url: http://qiita.com/kano-e

@@ -1,6 +1,6 @@
 ---
 title: CTO 就任にあわせて『リーダーズインテグレーション』を実施してみました！
-date: 2015-10-20 00:00 JST
+date: 2015-10-21 15:00 JST
 authors: inoue
 tags: dev_style
 ---

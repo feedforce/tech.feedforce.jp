@@ -11,8 +11,6 @@ gem 'middleman-deploy', '~> 1.0.0'
 gem 'middleman-syntax', '~> 2.0.0'
 gem 'redcarpet', '~> 3.2.1'
 
-gem 'middleman-google-analytics'
-
 # For feed.xml.builder
 gem 'builder', '~> 3.0'
 

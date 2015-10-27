@@ -155,15 +155,6 @@ activate :syntax
 set :markdown, tables: true, autolink: true, gh_blockcode: true, fenced_code_blocks: true, hard_wrap: true, footnotes: true
 set :markdown_engine, :redcarpet
 
-
-###
-# Google Analytics
-###
-activate :google_analytics do |ga|
-  ga.tracking_id = 'UA-50937-9'
-  ga.minify = true
-end
-
 ##
 # middleman-deploy settings
 ##

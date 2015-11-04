@@ -29,6 +29,12 @@ tags: selinux, logrotate
 - selinuxの設定方法を知りたい人
 - もうselinuxをdisableするのはいやだ！という人
 
+selinuxは以下の環境で動かしました
+
+- centos7.1
+- libselinux 2.2.2
+- selinux-policy 3.13.1
+
 私自身、selinuxについての理解はまだまだ浅いので、間違った記述があれば教えていただけるとたいへん嬉しいです。
 
 **注** : 本文中に記載されるログやアプリのディレクトリのパス等は、本記事用にvmで再現したものです。

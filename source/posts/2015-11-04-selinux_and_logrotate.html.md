@@ -273,6 +273,13 @@ testapp_logrotate       1.1
 この後、動作確認のたび新たに足りない権限が発生したのでそのたびに調整が必要でした。
 はじめから[ObjectClassesPerms](http://selinuxproject.org/page/ObjectClassesPerms)を見て必要そうな権限を追加しておくのが良いと思います。
 
+## 参考リンク
+
+- [Security-Enhanced Linux](https://access.redhat.com/documentation/ja-JP/Red_Hat_Enterprise_Linux/6/html/Security-Enhanced_Linux/index.html)
+	- 日本語だしselinux全体についてまとめてあり参考になりました
+- [SELinux Project Wiki](http://selinuxproject.org/)
+	- 公式のwiki
+
 ## まとめ
 
 いかがでしょうか。思ったより長い記事になりましたが、selinuxのログの見方からselnuxの概要、具体的な設定の方法までを紹介しました。

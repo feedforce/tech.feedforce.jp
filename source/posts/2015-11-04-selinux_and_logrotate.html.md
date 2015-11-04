@@ -18,7 +18,7 @@ tags: selinux, logrotate
 
 この記事では、以下のことについて書いてあります。
 
-- logrotateが失敗している事に気づいた経緯
+- selinuxが原因でlogrotateが失敗している事に気づいた経緯
 - selinuxを設定するにあたって必要な前提知識、用語
 - selinuxの設定方法
 

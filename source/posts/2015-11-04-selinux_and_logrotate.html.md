@@ -2,7 +2,7 @@
 title: selinuxでlogrotateが失敗した話
 date: 2015-11-04 13:52 JST
 authors: lorentzca
-tags: selinux, logrotate
+tags: infrastructure, operation
 ---
 
 こんにちは！先日赤城山に登りましたが、山の上は既に紅葉が終わっていました。lorentzcaです。

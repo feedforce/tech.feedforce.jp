@@ -29,7 +29,7 @@ tags: infrastructure, operation
 - SELinuxの設定方法を知りたい人
 - もうSELinuxをdisableするのはいやだ！という人
 
-SELinuxは以下の環境で動かしました
+SELinuxは以下の環境で動かしました。
 
 - centos7.1
 - libselinux 2.2.2

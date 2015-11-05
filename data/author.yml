@@ -91,16 +91,16 @@
       url: https://github.com/mgi166
 #------------------------------------------
 - id: kunishima
-  name: kunishima
-  thumbnail: kunishima.jpg
-  profile: "†深淵のリア充†<br>
-            好きな川は荒川です<br>
-            最近お気に入りのツールはAlfred"
+  name: lorentzca
+  thumbnail: lorentzca.jpg
+  profile: "アウトドア全般好きです<br>
+            洋酒大好き日本酒初心者<br>
+            リストバンドタイプのウェアラブルデバイスで己を観察しています"
   media:
     - label: GitHub
       url: https://github.com/Lorentzca
     - label: Blog
-      url: http://lorentzca.blogspot.jp/
+      url: https://ghost.ponpokopon.me/
 #------------------------------------------
 - id: tmd45
   name: tmd45

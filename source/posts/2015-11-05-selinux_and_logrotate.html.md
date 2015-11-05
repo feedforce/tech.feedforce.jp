@@ -1,6 +1,6 @@
 ---
 title: SELinuxでlogrotateが失敗した話
-date: 2015-11-04 13:52 JST
+date: 2015-11-05 12:32 JST
 authors: kunishima
 tags: infrastructure, operation
 ---

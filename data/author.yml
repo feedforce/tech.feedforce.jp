@@ -154,10 +154,12 @@
             ボードゲーム、将棋が趣味<br>
             好きなボードゲームはあやつり人形"
   media:
+    - label: About-Me
+      url: http://task-blog.net/About-Me/
     - label: GitHub
       url: https://github.com/TasukuNakano
-    - label: Qiita
-      url: http://qiita.com/TasukuNakano
+    - label: Twitter
+      url: https://twitter.com/task1010243
 #------------------------------------------
 - id: dkimura
   name: dkimura

@@ -150,14 +150,16 @@
 - id: t-nakano
   name: t-nakano
   thumbnail: t-nakano.png
-  profile: "見た目30歳の新卒1年目エンジニア<br>
-            ヨット、将棋が趣味<br>
-            サブライマーです"
+  profile: "頭を使う遊びが好き<br>
+            ボードゲーム、将棋が趣味<br>
+            好きなボードゲームはあやつり人形"
   media:
+    - label: About-Me
+      url: http://task-blog.net/About-Me/
     - label: GitHub
       url: https://github.com/TasukuNakano
-    - label: Qiita
-      url: http://qiita.com/TasukuNakano
+    - label: Twitter
+      url: https://twitter.com/task1010243
 #------------------------------------------
 - id: dkimura
   name: dkimura

@@ -1,6 +1,6 @@
 ---
 title: advent-calendar-2015
-date: 2015-11-30 17:49 JST
+date: 2015-12-01 12:00 JST
 authors:
 tags:
 ---

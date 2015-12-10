@@ -35,7 +35,7 @@ Advent Calendar のネタはなにかないかなあと考えていたら、私�
 
 ## KyotoTycoon
 
-[KyotoTycoon](http://fallabs.com/kyototycoon/) は memcached 互換のキーバリューストアです。でも、Rails4 で必要なバイナリプロトコルを完全にサポートしていません。
+[KyotoTycoon](http://fallabs.com/kyototycoon/) は Memcached 互換のキーバリューストアです。でも、Rails4 で必要なバイナリプロトコルを完全にサポートしていません。
 
 Rails4 へのアップデートの前に代替サービスに乗り換える必要がありました。
 
@@ -85,7 +85,7 @@ GitHub にリリースすることで、Chef のレシピからインストー�
 
 ## Facebook Graph API v1.0
 
-2014/4/30 の [F8](https://www.fbf8.com/) で Graph API v2.0 が発表され、v1.0 は今年の 4/30 に消滅しました。
+2014/4/30 の [F8 2014](https://www.fbf8.com/) で Graph API v2.0 が発表され、v1.0 は今年の 4/30 に消滅しました。
 
 我らがソーシャルPLUSは当然 Facebook ログインをサポートしているため、v1.0 に関わる処理や機能を削除することが出来ました。
 
@@ -115,7 +115,7 @@ Qiita:Team の記事を探してみたら、意外にたくさんありました
 
 現段階で作業中のタスクはこんなのがあります。
 
-* Redmine にある API マニュアル
+* Redmine にある API ドキュメント
      * GitHub に移植中
 * アラートメール
      * [Bugsnag](https://bugsnag.com/) に移行中

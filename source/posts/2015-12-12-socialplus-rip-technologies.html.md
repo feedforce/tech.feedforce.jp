@@ -5,7 +5,7 @@ authors: masutaka
 tags: operation, ruby, aws
 ---
 この記事は[フィードフォースエンジニア Advent Calendar](http://www.adventar.org/calendars/906) 12日目の記事です。
-11 日目は [meihong](http://www.adventar.org/users/9675) の海外ヴァカンスの話（TODO: あとでアップデートする）でした。
+11 日目は [meihong](http://www.adventar.org/users/9675) の『[Facebook Global Partner Summit に行ってきた](http://damelog.com/sns/facebook/facebook-global-partner-summit/)』でした。
 
 こんにちは。先週美容院デビュー<del>に失敗</del>した増田です。
 日々イケメソに近づいております。怖いです。

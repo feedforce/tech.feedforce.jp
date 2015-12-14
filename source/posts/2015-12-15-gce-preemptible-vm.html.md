@@ -1,6 +1,6 @@
 ---
 title: GCE の preemptible VM で、インフラの CI を回し始めました
-date: 2015-12-15 00:00 JST
+date: 2015-12-15 10:00 JST
 authors: inoue
 tags: infrastructure
 ---
@@ -56,7 +56,7 @@ tags: infrastructure
 ## GCE preemptible VM でインフラの CI を行うための設定作業
 ### 1. vagrant plugin である "vagrant-google" をインストールする
 
-vagrant を活用します。理由はいくつかあって、vagrant を使っていれば、建てたインスタンスの特定やアクセスがラクだったり、 `$ vagrant ssh-config` で config 情報を書き出せたり、とか。これは GCE だから、というわけではなく、AWS でのインフラ CI をやっていたときもこの方法で実施していました。今回もそれに倣うことにします。
+vagrant を活用します。理由はいくつかあって、vagrant を使っていれば、立てたインスタンスの特定やアクセスがラクだったり、 `$ vagrant ssh-config` で config 情報を書き出せたり、とか。これは GCE だから、というわけではなく、AWS でのインフラ CI をやっていたときもこの方法で実施していました。今回もそれに倣うことにします。
 
 
 
@@ -104,6 +104,19 @@ API を有効にするのは、Google Developers Console の API Manager から�
 
 
 ↑わかりにくいですが、「編集」ボタンから鍵の登録を行うことができます。
+
+
+この設定をしておくことで、起動した GCE インスタンスに対して下記のようなことが自動で行われるようになります。
+
+
+* 対応するユーザーの作成
+* 登録しておいた公開鍵の authorized_keys への追加
+* /etc/sudoers に `<ユーザー名> ALL=NOPASSWD: ALL` の行の追加
+
+
+ここで頭の片隅に置いておきたいことは、**メタデータの登録をして立てたインスタンスの authorized_keys や /etc/sudoers は、プラットフォーム側で適宜管理されている**、ということです。
+例えば、authorized_keys の公開鍵の行をコメントアウトしたり、/etc/sudoers から `<ユーザー名> ALL=NOPASSWD: ALL` の行を削除したりしても、**ある程度の時間が経つとそれらが元に戻る**ようになっています。
+なので、authorized\_keys や /etc/sudoers を書き換えるような Chef recipe を書いている場合・書き換え後のファイルの内容を比較するような serverspec を書いているような場合は、この点に注意する必要があります。
 
 
 ### 7. Vagrantfile を作成する
@@ -255,12 +268,6 @@ test:
 CI のプロセスの中で起動した GCE インスタンスの ssh-config の情報を `ci-vm` というホスト名で書き出しています。これにより、以降のステップでは `ci-vm` の名前でアクセスできるようになっています。（そのため、chef レシピリポジトリ内 nodes ディレクトリで管理する対象 node に `ci-vm` に対応する node を追加しておくことも、予め必要になります。）
 
 
-#### `vagrant ssh gcp -c "sudo gpasswd -a circleci wheel"`
-この行が少々トリッキーなのですが、まず前提として、**「GCE メタデータの機能として、メタデータに登録したユーザーについて、sudoers に自動で `<username> ALL=NOPASSWD: ALL` が足される」**ということを押さえておく必要があります。
-つまり、 `cook` で sudoers を書き換えるような変更を加えた場合、それ以降そのユーザーで sudo ができなくなってしまいます。（sudo できないと、serverspec が通りません...泣）
-今回、私達のケースではまさにそれが起きたため、sudoers が書き換えられても circleci ユーザーが sudo できるように、この一行を cook （ bootstrap ）直後であるここに追加しています。
-
-
 #### `bundle exec rake spec:ci`
 CI が立てた GCE インスタンスに対して、serverspec を実行するステップです。対応する rake task はあらかじめ定義しておいて下さい。
 
@@ -276,5 +283,5 @@ Vagrantfile や circle.yml など、ここまでの作業であれこれ変更�
 手順としては以上となります。少々煩雑になってしまいましたが、いかがでしたでしょうか。
 実際にやってみると、それほど大変ではないと思います。現在既に chef recipe での構成管理や serverspec でのインフラのテストなどを行っているのであれば、なおさらかと思います。
 
-みなさんの職場での GCP 利用例の最初の一例として、**GCE preemptible VM の CI 利用**、いかがでしょうか！
+みなさんの職場での GCP 利用例の最初の一例として、**GCE preemptible VM の CI 利用**、いかがでしょうか！٩( 'ω' )و
 

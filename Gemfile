@@ -17,6 +17,9 @@ gem 'builder', '~> 3.0'
 # for Heroku
 gem 'puma', '~> 2.11.3'
 
+# for https://github.com/feedforce/tech.feedforce.jp/pull/156
+gem 'sass', '3.4.19'
+
 # Debug Tool
 # gem 'pry'
 # gem 'pry-doc'

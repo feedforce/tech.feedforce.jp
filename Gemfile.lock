@@ -160,6 +160,7 @@ DEPENDENCIES
   middleman-syntax (~> 2.0.0)
   puma (~> 2.11.3)
   redcarpet (~> 3.2.1)
+  sass (= 3.4.19)
 
 BUNDLED WITH
    1.10.6

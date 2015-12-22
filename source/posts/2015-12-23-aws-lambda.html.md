@@ -78,7 +78,7 @@ AWS-SDKを使ってLambdaのコードから簡単にデータの登録、取得�
 
 今回のボット作りは以下の流れで行いました。
 
-- 1. ボットをnode.jsで実装
+- 1. ボットをNode.jsで実装
 - 2. SlackのOutgoing Webhocksの設定
 - 3. API Gatewayの設定
 - 4. Lambdaの設定

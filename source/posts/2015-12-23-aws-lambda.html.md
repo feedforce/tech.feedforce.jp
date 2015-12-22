@@ -20,7 +20,7 @@ tags: aws
 
 ## やりたいこと
 
-SlackのOutgoing Webhoockを使ってAPI（API Gateway + Lambda）を叩いて、登録したLGTM画像のURLを呼び出せるボットを作ります。
+SlackのOutgoing Webhooksを使ってAPI（API Gateway + Lambda）を叩いて、登録したLGTM画像のURLを呼び出せるボットを作ります。
 画像のURLは今回実装するAPIを通してAWSで提供されているDynamoDBに保存します。
 呼び出しの際はDynamoDBに保存した値を取得してSlack側に返します。
 
@@ -79,7 +79,7 @@ AWS-SDKを使ってLambdaのコードから簡単にデータの登録、取得�
 今回のボット作りは以下の流れで行いました。
 
 1. ボットをNode.jsで実装
-2. SlackのOutgoing Webhoockの設定
+2. SlackのOutgoing Webhooksの設定
 3. API Gatewayの設定
 4. Lambdaの設定
 
@@ -200,11 +200,11 @@ lgtm: show test
 
 ### 2. Slack
 
-#### Outgoing Webhoockの設定
+#### Outgoing Webhooksの設定
 
-Slack上の任意のPublicチャンネルに `Outgoing Webhoock` というインテグレーションを設定することで、チャンネル内の特定の発言をトリガにして外部APIを叩くことができます。
+Slack上の任意のPublicチャンネルに `Outgoing Webhooks` というインテグレーションを設定することで、チャンネル内の特定の発言をトリガにして外部APIを叩くことができます。
 
-Outgoing Webhoockを設定すると、設定で指定したAPIに対してSlack側からContent-Typeが`application/x-www-form-urlencoded（フォーム送信データ）`のデータが送信されます。
+Outgoing Webhooksを設定すると、設定で指定したAPIに対してSlack側からContent-Typeが`application/x-www-form-urlencoded（フォーム送信データ）`のデータが送信されます。
 送られてくるパラメータは以下の通りとなります。
 
 ```
@@ -222,7 +222,7 @@ trigger_word=トリガワード
 
 今回はSlack側から受け取った`text`データをLambda側で分析して、その`text`データに応じた処理をするよう実装しました。
 
-参考: [Slack API - Outgoing Webhoock](https://api.slack.com/outgoing-webhooks)
+参考: [Slack API - Outgoing Webhooks](https://api.slack.com/outgoing-webhooks)
 
 ### 3. API Gateway
 
@@ -283,7 +283,7 @@ Lambdaの管理画面の操作や設定に関しては下記の公式ガイド�
 ### デバッグについて
 
 Slack, API Gateway, Lambda, DynamoDBといった複数のサービスを横断するような実装だったので、バグが発生してうまく動かない際の原因の切り分けで少しつまづきました。
-SlackのOutgoing Webhoockにはログの機能はなく、API Gatewayにもデフォルトではログの機能がありませんでした。（後日調べると設定を加えることでログを管理する機能がありました…:bow:）
+SlackのOutgoing Webhooksにはログの機能はなく、API Gatewayにもデフォルトではログの機能がありませんでした。（後日調べると設定を加えることでログを管理する機能がありました…:bow:）
 そのため、そもそもOutgoing
 今回は段階的に次のように確認することで
 

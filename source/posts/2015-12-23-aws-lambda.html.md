@@ -12,7 +12,7 @@ tags: aws
 
 ## 目的
 
-昨今、サーバーレスアーキテクチャと呼ばれる技術分野が注目されており、それを実現する基盤としてAmazon Web Service（以下AWS）のLambdaが注目されています。
+昨今、サーバーレスアーキテクチャと呼ばれる技術分野が注目されており、それを実現する基盤としてAmazon Web Services（以下AWS）のLambdaが注目されています。
 今年10月にAWSが提供するAPI GatewayがTokyoリージョンでも使用が可能になり、API GatewayとLambdaを組み合わせたアプリケーションの開発がより手軽に行えるようになりました。
 
 そんな中、弊社ではまだAPI Gateway, Lambdaを採用したサービスやノウハウがありませんでした。

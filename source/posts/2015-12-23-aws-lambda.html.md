@@ -1,6 +1,6 @@
 ---
 title: API Gateway + LambdaでSlackボットを作ってみた
-date: 2015-12-23 0:00 JST
+date: 2015-12-22 19:00 JST
 authors: otofu_square
 tags: aws
 ---

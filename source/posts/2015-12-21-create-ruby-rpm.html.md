@@ -15,10 +15,10 @@ tags: operation
 弊社内ではこれまでRubyのrpmパッケージがリリースされるたびに有志が、手動でパッケージを作成してGitHubのreleaseページに公開するという運用をしておりました。慣れればなんてことはないのですが、初めて行う場合は若干面倒だなという感じる作業でした。フローに起こすと下記のようになります。
 
 * Rubyのリリース後、Vagrantを使ってVMを起動する
-* "rpmのビルドに"必要なファイルを修正して、Vagrantでコマンドを実行する
+* rpmのビルドに必要なファイルを修正して、Vagrantでコマンドを実行する
 * ひたすら待つ
-* 出来た"rpm"を適当な場所に保存しておく。
-* "rpmを使用する予定の"OSの分だけ繰り返す。"弊社だとCentOS6と7"
+* 出来たrpmを適当な場所に保存しておく
+* rpmを使用する予定のOSの分だけ繰り返す。弊社だとCentOS6と7
 * 作成できたら、GitHub releaseページにアップロード・タグ付け・descriptionの修正を行う
 * 最後に修正したコードをコミットする（順番は前後するかもしれません）
 
@@ -27,6 +27,8 @@ tags: operation
 
 * Rubyのリリース後、2ファイルのみ修正してPRを作成する
 * PR確認後、問題なければマージすると自動で公開される
+
+参考までにPRの作成方法が書いてあるREADMEとreleaseページのリンク貼って置きますね。
 
     [README.md](https://github.com/feedforce/ruby-rpm/blob/master/README.md)
     [Releases](https://github.com/feedforce/ruby-rpm/releases)

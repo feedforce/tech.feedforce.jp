@@ -28,6 +28,9 @@ tags: operation
 * Rubyのリリース後、2ファイルのみ修正してPRを作成する
 * PR確認後、問題なければマージすると自動で公開される
 
+    [README.md](https://github.com/feedforce/ruby-rpm/blob/master/README.md)
+    [Releases](https://github.com/feedforce/ruby-rpm/releases)
+
 手順としてもかなり簡単になったのではないでしょうか。簡単に概要だけ説明します。
 
 ## rpm自動公開までの道のり

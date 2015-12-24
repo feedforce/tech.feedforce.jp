@@ -103,5 +103,5 @@ fi
 
 ## 参考
 * [feedforce/ruby-rpm](https://github.com/feedforce/ruby-rpm)
-* [CircleCIを使ってbuildしたパッケージを自動でgithub releaseに公開する - とある元SEの学習日記](http://cross-black777.hatenablog.com/entry/2015/11/12/223645))]
-* [rubyのRPMを作るのをDockerとCircleCIにやらせたら便利だった - critical alertのブログ](http://critical-alert.hatenablog.com/entry/2015/12/04/095601))]
+* [CircleCIを使ってbuildしたパッケージを自動でgithub releaseに公開する - とある元SEの学習日記](http://cross-black777.hatenablog.com/entry/2015/11/12/223645)
+* [rubyのRPMを作るのをDockerとCircleCIにやらせたら便利だった - critical alertのブログ](http://critical-alert.hatenablog.com/entry/2015/12/04/095601)

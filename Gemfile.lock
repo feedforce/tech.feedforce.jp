@@ -87,7 +87,7 @@ GEM
       middleman-core (>= 3.2)
       net-sftp
       ptools
-    middleman-livereload (3.4.3)
+    middleman-livereload (3.4.5)
       em-websocket (~> 0.5.1)
       middleman-core (>= 3.3)
       rack-livereload (~> 0.3.15)

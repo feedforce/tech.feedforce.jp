@@ -7,23 +7,24 @@ tags: operation
 
 皆様いかがお過ごしでしょうか。tjinjinです。もう師走となり、なんだかしみじみする季節ですね。
 
-今日は弊社内で利用しているRubyのrpmパッケージ作成を自動化しましたのでご紹介します！
+本日はRubyのrpmパッケージ作成を自動化しましたのでご紹介します！
 
 <!--more-->
 
 ## As Is
-弊社内ではこれまでRubyのrpmパッケージがリリースされるたびに有志が、手動でパッケージを作成してGitHubのreleaseページに公開するという運用をしておりました。慣れればなんてことはないのですが、初めてやる場合は若干面倒だなという感じる作業でした。
-フローに起こすと下記のようになります
+弊社内ではこれまでRubyのrpmパッケージがリリースされるたびに有志が、手動でパッケージを作成してGitHubのreleaseページに公開するという運用をしておりました。慣れればなんてことはないのですが、初めて行う場合は若干面倒だなという感じる作業でした。フローに起こすと下記のようになります。
 
 * Rubyのリリース後、Vagrantを使ってVMを起動する
-* 必要なファイルを修正してVagrantで手動でコマンドを実行する
+* "rpmのビルドに"必要なファイルを修正して、Vagrantでコマンドを実行する
 * ひたすら待つ
-* OSの分だけ繰り返す。
+* 出来た"rpm"を適当な場所に保存しておく。
+* "rpmを使用する予定の"OSの分だけ繰り返す。"弊社だとCentOS6と7"
 * 作成できたら、GitHub releaseページにアップロード・タグ付け・descriptionの修正を行う
 * 最後に修正したコードをコミットする（順番は前後するかもしれません）
 
 ## To Be
 今回の仕組み化によって下記のことをすればパッケージを自動公開できるようになりました。
+
 * Rubyのリリース後、2ファイルのみ修正してPRを作成する
 * PR確認後、問題なければマージすると自動で公開される
 
@@ -38,14 +39,21 @@ tags: operation
 詳細についてはリンク先を見ていただきたいところですが、CentOS6とCentOS7のdockerイメージを起動してその中でrpmbuildを利用してrpmパッケージを作成します。rpmbuildする際にrootユーザはあまりよろしくないという話もあるので、専用のユーザを作成してbuildさせるようにしています。
 
 ### Step2 GitHub releaseページに公開する
-こちらは私が個人ブログでベータ版の検証をしておりました。
+こちらは私が個人ブログで検証をしておりました。
 
 [CircleCIを使ってbuildしたパッケージを自動でgithub releaseに公開する - とある元SEの学習日記](http://cross-black777.hatenablog.com/entry/2015/11/12/223645)。
 
 公開時にrpmパッケージのhash値を提示したいということがあり（Chefで利用）descriptionも弄ることができる、`github-release`というツールを採用しています。
 
 ### Step3 CircleCIを利用して自動で作成・公開する
-docker内で作成したrpmパッケージは`docker volume`を使ってホストディレクトリに置いています。CircleCIにはbuildした成果物を置く`$CIRCLE_ARTIFACTS`という環境変数が用意されているので、そこを共有ディレクトリとしています。deploymentタスクにてそこに置かれたパッケージを`github-release`を利用して、releaseページに公開しています。
+docker内で作成したrpmパッケージは`docker volume`を使ってホストディレクトリに置いています。CircleCIにはbuildした成果物を置く`$CIRCLE_ARTIFACTS`という環境変数が用意されているので、下記のようにコンテナ起動時にsharedというディレクトリを`$CIRCLE_ARTIFACTS`をにmountさせています。
+
+```sh
+docker run -u rpmbuilder -v $CIRCLE_ARTIFACTS:/shared:rw $docker_image /bin/sh ./rubybuild.sh
+```
+
+
+作成された成果物をdeploymentタスクにて`github-release`を利用して、GitHubのreleaseページに公開しています。全体の流れは`circle.yml`をご覧いただければと思います。
 
 ```yml
 machine:
@@ -67,7 +75,7 @@ deployment:
       - ./github-release.sh
 ```
 
-ここで1点問題があり、`rpmbuidler`というユーザだとdocker volumeに書き込めずエラーになってしまうということがありました。こちらは`root`もしくはUIDが1000であるユーザしか書き込めないとの情報を掴みましたので、`rpmbuilder`のUIDを1000にすることで対応しました。
+ここで1点問題があり、`rpmbuidler`というユーザだと`docker volume`に書き込めずエラーになってしまうということがありました。こちらは`root`もしくはUIDが1000であるユーザしか書き込めないとの情報を掴みましたので、`rpmbuilder`のUIDを1000にすることで対応しました。
 
 
 ### Step4 冪等性を担保する

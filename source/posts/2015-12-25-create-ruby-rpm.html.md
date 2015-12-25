@@ -1,6 +1,6 @@
 ---
 title: フィードフォースではRubyのrpmをGitHubに自動リリースしています
-date: 2015-12-21 10:45 JST
+date: 2015-12-25 17:30 JST
 authors: tjinjin
 tags: operation, ruby
 ---

@@ -24,7 +24,7 @@ tags: operation, ruby
 
 上記について紹介した記事はこちらです！
 
-[Vagrantで簡単に作れる！！RubyやKyotoTycoonのrpmたち | feedforce Engineers' blog](http://tech.feedforce.jp/vagrant-rpm.html))]
+[Vagrantで簡単に作れる！！RubyやKyotoTycoonのrpmたち | feedforce Engineers' blog](http://tech.feedforce.jp/vagrant-rpm.html)
 
 ## To Be
 今回の仕組み化によって下記のことをすればパッケージを自動公開できるようになりました。

@@ -9,6 +9,9 @@ tags: operation, ruby
 
 本日はRubyのrpmパッケージ作成を自動化しましたのでご紹介します！
 
+ちなみにすでにRuby-2.3.0のrpmパッケージを作成しました！！！
+https://github.com/feedforce/ruby-rpm/releases/tag/2.3.0
+
 <!--more-->
 
 ## As Is

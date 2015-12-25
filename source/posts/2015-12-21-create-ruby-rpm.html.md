@@ -1,8 +1,8 @@
 ---
-title: Rubyのrpmをdocker + CircleCIでGitHubに自動リリースする
+title: フィードフォースではRubyのrpmをGitHubに自動リリースしています
 date: 2015-12-21 10:45 JST
 authors: tjinjin
-tags: operation
+tags: operation, ruby
 ---
 
 皆様いかがお過ごしでしょうか。tjinjinです。もう師走となり、なんだかしみじみする季節ですね。

@@ -30,7 +30,7 @@ tags: operation
 
 参考までにPRの作成方法が書いてあるREADMEとreleaseページのリンク貼って置きますね。
 
-* [README.md](https://github.com/feedforce/ruby-rpm/blob/master/README.md)
+* [README.md](https://github.com/feedforce/ruby-rpm/blob/b6dbdc8324c5890678f2532003b04267f417f96a/README.md)
 * [Releases](https://github.com/feedforce/ruby-rpm/releases)
 
 手順としてもかなり簡単になったのではないでしょうか。簡単に概要だけ説明します。

@@ -22,6 +22,10 @@ tags: operation
 * 作成できたら、GitHub releaseページにアップロード・タグ付け・descriptionの修正を行う
 * 最後に修正したコードをコミットする（順番は前後するかもしれません）
 
+上記について紹介した記事はこちらです！
+
+[Vagrantで簡単に作れる！！RubyやKyotoTycoonのrpmたち | feedforce Engineers' blog](http://tech.feedforce.jp/vagrant-rpm.html))]
+
 ## To Be
 今回の仕組み化によって下記のことをすればパッケージを自動公開できるようになりました。
 

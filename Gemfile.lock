@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.1.14)
+    activesupport (4.1.14.1)
       i18n (~> 0.6, >= 0.6.9)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
@@ -99,7 +99,7 @@ GEM
     middleman-syntax (2.0.0)
       middleman-core (~> 3.2)
       rouge (~> 1.0)
-    minitest (5.8.3)
+    minitest (5.8.4)
     multi_json (1.11.2)
     net-sftp (2.1.2)
       net-ssh (>= 2.6.5)

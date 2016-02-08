@@ -11,7 +11,7 @@ tags: operation, resume,
 
 さて、最近 stretcher + consul を [tjinjin](/author/tjinjin) に布教[^1]されて、実際のプロダクト導入に向けて、デモ用の環境で動かしています。
 
-* これまでのデプロイとの違い
+* これまでの (capistrano を使った) デプロイとの違い
 * stretcher や consul が何をしているか
 * 良い点と現状の課題
 

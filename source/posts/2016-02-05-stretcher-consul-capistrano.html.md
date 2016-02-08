@@ -22,17 +22,21 @@ tags: operation, resume,
 
 ## これまでの capistrano でのデプロイ
 
-これまでのプロダクトのデプロイは、以下のようなフローでした
+これまでの capistrano を使ったプロダクトのデプロイは、以下のようなフローでした
 
 ![:よくある capistrano のデプロイ](/images/2016/02/stretcher_consul_capistrano_012.jpg)
+
+`cap production deploy` などと実行するだけですので、普段はタスクの中身をそこまで意識することはありませんが、ざっくりとタスクの流れを追うと
 
 * アプリケーションサーバ (デプロイ対象サーバ) に SSH で接続
 * 各アプリケーションサーバからリポジトリに接続してコードを持ってくる
 * アプリケーションが動くために必要な処理 (`bundle install` など) を各アプリケーションサーバで実行
 
+といったことを実行しています。
+
 ## stretcher + consul + capistrano でのデプロイ
 
-stretcher + consul を導入して、デプロイのフローは以下のようになりました。
+capistrano に加えて stretcher + consul を導入し、デプロイのフローは以下のようになりました。
 
 ![:stretcher + consul + capistrano でのデプロイ](/images/2016/02/stretcher_consul_capistrano_035.jpg)
 

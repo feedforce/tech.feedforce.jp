@@ -116,7 +116,7 @@ capistrano の担当はそれ以外全部です。
 ということではないでしょうか。
 
 capistrano の deploy タスクは、基本的に app ロールに対して実行されるので `cap deploy` しても何も起こらなくなります。
-(プロダクトでは `cap deploy` で `stretcher:deploy` が実行されるようにしました)
+(少し不便だったので `cap deploy` で `stretcher:deploy` が実行されるようにしました)
 
 アプリケーションサーバに接続しないので、当然ながら unicorn や sidekiq などのプロセスの再起動も capistrano では実行しません。
 それらの処理は stretcher がデプロイ後に実行することとして manifest.yml に定義します。

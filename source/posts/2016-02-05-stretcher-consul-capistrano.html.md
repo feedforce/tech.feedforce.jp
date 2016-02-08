@@ -9,7 +9,7 @@ tags: operation, resume,
 [フィードフォース ボドゲ部](https://github.com/pepabo/capistrano-stretcher) の kano-e です。
 こないだ[『Last Night on Earth』というアメリカB級ゾンビ映画ゲーム(オリジナルサウンドトラック付き)で遊んで楽しかった](http://twilog.org/ff_boardgame/date-160203)のでまた遊びたい！
 
-さて、最近 stretcher + consul を [tjinjin](http://kano-e.dev:4567/author/tjinjin) に布教[^1]されて、実際にプロダクトに導入しました。
+さて、最近 stretcher + consul を [tjinjin](/author/tjinjin) に布教[^1]されて、実際のプロダクト導入に向けて、デモ用の環境で動かしています。
 
 * これまでのデプロイとの違い
 * stretcher や consul が何をしているか

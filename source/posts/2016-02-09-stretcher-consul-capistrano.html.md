@@ -1,6 +1,6 @@
 ---
 title: stretcher + consul + capistrano を使ったデプロイを導入しようと思います
-date: 2016-02-05 19:46 JST
+date: 2016-02-09 12:00 JST
 authors: e-takano
 tags: operation, resume,
 ---

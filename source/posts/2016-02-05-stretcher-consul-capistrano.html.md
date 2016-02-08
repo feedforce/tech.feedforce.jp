@@ -1,5 +1,5 @@
 ---
-title: stretcher-consul-capistrano (仮)
+title: stretcher + consul + capistrano を使ったデプロイを導入しようと思います
 date: 2016-02-05 19:46 JST
 authors: e-takano
 tags: operation, resume,

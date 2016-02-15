@@ -1,0 +1,21 @@
+{
+  "name": "tech.feedforce.jp",
+  "scripts": {
+  },
+  "env": {
+    "BUILDPACK_URL": {
+      "required": true
+    },
+    "NODE_MODULES_CACHE": {
+      "required": true
+    }
+  },
+  "addons": [
+
+  ],
+  "buildpacks": [
+    {
+      "url": "git://github.com/ddollar/heroku-buildpack-multi"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -xe
+set -eu
 
 #
 # <!--more--> を持たない記事は NG なので標準出力に出力

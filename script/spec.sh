@@ -21,7 +21,7 @@ if [ "$errors" ]; then
 fi
 
 #
-# 幅 760pixel 以上の画像は大きすぎるので標準出力に出力
+# 幅 1024 pixel 以上の画像は大きすぎるので標準出力に出力
 #
 
 cd $HOME/$CIRCLE_PROJECT_REPONAME/source/images
@@ -29,13 +29,13 @@ cd $HOME/$CIRCLE_PROJECT_REPONAME/source/images
 image_width_errors=""
 
 for i in $(find . -type f ! -name ".DS_Store"); do
-  if [ $(identify -format "%w" $i) -gt 760 ]; then
+  if [ $(identify -format "%w" $i) -gt 1024 ]; then
     image_width_errors="$image_width_errors\n$(identify -format "%M (width=%w)" $i)"
   fi
 done
 
 if [ "$image_width_errors" ]; then
-  echo "# The following image(s) width are greater than 760."
+  echo "# The following image(s) width are greater than 1024."
   echo $image_width_errors
 fi
 

@@ -28,7 +28,7 @@ cd $HOME/$CIRCLE_PROJECT_REPONAME/source/images
 
 image_width_errors=""
 
-for i in $(find . -type f ! -name ".DS_Store"); do
+for i in $(find . -type f ! -name ".*"); do
   if [ $(identify -format "%w" $i) -gt 1024 ]; then
     image_width_errors="$image_width_errors\n$(identify -format "%M (width=%w)" $i)"
   fi

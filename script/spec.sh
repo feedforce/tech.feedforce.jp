@@ -15,8 +15,8 @@ for md in *.md; do
 done
 
 if [ "$errors" ]; then
-  echo "# The following file(s) doesn't have <!--more-->.\n"
-  for i in $errors; do echo $i; done
+  echo "# The following file(s) doesn't have <!--more-->.\n" >&2
+  for i in $errors; do echo $i >&2; done
   echo
 fi
 
@@ -35,8 +35,8 @@ for i in $(find . -type f ! -name ".*"); do
 done
 
 if [ "$image_width_errors" ]; then
-  echo "# The following image(s) width are greater than 1024."
-  echo $image_width_errors
+  echo "# The following image(s) width are greater than 1024." >&2
+  echo $image_width_errors >&2
 fi
 
 #

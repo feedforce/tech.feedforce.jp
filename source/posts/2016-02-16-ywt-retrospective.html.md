@@ -1,6 +1,6 @@
 ---
 title: 中長期のふりかえりとしてYWT(やった,わかった,つぎにやる)を試してみました
-date: 2016-02-15 20:02 JST
+date: 2016-02-16 17:40 JST
 authors: r-suzuki
 tags: dev_style
 ---

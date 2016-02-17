@@ -1,0 +1,28 @@
+{
+  "name": "tech.feedforce.jp",
+  "version": "1.0.0",
+  "description": "[tech.feedforce.jp](http://tech.feedforce.jp)",
+  "scripts": {
+    "test": "textlint ./source/posts/*.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/feedforce/tech.feedforce.jp.git"
+  },
+  "author": "feedforce.inc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/feedforce/tech.feedforce.jp/issues"
+  },
+  "homepage": "https://github.com/feedforce/tech.feedforce.jp#readme",
+  "dependencies": {
+    "jquery": "^2.2.0"
+  },
+  "devDependencies": {
+    "textlint": "^5.2.1",
+    "textlint-rule-max-number-of-lines": "^1.0.2",
+    "textlint-rule-no-todo": "^1.0.3",
+    "textlint-rule-preset-japanese": "^1.0.2",
+    "textlint-rule-sjsj": "^1.0.5"
+  }
+}

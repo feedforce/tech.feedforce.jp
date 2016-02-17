@@ -8,11 +8,11 @@ machine:
 
 dependencies:
   pre:
-    - npm install -g bower
-    - bower install
+    - npm install
 
 test:
   override:
+    - npm run lint
     - ./script/spec.sh
 
 deployment:

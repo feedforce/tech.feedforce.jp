@@ -6,13 +6,9 @@ general:
 machine:
   timezone: Asia/Tokyo
 
-dependencies:
-  pre:
-    - npm install
-
 test:
   override:
-    - npm run lint
+    - npm test
     - ./script/spec.sh
 
 deployment:

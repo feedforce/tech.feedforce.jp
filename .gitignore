@@ -1,5 +1,5 @@
 /.bundle
 /.envrc
-/bower_components
 /build
 /vendor/bundle
+/node_modules

@@ -10,7 +10,7 @@ machine:
 
 test:
   override:
-    - npm test
+    - git diff --name-only --diff-filter=ACMR origin/master | grep -a '.*.md$' | xargs -I@ npm test @
     - ./script/spec.sh
 
 deployment:

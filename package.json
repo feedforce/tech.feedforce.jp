@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "[tech.feedforce.jp](http://tech.feedforce.jp)",
   "scripts": {
-    "test": "textlint ./source/posts/*.md"
+    "test": "textlint"
   },
   "repository": {
     "type": "git",

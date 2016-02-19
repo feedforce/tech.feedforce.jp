@@ -123,7 +123,7 @@ fullchain.pem -> ../../archive/letsen.critical-alert.net/fullchain1.pem
 privkey.pem -> ../../archive/letsen.critical-alert.net/privkey1.pem
 ```
 
-このようにシンボリックリンクになっていて、本体は`archive`というディレクトリに保存されています。
+このようにシンボリックリンクになっていて、本体は `archive` というディレクトリに保存されています。
 更新時はこのシンボリックリンク先が差し代わるようになっていて、webサーバ側の設定を変えなくていいようになっています。
 
 証明書はそれぞれこのようになっています。

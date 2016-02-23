@@ -8,7 +8,6 @@ gem 'middleman-autoprefixer', '~> 2.3.0'
 gem 'middleman-livereload', '~> 3.4.2'
 gem 'middleman-deploy', '~> 1.0.0'
 
-gem 'middleman-syntax', '~> 2.0.0'
 gem 'redcarpet', '~> 3.2.1'
 
 # For feed.xml.builder

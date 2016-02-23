@@ -25,6 +25,7 @@ per_page: 6
       </div>
       <div class="entry-body">
         <%= article_excerpt(article.body) %>
+        《<%= link_to '続きを読む', article %>》
       </div>
     </article>
 <% end %>

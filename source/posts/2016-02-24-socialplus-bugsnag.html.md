@@ -52,7 +52,7 @@ Log4r::Logger
 
 #### 1. 捕捉できなかった例外
 
-* [exception_notification gem](https://rubygems.org/gems/exception_notification) が捕捉してくれる
+* [exception\_notification gem](https://rubygems.org/gems/exception_notification) が捕捉してくれる
 * 例外情報をメールに送信
 
 #### 2. 捕捉できた例外
@@ -318,8 +318,8 @@ module Log4r
 end
 ```
 
-* Settings.alert_mail_exclusion.keywords は config/settings.yml に定義しています
-* [delayed_job_active_record](https://rubygems.org/gems/delayed_job_active_record) の今のバージョン 4.1.0 は冗長なログを吐くので除外しています
+* Settings.alert\_mail\_exclusion.keywords は config/settings.yml に定義しています
+* [delayed\_job\_active_record](https://rubygems.org/gems/delayed_job_active_record) の今のバージョン 4.1.0 は冗長なログを吐くので除外しています
 
 ```yaml
 alert_mail_exclusion:

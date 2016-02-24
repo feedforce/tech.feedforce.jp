@@ -25,6 +25,7 @@ per_page: 6
       </div>
       <div class="entry-body">
         <%= article_excerpt(article.body) %>
+        <p class="entry-readmore"><%= link_to 'Read more', article %></p>
       </div>
     </article>
 <% end %>

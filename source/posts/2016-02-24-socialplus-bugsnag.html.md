@@ -107,7 +107,7 @@ Rails.logger.error("error occurs")
 このようなポリシーを持って、改善しました。
 
 * 例外やエラー情報を Bugsnag に集約する
-* Bugsnag は fluentd 経由で送る
+* Bugsnag には fluentd 経由で送る
     * 後日 td-agent のログを見たら、たまに Bugsnag 側でタイムアウトエラーになってました
     * Rails で Bugsnag に直接送ると、このタイムアウトがビジネスロジックに影響してしまいます
 * 既存の Log4r の処理は出来るだけ変更しない

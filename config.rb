@@ -151,8 +151,7 @@ sprockets.append_path '../bower_components'
 ###
 # Markdown Setting
 ###
-activate :syntax
-set :markdown, tables: true, autolink: true, gh_blockcode: true, fenced_code_blocks: true, hard_wrap: true, footnotes: true
+set :markdown, tables: true, autolink: true, prettify: true, fenced_code_blocks: true, hard_wrap: true, footnotes: true
 set :markdown_engine, :redcarpet
 
 ##

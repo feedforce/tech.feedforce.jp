@@ -1,12 +1,5 @@
 {
   "rules": {
-    "no-todo": true,
-    "max-number-of-lines": {
-      "max": 300
-    },
-    "sjsj": {
-      "distance": 1
-    },
     "preset-japanese": true
   }
 }

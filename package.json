@@ -1,0 +1,25 @@
+{
+  "name": "tech.feedforce.jp",
+  "version": "1.0.0",
+  "description": "[tech.feedforce.jp](http://tech.feedforce.jp)",
+  "scripts": {
+    "test": "textlint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/feedforce/tech.feedforce.jp.git"
+  },
+  "author": "feedforce.inc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/feedforce/tech.feedforce.jp/issues"
+  },
+  "homepage": "https://github.com/feedforce/tech.feedforce.jp#readme",
+  "dependencies": {
+    "jquery": "^2.2.0"
+  },
+  "devDependencies": {
+    "textlint": "^5.2.1",
+    "textlint-rule-preset-japanese": "^1.0.2"
+  }
+}

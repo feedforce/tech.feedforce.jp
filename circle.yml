@@ -4,15 +4,13 @@ general:
       - gh-pages
 
 machine:
+  node:
+    version: 4.2.2
   timezone: Asia/Tokyo
-
-dependencies:
-  pre:
-    - npm install -g bower
-    - bower install
 
 test:
   override:
+    - ./script/textlint
     - ./script/spec.sh
 
 deployment:

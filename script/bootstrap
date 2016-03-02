@@ -11,19 +11,8 @@ else
     echo "  + Bundler found."
 fi
 
-#
-# Check for Bower
-#
-if [ ! $(which bower) ]; then
-    echo "  x You need to install Bower:"
-    echo "    npm install -g bower"
-    exit
-else
-    echo "  + Bower found."
-fi
-
-echo "  + Install bower components."
-bower install
+echo "  + Install node_modules."
+npm install
 
 echo "  + Install ruby gems."
 bundle install --path vendor/bundle --binstubs vendor/bundle/bin --jobs=4 --quiet

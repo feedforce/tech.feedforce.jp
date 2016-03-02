@@ -146,7 +146,7 @@ ignore '/images/sprites/*.png'
 ###
 # Bower Components Support
 ###
-sprockets.append_path '../bower_components'
+sprockets.append_path '../node_modules'
 
 ###
 # Markdown Setting

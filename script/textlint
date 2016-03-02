@@ -1,0 +1,4 @@
+#!/bin/sh -e
+
+# origin/master との差分から Markdown ファイルにのみ textlint のテストを実行します
+git diff --name-only --diff-filter=ACMR origin/master | grep -a '.*.md$' | xargs -I@ npm test @

@@ -65,7 +65,7 @@ tags: operation
 ### keepalivedをやめてconsulを使う
 
 [consul](https://www.consul.io/)とはサービス(Nginx等)の検出や動的な設定を行うための仕組みを提供するツールです。  
-といってもイメージしにくいと思いますし、実際色々なことが出来ます。具体的には…、、おや、こんなところに事例が！！
+といってもイメージしにくいと思いますし、実際色々なことが出来ます。具体的には…、おや、こんなところに事例が！！
 
 - [stretcher + consul + capistrano を使ったデプロイを導入しようと思います | feedforce Engineers' blog](http://tech.feedforce.jp/stretcher-consul-capistrano.html)
 

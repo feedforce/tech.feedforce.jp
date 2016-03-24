@@ -224,6 +224,20 @@
     - label: Qiita
       url: http://qiita.com/otofu_square
 #--------------------------------------------
+- id: tsub
+  name: tsub
+  thumbnail: tsub.png
+  profile: "2016年卒内定者エンジニア。<br>
+            マンガが大好き。Kindleで絶賛散財中<br>
+            日付が変わった瞬間Webマンガを漁り始めます"
+  media:
+    - label: GitHub
+      url: https://github.com/tsub
+    - label: Qiita
+      url: http://qiita.com/tsub
+    - label: Twitter
+      url: https://twitter.com/_tsub_
+#--------------------------------------------
 # エンジニアが追記する場合はここより上に挿入してください
 # 以下、ゲスト
 #--------------------------------------------

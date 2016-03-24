@@ -24,9 +24,9 @@ tags: operation
 
 引っ越し後は以下の様な構成になりました。
 
-- サーバー台数: <font color=red>3台</font>
-- MySQLフェイルオーバーの仕組み: <font color=red>mha</font>
-- アプリの参照先を切り替える仕組み:<font color=red>consulのdns機能を使って実現</font>
+- サーバー台数: **3台**
+- MySQLフェイルオーバーの仕組み: **mha**
+- アプリの参照先を切り替える仕組み: **consulのdns機能を使って実現**
 
 なぜ、どのようにしてmhaとconsulを使った冗長化を行ったか、なんで1台増えてるのかを話していきます。
 

@@ -1,6 +1,6 @@
 ---
 title: mhaとconsulでDBサーバーの冗長化をしています
-date: 2016-03-23 14:06 JST
+date: 2016-03-24 14:06 JST
 authors: kunishima
 tags: operation
 ---

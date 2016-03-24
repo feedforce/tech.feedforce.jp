@@ -53,8 +53,8 @@ tags: operation
 
 ### 自作スクリプトをやめてmhaを使う
 
-[mha](https://code.google.com/p/mysql-master-ha/)とは複雑な操作や苦しみを伴うこと無く、マスタのフェイルオーバーを行えるツールです。  
-マスタのダウン等による自動的なフェイルオーバーだけでなく、オンラインでのマスタサーバーの切り替えも行えます。(サーバーのメンテナンスをしたい時に便利)
+[mha](https://code.google.com/p/mysql-master-ha/)とは複雑な操作や苦しみを伴うこと無く、DBマスタサーバーのフェイルオーバーを行えるツールです。  
+DBマスタサーバーのダウン等による自動的なフェイルオーバーだけでなく、オンラインでのDBマスタサーバーの切り替えも行えます。(サーバーのメンテナンスをしたい時に便利)
 
 以下の様な理由で導入しました。
 
@@ -69,7 +69,7 @@ tags: operation
 
 - [stretcher + consul + capistrano を使ったデプロイを導入しようと思います | feedforce Engineers' blog](http://tech.feedforce.jp/stretcher-consul-capistrano.html)
 
-さて、consulにはdns機能が内蔵されており、今回はこのdns機能とmhaを連携させることで **「マスタDBサーバーはどこか」** をconsulに問い合わせればわかるようにしました。
+さて、consulにはdns機能が内蔵されており、今回はこのdns機能とmhaを連携させることで **「DBマスタサーバーはどこか」** をconsulに問い合わせればわかるようにしました。
 
 以下の様な理由で導入しました。
 
@@ -125,7 +125,7 @@ master_ip_failover_script=/path/to/script_name
 
 スクリプトを一から作るのは大変なので、[サンプル](https://github.com/yoshinorim/mha4mysql-manager/blob/master/samples/scripts/master_ip_failover)を利用します。
 
-サンプルにある`FIXME_xxx;`を以下のように書き換えることで、consul(10.0.0.50)のapiを叩き、新マスタサーバーがどのホストなのかを知らせています。ここでmhaがスクリプトに渡していた引数(`new_master_ip`)が役に立ちます。
+サンプルにある`FIXME_xxx;`を以下のように書き換えることで、consul(10.0.0.50)のapiを叩き、新DBマスタサーバーがどのホストなのかを知らせています。ここでmhaがスクリプトに渡していた引数(`new_master_ip`)が役に立ちます。
 
 ```
   ## Update master ip on the catalog database, etc

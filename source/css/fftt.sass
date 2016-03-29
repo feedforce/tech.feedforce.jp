@@ -490,6 +490,9 @@ footer
     word-wrap: break-word
   pre > code
     display: block
+  /* fix prettyprint non break words */
+  pre .prettyprint
+    overflow: auto
   blockquote
     quotes: "“" "”"
     margin: 30px 0

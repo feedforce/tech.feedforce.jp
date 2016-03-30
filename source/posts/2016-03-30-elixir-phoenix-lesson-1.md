@@ -1,6 +1,6 @@
 ---
 title: 今から始めるRubyエンジニアのためのElixir Phoenix part1
-date: 2016-03-28 17:00 JST
+date: 2016-03-30 13:00 JST
 authors: tsub
 tags: elixir
 ---

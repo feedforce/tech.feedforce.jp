@@ -1,6 +1,6 @@
 ---
 title: 2016年度の新卒エンジニア受け入れを終えて
-date: 2016-06-17 15:00 JST
+date: 2016-06-16 16:00 JST
 authors: inoue
 tags: dev_style
 ---

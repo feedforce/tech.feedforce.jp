@@ -18,7 +18,7 @@ tags: dev_style
 今年は5人もの新入社員がフィードフォースエンジニアチームの仲間に加わってくれました。みんなとても優秀な若者ばかりで、嬉しく、頼もしい限りです。......ちなみに、彼らが入社する前の時点で、エンジニアチームは総勢 20人という規模でした。おわかりでしょうか、彼らの入社のインパクトの大きさが...。。
 
 
-![mizup](/images/2016/6/rookie_training_01.jpg)
+![mizup](/images/2016/06/rookie_training_01.jpg)
 
 
 
@@ -88,7 +88,7 @@ tags: dev_style
 指導先輩には、指導後輩とのふりかえり（KPT）も毎日実施してもらました。それにより日々得た学びを定着させるお手伝いをすると同時に、毎日何かしらの改善を積み重ねていけるような働きかけもお願いしました。
 
 
-![rookie_kpt](/images/2016/6/rookie_training_02.jpg)
+![rookie_kpt](/images/2016/06/rookie_training_02.jpg)
 
 
 
@@ -137,7 +137,7 @@ tags: dev_style
 例えば「パーフェクト Ruby on Rails」では特別 TDD をベースとした開発を徹底して書かれているわけではありませんでしたが、弊社での開発は基本的に TDD であるため、そのあたりをアレンジしたりしました。
 
 
-![カリキュラム](/images/2016/6/rookie_training_03.png)
+![カリキュラム](/images/2016/06/rookie_training_03.png)
 
 
 
@@ -162,7 +162,7 @@ tags: dev_style
 なので、「こうしようと思う」というのは思いついた時点でまず Qiita:Team に書いて公開し、いつでもフィードバックを受けられる状態を保ちながら準備を進めていました。
 
 
-![qiita:team](/images/2016/6/rookie_training_04.png)
+![qiita:team](/images/2016/06/rookie_training_04.png)
 
 
 
@@ -182,7 +182,7 @@ tags: dev_style
 といった工夫を合間合間で実施しました。
 
 
-![rookies](/images/2016/6/rookie_training_05.jpg)
+![rookies](/images/2016/06/rookie_training_05.jpg)
 
 ↑意見交換のようす。
 

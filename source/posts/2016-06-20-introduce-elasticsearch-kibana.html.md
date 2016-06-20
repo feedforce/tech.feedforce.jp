@@ -44,7 +44,7 @@ CloudWatch Logs はお手軽なのですが、このような問題もありま�
 
 [AWS再入門 Amazon Elasticsearch Service編 ｜ Developers.IO](http://dev.classmethod.jp/cloud/aws/cm-advent-calendar-2015-getting-started-again-amazon-es/)
 
-機能は相当制限されています。例えば本来の elasticsearch.yml にいくつも設定できるのに、AWS ではたったの 2 つです。
+機能は相当制限されています。例えば本来は elasticsearch.yml にいくつも設定を書けるのに、AWS では管理画面上から下記 2 つの設定を変更出来るだけです。elasticsearch.yml を直接編集することが出来ません。
 
 * [rest.action.multi.allow\_explicit\_index](https://www.elastic.co/guide/en/elasticsearch/reference/1.5/url-access-control.html)
 * [indices.fielddata.cache.size](https://www.elastic.co/guide/en/elasticsearch/reference/1.5/index-modules-fielddata.html)

@@ -79,7 +79,7 @@ Facebook App の使用履歴から、特定のバージョンで使えないリ�
 弊社 Slack には、各認証プロバイダの開発者向け更新情報を通知するチャンネルがあります。
 ここには Facebook の [Developer News](https://developers.facebook.com/blog/) のフィードも含まれているので、API バージョンのリリースにも気付けます。
 
-また [Developer Settings](https://developers.facebook.com/settings/developer/contact/) から、各項目毎に通知を受け取るかどうかの設定ができます。
+また [Developer Settings](https://developers.facebook.com/settings/developer/contact/) から、各項目毎に通知設定ができます。
 ここで `Notify By Email` を `Yes` にしておくと、自分の Facebook アカウントのプライマリなメールアドレスに、通知メールが届くようになります。
 
 Marketing API だけですが、ドキュメント更新の際の通知も可能です。

@@ -32,6 +32,8 @@ API バージョンがいつ廃止されるか、その寿命は Graph API と M
 Graph API の場合、次のバージョンがリリースされてから二年間で、そのバージョンは使えなくなります。
 例えば `v2.7` が 2016/07/13 にリリースされたので、 `v2.6` はそこから2年後の 2018/07/13 が期限です。
 
+![:alt](/images/2016/07/watch-facebook-api-version-graph-api-versioning.jpg)
+
 この辺りのことは [Platform Versioning](https://developers.facebook.com/docs/apps/versions) のページにまとまっています。
 
 また、 Facebook の App ID と App Secret の発行に必要な Facebook App も、 API Version という属性を持っています。
@@ -46,6 +48,8 @@ Graph API の場合、次のバージョンがリリースされてから二年�
 
 Marketing API の場合、寿命がもう少し短く、次の次のバージョンが出るタイミングで無効になっています。
 例えば `v2.4` は `v2.6` がリリースされた 2016/04/12 の前日 2016/04/11 が期限です。
+
+![:alt](/images/2016/07/watch-facebook-api-version-marketing-api-versioning.jpg)
 
 Marketing API の期限は、次のバージョンがリリースされたタイミングで目安が公開されます。
 今であれば `v2.7` が公開され、 `v2.6` の期限は 2016/10 となっています。

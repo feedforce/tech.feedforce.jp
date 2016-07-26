@@ -1,6 +1,6 @@
 ---
 title: Facebook API アップデートと付き合う話
-date: 2016-07-21 18:25 JST
+date: 2016-07-26 16:00 JST
 authors: e-takano
 tags: facebook
 ---

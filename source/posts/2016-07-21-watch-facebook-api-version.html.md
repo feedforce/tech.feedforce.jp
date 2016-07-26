@@ -2,7 +2,7 @@
 title: Facebook API アップデートと付き合う話
 date: 2016-07-21 18:25 JST
 authors: e-takano
-tags:
+tags: facebook
 ---
 
 最近買ったボードゲームはスカイアイランドとテレストレーションとストーンエイジです、こんにちは。フィードフォース ボドゲ部の kano-e です。

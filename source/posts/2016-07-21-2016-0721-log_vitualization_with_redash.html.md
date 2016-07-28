@@ -56,7 +56,7 @@ Re:dashで利用するデータを指定します。Re:dashはデータソース
 - MySQL
 - TresureData
 
-などがあります。詳しくはこちら。（[Supported Data Sources — Re:dash documentation(http://docs.redash.io/en/latest/datasources.html))
+などがあります。詳しくはこちら。[Supported Data Sources — Re:dash documentation](http://docs.redash.io/en/latest/datasources.html)
 
 Bigqueryの場合は、事前にサービスアカウントの鍵を取得しておき、それを指定するだけで可能です。
 
@@ -74,6 +74,8 @@ Bigqueryの場合は、事前にサービスアカウントの鍵を取得して
 - Counter
 - Map
 - PivotTable
+
+この中でPivotTableが便利で、動的にカラムを指定することができます。例えばエンジニアが基本的なクエリを発行したうえで、マーケ担当者などが自分で好きなデータをD&Dで分析することが可能です。うまく説明ができないので気になる方はお試しいただければと...。
 
 
 ## 細かいTips

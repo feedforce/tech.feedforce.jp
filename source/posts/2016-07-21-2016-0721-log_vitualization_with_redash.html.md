@@ -18,6 +18,7 @@ tags: operation
 
 ## Re:dashの導入方法
 Re:dashを簡単に導入するにはAMIが用意されているので、Terraformで簡単に構築ができます。
+Regionに応じたAMIはこちらです。[Setting up Re:dash instance — Re:dash documentatio](http://docs.redash.io/en/latest/setup.html)
 
 ```
 resource "aws_instance" "redash" {

@@ -1,6 +1,6 @@
 ---
 title: Re:dashを使ったログの可視化をさくっと始めてみた
-date: 2016-07-21 14:30 JST
+date: 2016-07-29 14:30 JST
 authors: tjinjin
 tags: operation
 ---

@@ -11,9 +11,11 @@ tags: operation
 <!--more-->
 
 <!-- textlint-disable -->
+
 <a class="embedly-card" href="https://github.com/masutaka/mackerel-plugin-delayed-job-count">masutaka/mackerel-plugin-delayed-job-count</a>
 <script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>
-<!-- textlint-enable -->`
+
+<!-- textlint-enable -->
 
 ## なぜ作ったか？
 

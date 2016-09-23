@@ -101,7 +101,7 @@ macOS と Linux 用のバイナリを GitHub にリリースしています。
 
 https://github.com/masutaka/mackerel-plugin-delayed-job-count/releases
 
-例えばこのような Chef レシピを書けば、/usr/local/bin/mackerel-plugin-delayed-job-count としてインストール出来ます。Ruby スクリプトと違って、依存関係がなく良いですね。
+例えばこのような Chef レシピを書けば、/usr/local/bin/mackerel-plugin-delayed-job-count としてインストール出来ます。Ruby スクリプトと違って、レシピに依存関係が出来なくて良いですね。
 
 ```ruby
 remote_file '/usr/local/bin/mackerel-plugin-delayed-job-count' do

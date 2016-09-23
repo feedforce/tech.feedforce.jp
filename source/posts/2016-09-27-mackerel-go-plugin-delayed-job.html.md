@@ -14,14 +14,14 @@ https://github.com/masutaka/mackerel-plugin-delayed-job-count
 
 ## なぜ作ったか？
 
-最近、私が関わっているソーシャルPLUSで、新しいサービスを作り始めました。今までは Zabbix で監視していたのですが、稼働用のサーバや、ある意味特殊スキルが必要だったのが悩みでした。そういった事情から、今回は [Mackerel](https://mackerel.io/) を採用したのが事の発端です。
+最近、私が関わっているソーシャルPLUSで、新しいサービスを作り始めました。今までは Zabbix で監視していたのですが、稼働用のサーバやある意味特殊スキルが必要で、導入すべきか悩んでいました。そういった事情から、今回は [Mackerel](https://mackerel.io/) を採用したのが事の発端です。
 
 このサービスでは [delayed_job](https://rubygems.org/gems/delayed_job) が動いています。delayed\_job の監視は大きく 2 つが必要です。
 
 1. プロセス数の監視
 2. Job Queue の監視
 
-1 については Ruby で書いた Mackerel plugin を作りました。pgrep でプロセス数をカウントする素朴なスクリプトです。
+1 については Ruby で書いた Mackerel plugin を作りました。pgrep を使ってプロセス数をカウントする素朴なスクリプトです。
 
 ```ruby
 #!/usr/bin/env ruby
@@ -70,7 +70,7 @@ puts [ 'delayed_job.processes',  process_count, Time.now.to_i ].join("\t")
 
 現在は MySQL のみ対応しています。PostgreSQL 等への対応も難しくないようなので、いずれ対応するかもです。
 
-今回の masutaka/mackerel-plugin-delayed-job-count は以下のメトリクスを Mackerel に送信します（実際の SQL は発行回数を減らすため、若干違います）。
+今回の masutaka/mackerel-plugin-delayed-job-count は以下のメトリクスを Mackerel に送信します。実際の SQL は発行回数を減らすため、若干違います。
 
 * Processed Job Count
     * 直近 1 分で処理したジョブ数
@@ -100,7 +100,7 @@ macOS と Linux 用のバイナリを GitHub にリリースしています。
 
 https://github.com/masutaka/mackerel-plugin-delayed-job-count/releases
 
-例えばこのような Chef レシピを書けば、/usr/local/bin/mackerel-plugin-delayed-job-count としてインストール出来ます。Ruby スクリプトと違って、依存関係がないのが良いですね。
+例えばこのような Chef レシピを書けば、/usr/local/bin/mackerel-plugin-delayed-job-count としてインストール出来ます。Ruby スクリプトと違って、依存関係がなく良いですね。
 
 ```ruby
 remote_file '/usr/local/bin/mackerel-plugin-delayed-job-count' do

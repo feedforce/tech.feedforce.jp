@@ -8,9 +8,10 @@ tags: operation
 
 さて、少し前に Go で Mackerel の delayed\_job plugin を作りました。
 
-https://github.com/masutaka/mackerel-plugin-delayed-job-count
-
 <!--more-->
+
+<a class="embedly-card" href="https://github.com/masutaka/mackerel-plugin-delayed-job-count">masutaka/mackerel-plugin-delayed-job-count</a>
+<script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>
 
 ## なぜ作ったか？
 

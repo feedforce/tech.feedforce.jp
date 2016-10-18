@@ -59,11 +59,11 @@ class Ranking
   end
 end
 
-# origin/master との差分に Markdown ファイルがある時だけ、
-# このスクリプトを実行します
-if `git diff --name-only --diff-filter=ACMR origin/master`.split.grep(/.+\.md$/).empty?
-  exit 0
-end
+# # origin/master との差分に Markdown ファイルがある時だけ、
+# # このスクリプトを実行します
+# if `git diff --name-only --diff-filter=ACMR origin/master`.split.grep(/.+\.md$/).empty?
+#   exit 0
+# end
 
 Slack::Notifier.new(ENV['SLACK_WEBHOOK_URL']).ping(
   Ranking.new.formated_data

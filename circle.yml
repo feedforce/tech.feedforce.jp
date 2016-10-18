@@ -17,6 +17,7 @@ deployment:
   publish:
     branch: master
     commands:
+      - bundle exec ruby script/contribution-ranking.rb
       - git config --global user.name "circleci"
       - git config --global user.email "circleci@feedforce.jp"
       - bundle exec middleman deploy

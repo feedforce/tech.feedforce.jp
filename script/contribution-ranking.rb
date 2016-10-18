@@ -45,7 +45,7 @@ class Ranking
 
   # Getting article files
   def articles
-    @articles ||= Dir.glob(File.join(__dir__, '../source/posts/*'))
+    @articles ||= Dir.glob(File.join(__dir__, '../source/posts/*.md'))
   end
 
   # Getting target authors

@@ -4,10 +4,10 @@ require 'slack-notifier'
 require 'yaml'
 
 class Ranking
-  # Getting formated ranking data
+  # Getting formatted ranking data
   #
   # @return [String]
-  def formated_data
+  def formatted_data
     result = ''
 
     raw_data.sort_by(&:last).reverse.each do |k,v|
@@ -66,5 +66,5 @@ if `git diff --name-only --diff-filter=ACMR origin/master`.split.grep(/.+\.md$/)
 end
 
 Slack::Notifier.new(ENV['SLACK_WEBHOOK_URL']).ping(
-  Ranking.new.formated_data
+  Ranking.new.formatted_data
 )

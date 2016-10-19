@@ -21,7 +21,7 @@ class Ranking
 
   # Getting ranking raw data which is unsorted
   #
-  # @return [Hash<Hash>] {"author1" => 10, "author2" => 5, "author3" => 8,...}
+  # @return [Hash] {"author1" => 10, "author2" => 5, "author3" => 8,...}
   def raw_data
     result = {}
 

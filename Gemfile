@@ -22,3 +22,5 @@ gem 'sass', '3.4.19'
 # Debug Tool
 # gem 'pry'
 # gem 'pry-doc'
+
+gem 'slack-notifier', require: false

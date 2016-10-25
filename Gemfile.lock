@@ -115,7 +115,7 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
-    rb-fsevent (0.9.7)
+    rb-fsevent (0.9.8)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
     redcarpet (3.2.3)

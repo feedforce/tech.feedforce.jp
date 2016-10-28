@@ -137,5 +137,5 @@ DSN は AWS であれば `id:password@tcp(your-amazonaws-uri.com:3306)/dbname` �
 
 ## まとめ
 
-* Go 使えて満足！
+* Go を使えて満足！
 * 要望等あれば GitHub の [Issue](https://github.com/masutaka/mackerel-plugin-delayed-job-count/issues) や [PR](https://github.com/masutaka/mackerel-plugin-delayed-job-count/pulls) に挙げて下さい！

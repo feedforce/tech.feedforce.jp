@@ -59,9 +59,9 @@ class Ranking
   end
 end
 
-# origin/master との差分に Markdown ファイルがある時だけ、
+# 前回の commit との差分に Markdown ファイルがある時だけ、
 # このスクリプトを実行します
-if `git diff --name-only --diff-filter=ACMR origin/master`.split.grep(/.+\.md$/).empty?
+if `git diff --name-only --diff-filter=ACMR HEAD~1`.split.grep(/.+\.md$/).empty?
   exit 0
 end
 

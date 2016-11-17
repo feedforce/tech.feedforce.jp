@@ -44,7 +44,7 @@ tags: operation
 
 画像は一見冷静にやりとりしている様に見えますが二人とも焦っているの図です。
 
-(画像貼る)
+![:alt](/images/2016/11/call_with_slack.png)
 
 ## まとめ
 

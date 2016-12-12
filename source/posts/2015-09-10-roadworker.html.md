@@ -79,7 +79,7 @@ end
 `--dry-run`オプションを使うことで、実際には適用されずsyntaxのチェックができます。
 
 ```
-$ bundle exec -a --dry-run
+$ bundle exec roadwork -a --dry-run
 Apply `Routefile` to Route53 (dry-run)
 Create ResourceRecordSet: example.jp  (dry-run)
 No change

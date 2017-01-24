@@ -1,5 +1,5 @@
 ---
-title: troubleshooting_discussion
+title: 障害対応についてパネルディスカッション形式で話し合ってみた
 date: 2017-01-25 12:00 JST
 authors: tjinjin
 tags: resume

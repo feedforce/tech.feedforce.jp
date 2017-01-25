@@ -1,21 +1,19 @@
 {
   "name": "tech.feedforce.jp",
-  "scripts": {
-  },
   "env": {
-    "BUILDPACK_URL": {
-      "required": true
-    },
     "NODE_MODULES_CACHE": {
       "required": true
     }
   },
-  "addons": [
-
-  ],
   "buildpacks": [
     {
-      "url": "https://github.com/ddollar/heroku-buildpack-multi.git"
+      "url": "heroku/node"
+    },
+    {
+      "url": "heroku/ruby"
+    },
+    {
+      "url": "https://github.com/hashicorp/heroku-buildpack-middleman.git"
     }
   ]
 }

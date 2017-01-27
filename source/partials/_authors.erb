@@ -1,0 +1,15 @@
+<li>
+  <div class="page-member-image">
+    <%= image_tag "authors/#{authors['thumbnail']}", :class => 'avatar avatar-100 photo', :height => '100', :width => '100' %>
+  </div>
+  <div class="page-member-name">
+    <h2><%= authors['name'] %></h2>
+    <%= link_to '投稿記事', "/author/#{authors['id']}" %>
+  </div>
+  <div class="page-member-profile">
+    <p>
+      <%= authors['profile'] %><br/>
+      <%= authors['media'].map{|media| link_to media['label'], media['url']}.join(' | ').html_safe %>
+    </p>
+  </div>
+</li>

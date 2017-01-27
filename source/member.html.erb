@@ -1,31 +1,28 @@
 ---
 title: "編集者一覧"
 ---
+<div class="entry-page">
+  <section>
+    <h1>編集者一覧</h1>
 
-<article class="entry-page">
-  <h1>編集者一覧</h1>
+    <ul class="page-member">
+      <% data.author.select{ |author| !author['resignation'] }.each do |authors| %>
+      <%= partial 'authors', locals: {authors: authors} %>
+      <% end %>
+    </ul>
+    <!--/投稿者一覧を表示-->
+  </section>
 
-  <ul class="page-member">
-    <% data.author.each do |authors| %>
-    <li>
-      <div class="page-member-image">
-        <%= image_tag "authors/#{authors['thumbnail']}", :class => 'avatar avatar-100 photo', :height => '100', :width => '100' %>
-      </div>
-      <div class="page-member-name">
-        <h2><%= authors['name'] %></h2>
-        <%= link_to '投稿記事', "/author/#{authors['id']}" %>
-      </div>
-      <div class="page-member-profile">
-        <p>
-          <%= authors['profile'] %><br/>
-          <%= authors['media'].map{|media| link_to media['label'], media['url']}.join(' | ').html_safe %>
-        </p>
-      </div>
-    </li>
-    <% end %>
-  </ul>
-  <!--/投稿者一覧を表示-->
+  <section>
+    <h1>殿堂入り</h1>
 
+    <ul class="page-member">
+      <% data.author.select{ |author| author['resignation'] }.each do |authors| %>
+      <%= partial 'authors', locals: {authors: authors} %>
+      <% end %>
+    </ul>
+    <!--/殿堂入り一覧を表示-->
+  </section>
 
   <div class="page-member-links">
     <h2>feedforce tech team <br>ソーシャルアカウント</h2>
@@ -35,4 +32,4 @@ title: "編集者一覧"
       <li id="github"><a href="https://github.com/feedforce" target="_blank"><span>GitHub</span></a></li>
     </ul>
   </div>
-  <!-- /entry-head --></article>
+</div>

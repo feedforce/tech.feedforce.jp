@@ -89,6 +89,7 @@
   media:
     - label: GitHub
       url: https://github.com/mgi166
+  resignation: true
 #------------------------------------------
 - id: kunishima
   name: lorentzca
@@ -122,6 +123,7 @@
       url: https://twitter.com/a_know
     - label: About me
       url: http://home.a-know.me/
+  resignation: true
 #------------------------------------------
 - id: masutaka
   name: masutaka
@@ -211,6 +213,7 @@
       url: https://twitter.com/yukiyan_w
     - label: Blog
       url: http://yukiyan.com/
+  resignation: true
 #--------------------------------------------
 - id: otofu_square
   name: otofu_square

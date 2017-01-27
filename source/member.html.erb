@@ -3,23 +3,27 @@ title: "編集者一覧"
 ---
 
 <article class="entry-page">
-  <h1>編集者一覧</h1>
+  <section>
+    <h1>編集者一覧</h1>
 
-  <ul class="page-member">
-    <% data.author.select{ |author| !author['resignation'] }.each do |authors| %>
+    <ul class="page-member">
+      <% data.author.select{ |author| !author['resignation'] }.each do |authors| %>
       <%= partial 'authors', locals: {authors: authors} %>
-    <% end %>
-  </ul>
-  <!--/投稿者一覧を表示-->
+      <% end %>
+    </ul>
+    <!--/投稿者一覧を表示-->
+  </section>
 
-  <h1>殿堂入り</h1>
+  <section>
+    <h1>殿堂入り</h1>
 
-  <ul class="page-member">
-    <% data.author.select{ |author| author['resignation'] }.each do |authors| %>
+    <ul class="page-member">
+      <% data.author.select{ |author| author['resignation'] }.each do |authors| %>
       <%= partial 'authors', locals: {authors: authors} %>
-    <% end %>
-  </ul>
-  <!--/殿堂入り一覧を表示-->
+      <% end %>
+    </ul>
+    <!--/殿堂入り一覧を表示-->
+  </section>
 
   <div class="page-member-links">
     <h2>feedforce tech team <br>ソーシャルアカウント</h2>

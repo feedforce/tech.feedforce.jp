@@ -82,7 +82,7 @@ tags: resume
 * Kuromoji の他の Analyzer どんなのが？（Qiita とか何使ってるのかな）
     * [GitHub は Elasticsearch 使っているみたいですね](https://speakerdeck.com/johtani/elastic-stackwoli-yong-site-detakarayang-naqi-dukiwojian-tukeru?slide=44)
 * 学習コスト高いですよね
-    * そうなんですよ。ライトな検索にはコストが高い気と思いました
+    * そうなんですよ。ライトな検索にはコストが高いと思いました
 * Kibana 5 いいなぁ〜 使いやすそう
     * [Elastic Cloud](https://www.elastic.co/jp/cloud) がいろいろお手軽です
 * ![ド・モルガンの法則](/images/2017/02/de-morgan.jpg)

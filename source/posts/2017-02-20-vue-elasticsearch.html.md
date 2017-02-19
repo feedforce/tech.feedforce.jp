@@ -81,6 +81,7 @@ tags: resume
     * [この技術者ブログは CI の時に textlint を使ってます](https://github.com/feedforce/tech.feedforce.jp/blob/86d7b8728b5d23e77985a41d5322c6a1b3b793b9/circle.yml#L13)
 * Kuromoji の他の Analyzer どんなのが？（Qiita とか何使ってるのかな）
     * [GitHub は Elasticsearch 使っているみたいですね](https://speakerdeck.com/johtani/elastic-stackwoli-yong-site-detakarayang-naqi-dukiwojian-tukeru?slide=44)
+    * [Qiita と Qiita:Team でも使っているみたいです](http://blog.qiita.com/post/101162528979/new-qiita-search)
 * 学習コスト高いですよね
     * そうなんですよ。ライトな検索にはコストが高いと思いました
 * Kibana 5 いいなぁ〜 使いやすそう

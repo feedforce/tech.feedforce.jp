@@ -241,6 +241,17 @@
     - label: Twitter
       url: https://twitter.com/_tsub_
 #--------------------------------------------
+- id: mizukmb
+  name: mizukmb
+  thumbnail: mizukmb.png
+  profile: "HHKB 愛用者でボドゲ部員<br>
+            音ゲーも好きです"
+  media:
+    - label: GitHub
+      url: https://github.com/mizukmb
+    - label: Twitter
+      url: https://twitter.com/mizukmb
+#--------------------------------------------
 # エンジニアが追記する場合はここより上に挿入してください
 # 以下、ゲスト
 #--------------------------------------------

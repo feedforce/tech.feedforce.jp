@@ -7,19 +7,18 @@ tags: infrastructure, operation
 
 はじめまして。新卒エンジニアの [mizukmb](https://twitter.com/mizukmb) です。普段はソーシャルPLUSチームでインフラ担当としてアレコレしてます。
 
-先日、ソーシャルPLUSのプロモーションサイトを一新しました。 [https://socialplus.jp](https://socialplus.jp)
+先日、ソーシャルPLUSのプロモーションサイトを一新しました。  🎊 [https://socialplus.jp](https://socialplus.jp)
 それに伴いインフラ構成も CloudFront と Tilda で作り直し、いい感じの運用ができるようになりましたので紹介します。
 
 <!--more-->
 
-## Tilda とは
+![socialplusjp](/images/2017/02/promotion.png)
+https://socialplus.jp
 
-[Tilda] (https://tilda.cc) はウェブサイトを直接操作するような UI が特徴的な CMS サービスです。トップページから、すでにおしゃれな感じが漂っています。
+## 経緯
 
-![tilda](/images/2017/02/tilda.png)
-https://tilda.cc
-
-ソーシャルPLUSでは主にマーケティングチームが Tilda を利用してプロモーションサイトを作成しています。
+これまで、プロモーションサイトの修正やコンテンツの追加を行う場合、マーケティングチームからエンジニアに修正の依頼をする必要がありました。これにより、**マーケティング・エンジニアの両方に追加タスクが発生してしまう問題をこれまで抱えていました。**
+そこで、コンテンツの修正などの作業がマーケティングチームだけで完結できるように、 [Tilda](https://tilda.cc) と呼ばれる CMS サービスを利用することにしました。Tildaは、 ウェブサイトを直接操作するような UI を持ち、コードをいじらなくてもデザインや文言の調整が行えるのが特徴です。
 
 ## 構成
 

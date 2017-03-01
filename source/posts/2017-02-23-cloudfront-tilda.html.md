@@ -12,7 +12,7 @@ tags: infrastructure, operation
 
 <!--more-->
 
-![socialplusjp](/images/2017/02/promotion.png)
+![socialplusjp](/images/2017/03/promotion.png)
 https://socialplus.jp
 
 ## 経緯
@@ -30,7 +30,7 @@ CloudFront の設定は特殊なことを行っておらず、 Origin Domain Nam
 
 以下全体図
 
-![socialplusjp](/images/2017/02/socialplusjp.png)
+![socialplusjp](/images/2017/03/socialplusjp.png)
 
 CloudFront で ACM を利用する場合はバージニア北部 ( us-east-1 ) で取得しなければならない点は注意が必要です。
 

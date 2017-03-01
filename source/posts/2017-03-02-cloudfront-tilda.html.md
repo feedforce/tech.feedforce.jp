@@ -28,11 +28,11 @@ Tilda でカスタムドメインを利用する際、 http しかサポート�
 
 CloudFront の設定は特殊なことを行っておらず、 Origin Domain Name に Tilda 側の URL をセットして、 default TTL を短めに設定したことくらいです。また、上記理由により http は利用できないため、アクセスは全て https にリダイレクトさせています。
 
-以下全体図
+以下全体図。
+ドメインや SSL 証明書の管理は、同じく AWS が提供する [Route53](https://aws.amazon.com/jp/route53/) と [Certificate Manager](https://aws.amazon.com/jp/certificate-manager/) で行っています。CloudFront で Certificate Manager を利用する場合はバージニア北部 ( us-east-1 ) で取得しなければならない点は注意が必要です。
 
 ![socialplusjp](/images/2017/03/socialplusjp.png)
 
-CloudFront で ACM を利用する場合はバージニア北部 ( us-east-1 ) で取得しなければならない点は注意が必要です。
 
 ## 得られた恩恵
 

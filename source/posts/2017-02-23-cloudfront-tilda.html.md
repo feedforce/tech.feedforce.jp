@@ -7,7 +7,7 @@ tags: infrastructure, operation
 
 はじめまして。新卒エンジニアの [mizukmb](https://twitter.com/mizukmb) です。普段はソーシャルPLUSチームでインフラ担当としてアレコレしてます。
 
-先日、ソーシャルPLUSのプロモーションサイトを一新しました。  🎊 [https://socialplus.jp](https://socialplus.jp)
+先日、ソーシャルPLUSのプロモーションサイトを一新しました。  🎊 https://socialplus.jp
 それに伴いインフラ構成も CloudFront と Tilda で作り直し、いい感じの運用ができるようになりましたので紹介します。
 
 <!--more-->

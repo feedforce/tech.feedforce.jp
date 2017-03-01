@@ -1,6 +1,6 @@
 ---
 title: CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました
-date: 2017-02-23 19:04 JST
+date: 2017-03-02 19:04 JST
 authors: mizukmb
 tags: infrastructure, operation
 ---

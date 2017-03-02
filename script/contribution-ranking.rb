@@ -50,7 +50,7 @@ class Ranking
 
   # Getting target authors
   def target_authors
-    @target_authors ||= yaml.map { |y| y['id'] }
+    @target_authors ||= yaml.map { |y| y['id'] unless y['resignation'] }
   end
 
   # Getting yaml data

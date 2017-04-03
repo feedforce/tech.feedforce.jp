@@ -106,7 +106,7 @@ AM1:30 からスナップショットを取り始めました。結果的に 50 
 
 ### アプリケーションの接続先を production-green に向ける
 
-前述の `PR1` をデプロイし、接続先を Read Replica に向けます。Webアプリケーションとしては read-only になります。
+前述の `PR1` をデプロイし、接続先を Read Replica に向けます。Webアプリケーションとしては read-only になります。`PR2` も Cook して、メトリクス収集元を切り替えます。
 
 ![safe-rds-update-4](/images/2017/04/safe-rds-update-4.png)
 

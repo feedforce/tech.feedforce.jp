@@ -121,15 +121,25 @@ CircleCI 2.0 で Docker コンテナを動かす
 
 パブリックレジストリにある Docker イメージを使う場合、設定の `jobs: > {job name}: > docker: > {i}: > image:` でイメージを指定するだけで済みます。一方、 `jobs: > {job name}: > docker: > {i}: > image:` にはプライベートレジストリのイメージは指定できません。自分で認証(`docker login`)を通した上で、適宜イメージを取得(`docker image pull` など)する必要があります。
 
-さらに、CircleCI 2.0 で docker コマンドを実行するためには、[Remote Docker Environment](https://circleci.com/docs/2.0/building-docker-images/) と呼ばれる隔離環境を立ち上げて使用する必要があります。これは steps: 以下に `setup_remote_docker` を記述するだけで準備出来ます。
+さらに、CircleCI 2.0 で docker コマンドを実行するためには、[Remote Docker Environment](https://circleci.com/docs/2.0/building-docker-images/) と呼ばれる隔離環境を立ち上げて使用する必要があります。これは steps: 以下に `setup_remote_docker` を記述するだけで準備出来ます。これにより、Docker クライアント(docker コマンド)を primary container 上で実行すると、Remote Docker Environment 内でその要求が実行されます。
+
+```
+# 例: setup_remote_docker のログ
+Allocating a remote Docker Engine
+...
+Remote Docker engine created. Using VM 'prealloc-********-*************'
+Created container accessible with:
+  DOCKER_TLS_VERIFY=1
+  DOCKER_HOST=tcp://***.***.***.***:****
+  DOCKER_CERT_PATH=/tmp/docker-certs*********
+  DOCKER_MACHINE_NAME=*****
+```
 
 また、Remote Docker Environment で動くコンテナは、primary container とは異なるネットワークに所属します。primary container から Remote Docker Environment で動くコンテナへの直接的なネットワーク通信は行えません。[通信したいコンテナが属するネットワークに参加する形で新しくコンテナを作り、その新しく作ったコンテナから通信する必要があります](https://circleci.com/docs/2.0/building-docker-images/#accessing-services)。
 
 今回のケースでは、プライベートレジストリを利用する都合とネットワーク的な制約を抱えています。バックエンドのコンテナ群を動かして E2E テストで利用するために、E2E テストも Remote Docker Environment のコンテナで実行する必要がありました。
 
 制約といえば、primary container のファイルシステムを Remote Docker Environment のコンテナからマウントする事もできません。primary container のキャッシュは便利ですが、そのキャッシュを Remote Docker Environment でも無条件に利用する事はできません。直接マウントはできないので、[docker cp でコンテナにコピーする方法が提案されています](https://circleci.com/docs/2.0/building-docker-images/#mounting-folders)。
-
-なお、当然ながら、primary container となるイメージには Docker クライアントがインストールされている必要があります。primary container 上で直接コンテナを動かす事は無いので、Docker デーモンが動いている必要はありません。
 
 ### 例：バックエンドのコンテナ群を動かして E2E テスト
 

@@ -121,7 +121,7 @@ CircleCI 2.0 で Docker コンテナを動かす
 
 パブリックレジストリにある Docker イメージを使う場合、設定の `jobs: > {job name}: > docker: > {i}: > image:` でイメージを指定するだけで済みます。一方、 `jobs: > {job name}: > docker: > {i}: > image:` にはプライベートレジストリのイメージは指定できません。自分で認証(`docker login`)を通した上で、適宜イメージを取得(`docker image pull` など)する必要があります。
 
-さらに、CircleCI 2.0 で docker コマンドを実行するためには、[Remote Docker Environment](https://circleci.com/docs/2.0/building-docker-images/) と呼ばれる隔離環境を立ち上げて使用する必要があります。これは steps: 以下に `setup_remote\docker` を記述するだけで準備出来ます。
+さらに、CircleCI 2.0 で docker コマンドを実行するためには、[Remote Docker Environment](https://circleci.com/docs/2.0/building-docker-images/) と呼ばれる隔離環境を立ち上げて使用する必要があります。これは steps: 以下に `setup_remote_docker` を記述するだけで準備出来ます。
 
 また、Remote Docker Environment で動くコンテナは、primary container とは異なるネットワークに所属します。primary container から Remote Docker Environment で動くコンテナへの直接的なネットワーク通信は行えません。[通信したいコンテナが属するネットワークに参加する形で新しくコンテナを作り、その新しく作ったコンテナから通信する必要があります](https://circleci.com/docs/2.0/building-docker-images/#accessing-services)。
 

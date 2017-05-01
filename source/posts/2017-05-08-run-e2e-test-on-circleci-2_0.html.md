@@ -129,7 +129,7 @@ CircleCI 2.0 で Docker コンテナを動かす
 
 制約といえば、primary container のファイルシステムを Remote Docker Environment のコンテナからマウントする事もできません。primary container のキャッシュは便利ですが、そのキャッシュを Remote Docker Environment でも無条件に利用する事はできません。直接マウントはできないので、[docker cp でコンテナにコピーする方法が提案されています](https://circleci.com/docs/2.0/building-docker-images/#mounting-folders)。
 
-なお、当然ながら、primary container となるイメージには Docker がインストールされている必要があります。primary container 上で直接コンテナを動かす事は無いので、Docker デーモンが動いている必要はありません。
+なお、当然ながら、primary container となるイメージには Docker クライアントがインストールされている必要があります。primary container 上で直接コンテナを動かす事は無いので、Docker デーモンが動いている必要はありません。
 
 ### 例：バックエンドのコンテナ群を動かして E2E テスト
 

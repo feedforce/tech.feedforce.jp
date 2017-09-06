@@ -3,7 +3,7 @@
 set -eu
 
 #
-# <!--more--> を持たない記事は NG なので標準出力に出力
+# <!--more--> を持たない記事は NG なので標準エラー出力に出力
 #
 
 cd $HOME/$CIRCLE_PROJECT_REPONAME/source/posts
@@ -23,7 +23,8 @@ if [ "$errors" ]; then
 fi
 
 #
-# 幅 1024 pixel 以上の画像は大きすぎるので標準出力に出力
+# 記事画像の幅は 1024 pixel 以下とする。
+# それより大きな画像は標準エラー出力に出力。
 #
 
 cd $HOME/$CIRCLE_PROJECT_REPONAME/source/images

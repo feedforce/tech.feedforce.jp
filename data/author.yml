@@ -255,6 +255,17 @@
     - label: Twitter
       url: https://twitter.com/mizukmb
 #--------------------------------------------
+- id: ryosuke_sato
+  name: ryosuke_sato
+  thumbnail: ryosuke_sato.png
+  profile: "バックエンドのエンジニアやってます。<br>
+            趣味でバンドやってるせいで家にシンセが沢山あって邪魔です。"
+  media:
+    - label: GitHub
+      url: https://github.com/ryz310
+    - label: Twitter
+      url: https://twitter.com/ryosuke_sato
+#--------------------------------------------
 # エンジニアが追記する場合はここより上に挿入してください
 # 以下、ゲスト
 #--------------------------------------------

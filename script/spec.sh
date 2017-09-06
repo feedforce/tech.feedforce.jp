@@ -19,7 +19,7 @@ done
 if [ "$errors" ]; then
   echo "# The following file(s) doesn't have <!--more-->.\n" >&2
   for i in $errors; do echo $i >&2; done
-  echo
+  echo >&2
 fi
 
 #
@@ -40,6 +40,7 @@ done
 if [ "$image_width_errors" ]; then
   echo "# The following image(s) width are greater than 1024." >&2
   echo $image_width_errors >&2
+  echo >&2
 fi
 
 #

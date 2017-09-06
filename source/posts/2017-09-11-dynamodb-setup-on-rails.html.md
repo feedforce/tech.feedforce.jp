@@ -6,15 +6,15 @@ tags: ruby aws
 ---
 
 初めまして。バックエンドエンジニアの佐藤と申します。
-以前、弊社のとあるプロダクトに DynamoDB を導入したのですが、今度は別のプロダクトにも導入しようとしたら思ったより大変だったので、備忘録として記事にしておこうと思いました。
+弊社プロダクト [ソーシャルPLUS](https://socialplus.jp/) では [Amazon DynamoDB](https://aws.amazon.com/jp/dynamodb/) を使用しております。しかし、導入手順が思ったより煩雑でハマった点も多かったため、備忘録として記事にしておこうと思います。
 
 <!--more-->
 
 ## どうやるの？
 
-### :docker2: Docker の設定
+### 開発環境に Docker を使用している場合の設定
 
-DynamoDB のローカルでの開発環境には AWS が公開している [DynamoDB Local](https://aws.amazon.com/jp/blogs/aws/dynamodb-local-for-desktop-development/) があります。これを利用しても良いのですが、 :sp: チームでは開発環境に Docker を採用しているので、 DynamoDB の Docker イメージを利用します。
+DynamoDB のローカルでの開発環境には AWS が公開している [DynamoDB Local](https://aws.amazon.com/jp/blogs/aws/dynamodb-local-for-desktop-development/) があります。これを利用しても良いのですが、ソーシャルPLUSチームでは開発環境に Docker を採用しているので、 DynamoDB の Docker イメージを利用します。
 ここでは [deangiberson/aws-dynamodb-local](https://hub.docker.com/r/deangiberson/aws-dynamodb-local/) という Docker イメージを使います。これは DynamoDB Local を個人で Docker イメージにしたものを公開されているようです。この記事では触れませんが、 [atlassianlabs/localstack ](https://hub.docker.com/r/atlassianlabs/localstack/) を利用する、という方法もあります。
 ちなみに後述する Circle CI での設定でも Docker イメージの話は出てきます。
 
@@ -29,9 +29,9 @@ msgdynamodb:
     DEFAULT_REGION: ap-northeast-1
 ```
 
-:sp: 本体でも DynamoDB を利用しているため、`ports` でポート番号を変えていますが、複数の DynamoDB を利用していない場合は設定不要になります。
+今回は同一の Docker ネットワーク内で複数の DynamoDB を利用しているため、`ports` でポート番号を変えていますが、単一でしか利用していない場合は設定不要になります。
 
-### :ruby_on_rails: Rails の設定
+### Rails アプリケーションの設定
 
 #### Dynamoid を使用するための準備
 
@@ -64,7 +64,7 @@ config/settings/development.yml
 ```yaml
 aws:
   dynamodb:
-    namespace: message_development
+    namespace: development
     endpoint: http://msgdynamodb:8000
     read_capacity: 5
     write_capacity: 5
@@ -75,7 +75,7 @@ config/settings/test.yml
 ```yaml
 aws:
   dynamodb:
-    namespace: message_test
+    namespace: test
     endpoint: <%= ENV.fetch('CIRCLECI_DYNAMODB_ENDPOINT', 'http://msgdynamodb:8000') %>
     read_capacity: 5
     write_capacity: 5
@@ -88,7 +88,7 @@ aws:
 Model の実装については `dynamoid` の [GitHub](https://github.com/Dynamoid/Dynamoid) を見て頂くとして、実際に動かしてからのことを書きます。`dynamoid` は実行時に対応するテーブルが存在していないと、自動的に AWS 上でテーブルの作成までやってくれます。ですが、この時に例外が発生してしまうので、本番への適用時に一度試験的に動作させるなどが必要になってくるかと思います。AWS のマネジメントコンソールにも、エラーとして記録が残りますが、原因は同様です。
 テーブルが作成されたら、コンソールから名前などが適切であるかどうか確認しましょう。そして、前述のように **Auto Scaling の設定** も忘れずにやりましょう。
 
-### :ruby: Rspec の設定
+### Rspec の設定
 
 #### DynamoDB のデータをリセットする機能を追加する
 
@@ -159,9 +159,9 @@ config.before :suite do
 end
 ```
 
-こういう記述が出来ることを調べるのに随分苦労しました :sweat:
+こういう記述が出来ることを調べるのに随分苦労しました。。
 
-### :circleci: Circle CI 2.0 での設定
+### Circle CI 2.0 での設定
 
 Circle CI 2.0 から Docker イメージを使用するようになったことは周知かと思います。Docker の設定の項でも使用した Docker イメージを設定していきます。`.circleci/config.yml` に以下の設定を追加します。
 
@@ -174,7 +174,6 @@ version: 2
           environment:
             TZ: /usr/share/zoneinfo/Asia/Tokyo
             RAILS_ENV: test
-            DATABASE_URL_TEST: mysql2://root:@127.0.0.1/socialplus-for-message_test
 +           CIRCLECI_DYNAMODB_ENDPOINT: http://localhost:8000
 +           AWS_ACCESS_KEY_ID: dummy # iam/security-credentials へのアクセスが発生するのを抑止
 +           AWS_SECRET_ACCESS_KEY: dummy # iam/security-credentials へのアクセスが発生するのを抑止
@@ -183,16 +182,15 @@ version: 2
 +         environment:
 +           SERVICES: dynamodb
 +         entrypoint: ['/usr/bin/java', '-Xms1G', '-Xmx1G', '-Djava.library.path=.', '-jar', 'DynamoDBLocal.jar', '-dbPath', '/var/dynamodb_local', '-port', '8000']
-      working_directory: /home/circleci/socialplus-for-message
 ```
 
 コメントにもありますが、`AWS_ACCESS_KEY_ID` と `AWS_SECRET_ACCESS_KEY` は `iam/security-credentials` へのアクセスが走ってしまうのを防止するために必要となります。
 
 重要なのが `entrypoint: ['/usr/bin/java', '-Xms1G', '-Xmx1G'...` の部分でして、これは [Java プロセスのメモリー占有領域を制限するためのオプション](http://docs.oracle.com/cd/E22646_01/doc.40/b61439/tune_footprint.htm) です。 `-Xms1G`, `-Xmx1G` とすると、 Java のメモリ領域を 1 GByte に制限してくれます。
-この設定が無いと、 DynamoDB Local のメモリ使用量が爆発して Circle CI でのテストが死にます :innocent:
+この設定が無いと、 DynamoDB Local のメモリ使用量が爆発して Circle CI でのテストが死にます。。
 `atlassianlabs/localstack` を使用していた時も同様でした。
 
-これも原因を調べるのに随分苦労したので、皆さんは罠にはまらないように気を付けてください :innocent:
+これも原因を調べるのに随分苦労したので、皆さんは罠にはまらないように気を付けてください。
 
 ## 終わりに
 

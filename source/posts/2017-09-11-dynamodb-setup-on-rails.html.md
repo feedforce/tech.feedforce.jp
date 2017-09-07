@@ -57,7 +57,7 @@ Dynamoid.configure do |config|
 end
 ```
 
-設定値の詳細は settings/xxx.yml へ記述する形になります。ここでは `development` と `test` の例を記載します。
+設定値の詳細は Rails の Config を利用して `config/settings/xxx.yml` へ記述しています。ここでは `development` と `test` の例を記載します。
 
 config/settings/development.yml
 
@@ -175,16 +175,12 @@ version: 2
             TZ: /usr/share/zoneinfo/Asia/Tokyo
             RAILS_ENV: test
 +           CIRCLECI_DYNAMODB_ENDPOINT: http://localhost:8000
-+           AWS_ACCESS_KEY_ID: dummy # iam/security-credentials へのアクセスが発生するのを抑止
-+           AWS_SECRET_ACCESS_KEY: dummy # iam/security-credentials へのアクセスが発生するのを抑止
         - image: circleci/mysql:5.7
 +       - image: deangiberson/aws-dynamodb-local
 +         environment:
 +           SERVICES: dynamodb
 +         entrypoint: ['/usr/bin/java', '-Xms1G', '-Xmx1G', '-Djava.library.path=.', '-jar', 'DynamoDBLocal.jar', '-dbPath', '/var/dynamodb_local', '-port', '8000']
 ```
-
-コメントにもありますが、`AWS_ACCESS_KEY_ID` と `AWS_SECRET_ACCESS_KEY` は `iam/security-credentials` へのアクセスが走ってしまうのを防止するために必要となります。
 
 重要なのが `entrypoint: ['/usr/bin/java', '-Xms1G', '-Xmx1G'...` の部分でして、これは [Java プロセスのメモリー占有領域を制限するためのオプション](http://docs.oracle.com/cd/E22646_01/doc.40/b61439/tune_footprint.htm) です。 `-Xms1G`, `-Xmx1G` とすると、 Java のメモリ領域を 1 GByte に制限してくれます。
 この設定が無いと、 DynamoDB Local のメモリ使用量が爆発して Circle CI でのテストが死にます。。

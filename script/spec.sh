@@ -3,7 +3,7 @@
 set -eu
 
 #
-# <!--more--> を持たない記事は NG なので標準出力に出力
+# <!--more--> を持たない記事は NG なので標準エラー出力に出力
 #
 
 cd $HOME/$CIRCLE_PROJECT_REPONAME/source/posts
@@ -19,11 +19,12 @@ done
 if [ "$errors" ]; then
   echo "# The following file(s) doesn't have <!--more-->.\n" >&2
   for i in $errors; do echo $i >&2; done
-  echo
+  echo >&2
 fi
 
 #
-# 幅 1024 pixel 以上の画像は大きすぎるので標準出力に出力
+# 記事画像の幅は 1024 pixel 以下とする。
+# それより大きな画像は標準エラー出力に出力。
 #
 
 cd $HOME/$CIRCLE_PROJECT_REPONAME/source/images
@@ -39,13 +40,35 @@ done
 if [ "$image_width_errors" ]; then
   echo "# The following image(s) width are greater than 1024." >&2
   echo $image_width_errors >&2
+  echo >&2
+fi
+
+#
+# プロフィール画像の幅は 300 pixel 以下とする。
+# それより大きな画像は標準エラー出力に出力。
+#
+
+cd $HOME/$CIRCLE_PROJECT_REPONAME/source/images/authors
+
+image_width_errors2=""
+
+for i in *; do
+  if [ $(identify -format "%w" $i) -gt 300 ]; then
+    image_width_errors2="$image_width_errors2\n$(identify -format "%M (width=%w)" $i)"
+  fi
+done
+
+if [ "$image_width_errors2" ]; then
+  echo "# The following image(s) width are greater than 300." >&2
+  echo $image_width_errors2 >&2
+  echo >&2
 fi
 
 #
 # 戻り値
 #
 
-if [ "$errors" -o "$image_width_errors" ]; then
+if [ "$errors" -o "$image_width_errors" -o "$image_width_errors2" ]; then
   exit 1
 fi
 

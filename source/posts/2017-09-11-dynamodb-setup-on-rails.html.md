@@ -35,7 +35,7 @@ msgdynamodb:
 
 #### Dynamoid を使用するための準備
 
-ActiveRecord は MySQL などの RDB の ORM なので、 DynamoDB の場合は `dynamoid` と言う ORM を使用します。Gemfile に以下のコードを追加します。
+ActiveRecord は MySQL など RDB の O/R マッパーなので、 DynamoDB の場合は `dynamoid` という O/Rマッパーを使用します。Gemfile に以下のコードを追加します。
 
 ```rb
 gem 'dynamoid', '~> 1'
@@ -57,7 +57,7 @@ Dynamoid.configure do |config|
 end
 ```
 
-設定値の詳細は settings/xxx.yml に記述する形になります。ここでは `development` と `test` の例を記載します。
+設定値の詳細は settings/xxx.yml へ記述する形になります。ここでは `development` と `test` の例を記載します。
 
 config/settings/development.yml
 
@@ -86,13 +86,13 @@ aws:
 #### 実際に動かしてからやること
 
 Model の実装については `dynamoid` の [GitHub](https://github.com/Dynamoid/Dynamoid) を見て頂くとして、実際に動かしてからのことを書きます。`dynamoid` は実行時に対応するテーブルが存在していないと、自動的に AWS 上でテーブルの作成までやってくれます。ですが、この時に例外が発生してしまうので、本番への適用時に一度試験的に動作させるなどが必要になってくるかと思います。AWS のマネジメントコンソールにも、エラーとして記録が残りますが、原因は同様です。
-テーブルが作成されたら、コンソールから名前などが適切であるかどうか確認しましょう。そして、前述のように **Auto Scaling の設定** も忘れずにやりましょう。
+テーブルが作成されたら、コンソールから名前などが適切であるか確認しましょう。そして、前述のように **Auto Scaling の設定** も忘れずにやりましょう。
 
 ### Rspec の設定
 
 #### DynamoDB のデータをリセットする機能を追加する
 
-ActiveRecord であれば `spec/rails_helper.rb` で `config.use_transactional_fixtures = true` と記述すれば、テスト毎にテーブルの内容がリセットされるのですが、 Dynamoid においては自前でリセットの仕組みを用意する必要があります。
+ActiveRecord であれば `use_transactional_fixtures = true` と記述すれば、テスト毎にテーブルの内容がリセットされるのですが、Dynamoid においては自前でリセットの仕組みを用意する必要があります。
 
 https://github.com/Dynamoid/Dynamoid#test-environment を参考に、`spec/support/dynamoid_reset.rb` に以下のような処理を記述します。
 

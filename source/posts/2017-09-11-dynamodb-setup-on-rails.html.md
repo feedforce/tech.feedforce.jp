@@ -2,7 +2,7 @@
 title: DynamoDB を Rails で使えるようにするためのあれこれ
 date: 2017-09-11 00:00 JST
 authors: ryosuke_sato
-tags: ruby aws
+tags: ruby, aws
 ---
 
 初めまして。バックエンドエンジニアの佐藤と申します。

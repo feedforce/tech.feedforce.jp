@@ -20,7 +20,7 @@ DynamoDB のローカルでの開発環境には AWS が公開している [Dyna
 
 `docker-compose.yml` に以下の設定を追加します。
 
-```rb
+```yaml
 msgdynamodb:
   image: deangiberson/aws-dynamodb-local
   ports:

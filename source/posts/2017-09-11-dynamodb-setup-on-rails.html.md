@@ -16,7 +16,7 @@ tags: ruby, aws
 
 DynamoDB のローカルでの開発環境には AWS が公開している [DynamoDB Local](https://aws.amazon.com/jp/blogs/aws/dynamodb-local-for-desktop-development/) があります。これを利用しても良いのですが、ソーシャルPLUSチームでは開発環境に Docker を採用しているので、 DynamoDB の Docker イメージを利用します。
 ここでは [deangiberson/aws-dynamodb-local](https://hub.docker.com/r/deangiberson/aws-dynamodb-local/) という Docker イメージを使います。これは DynamoDB Local を個人で Docker イメージにしたものを公開されているようです。この記事では触れませんが、 [atlassianlabs/localstack ](https://hub.docker.com/r/atlassianlabs/localstack/) を利用する、という方法もあります。
-ちなみに後述する Circle CI での設定でも Docker イメージの話は出てきます。
+ちなみに後述する CircleCI での設定でも Docker イメージの話は出てきます。
 
 `docker-compose.yml` に以下の設定を追加します。
 
@@ -161,9 +161,9 @@ end
 
 こういう記述が出来ることを調べるのに随分苦労しました。。
 
-### Circle CI 2.0 での設定
+### CircleCI 2.0 での設定
 
-Circle CI 2.0 から Docker イメージを使用するようになったことは周知かと思います。Docker の設定の項でも使用した Docker イメージを設定していきます。`.circleci/config.yml` に以下の設定を追加します。
+CircleCI 2.0 から Docker イメージを使用するようになったことは周知かと思います。Docker の設定の項でも使用した Docker イメージを設定していきます。`.circleci/config.yml` に以下の設定を追加します。
 
 ```diff
 version: 2
@@ -183,7 +183,7 @@ version: 2
 ```
 
 重要なのが `entrypoint: ['/usr/bin/java', '-Xms1G', '-Xmx1G'...` の部分でして、これは [Java プロセスのメモリー占有領域を制限するためのオプション](http://docs.oracle.com/cd/E22646_01/doc.40/b61439/tune_footprint.htm) です。 `-Xms1G`, `-Xmx1G` とすると、 Java のメモリ領域を 1 GByte に制限してくれます。
-この設定が無いと、 DynamoDB Local のメモリ使用量が爆発して Circle CI でのテストが死にます。。
+この設定が無いと、 DynamoDB Local のメモリ使用量が爆発して CircleCI でのテストが死にます。。
 `atlassianlabs/localstack` を使用していた時も同様でした。
 
 これも原因を調べるのに随分苦労したので、皆さんは罠にはまらないように気を付けてください。

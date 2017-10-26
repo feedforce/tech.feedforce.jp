@@ -14,7 +14,7 @@ gem 'redcarpet', '~> 3.2.1'
 gem 'builder', '~> 3.0'
 
 # for Heroku
-gem 'puma', '~> 2.11.3'
+gem 'puma', '~> 3.0'
 
 # for https://github.com/feedforce/tech.feedforce.jp/pull/156
 gem 'sass', '3.4.19'

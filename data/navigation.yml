@@ -2,5 +2,5 @@
   url: "/"
 - label: "Archives"
   url: "/archives/"
-- label: "Member"
-  url: "/member/"
+- label: ">> RENEW!"
+  url: "http://developer.feedforce.jp"

@@ -1,0 +1,318 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>Rails のエラー通知を fluentd 経由で Bugsnag に送る | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは。2月に入社して以来、とうとう勉強会の担当が回ってきた腰越です。最近、現在進行中のプロジェクト(Rails)にて Bugsnag というサービスを導入いたしましたので、導入までの経緯について発表させていただきました。Bugsnag とは？なぜ Bugsnag を使うのかBugsnag をどう使うのか">
+      <link rel="canonical" href="http://tech.feedforce.jp/rails-fluent-bugsnag.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="Rails のエラー通知を fluentd 経由で Bugsnag に送る | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは。2月に入社して以来、とうとう勉強会の担当が回ってきた腰越です。最近、現在進行中のプロジェクト(Rails)にて Bugsnag というサービスを導入いたしましたので、導入までの経緯について発表させていただきました。Bugsnag とは？なぜ Bugsnag を使うのかBugsnag をどう使うのか">
+      <meta property="og:url" content="http://tech.feedforce.jp/rails-fluent-bugsnag.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/rails-fluent-bugsnag.html">Rails のエラー通知を fluentd 経由で Bugsnag に送る</a></h1>
+      <ul>
+        <li class="entry-time">2015.05.19</li>
+        <li class="entry-cat"><a href="/category/resume/">勉強会資料</a>, <a href="/category/operation/">運用事例</a></li>
+        <li class="entry-author"><a href="/author/ff_koshigoe">ff_koshigoe</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/ff_koshigoe"><img src="/images/authors/koshigoe.gif" /></a>
+    </div>
+    <div class="entry-body">
+      <p><img alt="bugsnag logo" src="/images/2015/05/logo-bugsnag.png" /></p>
+
+<p>こんにちは。2月に入社して以来、とうとう勉強会の担当が回ってきた腰越です。</p>
+
+<p>最近、現在進行中のプロジェクト(Rails)にて <a href="https://bugsnag.com/">Bugsnag</a> というサービスを導入いたしましたので、導入までの経緯について発表させていただきました。</p>
+
+<ul>
+<li>Bugsnag とは？</li>
+<li>なぜ Bugsnag を使うのか</li>
+<li>Bugsnag をどう使うのか</li>
+</ul>
+
+<!--more-->
+
+<h2>Bugsnag とは？</h2>
+
+<p>Bugsnag は、アプリケーションで発生した例外の検知・診断に役立つサービスです。</p>
+
+<p><img alt="bugsnag screenshot" src="/images/2015/05/bugsnag-screenshot.png" /></p>
+
+<p>類似サービスとして、<a href="https://airbrake.io/">Airbrake</a> や <a href="https://raygun.io/">Raygun</a>、<a href="https://rollbar.com/">Rollbar</a>、オープンソースでは Sentry(<a href="https://getsentry.com/welcome/">SaaS</a>, <a href="https://github.com/getsentry/sentry">OSS</a>) や <a href="https://github.com/errbit/errbit">errbit</a> などがよく知られているのではないでしょうか。</p>
+
+<h2>Bugsnag 導入に至る経緯</h2>
+
+<p>これまで、アプリケーションのエラー処理にて「エラーメールを送る」という対応をよく行ってきましたが、その一方で、過去の経験から「発生したエラーを通知するだけだと運用で苦労する」という問題があることも感じていました。</p>
+
+<p>そこで、この問題を解決するべく、エラー情報を賢く取り回してくれるサービスの導入を検討する事にしました。</p>
+
+<h3>感じていた問題</h3>
+
+<ul>
+<li>エラー発生の度に通知がくるので、短い間隔でエラーが連続すると通知が山積する(メール通知だとメールが遅延しかねない)</li>
+<li>エラー情報が通知先で保管されるので、複数人での協力作業に手間取る</li>
+<li>既に対応中のため、該当箇所の通知だけを止めたい、という事は容易でない</li>
+<li>通知を受けるだけなので、「対応は不要」とか「誰が対応しているか」などの状況の管理が容易でない</li>
+<li>エラー情報を探すのが容易でない</li>
+</ul>
+
+<h3>そこで Bugsnag</h3>
+
+<p>BTS の様にエラーを管理してくれるサービスを使えば感じている問題は解消されそうだと考え、いくつかのサービスを軽く試した結果 Bugsnag の導入に至りました。</p>
+
+<ul>
+<li>Bugsnag はアプリケーションのエラーを検知して記録する仕組みを提供してくれる</li>
+<li>Bugsnag はエラーを一定のルールで束ねて管理することができる(メールで言うスレッド的な)</li>
+<li>Bugsnag は記録されたエラーをフィルタして一覧することができる</li>
+<li>Bugsnag は記録されたエラーに担当者を割り当てたり解決済みにしたりコメントを付けたりする事ができる</li>
+<li>Bugsnag は外部サービスと連携する事ができる
+
+<ul>
+<li>メールで通知することができる</li>
+<li>Issue Tracker との連携(エラー発生時に GitHub issue を作ることができる)</li>
+<li>Slack や PagerDuty などを使って通知を送ることができる</li>
+</ul></li>
+<li>Bugsnag はエラーを様子見することができる
+
+<ul>
+<li>あと○回発生するまで無視する</li>
+<li>一時間以内に○回発生するまで無視する</li>
+<li>○時間以内に発生するまで無視する</li>
+</ul></li>
+<li>Bugsnag は最初の発生でのみ通知を送る、などの調節ができる</li>
+</ul>
+
+<p>上記機能が利用可能という点に加え、管理画面の操作感が感覚的にあったという事で、類似サービスの中から Bugsnag を選択しています。</p>
+
+<h3>余談：オープンソース系は？</h3>
+
+<p>Sentry や Errbit といったオープンソースのツールも利用することができますが、今回は有償サービスを使うよりも結果として運用コスト(人件費、技術的負債)が大きくなると判断して見送りました。操作感的にも合わなかったという理由もありますが。</p>
+
+<h2>Bugsnag をどう使う？</h2>
+
+<p>今回 Bugsnag を導入するプロジェクトでは Rails を使っているため、<a href="https://github.com/bugsnag/bugsnag-ruby">bugsnag/bugsnag-ruby</a> を利用します。</p>
+
+<p>bugsnag-ruby の標準機能では、スレッドを使って Bugsnag への送信処理が実行されます。</p>
+
+<h3>Bugsnag への送信を Fluentd に任せる</h3>
+
+<p>bugsnag-ruby の標準機能ではリトライなどの通信周りのフォローは行わないため、そのあたりを考慮すると何かしらの工夫が欲しくなります。そこで、Fluentd を使う事を考えました。</p>
+
+<p>今回は、Rails アプリケーションから直接 Fluentd にデータを送信する形式で、Fluent を経由した Bugsnag への送信処理を実現してみました。将来的にログファイルに書き出したエラー情報を Fluentd で読み取る方式に変わるかもしれません。</p>
+
+<h4>Rails から Fluentd</h4>
+
+<p>bugsnag-ruby でのエラー情報送信処理を Fluentd への送信に置き換えるため、<a href="https://github.com/feedforce/bugsnag-delivery-fluent">feedforce/bugsnag-delivery-fluent</a> という gem を作りました。bugsnag-ruby の設定 <code class="prettyprint">Bugsnag.configuration.delivery_method</code> を <code class="prettyprint">:fluent</code> とすることで使える様になります。</p>
+
+<pre><code class="prettyprint rb">Bugsnag.configure do |config|
+  ...
+  config.delivery_method = :fluent
+  # config.fluent_tag_prefix = &#39;bugsnag&#39;
+  # config.fluent_host = &#39;localhost&#39;
+  # config.fluent_port = 24224
+end
+</code></pre>
+
+<p>Fluentd で受け取ったエラー情報を Bugsnag に送信するために、<a href="https://github.com/feedforce/fluent-plugin-bugsnag">feedforce/fluent-plugin-bugsnag</a> を使います。</p>
+
+<pre><code class="prettyprint">&lt;source&gt;
+  type forward
+&lt;/source&gt;
+
+&lt;match bugsnag.deliver&gt;
+  type bugsnag
+
+  # bugsnag_proxy_host localhost
+  # bugsnag_proxy_port 8888
+  # bugsnag_proxy_user user
+  # bugsnag_proxy_password password
+  # bugsnag_timeout 10
+&lt;/match&gt;
+</code></pre>
+
+<h2>まとめ</h2>
+
+<ul>
+<li>エラーメールに疲れたのでエラー管理系サービスを使うことにしました</li>
+<li>エラー管理系サービスの中から Bugsnag を選択しました</li>
+<li>Bugsnag への通知は Fluentd を経由して行う様にしました</li>
+<li>Bugsnag の導入を決めたプロジェクトは絶賛鋭意開発中のため、運用ノウハウなどは今後機会があれば別途共有します</li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/rails-fluent-bugsnag.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="Rails のエラー通知を fluentd 経由で Bugsnag に送る" data-url="http://tech.feedforce.jp/rails-fluent-bugsnag.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/rails-fluent-bugsnag.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/rails-fluent-bugsnag.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/heroku-recent-topics.html" rel="next">数年ぶりに Heroku を使って感じたことなど</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/elasticache.html" rel="prev">ElastiCacheをCloudWatch+fluentd+Zabbixで監視する</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

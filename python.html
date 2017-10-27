@@ -1,0 +1,1222 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>はじめましてPython | feedforce Engineers' blog</title>
+      <meta name="description" content="「Django(の名前が)カッコイイ！」という事でPythonを始めてみました。- あくまで個人的に始めたということです- 本文中のサンプルコードなどは全てPython2.4で実行しています">
+      <link rel="canonical" href="http://tech.feedforce.jp/python.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="はじめましてPython | feedforce Engineers' blog">
+      <meta property="og:description" content="「Django(の名前が)カッコイイ！」という事でPythonを始めてみました。- あくまで個人的に始めたということです- 本文中のサンプルコードなどは全てPython2.4で実行しています">
+      <meta property="og:url" content="http://tech.feedforce.jp/python.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/python.html">はじめましてPython</a></h1>
+      <ul>
+        <li class="entry-time">2007.03.27</li>
+        <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/ff_koshigoe">ff_koshigoe</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/ff_koshigoe"><img src="/images/authors/koshigoe.gif" /></a>
+    </div>
+    <div class="entry-body">
+      <p>「Django(の名前が)カッコイイ！」という事でPythonを始めてみました。<br>
+- あくまで個人的に始めたということです<br>
+- 本文中のサンプルコードなどは全てPython2.4で実行しています</p>
+
+<!--more-->  
+
+<ul>
+<li>Pythonはじめました
+
+<ul>
+<li>入門書は『初めてのPython』</li>
+<li>ほか、情報源</li>
+</ul></li>
+<li>それでは始めましょう
+
+<ul>
+<li>お好みでどうぞ</li>
+<li>ほかにも</li>
+<li>ドキュメントを読みましょう</li>
+<li>自作モジュールにも使えます</li>
+</ul></li>
+<li>中の事を少し
+
+<ul>
+<li>実装</li>
+<li>例えばCPython</li>
+<li>JIT(Just In Time)コンパイラ</li>
+<li>フローズンバイナリ</li>
+</ul></li>
+<li><p>それではダイジェストでどうぞ</p>
+
+<ul>
+<li>ステートメント</li>
+<li>代入ステートメント
+
+<ul>
+<li>memo</li>
+<li>memo</li>
+</ul></li>
+<li>ifステートメント</li>
+<li>whileループとforループ
+
+<ul>
+<li>ループ内で利用出来るステートメント</li>
+</ul></li>
+<li>forループとイテレータとジェネレータ</li>
+<li>全てはオブジェクト</li>
+<li>不変性</li>
+<li>オブジェクト指向とは関係ありません</li>
+<li>関数やクラスを書く順序</li>
+<li>ビルトインオブジェクト</li>
+<li>型とリテラル</li>
+<li>たぷる？</li>
+<li>ガーベージコレクションとキャッシュ</li>
+<li>おまけ</li>
+<li>演算について</li>
+<li>インクリメントとデクリメント</li>
+<li>フックメソッドを利用した演算のオーバーライド</li>
+<li>演算と型</li>
+<li>スコープ</li>
+<li>関数まわり</li>
+<li>引数</li>
+<li>デコレータ構文</li>
+<li>クロージャ</li>
+<li>クラス</li>
+<li>多重継承</li>
+<li>classmethod, staticmethod</li>
+<li>ネームマングリング</li>
+<li>モジュール</li>
+<li>リロード</li>
+<li>unittestを忘れずに</li>
+</ul></li>
+<li><p>挑戦は続く</p></li>
+</ul>
+
+<h2>Pythonはじめました</h2>
+
+<p>「Django(の名前が)カッコイイ！」という事でPythonを始めてみました。<br>
+- あくまで個人的に始めたということです<br>
+- 本文中のサンプルコードなどは全てPython2.4で実行しています</p>
+
+<h3>入門書は『初めてのPython』</h3>
+
+<p>これを読めば間違いないと思います。<br>
+- <a href="http://www.amazon.co.jp/%E5%88%9D%E3%82%81%E3%81%A6%E3%81%AEPython-%E7%AC%AC2%E7%89%88-%E3%83%9E%E3%83%BC%E3%82%AF-%E3%83%AB%E3%83%83%E3%83%84/dp/4873112109/ref=pd_bbs_sr_1/503-0839888-0903908?ie=UTF8&amp;s=books&amp;qid=1174213817&amp;sr=8-1">Amazon.co.jp： 初めてのPython 第2版: 本: マーク ルッツ,デイビッド アスカー,Mark Lutz,David Ascher,夏目 大</a></p>
+
+<h4>ほか、情報源</h4>
+
+<ul>
+<li><a href="http://oldriver.org/pep-0008j.html">PEP 8 -- Style Guide for Python Code</a></li>
+<li><a href="http://www.python.jp/Zope/">Python Japan User&#39;s Group</a></li>
+<li><a href="http://www.python.jp/doc/nightly/">Python 2.4 ドキュメント - June 27, 2006</a></li>
+<li><a href="http://www.python.jp/mailman/listinfo/">www.python.jp メーリングリスト</a></li>
+</ul>
+
+<h2>それでは始めましょう</h2>
+
+<pre><code class="prettyprint">&quot;&quot;&quot;
+http://www.ruby-lang.org/ja/
+&quot;&quot;&quot;
+class Greeter:
+    def __init__ (self, name):
+        self.name = name.capitalize()
+
+    def salute(self):
+        print &#39;Welcome to the world of the indent, %s!&#39; % self.name
+
+g = Greeter(&quot;feedforce&quot;)
+g.salute()
+</code></pre>
+
+<h3>お好みでどうぞ</h3>
+
+<dl>
+<dt>ワンライナー</dt>
+
+</dl>
+
+<pre><code class="prettyprint">$ python -c &#39;print &quot;Oneliner!&quot;&#39;
+Oneliner!
+</code></pre>
+
+<dl>
+<dt>インタラクティブシェル</dt>
+
+</dl>
+
+<pre><code class="prettyprint">$ python
+&gt;&gt;&gt; print &#39;Interactive shell!&#39;
+Interactive shell!
+</code></pre>
+
+<dl>
+
+<dt>ファイルを実行</dt>
+
+</dl>
+
+<pre><code class="prettyprint">$ python sample.py
+</code></pre>
+
+<h4>ほかにも</h4>
+
+<ul>
+<li><a href="http://www.python.org/idle/">IDLE - an Integrated DeveLopment Environment for Python</a>
+
+<ul>
+<li>標準のIDE(使った事がありません)</li>
+</ul></li>
+<li><a href="http://ipython.scipy.org/moin/">フロントページ - IPython</a>
+
+<ul>
+<li>履歴やシェルコマンドなどを利用可能なインタラクティブシェル(interactive interpreter)</li>
+</ul></li>
+</ul>
+
+<h3>ドキュメントを読みましょう</h3>
+
+<p>pydocコマンドを利用してヘルプドキュメントを表示する事が出来ます。</p>
+
+<pre><code class="prettyprint">$ pydoc urlparse
+$ pydoc urlparse.urlparse
+$ pydoc -k url
+</code></pre>
+
+<p>pydocには、HTMLドキュメントを書き出したり、ドキュメントサーバを立ち上げるなどの機能もあります。</p>
+
+<h4>自作モジュールにも使えます</h4>
+
+<dl>
+<dt>sample.py</dt>
+
+</dl>
+
+<pre><code class="prettyprint">&quot;&quot;&quot;
+doc for file
+&quot;&quot;&quot;
+
+class C:
+    &quot;&quot;&quot;
+    doc for class
+    &quot;&quot;&quot;
+
+ def method(self):
+        &quot;&quot;&quot;
+        doc for method
+        &quot;&quot;&quot;
+        return 0
+
+def func():
+    &quot;&quot;&quot;
+    doc for function
+    &quot;&quot;&quot;
+    return 0
+
+if __name__ == &#39; __main__&#39;:
+    &quot;&quot;&quot;
+    doc for main
+    &quot;&quot;&quot;
+    print &#39;main&#39;
+</code></pre>
+
+<pre><code class="prettyprint">~$ pydoc sample
+
+NAME
+    doc - doc for file
+
+FILE
+    /Users/mamutaro/work/note/study/doc.py
+
+CLASSES
+    C
+
+    class C
+     | doc for class
+     |  
+     | Methods defined here:
+     |  
+     | method(self)
+     | doc for method
+
+FUNCTIONS
+    func()
+        doc for function
+</code></pre>
+
+<h2>中の事を少し</h2>
+
+<h3>実装</h3>
+
+<ul>
+<li>CPython</li>
+<li>Jython</li>
+<li>Python.NET</li>
+<li>など</li>
+</ul>
+
+<h4>例えばCPython</h4>
+
+<p>CPythonはいわゆるPythonです。Linuxディストリビューションに標準インストールされるようなPythonはCPythonでしょう。<br><br>
+CPythonでは、実行に先立ちソースコードをバイトコンパイルし、出来上がったバイトコードをPVM(Python Virtual Machine)に送り、PVMによってプログラムが動作します。</p>
+
+<h3>JIT(Just In Time)コンパイラ</h3>
+
+<p>PsycoというJITコンパイラが存在するようです。詳しくありませんので、詳細は省きます。<br>
+- <a href="http://psyco.sourceforge.net/">Psyco - Home Page</a><br>
+- <a href="http://ja.wikipedia.org/wiki/%E3%82%B8%E3%83%A3%E3%82%B9%E3%83%88%E3%82%A4%E3%83%B3%E3%82%BF%E3%82%A4%E3%83%A0%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%AB%E6%96%B9%E5%BC%8F">ジャストインタイムコンパイル方式 - Wikipedia</a></p>
+
+<h3>フローズンバイナリ</h3>
+
+<p>単独で実行可能な形式にまとめる事が出来るツールを利用出来ます。<br>
+- <a href="http://www.python.jp/Zope/articles/tips/py2exe">py2exe (Windows 実行形式に変換)</a><br>
+- <a href="http://pyinstaller.hpcf.upr.edu/cgi-bin/trac.cgi">PyInstaller - Trac</a><br>
+- <a href="http://svn.python.org/view/python/trunk/Tools/freeze/">Repository - directory - projects: python/trunk/Tools/freeze</a></p>
+
+<h2>それではダイジェストでどうぞ</h2>
+
+<h3>ステートメント</h3>
+
+<h4>代入ステートメント</h4>
+
+<p>Pythonでは値が代入されていない変数を利用する事は出来ません。利用しようとした場合、NameError例外がスローされます。<br><br>
+代入は=だけで行われるわけではなく、forループや関数・クラスの定義や関数の引数などでは自動的に代入が行われます。</p>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; x = 10
+&gt;&gt;&gt; y, z = 100, 1000
+&gt;&gt;&gt; x, y, z
+(10, 100, 1000)
+&gt;&gt;&gt; L = [0, 1, 2]
+&gt;&gt;&gt; [a, b, c] = L
+&gt;&gt;&gt; a, b, c
+(0, 1, 2)
+
+</code></pre>
+
+<h5>memo</h5>
+
+<p>Pythonの変数は、C言語のポインタのような働きをします(void型ポインタ, 汎用ポインタ)。<br><br>
+代入によってオブジェクトへのリファンレンスが作られ、それが変数に割り当てられます。</p>
+
+<h5>memo</h5>
+
+<p>Pythonでは代入は式ではなくステートメントです。このため、代入は値を返しません。つまり、以下のような記述は許されていません。</p>
+
+<pre><code class="prettyprint">&lt;?php
+
+$fp = fopen( __FILE__ , &#39;r&#39;);
+while (($str = fgets($fp))) {
+    print $str;
+}
+
+?&gt;
+</code></pre>
+
+<h4>ifステートメント</h4>
+
+<pre><code class="prettyprint">if a:
+    ...
+elif b:
+    ...
+else:
+    ...
+</code></pre>
+
+<dl>
+<dt>ブール演算</dt>
+
+</dl>
+
+<ul>
+<li>0、空のオブジェクト、Noneを偽と解釈する</li>
+<li>上記以外は真と解釈する</li>
+<li>データ構造の比較はその構成要素１つ１つに付いて行われる</li>
+</ul>
+
+<pre><code class="prettyprint">(1, 2, 3) and (0, 1, 4)
+&gt;&gt;&gt; 1 and &#39;a&#39; and (1)
+1
+&gt;&gt;&gt; not 0 and not &#39;&#39; and not () and not None
+True
+&gt;&gt;&gt; (1, 2, 3) and (1, 2, 3)
+(1, 2, 3)
+&gt;&gt;&gt; (1, 2, 3) and (0, 1, 4)
+(0, 1, 4)
+</code></pre>
+
+<h4>whileループとforループ</h4>
+
+<pre><code class="prettyprint">while cond:
+    ...
+else:
+    ... # elseは省略可能; breakによって終了された場合は実行されない
+
+</code></pre>
+
+<pre><code class="prettyprint">for n in seq:
+    ...
+else:
+    ... # elseは省略可能; breakによって終了された場合は実行されない
+</code></pre>
+
+<h5>ループ内で利用出来るステートメント</h5>
+
+<ul>
+<li>break
+
+<ul>
+<li>ループを強制終了させる</li>
+</ul></li>
+<li>pass
+
+<ul>
+<li>なにもしない</li>
+</ul></li>
+<li>continue
+
+<ul>
+<li>そのループの見出しに戻る</li>
+</ul></li>
+</ul>
+
+<h5>forループとイテレータとジェネレータ</h5>
+
+<p>forループで利用するシーケンスオブジェクトはイテレータプロトコルをサポートしている必要があります。</p>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; def gen_cube(length):
+... for n in range(length):
+... yield n ** 3
+... 
+&gt;&gt;&gt; g = gen_cube(4)
+
+&gt;&gt;&gt; g.next()
+0
+&gt;&gt;&gt; g.next()
+1
+&gt;&gt;&gt; g.next()
+8
+&gt;&gt;&gt; g.next()
+27
+&gt;&gt;&gt; g.next()
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+StopIteration
+&gt;&gt;&gt; for i in gen_cube(5):
+... print i, &#39;:&#39;,
+... 
+0 : 1 : 8 : 27 : 64 :
+</code></pre>
+
+<p>returnでなくyieldを利用する事で、yieldのたびに処理を停止して値を関数の呼び出し元に渡します。yieldを含む関数が呼び出されると、イテレータプロトコルをサポートする(next()メソッドを持つ)ジェネレータオブジェクトを返します。</p>
+
+<h3>全てはオブジェクト</h3>
+
+<p>Pythonの世界では全てがオブジェクトです。数値も文字列も配列も関数もクラスもオブジェクトです。</p>
+
+<h4>不変性</h4>
+
+<p>Pythonには、値を変更出来ないオブジェクトと変更可能なオブジェクトがあり、前者の性質を不変性と呼ぶようです。<br><br>
+数値や文字列、タプルなどは不変性を持ち、リストは値を変更する事が出来ます。</p>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; l1 = [1, 2]
+&gt;&gt;&gt; l2 = l1
+
+&gt;&gt;&gt; l1[1] = 0
+&gt;&gt;&gt; l1, l2
+([1, 0], [1, 0])
+&gt;&gt;&gt; t1 = (1, 2)
+&gt;&gt;&gt; t1[0] = 1
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+TypeError: object does not support item assignment
+</code></pre>
+
+<h4>オブジェクト指向とは関係ありません</h4>
+
+<p>全てがオブジェクトで表現されますが、オブジェクト指向のための言語というわけではないようです。<br><br>
+例えば、(厳密な)アクセスコントロールによるカプセル化は出来ません(それらしく振る舞う事は出来るようですが)。</p>
+
+<h4>関数やクラスを書く順序</h4>
+
+<p>Pythonでは、関数やクラスが登場する位置が意味を持ちます。</p>
+
+<p>例えば、PHPの場合。</p>
+
+<pre><code class="prettyprint">&lt;?php
+
+func();
+
+function func()
+{
+    echo &quot;function\n&quot;;
+}
+
+?&gt;
+</code></pre>
+
+<p>上記のように、関数呼び出し後に関数を定義する事が許されています。</p>
+
+<p>一方、Pythonの場合。</p>
+
+<dl>
+<dt>OK</dt>
+
+</dl>
+
+<pre><code class="prettyprint">def func():
+    print &#39;function&#39;
+
+func()
+</code></pre>
+
+<dl>
+<dt>NG</dt>
+
+</dl>
+
+<pre><code class="prettyprint">func()
+
+def func():
+    print &#39;function&#39;
+</code></pre>
+
+<p>上記のように、先に関数を記述しておかなければ呼び出す事は出来ません。これは、クラスも同様です。利用しようとしている時点では、オブジェクトが存在していないので当然の結果ではありますが、少々戸惑います。</p>
+
+<h3>ビルトインオブジェクト</h3>
+
+<h4>型とリテラル</h4>
+
+<pre><code class="prettyprint"># 数値
+n_short = 100
+n_long = 10000000000000000000L
+n_double_1 = 1.00
+n_double_2 = 1.2e-2
+n_oct = 0123
+n_hex = 0x1a
+n_complex = 3j
+# 文字列
+s1 = &#39;\tsingle quote&#39;
+s2 = &quot;\tdouble quote&quot;
+s3 = &quot;&quot;&quot;\ttriple quote&quot;&quot;&quot; + &#39;&#39;&#39;\ttriple quote&#39;&#39;&#39;
+s4 = r&#39;\traw string\n&#39;
+s5 = u&#39;unicode&#39;
+# タプル
+T = (1, 2, 3, (0, 100,))
+# リスト
+L = [1, 2, 3, [3, 4,]]
+# ディクショナリ
+D = {&#39;a&#39;: 1, T: {}, 100: L}
+# ファイル
+F = open(path, mode)
+</code></pre>
+
+<h4>たぷる？</h4>
+
+<p>固定長の不変性を持つ配列と考えれば良いでしょうか。不変性を持つので、辞書型のキーとして利用可能です。<br>
+- 辞書型のキーには、不変性を持つオブジェクトのみ利用可能です</p>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; x, y, z = (1, 2, 3)
+&gt;&gt;&gt; D = {(1, 2, 3): 100, (4, 5, 6): 200}
+
+&gt;&gt;&gt; print D[(x, y, z)]
+100
+</code></pre>
+
+<h4>ガーベージコレクションとキャッシュ</h4>
+
+<p>Pythonではガーベージコレクションの機能が用意されているため、どこからも参照されなくなったオブジェクトの為に確保されているメモリ領域は自動的に解放されます。<br><br>
+一方で、桁数が少ない数値や文字数が少ない文字列などはキャッシュして再利用する仕組みもあります。</p>
+
+<h4>おまけ</h4>
+
+<dl>
+<dt>数値は続くよ、どこまでも</dt>
+
+</dl>
+
+<p>整数や実数といった表現は自動的に判断されます。また、長さ(精度)についても同様です。<br><br>
+長整数(long)はメモリ容量が許す限りの長さを表現する事が出来ます。</p>
+
+<dl>
+<dt>循環オブジェクト</dt>
+
+</dl>
+
+<p>Pythonでは、自身へのリファレンスをを要素とするコレクションオブジェクトを循環オブジェクトと呼びます。</p>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; L = [1,2,3]
+&gt;&gt;&gt; L.append(L)
+&gt;&gt;&gt; L
+[1, 2, 3, [...]]
+
+</code></pre>
+
+<p>出力の際に無限ループに陥る事はありません(Python1.5.1以降)。</p>
+
+<dl>
+<dt>set型</dt>
+
+</dl>
+
+<p>Python2.4から集合型としてsetを利用出来るようです。</p>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; L1 = [1, 2, 3, 4, 5, 5]
+&gt;&gt;&gt; L2 = [3, 4, 5]
+&gt;&gt;&gt; U = set(L1)
+&gt;&gt;&gt; U
+set([1, 2, 3, 4, 5])
+
+&gt;&gt;&gt; U.intersection(L2)
+set([3, 4, 5])
+&gt;&gt;&gt; U.difference(L2)
+set([1, 2])
+</code></pre>
+
+<dl>
+<dt>リスト内包表記とジェネレータ式</dt>
+
+</dl>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; [x**2 for x in range(10)]
+[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+</code></pre>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; (x**2 for x in range(10))
+&lt;generator object at 0x608f0&gt;
+
+</code></pre>
+
+<h3>演算について</h3>
+
+<h4>インクリメントとデクリメント</h4>
+
+<p>++や--によるインクリメント／デクリメントを行う事は出来ません。</p>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; n = 1
+&gt;&gt;&gt; n++
+  File &quot;&lt;stdin&gt;&quot;, line 1
+    n++
+      ^
+SyntaxError: invalid syntax
+&gt;&gt;&gt; n += 1
+
+&gt;&gt;&gt; n
+2
+&gt;&gt;&gt; n--
+  File &quot;&lt;stdin&gt;&quot;, line 1
+    n--
+      ^
+SyntaxError: invalid syntax
+&gt;&gt;&gt; n -= 1
+&gt;&gt;&gt; n
+1
+</code></pre>
+
+<h4>フックメソッドを利用した演算のオーバーライド</h4>
+
+<p>フックメソッドと呼ばれる特別なメソッドをオーバーライドする事で、そのクラスオブジェクトの演算処理を変更する事が出来ます。</p>
+
+<pre><code class="prettyprint">
+&gt;&gt;&gt; class C:
+... def __init__ (self, v):
+... self.v = v
+... def __add__ (self, v):
+... return self.v - v
+... 
+&gt;&gt;&gt; n = C(100)
+&gt;&gt;&gt; n + 30
+70
+</code></pre>
+
+<h5>演算と型</h5>
+
+<p>演算は対象オブジェクトの型によって振る舞いが変わります。</p>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; 10 + 100
+110
+&gt;&gt;&gt; &#39;abc&#39; + &#39;xyz&#39;
+&#39;abcxyz&#39;
+
+&gt;&gt;&gt; &#39;aiueo&#39; + 100
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+TypeError: cannot concatenate &#39;str&#39; and &#39;int&#39; objects
+&gt;&gt;&gt; 10 * 3
+30
+&gt;&gt;&gt; &#39;a&#39; * 10
+&#39;aaaaaaaaaa&#39;
+</code></pre>
+
+<h3>スコープ</h3>
+
+<ol>
+<li><p>ビルトインスコープ</p>
+
+<ol>
+<li>__builtin__モジュールのスコープ</li>
+</ol></li>
+<li><p>グローバルスコープ</p>
+
+<ol>
+<li>モジュールのトップレベルのスコープ</li>
+</ol></li>
+<li><p>外側の関数のスコープ(ネストスコープ)</p>
+
+<ol>
+<li>関数がネストされた際の、最内以外のスコープ</li>
+</ol></li>
+<li><p>ローカルスコープ</p>
+
+<ol>
+<li>最内の関数のスコープ</li>
+</ol></li>
+</ol>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; global_scope = 100
+&gt;&gt;&gt; 
+&gt;&gt;&gt; def outside_func():
+... nest_scope = global_scope
+... def inside_func():
+... local_scope = -1
+... print nest_scope
+... inside_func()
+... print local_scope
+... 
+&gt;&gt;&gt; outside_func()
+100
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+  File &quot;&lt;stdin&gt;&quot;, line 7, in outside_func
+NameError: global name &#39;local_scope&#39; is not defined
+</code></pre>
+
+<h3>関数まわり</h3>
+
+<h4>引数</h4>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; def func(a, b=0, *args, **kargs):
+... print &#39; a=&#39;, a
+... print &#39; b=&#39;, b
+... print &#39; args=&#39;, args
+... print &#39;kargs=&#39;, kargs
+... 
+&gt;&gt;&gt; func(&#39;x&#39;)
+    a= x
+    b= 0
+ args= ()
+kargs= {}
+&gt;&gt;&gt; func(&#39;y&#39;, 100, 200, 300, c=&#39;?&#39;, d=[])
+    a= y
+    b= 100
+ args= (200, 300)
+kargs= {&#39;c&#39;: &#39;?&#39;, &#39;d&#39;: []}
+&gt;&gt;&gt; func(b=1000, a=&#39;foo&#39;)
+    a= foo
+    b= 1000
+ args= ()
+kargs= {}
+</code></pre>
+
+<ul>
+<li>位置と名前によって引数のマッチングが行われます</li>
+<li>*や**を利用して、可変個の引数を扱う事が出来ます
+
+<ul>
+<li>*を利用した場合、該当箇所の引数がタプルで格納されます</li>
+<li>**を利用した場合、該当箇所のキーワード引数がディクショナリで格納されます</li>
+<li>*や**は通常の引数より後ろに記述し、*の後に**がくるようにします</li>
+</ul></li>
+</ul>
+
+<h4>デコレータ構文</h4>
+
+<p>Python2.4から、デコレータ構文が導入されました。<br>
+- <a href="http://www.planewave.org/translations/python/PQR/PQR2.4.ja.html#Decorators">Python 2.4 クイックリファレンス</a><br>
+- <a href="http://www.itmedia.co.jp/enterprise/articles/0501/24/news034_3.html">ITmedia エンタープライズ：2.4への機能強化で広がるPythonの世界 (3/4)</a></p>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; def deco_a(f):
+... print &#39;deco_a&#39;
+... return f
+... 
+&gt;&gt;&gt; def deco_b(f):
+... print &#39;deco_b&#39;
+... return f
+... 
+&gt;&gt;&gt; def deco_c(f):
+... print &#39;deco_c&#39;
+... return f
+... 
+&gt;&gt;&gt; @deco_a
+... @deco_c
+... @deco_b
+... def func(x):
+... return x ** 2
+... 
+deco_b
+deco_c
+deco_a
+&gt;&gt;&gt; print func(2)
+4
+</code></pre>
+
+<p><strong>@&lt;関数名&gt;</strong> をデコレート対象関数の直前の行に記述する事でその関数のデコレータとする事が出来ます。デコレータは複数適用させる事が出来ます(下から順に適用)。<br><br>
+デコレータ関数自身を関数を返すラッパーとしている場合、デコレータ構文で引数を指定する事が出来ます。<br>
+- <strong>注）誤った解釈をしているかもしれません</strong><br>
+- @funcはfuncオブジェクトをデコレータに指定している<br>
+- @func(n)はfunc(n)の結果として返ってくる関数オブジェクトをデコレータに指定する事になる<br>
+- デコレータが実行される時には引数にデコレート対象の関数オブジェクトが渡される</p>
+
+<p>以下は、デコレート対象の関数をデコレータによって置き換える際の一例です。</p>
+
+<pre><code class="prettyprint">01: &gt;&gt;&gt; def decorator(*d_args, **d_kargs):
+02: ... print &#39;decorator&#39;, d_args, d_kargs
+03: ... def director(target_func):
+04: ... print &#39;replacement&#39;
+05: ... def wrapper(*args, **kargs):
+05: ... return &#39;ans = %d&#39; % target_func(*args, **kargs)
+07: ... wrapper.func_name = target_func.func_name
+08: ... return wrapper
+09: ... return director
+10: ... 
+11: &gt;&gt;&gt; @decorator(1, &#39;s&#39;, key=&#39;value&#39;)
+12: ... def func(x):
+13: ... return x * 2 + 100
+14: ... 
+15: decorator (1, &#39;s&#39;) {&#39;key&#39;: &#39;value&#39;}
+16: replacement
+17: &gt;&gt;&gt; print func(3)
+18: ans = 106
+19: &gt;&gt;&gt; print func(100)
+20: ans = 300
+
+</code></pre>
+
+<ol>
+<li><p>デコレータ関数はデコレート対象の関数が作成される際に実行されます</p>
+
+<ol>
+<li>15,16行目は02行目の実行結果</li>
+<li>この時点で、デコレート対象の関数が置き換えられました</li>
+</ol></li>
+<li><p>17,19行目で関数を実行しています</p>
+
+<ol>
+<li>decoratorによって置き換えられた関数の結果が出力されています</li>
+<li>今回はフォーマットを整えてみました</li>
+</ol></li>
+</ol>
+
+<h4>クロージャ</h4>
+
+<ul>
+<li><a href="http://ja.wikipedia.org/wiki/%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B8%E3%83%A3">クロージャ - Wikipedia</a></li>
+</ul>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; def func1():
+... in_func1 = 100
+... def func2():
+... print in_func1
+... return func2
+... 
+&gt;&gt;&gt; action = func1()
+&gt;&gt;&gt; action()
+100
+</code></pre>
+
+<p>Pythonでは「内側の関数で外側の関数の変数が有効になる」というルールが存在しています。これは、外側の関数の処理がreturnによって終了していても適用されます。</p>
+
+<dl>
+<dt>ラムダ式</dt>
+
+</dl>
+
+<ul>
+<li><a href="http://ja.wikipedia.org/wiki/%E3%83%A9%E3%83%A0%E3%83%80%E5%BC%8F">ラムダ計算 - Wikipedia</a></li>
+</ul>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; f = lambda arg: arg**2
+&gt;&gt;&gt; f(100) 
+10000
+</code></pre>
+
+<p>ラムダ式は <strong>式</strong> であるため、defステートメントが利用出来ない場所でも利用可能です。また、lambda式にもスコープが存在しているため、lambda式を利用したクロージャを書く事が出来ます。</p>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; def func():
+... x = 100
+... return (lambda n: n * x)
+... 
+&gt;&gt;&gt; f = func()
+&gt;&gt;&gt; f(2)
+200
+</code></pre>
+
+<h3>クラス</h3>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; class C:
+... def __init__ (self, a):
+... self.a = a
+...     
+... def action(self):
+... print &#39;a=%s&#39; % self.a
+... 
+&gt;&gt;&gt; C(&#39;class&#39;).action()
+a=class
+</code></pre>
+
+<ul>
+<li>classステートメントを利用してクラスオブジェクトを作成する事が出来ます</li>
+<li>メソッドの第１引数には自動的に自身を指す変数が割り当てられます
+
+<ul>
+<li>慣例的に変数名selfを指定するようです</li>
+</ul></li>
+</ul>
+
+<h4>多重継承</h4>
+
+<p>Pythonでは複数の親クラスからなるクラスを作成する事が出来ます。</p>
+
+<pre><code class="prettyprint">class Mixed(C1, C2):
+    ...
+</code></pre>
+
+<p>親クラスの並びには意味があり、属性をオブジェクトツリーから検索する際に左にあるクラスが優先されます。</p>
+
+<h4>classmethod, staticmethod</h4>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; class C:
+... def instance_method(self):
+... print self
+...     
+... @classmethod
+... def class_method(cls):
+... print cls
+...     
+... @staticmethod
+... def static_method():
+... print &#39;static&#39;
+... 
+&gt;&gt;&gt; c = C()
+&gt;&gt;&gt; c.instance_method()
+&lt; __main__.C instance at 0x60a08&gt;
+&gt;&gt;&gt; c.class_method()
+__main__.C
+&gt;&gt;&gt; C.static_method()
+static
+
+</code></pre>
+
+<ul>
+<li>classmethodやstaticmethodは関数を引数にとるデコレータ関数です</li>
+<li>classmethodは第１引数がインスタンスではなくクラスになります</li>
+<li>staticmethodは第１引数にインスタンスが渡らなくなります</li>
+</ul>
+
+<h4>ネームマングリング</h4>
+
+<p>classステートメント中で、__から始まる属性(終わりにはつけない)は、ある規則で名前が置き換えられます。</p>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; class C:
+... def __init__ (self, a, b):
+... self.__a = a
+... self.b = b
+...     
+... def public_method(self):
+... print &#39;public: &#39;, self.__a, self.b
+...     
+... def __private_method(self):
+... print &#39;private: &#39;, self.__a, self.b
+... 
+
+&gt;&gt;&gt; c = C(1, 2)
+&gt;&gt;&gt; c.public_method()
+public: 1 2
+&gt;&gt;&gt; c.__private_method()
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+AttributeError: C instance has no attribute &#39;__private_method&#39;
+&gt;&gt;&gt; c._C__private_method()
+private: 1 2
+&gt;&gt;&gt; c.b
+2
+&gt;&gt;&gt; c.__a
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+AttributeError: C instance has no attribute &#39;__a&#39;
+&gt;&gt;&gt; c._C__a
+1
+
+</code></pre>
+
+<ul>
+<li>クラスXの__xという属性名は_X__xに自動的に置き換えられます
+
+<ul>
+<li>外部から__xという属性名でアクセスする事が出来なくなります</li>
+<li>擬似的なprivateとして考えることも出来ますが、本質的には『名前が変わる』機能です</li>
+<li>継承ツリー内での名前の衝突を防ぐことが出来ます</li>
+</ul></li>
+</ul>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; class D(C):
+... def public_method(self):
+... self._C__private_method()
+... self.__private_method()
+... 
+&gt;&gt;&gt; d = D(3, 4)
+
+&gt;&gt;&gt; d.public_method()
+private: 3 4
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+  File &quot;&lt;stdin&gt;&quot;, line 4, in public_method
+AttributeError: D instance has no attribute &#39;_D__private_method&#39;
+</code></pre>
+
+<h3>モジュール</h3>
+
+<p>以下のような使い方をする場合があります。</p>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; import urlparse
+&gt;&gt;&gt; urlparse.urlparse(&#39;http://tech.feedforce.jp/&#39;)
+(&#39;http&#39;, &#39;tech.feedforce.jp&#39;, &#39;/&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;)
+
+</code></pre>
+
+<p>urlparse.urlparse()に違和感を感じる場合、以下のように書く事も出来ます。</p>
+
+<pre><code class="prettyprint">&gt;&gt;&gt; from urlparse import urlparse
+&gt;&gt;&gt; urlparse(&#39;http://tech.feedforce.jp/&#39;)
+(&#39;http&#39;, &#39;tech.feedforce.jp&#39;, &#39;/&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;)
+</code></pre>
+
+<p>Pythonではモジュールごとに名前空間(グローバルスコープ)が分かれるため、単純なimportの場合にモジュール名から始まる絶対パスでモジュールの属性にアクセスしなければなりません。</p>
+
+<h4>リロード</h4>
+
+<p>reloadステートメントを利用する事で、実行中にモジュールを再読み込みする事が出来ます。</p>
+
+<h3>unittestを忘れずに</h3>
+
+<p>Pythonでは、unittestというユニットテストフレームワークが標準モジュールとして付属しています。</p>
+
+<dl>
+<dt>pydocより</dt>
+
+</dl>
+
+<pre><code class="prettyprint">Simple usage:
+
+ import unittest
+
+ class IntegerArithmenticTestCase(unittest.TestCase):
+        def testAdd(self): ## test method names begin &#39;test*&#39;
+            self.assertEquals((1 + 2), 3)
+            self.assertEquals(0 + 1, 1)
+        def testMultiply(self):
+            self.assertEquals((0 * 10), 0)
+            self.assertEquals((5 * 8), 40)
+
+ if __name__ == &#39; __main__&#39;:
+        unittest.main()
+</code></pre>
+
+<h2>挑戦は続く</h2>
+
+<ul>
+<li><a href="http://w.koshigoe.jp/study/?Python%A4%CE%A5%DA%A1%BC%A5%B8">KOSHIGOE学習帳 - Pythonのページ</a>
+
+<ul>
+<li>手前味噌</li>
+</ul></li>
+<li><a href="http://www.djangoproject.com/">Django | The Web framework for perfectionists with deadlines</a>
+
+<ul>
+<li><a href="http://ymasuda.jp/python/django/index.html">ymasuda氏による邦訳ドキュメント</a></li>
+</ul></li>
+<li><a href="http://www.turbogears.org/">TurboGears: Front-to-Back Web Development</a></li>
+<li><a href="http://twistedmatrix.com/trac/">Twisted &#8211; Trac</a>
+
+<ul>
+<li>イベントドリブン</li>
+</ul></li>
+<li><a href="http://www.python.jp/doc/contrib/modpython/index.html">mod_python マニュアル</a></li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/python.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="はじめましてPython" data-url="http://tech.feedforce.jp/python.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/python.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/python.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/bts-2.html" rel="next">BTS - バグトラッキングシステムの利用（２）</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/memcached.html" rel="prev">memcached</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

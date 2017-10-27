@@ -1,0 +1,324 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>elisp はじめてガイド | feedforce Engineers' blog</title>
+      <meta name="description" content="はじめまして。新卒の茂木です。社内勉強会で elisp の基本的な概念について紹介したので、資料を公開します。 資料のうち説明不足な点もありますので、ざっくりとした要点を紹介したいと思います。">
+      <link rel="canonical" href="http://tech.feedforce.jp/elisp.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="elisp はじめてガイド | feedforce Engineers' blog">
+      <meta property="og:description" content="はじめまして。新卒の茂木です。社内勉強会で elisp の基本的な概念について紹介したので、資料を公開します。 資料のうち説明不足な点もありますので、ざっくりとした要点を紹介したいと思います。">
+      <meta property="og:url" content="http://tech.feedforce.jp/elisp.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/elisp.html">elisp はじめてガイド</a></h1>
+      <ul>
+        <li class="entry-time">2013.11.29</li>
+        <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/mogi">mogi</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/mogi"><img src="/images/authors/mogi.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>はじめまして。新卒の茂木です。</p>
+
+<p>社内勉強会で elisp の基本的な概念について紹介したので、資料を公開します。 資料のうち説明不足な点もありますので、ざっくりとした要点を紹介したいと思います。</p>
+
+<!--more-->
+
+<h2>資料</h2>
+
+<iframe src="https://docs.google.com/presentation/d/1eIrO5ITgCWIx8YqVHxSTiVzcY5WQFwRD7I8uh-IvPBc/embed?start=false&amp;loop=false&amp;delayms=60000" frameborder="0" width="100%" height="299" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true" style="max-width:100%;"></iframe>
+
+<h2>どんな人に向けたもの？</h2>
+
+<ul>
+<li>elisp を触ったことがない人</li>
+<li>興味はあるけど、どうにも「とっつきにくい...」と思っている人</li>
+<li>自分で elisp を組んで、emacs をカスタマイズしたい思っている人</li>
+</ul>
+
+<h3>elisp を学ぶメリット</h3>
+
+<p>発表した資料では以下のようにまとめています。  </p>
+
+<ul>
+<li>lisp 系言語の基本を学べる</li>
+<li>emacs という環境が用意されている</li>
+<li>印象に残りやすい</li>
+</ul>
+
+<p>どういうことか少し詳しく解説します。  </p>
+
+<h4>lisp 系言語の基本を学べる</h4>
+
+<p>elisp は 数ある lisp の派生言語の一つです。他と仕様が異なる部分は多いのですが、見た目や「式」など共通点もあります。 elisp を学ぶことで括弧に対する恐怖感が薄れ、scheme や clojure を学ぶ際の心理的障壁が小さくなりますし、elisp で学んだ文法の共通点を利用できます。</p>
+
+<p>つまりひとつ学ぶだけで他の言語にも応用が効き、まさに一石N鳥となる可能性があるのです。  </p>
+
+<h4>emacs という環境が用意されている</h4>
+
+<p>これだけだと「別に elisp じゃなくていいじゃん」となります。 ですが elisp では勉強したことが、確実に生きる環境(emacs)が用意されています。これが他の lisp 派生言語にはない大きな特徴だと思います。</p>
+
+<p>elisp を学ぶとエンジニアが日常的に使用するエディタにも、大きな革命が起きるのです。</p>
+
+<p>何故なら emacs を拡張するためのプラグインのほとんどが elisp で書かれているからです。 elisp を学ぶとプラグインを自作して、自在に使うことができます。そして elisp の高い表現力で、どんなことでも実現できるようになるでしょう。 エディタはエンジニアがとても長くお付き合いするものです。必然的に自作プラグインも日常的に使うことになります。 自分で作ったものを使い込んでいき、ブラッシュアップしていく場として最適ではないでしょうか。  </p>
+
+<h4>印象に残りやすい</h4>
+
+<p>elisp はマイナーな言語と言えるかと思います。ひとつは「括弧が多い見た目がどうにも受け付けない」という人も多いということ。「elisp 自体が仕事で使われる言語ではない」などが理由に挙げられるでしょう。</p>
+
+<p>一方で、エンジニアとして希少な言語を書けるということは、ある意味それが自分の強みとなる可能性があると、私は思います。 第一に公開した時に他者の記憶に残りやすいということ。第二に使用用途に特化したニッチな開発がしやすいというのが理由です。</p>
+
+<p>という風にいかにもそれっぽい理屈を述べていますが、誰得プラグインを自由に自作できることは、単純に楽しかったりします。 あくまで個人的な意見ですが。  </p>
+
+<h3>式</h3>
+
+<p>elisp の特徴的な評価方法について説明します。 関数の挙動のような「調べればわかる」ことよりも、調べにくくて根本的なことに焦点を当てたほうが、全体の理解が早いと考えたからです。</p>
+
+<p>「式」とは評価の対象のことで、form とも呼びます。式が評価されることで、処理が行われ、結果が出力されます。 elisp の式の単位は ( ) で括られた範囲となります。</p>
+
+<p>式の評価は２つの大原則に則って行われます。  </p>
+
+<ul>
+<li>引数部分が先に評価される</li>
+<li>評価は再帰的に行われる</li>
+</ul>
+
+<h4>引数部分が先に評価される</h4>
+
+<p>リストの先頭がシンボルなら関数セルを呼び出します。リストとは何か、シンボルとは何か、という詳しい説明は資料に譲らせていただきます。 言い換えると「( ) の中の先頭の要素は関数として処理され、引数部分が先に評価される」ということです。</p>
+
+<p>elisp では基本的に、この原則に則って式の評価が行われていきます。</p>
+
+<p><strong>例1: <code class="prettyprint">(+ 1 2)</code> を評価する</strong></p>
+
+<p>例1 の式を評価してみましょう。括弧の中を評価すると基本的には前から順に評価されます。この場合ですと</p>
+
+<p><strong>+ → 1 → 2</strong></p>
+
+<p>の順番で評価されていきます。順に見て行きましょう。  </p>
+
+<h5>1. + を評価する</h5>
+
+<ul>
+<li>は「与えられた引数を全て加算する」という動きをする関数です。 「引数部分が先に評価される」原則に従って、引数部分が先に評価されます。<br></li>
+</ul>
+
+<h5>2. 1 を評価する</h5>
+
+<p>次の引数 1 を評価します。これは式ではありませんが、1 を評価して 1 を返します。 当たり前に思えるかもしれませんが、重要なことです。  </p>
+
+<h5>3. 2 を評価する</h5>
+
+<p>2 を評価します。1 を評価した時と同じです。 2 を返します。  </p>
+
+<h5>4. 関数を適応</h5>
+
+<p>さて、ここまで評価が進み、関数以外の引数が全て評価されました。 その結果引数の値はそれぞれ、「1」と「2」でした。 最後に + の関数が「与えられた引数を全て加算する」というルールに則って処理をし、結果として 3 が返ります。  </p>
+
+<h4>評価は再帰的に行われる</h4>
+
+<p>言い換えると「式の内部に式があると、そこから評価を行う」ことです。 繰り返しになりますが、elisp の式の単位は ( ) で括られた範囲となります。つまり括弧の中に括弧があったら、先にそちらが評価されるということです。</p>
+
+<p><strong>例2: <code class="prettyprint">(+ (* 2 3) (/ 8 4))</code> を評価する</strong></p>
+
+<p>例2 の式を評価してみましょう。先ほどの原則も合わせてみていきます。  </p>
+
+<h5>1. + を評価する</h5>
+
+<p>先ほどと同じです。 + は「与えられた引数を全て加算する」という動きをする関数なので、引数部分が先に評価されます。  </p>
+
+<h5>2. <code class="prettyprint">(* 2 3)</code> を評価する</h5>
+
+<p>引数部分にさらに括弧が出現しました。「式の内部に式があると、そこから評価を行う」原則に則って、+ の残りの引数を評価する前にこちらが先に評価されます。 冗長になるので繰り返しませんが、<code class="prettyprint">(+ 1 2)</code> と全く同じ形をしているので、同様のプロセスで評価されていき、結果として 6 を返します。 もちろん内部では「1 が評価されて 1 が返る」というプロセスも行われています。  </p>
+
+<h5>3. <code class="prettyprint">(/ 8 4)</code> を評価する</h5>
+
+<ul>
+<li>の第二引数を評価します。 こちらも先ほどと同様で、括弧がありますので評価し、結果として 2 を返します。<br></li>
+</ul>
+
+<h5>4. 関数を適応する</h5>
+
+<p>ここまででようやく + の引数部分が最後まで評価されました。+ の「与えられた引数を全て加算する」が発動し、8 が返ります。  </p>
+
+<h2>まとめ</h2>
+
+<p>elisp を学ぶ理由、式の評価について述べてみました。 特に「式」については極めてシンプルなルールで評価されていきます。これこそが根強い lisp の人気となっているのかもしれません。 記事を読んで少しでも elisp 触ってみよう と考えて頂けたら幸いです。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/elisp.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="elisp はじめてガイド" data-url="http://tech.feedforce.jp/elisp.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/elisp.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/elisp.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/kidsruby.html" rel="next">小学生男子がKidsRubyを使ってみた</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/retrospective-meeting.html" rel="prev">ふりかえり</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

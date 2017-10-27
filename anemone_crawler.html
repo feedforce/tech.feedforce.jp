@@ -1,0 +1,395 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>Anemoneによるクローラー入門 | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは！見た目30歳の新卒1年目中野です。今回は社内でクローラーについて勉強会を行ったので、その内容について記事を書きました。クローラーとは、WebページからHTMLを解析して周期的に情報を収集する技術です。初心者向けの内容となっていますので、クローラーに興味があってやってみたい！という人に読んでいただきたいなと思います。">
+      <link rel="canonical" href="http://tech.feedforce.jp/anemone_crawler.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="Anemoneによるクローラー入門 | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは！見た目30歳の新卒1年目中野です。今回は社内でクローラーについて勉強会を行ったので、その内容について記事を書きました。クローラーとは、WebページからHTMLを解析して周期的に情報を収集する技術です。初心者向けの内容となっていますので、クローラーに興味があってやってみたい！という人に読んでいただきたいなと思います。">
+      <meta property="og:url" content="http://tech.feedforce.jp/anemone_crawler.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/anemone_crawler.html">Anemoneによるクローラー入門</a></h1>
+      <ul>
+        <li class="entry-time">2014.11.10</li>
+        <li class="entry-cat"><a href="/category/ruby/">Ruby/Rails</a>, <a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/t-nakano">t-nakano</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/t-nakano"><img src="/images/authors/t-nakano.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは！<br>
+見た目30歳の新卒1年目中野です。<br>
+今回は社内でクローラーについて勉強会を行ったので、その内容について記事を書きました。<br>
+クローラーとは、WebページからHTMLを解析して周期的に情報を収集する技術です。<br>
+初心者向けの内容となっていますので、クローラーに興味があってやってみたい！という人に読んでいただきたいなと思います。</p>
+
+<!--more-->
+
+<iframe src="//www.slideshare.net/slideshow/embed_code/41130757" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
+
+<p><strong><a title="Anemoneによるクローラー入門" href="//www.slideshare.net/TasukuNakano/anemone-41130757">Anemoneによるクローラー入門</a></strong> from <strong><a href="//www.slideshare.net/TasukuNakano">Tasuku Nakano</a></strong></p>
+
+<h2>クローラーとスクレイピングについて</h2>
+
+<p>まずはクローラーについて説明していきます。<br>
+ただ、その前にスクレイピングという技術もあるので先にそちらを説明します。<br>
+ご存知かと思いますが、スクレイピングとは、WebページのHTMLを解析してデータを抽出することです。スクレイピングはWebページ1ページに対して処理を行います。</p>
+
+<p>一方クローラーは、Webページ内にある全てのリンクを巡回して、深堀りしながら目的の情報を取得する方法です。この行為自体はクローリングと呼ばれます。<br>
+クローラーでリンクを探す際にはもちろんスクレイピングをしてHTMLのタグを解析して、リンク先を取得します。<br>
+クローラーはBotとも呼ばれ、Googleの検索エンジンや画像収集サイトなど様々なサービスで使われています。</p>
+
+<h2>Anemoneの使い方</h2>
+
+<p>フィードフォースではRubyを使っており、Rubyでクローリングする方法を紹介します。<br>
+(本記事ではRuby2.1.2を使っています。)<br>
+クローリングするのに最適なGemとしてAnemoneが参考書(※記事最下部参照)で紹介されていたので、本記事でもAnemoneを使って紹介していきたいと思います。<br>
+Anemoneは現在開発が止まっていますが、クローラーの機能として充分網羅されており、多くのユーザに利用されています。</p>
+
+<p>Anemoneの機能としてはざっくり以下のものがあります。</p>
+
+<ul>
+<li>階層の制限を指定してたどる</li>
+<li>sleep機能でクローリングする間隔を開ける</li>
+<li>Webページにアクセスする <a href="http://ja.wikipedia.org/wiki/%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88">ユーザエージェント</a>(以下、UA)を指定する</li>
+</ul>
+
+<p>それでは実際にAnemoneのメソッドを紹介していきますが、基本的なクローラーの機能は <code class="prettyprint">.crawl</code>メソッドでほとんど完結できてしまいます。</p>
+
+<p><code class="prettyprint">.crawl</code>メソッドには様々なオプションを渡せることができ、このオプションによって様々なクローラーの機能を網羅することができます。<br>
+では、実際に紹介した機能のオプションをAnemoneの場合に置き換えて紹介します。</p>
+
+<p><code class="prettyprint">:depth_limit</code>：階層の制限を指定</p>
+
+<p><code class="prettyprint">:delay</code>：sleep機能(アクセス間隔を指定)</p>
+
+<p><code class="prettyprint">:user_agent</code>：UAを指定</p>
+
+<p>↑で説明した機能以外にもいろいろあります。<br>
+指定の仕方としては、<code class="prettyprint">.crawl</code>メソッドの第二引数にオプションをHashで渡します(第一引数はURL)<br>
+必須ではないので、指定しない場合は <a href="http://www.rubydoc.info/github/chriskite/anemone/Anemone/Core">デフォルト</a>のオプションが使われます。</p>
+
+<p>では、実際にクローリングした後のWebページに対するメソッドについてソースコードと共に紹介していきます。</p>
+
+<h3>.on_every_pageメソッド</h3>
+
+<p>全てのWebページを対象に処理をするメソッドです。</p>
+
+<pre><code class="prettyprint"># anemone.rbrequire &#39;anemone&#39;URL = ARGV[0]Anemone.crawl(URL, :depth_limit =&gt; 1) do |anemone|
+  anemone.on_every_page do |page|
+    puts page.url
+  endend
+</code></pre>
+
+<p>まず、URLを引数として受け取るようにしました。<br>
+ここでは階層を1に指定したので、リンクからたどる回数は1になります。<br>
+数を多くするとそれだけ実行に時間がかかってしてしまうため、1としました。<br>
+その後にブロック引数として渡した<code class="prettyprint">page</code>に、取得したWebページの情報が入っています。<br>
+そこで<code class="prettyprint">.url</code>メソッドを使うことによってURLを取得できます。</p>
+
+<p>実行する際にはターミナルで</p>
+
+<p><code class="prettyprint">$ ruby anemone.rb http://tech.feedforce.jp/</code><br>
+とすると、このリンク先にから辿れるリンク一覧と、更にその一覧からたどった先のリンク一覧を表示することができます。<br>
+「 <a href="http://tech.feedforce.jp/">http://tech.feedforce.jp/</a> 」以外から取得したい場合はURLを変えると違うページからでもリンク一覧を取得できると思います。<br>
+ただ、リンクが多いサイトでは実行に時間がかかってしまいますので、注意するようにしてください。</p>
+
+<h3>.on_pages_likeメソッド</h3>
+
+<p>ただ、先ほどのメソッドを実装してしまうと大変なので、指定したページのみ処理するようにしたいと思います。<br>
+指定したページのみを対象に処理するメソッドです。</p>
+
+<p>では、実際にソースコードで実装していきましょう。<br>
+対象はフィードフォースのブログで、以下の記事としました。</p>
+
+<ul>
+<li><a href="http://tech.feedforce.jp/lego-scrum.html">「LEGO(R)ではじめるスクラム入門」に参加してきました</a></li>
+<li><a href="http://tech.feedforce.jp/summer_intern2014.html">フィードフォースで初めてエンジニア向けサマーインターンをやってみた</a></li>
+<li><a href="http://tech.feedforce.jp/agile_whiteboards.html">アジャイル開発で便利だったホワイトボードなどまとめ</a></li>
+</ul>
+
+<pre><code class="prettyprint"># anemone2.rbrequire &#39;anemone&#39;URL = ARGV[0]
+
+Anemone.crawl(URL, depth_limit: 2) do |anemone|
+  PATTERN = %r[lego-scrum.html|summer_intern2014.html|agile_whiteboards.html]
+
+ anemone.on_pages_like(PATTERN) do |page|
+    puts page.url
+  endend
+</code></pre>
+
+<p><code class="prettyprint">.on_pages_like</code>メソッドでは、引数に正規表現を渡すことで対象を絞ることができます。<br>
+今回は、対象としている記事のURLを直接指定するように実装しています。<br>
+この意図としては例えば「page=1」,「page=2」…というように続く場合には正規表現で</p>
+
+<p><code class="prettyprint">%r[page=\d+]</code>とすれば良いのですが、今回は特にそういったパターンには当てはまらないので、直接指定しました。<br>
+Webページを指定して取得できたらあとは、anemone.rbと同様に<code class="prettyprint">.url</code>メソッドを呼ぶことでURLを取得することができます。</p>
+
+<h2>各記事の項目一覧を取得する</h2>
+
+<p>ここではページのurlのみを取得するような処理を紹介しましたが、実際に細かな情報を取得したいこともあります。</p>
+
+<p>そこで最初に説明したスクレイピングを行っていきます。<br>
+スクレイピングを行う上で扱うGemは皆さんご存知のNokogiriを使います。</p>
+
+<p>その前に、スクレイピングを行う上でも知っておくと便利な知識があるので紹介したいと思います。</p>
+
+<p>それはXPathというものがあります。<br>
+XPathはHTMLをXML文書として、階層構造で特定部分を示すための構文です。<br>
+XPathを使わずに正規表現を使って情報を抜き出すことも可能ですが、かなり手間がかかるためXPathを使うことをおすすめします。<br>
+記法としてはHTMLを木構造としてみて、探し当てたいノードに一番近いルートのタグからたどって表記します。<br>
+例えば、 <a href="http://tech.feedforce.jp/summer_intern2014.html">ここ</a>のタイトルである「フィードフォースで初めてサマーインターンをやってみた」のXPathは<code class="prettyprint">//*[@id=&quot;content&quot;]/article/div[1]/h1</code>となります。</p>
+
+<p>XPathの取得方法は文章で書くよりもスライドの方がわかりやすいと思うので、スライドの35ページ辺りを参考にしてみてください。</p>
+
+<p>では、XPathを使ってスクレイピングをしてみましょう。<br>
+スクレイピング対象は変わらず先ほどのURLと同じこのエンジニアブログにします。<br>
+ここから、各記事内の項目一覧を取得します。</p>
+
+<pre><code class="prettyprint"># anemone3.rbrequire &#39;anemone&#39;require &#39;nokogiri&#39;require &#39;kconv&#39;
+
+URL = ARGV[0]Anemone.crawl(URL,:depth_limit =&gt; 1) do |anemone|
+  PATTERN = %r[lego-scrum.html|summer_intern2014.html|agile_whiteboards.html]
+
+ anemone.focus_crawl do |page|
+    page.links.keep_if{ |link|
+      link.to_s.match(PATTERN)
+    }
+  end
+
+ anemone.on_every_page do |page|
+    doc = Nokogiri::HTML.parse(page.body.toutf8)
+    body = doc.xpath(%Q[//*[@id=&quot;content&quot;]/article/div[3]])
+
+ body.css(&#39;h2&#39;).each do |h2|
+      puts h2.text
+    end
+  endend
+</code></pre>
+
+<p>まず、パターンマッチでスクレイピング対象となるhtmlを絞ります。<br>
+ここで、対象を絞り込んだ後に<code class="prettyprint">.css</code>や<code class="prettyprint">.text</code>というメソッドを使っています。<br>
+これらは、NokogiriのNodeオブジェクトが持っているメソッドになります。</p>
+
+<p>スクレイピングするにあたってはこのNodeオブジェクトについて理解することが大切になってくるのですが、この説明だけで1つの記事をかけてしまうくらいのものなので割愛させていただきます。<br>
+スライドに簡単に説明を加えてありますので、そちらを参照ください。</p>
+
+<h2>クロールする上でのルール</h2>
+
+<p>最後に、クロールする上でルールがあるので紹介します。<br>
+クローラーは対象のWebサイトに頻繁にアクセスをしますので、攻撃とみなされてしまうことがあります。<br>
+また、収集した情報を許可なくそのまま公開してしまうと、著作権違反で捕まってしまうこともあります。</p>
+
+<p>また、UAを指定してこのUAからはクローリングされたくないなどWebサイトで決め事をしていることもあります。<br>
+この決め事をしているのをまとめて公開しているものがあり、それがrobots.txtです。<br>
+以下に、robots.txtの記述方式をまとめておきます。</p>
+
+<h3>robots.txtの記述方式</h3>
+
+<p>User-agent: ルールを適用したいUA<br>
+Allow: クロールの可能なページのパス<br>
+Disallow: クロールされたくないページのパス<br>
+Crawl-delay: クロール間隔(単位はあやふや)</p>
+
+<p>またrubyには、robots.txtをよしなに処理してくれるrubyのgemとして <a href="https://github.com/chriskite/robotex">robotex</a>があります。<br>
+そこまで使い方は難しくないので、説明は割愛させていただきます。</p>
+
+<p>以下に、実際に使われているrobots.txtを紹介します</p>
+
+<ul>
+<li><a href="http://www.amazon.com/robots.txt">Amazon</a></li>
+<li><a href="http://hatenablog.com/robots.txt">はてなブログ</a></li>
+<li><a href="http://ja.wikipedia.org/robots.txt">Wikipedia</a></li>
+</ul>
+
+<p>例えば、はてなブログから新着記事のタイトルをクローリングする際には、 <a href="http://hatenablog.com/robots.txt">http://hatenablog.com/robots.txt</a> のルールを守るように心がけてください。</p>
+
+<h2>参考書の紹介</h2>
+
+<p>最後に今回、クローラーを勉強するにあたって以下の本を参考にさせていただきました。<br>
+クローラーに関する基礎から応用まで網羅されていて、とても良書でした。<br>
+本記事を読んで、クローラーに興味を持っていただけたら、読んでみてください。</p>
+
+<p><a href="http://www.amazon.co.jp/dp/4797380357"><img src="/images/2014/11/9f581f9b7f4046c18983b6c479aa7c3f.jpeg" /></a></p>
+
+<p>みなさん安全に楽しくクローリング生活を楽しんでいただけたらと思います！<br>
+以上です。ありがとうございました。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/anemone_crawler.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="Anemoneによるクローラー入門" data-url="http://tech.feedforce.jp/anemone_crawler.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/anemone_crawler.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/anemone_crawler.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/coreos_jenkins_cloud-config.html" rel="next">貧者のためのCoreOS(Jenkinsを例に)</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/cyber-sunglasses.html" rel="prev">サイバーサングラス製作記</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

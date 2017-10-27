@@ -1,0 +1,482 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>BigQueryで待望のUDF(user-defined function)がリリースされたので早速試してみた | feedforce Engineers' blog</title>
+      <meta name="description" content="ゆきやんです！ ついに出ました！！ UDF！！！前回の私の投稿では弊社でのBigQueryの導入事例をご紹介いたしました。今回は、今朝リリースされたBigQueryの新機能であるUDFについて書きたいと思います。">
+      <link rel="canonical" href="http://tech.feedforce.jp/introduce-udf.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="BigQueryで待望のUDF(user-defined function)がリリースされたので早速試してみた | feedforce Engineers' blog">
+      <meta property="og:description" content="ゆきやんです！ ついに出ました！！ UDF！！！前回の私の投稿では弊社でのBigQueryの導入事例をご紹介いたしました。今回は、今朝リリースされたBigQueryの新機能であるUDFについて書きたいと思います。">
+      <meta property="og:url" content="http://tech.feedforce.jp/introduce-udf.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/introduce-udf.html">BigQueryで待望のUDF(user-defined function)がリリースされたので早速試してみた</a></h1>
+      <ul>
+        <li class="entry-time">2015.08.26</li>
+        <li class="entry-cat"><a href="/category/bigquery/">BigQuery</a></li>
+        <li class="entry-author"><a href="/author/yukiyan">yukiyan</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/yukiyan"><img src="/images/authors/yukiyan.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p><img alt="UDF Release" src="/images/2015/08/udf-release.png" /></p>
+
+<p>ゆきやんです！ ついに出ました！！ UDF！！！<br>
+前回の私の投稿では弊社での<a href="http://tech.feedforce.jp/bigquery_tips.html">BigQueryの導入事例</a>をご紹介いたしました。<br>
+今回は、<a href="http://googledevelopers.blogspot.jp/2015/08/breaking-sql-barrier-google-bigquery.html">今朝リリース</a>されたBigQueryの新機能であるUDFについて書きたいと思います。</p>
+
+<!--more-->
+
+<h2>UDFとは</h2>
+
+<p>UDFとは、BigQueryで実行するクエリ内にJavaScriptを書いて任意のロジックが実行できるようになる機能です。<br>
+この機能によって、BigQueryのクエリでは表現しづらかったことも表現しやすくなります。</p>
+
+<h2>UDFはすぐに試せる</h2>
+
+<p>UDFを用いたクエリの実行は、以下のようにBigQueryのWebUIからすぐに試すことができます。</p>
+
+<p>Query Editorでは、クエリを入力します。<br>
+<img alt="クエリ入力画面" src="/images/2015/08/query-web-ui.png" /></p>
+
+<p>UDF Editorでは、UDFを入力します。<br>
+<img alt="UDF入力画面" src="/images/2015/08/udf-web-ui.png" /></p>
+
+<h2>実際に使ってみる</h2>
+
+<p>では、実際に使ってみながら説明していきます。<br>
+ある数値をカンマ区切りの金額表示形式に変換してみましょう。<br>
+(例: 15000 -&gt; ¥15,000)</p>
+
+<h3>UDFなしで書いた場合</h3>
+
+<p>まずは、UDFなしで書いてみます。<br>
+だいぶ無理のあるクエリですが以下のように書けます。しかも、この場合7桁までしか対応できません。</p>
+
+<pre><code class="prettyprint sql">SELECT
+CASE
+    WHEN length(number) &lt;= 3
+      THEN &#39;¥&#39; + number
+    WHEN length(number) &lt;= 4
+      THEN &#39;¥&#39; + REGEXP_REPLACE(number, r&#39;(\d)(\d\d\d)&#39;, r&#39;\1&#39; + &#39;,&#39; + r&#39;\2&#39;)
+    WHEN length(number) &lt;= 5
+      THEN &#39;¥&#39; + REGEXP_REPLACE(number, r&#39;(\d\d)(\d\d\d)&#39;, r&#39;\1&#39; + &#39;,&#39; + r&#39;\2&#39;)
+    WHEN length(number) &lt;= 6
+      THEN &#39;¥&#39; + REGEXP_REPLACE(number, r&#39;(\d\d\d)(\d\d\d)&#39;, r&#39;\1&#39; + &#39;,&#39; + r&#39;\2&#39;)
+    WHEN length(number) &lt;= 7
+      THEN &#39;¥&#39; + REGEXP_REPLACE(number, r&#39;(\d)(\d\d\d)(\d\d\d)&#39;, r&#39;\1&#39; + &#39;,&#39; + r&#39;\2&#39; + &#39;,&#39; + r&#39;\3&#39; )
+    ELSE
+    &quot;不正な値&quot;
+    END AS price
+from
+( SELECT number FROM (SELECT &#39;15000&#39; AS number) )
+</code></pre>
+
+<h3>UDFありで書いた場合</h3>
+
+<p>クエリからUDFとして定義した関数を呼ぶことで、JavaScriptを実行できます。<br>
+先ほどと違い、何桁の場合でも対応できますし、クエリもシンプルになり可読性が上がりました！</p>
+
+<p>クエリ</p>
+
+<pre><code class="prettyprint sql">SELECT
+  &#39;¥&#39; + price
+FROM
+  moneyLocale( (SELECT number FROM (SELECT &#39;15000&#39; AS number)) )
+</code></pre>
+
+<p>UDF</p>
+
+<pre><code class="prettyprint js">function moneyLocale(row, emit) {
+  emit({price: localeHelper(row.number)});
+}
+
+function localeHelper(num) {
+  try {
+    var str = String(num).split(&quot;&quot;).reverse().join(&quot;&quot;).match(/\d{1,3}/g).join(&quot;,&quot;).split(&quot;&quot;).reverse().join(&quot;&quot;);
+    return str;
+  } catch (ex) {
+    return num;
+  }
+}
+
+bigquery.defineFunction(
+  &#39;moneyLocale&#39;,
+  [&#39;number&#39;],
+  [{name: &#39;price&#39;, type: &#39;string&#39;}],
+  moneyLocale
+);
+</code></pre>
+
+<h2>UDFの定義方法</h2>
+
+<p>では、実際にUDFはどのように定義するのか説明いたします。<br>
+基本的には以下の構成になります。</p>
+
+<pre><code class="prettyprint js">function UDFName(row, emit) {
+  emit({name: &#39;row.&lt;col1&gt;やrow.&lt;col2&gt;を処理する&#39;}); // 処理対象のそれぞれの列
+}
+
+bigquery.defineFunction(
+  &#39;UDF_name&#39;,  // クエリ内での参照名
+  [&#39;&lt;col1&gt;&#39;, &#39;&lt;col2&gt;&#39;],  // 処理対象にしたいテーブルのカラム名
+  [{name: &#39;name&#39;, type: &#39;string&#39;}], // 処理結果のカラム名と型
+  UDFName // UDFとして定義したfunction名
+);
+</code></pre>
+
+<p>先ほどの例で説明すると以下のようになります。<br>
+例外が発生するとUDFだけでなくクエリ全体が失敗となってしまうので、例外処理を追加しエラーハンドリングを行っています。</p>
+
+<pre><code class="prettyprint js">// UDFの定義
+function moneyLocale(row, emit) {
+  emit({price: localeHelper(row.number)});
+}
+
+// 例外処理用のヘルパー
+function localeHelper(num) {
+  try {
+    var str = String(num).split(&quot;&quot;).reverse().join(&quot;&quot;).match(/\d{1,3}/g).join(&quot;,&quot;).split(&quot;&quot;).reverse().join(&quot;&quot;);
+    return str;
+  } catch (ex) {
+    return num;
+  }
+}
+
+// BigQueryのクエリで呼び出せるようにする処理
+bigquery.defineFunction(
+  &#39;moneyLocale&#39;, // クエリ内での参照名
+  [&#39;number&#39;], // 処理対象にしたいテーブルのカラム名
+  [{name: &#39;price&#39;, type: &#39;string&#39;}], // 処理結果のカラム名と型
+  moneyLocale // UDFとして定義したfunction名
+);
+</code></pre>
+
+<h2>API経由でUDFを使う</h2>
+
+<p>WebUIのほかに、APIでもUDFを実行できます。<br>
+以下、Rubyで書いたコード例です。<br>
+gemは、<a href="https://github.com/google/google-api-ruby-client">google/google-api-ruby-client</a>を用いました。<br>
+また、UDFはコード内にインラインで書けますが、Google Cloud Storage(GCS)経由でも読み込めます。</p>
+
+<pre><code class="prettyprint ruby">require &#39;google/api_client&#39;
+
+class UdfSample
+  def initialize
+    @client = Google::APIClient.new(application_name: &#39;sample&#39;, application_version: &#39;0.0.1&#39;)
+    authorize
+    @api    = @client.discovered_api(&#39;bigquery&#39;, &#39;v2&#39;)
+  end
+
+  def run
+    response = execute_query
+    response = poll(response.data.jobReference.jobId)
+    puts result(response.data.jobReference.jobId)
+  end
+
+  private
+
+  def authorize
+    scope  = [
+      &#39;https://www.googleapis.com/auth/bigquery&#39;,
+      &#39;https://www.googleapis.com/auth/cloud-platform&#39;,
+      &#39;https://www.googleapis.com/auth/devstorage.read_only&#39;,
+      &#39;https://www.googleapis.com/auth/devstorage.read_write&#39;,
+      &#39;https://www.googleapis.com/auth/devstorage.full_control&#39;
+    ]
+    key = Google::APIClient::KeyUtils.load_from_pkcs12(ENV[&#39;P12_PATH&#39;], &#39;notasecret&#39;))
+
+    @client.authorization = Signet::OAuth2::Client.new(
+    token_credential_uri: &#39;https://accounts.google.com/o/oauth2/token&#39;,
+    audience: &#39;https://accounts.google.com/o/oauth2/token&#39;,
+    scope: scope,
+    issuer: ENV[&#39;issuer&#39;],
+    signing_key: key)
+
+    @client.authorization.fetch_access_token!
+  end
+
+  def execute_query
+    @client.execute(set_insert_params)
+  end
+
+  def poll(job_id)
+    response = @client.execute(set_get_params(job_id))
+
+    while response.data.status.state != &#39;DONE&#39;
+      sleep 30
+      response = @client.execute(set_get_params(response.data.jobReference.jobId))
+    end
+  end
+
+  def result(job_id)
+    response = @client.execute(set_result_params(job_id))
+    response.data.rows[0].f[0].v
+  end
+
+  def set_insert_params
+    {
+      api_method: @api.jobs.insert,
+      parameters: {
+        projectId: &#39;sample_project&#39;
+      },
+      body_object: {
+        configuration: {
+          query: {
+            userDefinedFunctionResources: [
+              {
+                inlineCode: udf
+              }
+              # UDFはGCS経由でも読み込めます。
+              # {
+              #   resourceUri: &#39;gs://some-bucket/js/lib.js&#39;
+              # }
+            ],
+            query: query
+          }
+        }
+      }
+    }
+  end
+
+  def set_get_params(job_id)
+    {
+      api_method: @api.jobs.get,
+      parameters: {
+        projectId: &#39;sample_project&#39;, jobId: job_id
+      }
+    }
+  end
+
+  def set_result_params(job_id)
+    {
+      api_method: @api.jobs.get_query_results,
+      parameters: {
+        projectId: &#39;sample_project&#39;, jobId: job_id
+      }
+    }
+  end
+
+  def udf
+    &quot;function moneyLocale(row, emit) {
+      emit({price: localeHelper(row.number)});
+    }
+
+    function localeHelper(num) {
+      try {
+        var str = String(num).split(&#39;&#39;).reverse().join(&#39;&#39;).match(/\d{1,3}/g).join(&#39;,&#39;).split(&#39;&#39;).reverse().join(&#39;&#39;);
+        return str;
+      } catch (ex) {
+        return num;
+      }
+    }
+
+    bigquery.defineFunction(
+      &#39;moneyLocale&#39;,
+      [&#39;number&#39;],
+      [{name: &#39;price&#39;, type: &#39;string&#39;}],
+      moneyLocale
+    );&quot;
+  end
+
+  def query
+    &quot;SELECT
+      &#39;¥&#39; + price
+    FROM
+      moneyLocale( (SELECT number FROM (SELECT &#39;15000&#39; AS number)) )&quot;
+  end
+end
+
+UdfSample.new.run
+# =&gt; ¥15,000
+</code></pre>
+
+<h2>感想</h2>
+
+<p>BigQueryに関わっているチームメンバーは皆、川のようなクエリで消耗しているのでUDFに対する期待は大です。<br>
+今後、プロダクション利用できるようさらに知見を深めていこうと思います。</p>
+
+<h2>参考資料</h2>
+
+<ul>
+<li><a href="https://cloud.google.com/bigquery/user-defined-functions">BigQuery User-Defined Functions - BigQuery — Google Cloud Platform</a></li>
+<li><a href="http://googlecloudplatform.blogspot.jp/2015/08/Google-BigQuery-adds-UDF-support-for-deeper-cloud-analytics.html">Google Cloud Platform Blog: Google BigQuery adds UDF support for deeper cloud analytics</a></li>
+<li><a href="http://googledevelopers.blogspot.jp/2015/08/breaking-sql-barrier-google-bigquery.html">Google Developers Blog: Breaking the SQL Barrier: Google BigQuery User-Defined Functions</a></li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/introduce-udf.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="BigQueryで待望のUDF(user-defined function)がリリースされたので早速試してみた" data-url="http://tech.feedforce.jp/introduce-udf.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/introduce-udf.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/introduce-udf.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/roadworker.html" rel="next">roadworkerを使ってRoute53を管理する</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/agile-planning.html" rel="prev">現在開催中のサマーインターンで『アジャイルな計画づくり』についておはなししています</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

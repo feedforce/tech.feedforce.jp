@@ -1,0 +1,352 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>find(1) | feedforce Engineers' blog</title>
+      <meta name="description" content="ファイルを検索するコマンド。find [path...] [expression]与えられた起点ディレクトリ以下からファイルを検索する。">
+      <link rel="canonical" href="http://tech.feedforce.jp/find1.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="find(1) | feedforce Engineers' blog">
+      <meta property="og:description" content="ファイルを検索するコマンド。find [path...] [expression]与えられた起点ディレクトリ以下からファイルを検索する。">
+      <meta property="og:url" content="http://tech.feedforce.jp/find1.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/find1.html">find(1)</a></h1>
+      <ul>
+        <li class="entry-time">2006.10.20</li>
+        <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/akahige">akahige</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/akahige"><img src="/images/authors/no-image.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>ファイルを検索するコマンド。</p>
+
+<pre><code class="prettyprint">find [path...] [expression]
+</code></pre>
+
+<p>与えられた起点ディレクトリ以下からファイルを検索する。</p>
+
+<!--more-->  
+
+<h2>評価式 (expression)</h2>
+
+<p>評価式は</p>
+
+<ul>
+<li>オプション</li>
+<li>判別式</li>
+<li>アクション</li>
+</ul>
+
+<p>の3つからなる。</p>
+
+<p>オプションは find コマンド全体の動作についての指定。常に真を返す。 判別式とアクションは真または偽を返す。</p>
+
+<p>各ファイルについて評価式の評価を行なう。</p>
+
+<h3>判別式の例</h3>
+
+<ul>
+<li>-name __pattern__</li>
+</ul>
+
+<p>ファイル名がパターン pattern にマッチすれば真。</p>
+
+<p>例: ホームディレクトリ以下から ~ で終わるファイルを探す</p>
+
+<pre><code class="prettyprint">find ~ -name &#39;*~&#39;
+</code></pre>
+
+<ul>
+<li>-size __n__[bckw]</li>
+</ul>
+
+<p>ファイルサイズによる指定。</p>
+
+<pre><code class="prettyprint">-size 100k # 100KB ちょうどのファイル
+-size -100k # 100KB より小さいファイル
+-size +100k # 100KB より大きいファイル
+</code></pre>
+
+<ul>
+<li>-type __c__</li>
+</ul>
+
+<p>ファイルタイプによる指定。</p>
+
+<pre><code class="prettyprint">f 通常のファイル
+ d ディレクトリ
+ l シンボリックリンク
+ ...
+</code></pre>
+
+<ul>
+<li>-ctime n</li>
+<li>-mtime n</li>
+<li>-atime n</li>
+</ul>
+
+<p>ファイルの作成日時・更新日時・アクセス日時が n*24 時間前</p>
+
+<p>+n は、(n+1)*24 時間前以前の意味。</p>
+
+<pre><code class="prettyprint">-2d -1d now
+--2-----|------1-----|------0-----|------
+        / \
+&lt;------/ `--------&gt;
+   +1 -1
+</code></pre>
+
+<p><a href="http://sonic64.com/2005-07-06.html">http://sonic64.com/2005-07-06.html</a></p>
+
+<h3>アクションの例</h3>
+
+<ul>
+<li>-print</li>
+</ul>
+
+<p>ファイル名をフルパスで標準出力に表示し、改行文字を付ける。</p>
+
+<ul>
+<li>-print0</li>
+</ul>
+
+<p>ファイル名をフルパスで標準出力に表示し、ヌル文字を付ける。</p>
+
+<ul>
+<li>-exec __command__ ;</li>
+</ul>
+
+<p>コマンドを実行する。ファイル名は {} で指定する。 シェルのメタキャラクタをエスケープするのに注意。</p>
+
+<ul>
+<li>-prune</li>
+</ul>
+
+<p>ディレクトリを降りない。</p>
+
+<p>例: .svn 以下を除く</p>
+
+<pre><code class="prettyprint">find . -type d -name .svn -prune -o -print
+</code></pre>
+
+<h3>演算子</h3>
+
+<ul>
+<li>( expr )</li>
+</ul>
+
+<p>括弧。( ) がシェルのメタキャラクターなのでエスケープする必要があるのに注意。</p>
+
+<ul>
+<li>! expr expr</li>
+<li>-not expr</li>
+</ul>
+
+<p>NOT: 真偽の反転。! もエスケープする必要がある。</p>
+
+<ul>
+<li>expr1 expr2</li>
+<li>expr1 -a expr2</li>
+<li>expr1 -and expr2</li>
+</ul>
+
+<p>AND: expr1 が偽なら expr2 は評価しない</p>
+
+<ul>
+<li>expr1 -o expr2</li>
+<li>expr1 -or expr2</li>
+</ul>
+
+<p>OR: expr1 が真なら expr2 は評価しない</p>
+
+<ul>
+<li>expr1 , expr2</li>
+</ul>
+
+<p>LIST: expr1 と expr2 の両方を評価し、全体の値は expr2。</p>
+
+<h2>参考文献</h2>
+
+<ul>
+<li>man find</li>
+<li><a href="http://x68000.q-e-d.net/~68user/unix/pickup?find">UNIXの部屋 検索結果: find</a></li>
+<li><a href="http://www.sixnine.net/roadside/find.html">ちょっとだけカッコよく find(1) を使う</a></li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/find1.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="find(1)" data-url="http://tech.feedforce.jp/find1.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/find1.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/find1.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/the_atom_syndication_format.html" rel="next">The Atom Syndication Format</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/mysql.html" rel="prev">MySQL ロックの話</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

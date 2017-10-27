@@ -1,0 +1,297 @@
+<!doctype html>
+<html>
+  <!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>feedforce Engineers' blog</title>
+      <meta name="description" content="株式会社フィードフォース技術チームのサイト。社内勉強会資料や開発の様子および成果の公開など。">
+      <link rel="canonical" href="http://tech.feedforce.jp">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="feedforce Engineers' blog">
+      <meta property="og:description" content="株式会社フィードフォース技術チームのサイト。社内勉強会資料や開発の様子および成果の公開など。">
+      <meta property="og:url" content="http://tech.feedforce.jp">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+  <body>
+    <header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+    <div id="content">
+          <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/aws-lambda.html">API Gateway + LambdaでSlackボットを作ってみた</a></h1>
+        <ul>
+          <li class="entry-time">2015.12.22</li>
+          <li class="entry-cat"><a href="/category/aws/">AWS</a></li>
+          <li class="entry-author"><a href="/author/otofu_square">otofu_square</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/otofu_square"><img src="/images/authors/otofu_square.png" /></a>
+      </div>
+      <div class="entry-body">
+        <p>寒くなってきましたが暑がりなのでまだ上着はあまり出番がありません、内定者のお豆腐です。<br>
+そろそろクリスマスですね！ターミナルで<code class="prettyprint">npm xmas</code>を実行すれば黒い画面の中でちょっとしたクリスマス気分を味わえるかもしれません。</p>
+
+<p>さて、今回はエンジニア内定者ブログ第2弾として「API Gateway + Lambdaを使ってサーバーレスなSlackボットを実装してみる」というお題で記事を書いてみました。</p>
+
+
+        <p class="entry-readmore"><a href="/aws-lambda.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/qiita-popular-post-2015.html">Qiita:Teamで好評だった記事から2015年をふりかえる</a></h1>
+        <ul>
+          <li class="entry-time">2015.12.16</li>
+          <li class="entry-cat"><a href="/category/announcement/">お知らせ</a></li>
+          <li class="entry-author"><a href="/author/r-suzuki">r-suzuki</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/r-suzuki"><img src="/images/authors/r-suzuki.jpg" /></a>
+      </div>
+      <div class="entry-body">
+        <p>社内イチのQiita:Teamヘビーユーザー鈴木です(自称)。弊社ではエンジニアだけでなく、セールスや代表取締役を含む全員<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>で<a href="https://teams.qiita.com/">Qiita:Team</a>を使っています。そこで今日は、今年投稿された記事の「いいね！」が多い順に、フィードフォースの2015年をふりかえってみます。</p>
+
+
+        <p class="entry-readmore"><a href="/qiita-popular-post-2015.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/gce-preemptible-vm.html">GCE の preemptible VM で、インフラの CI を回し始めました</a></h1>
+        <ul>
+          <li class="entry-time">2015.12.15</li>
+          <li class="entry-cat"><a href="/category/infrastructure/">インフラ</a></li>
+          <li class="entry-author"><a href="/author/inoue">inoue</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/inoue"><img src="/images/authors/inoue.jpg" /></a>
+      </div>
+      <div class="entry-body">
+        <p>こんにちは！ <a href="https://twitter.com/a_know">a-know</a> こと、いのうえです。<br>
+ここではあまり技術的な記事を書くことが少ない私ですが、今回は少し、踏み込んだ内容の記事をお届けしたいと思います。</p>
+
+<p>...あ、この記事は <a href="http://www.adventar.org/calendars/906">フィードフォースエンジニア Advent Calendar 2015</a> の 15日目の記事であり、また、<a href="http://qiita.com/advent-calendar/2015/gcp">Google Cloud Platform Advent Calendar 2015</a>の 15日目の記事でもあります。</p>
+
+
+        <p class="entry-readmore"><a href="/gce-preemptible-vm.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/socialplus-rip-technologies.html">今年ソーシャルPLUSで捨てられた技術たち</a></h1>
+        <ul>
+          <li class="entry-time">2015.12.12</li>
+          <li class="entry-cat"><a href="/category/operation/">運用事例</a>, <a href="/category/ruby/">Ruby/Rails</a>, <a href="/category/aws/">AWS</a></li>
+          <li class="entry-author"><a href="/author/masutaka">masutaka</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/masutaka"><img src="/images/authors/masutaka.jpg" /></a>
+      </div>
+      <div class="entry-body">
+        <p>この記事は<a href="http://www.adventar.org/calendars/906">フィードフォースエンジニア Advent Calendar</a> 12日目の記事です。<br>
+11 日目は <a href="http://www.adventar.org/users/9675">meihong</a> の『<a href="http://damelog.com/sns/facebook/facebook-global-partner-summit/">Facebook Global Partner Summit に行ってきた</a>』でした。</p>
+
+<p>こんにちは。先週美容院デビュー<del>に失敗</del>した増田です。<br>
+日々イケメソに近づいております。怖いです。</p>
+
+
+        <p class="entry-readmore"><a href="/socialplus-rip-technologies.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/office-relocation.html">オフィス移転に向けてインフラエンジニアが検討したこと</a></h1>
+        <ul>
+          <li class="entry-time">2015.12.06</li>
+          <li class="entry-cat"><a href="/category/infrastructure/">インフラ</a></li>
+          <li class="entry-author"><a href="/author/tjinjin">tjinjin</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/tjinjin"><img src="/images/authors/tjinjin.png" /></a>
+      </div>
+      <div class="entry-body">
+        <p>こちらは、<a href="http://www.adventar.org/calendars/906">フィードフォースエンジニアAdvent Calendar 2015</a> 6日目の記事です。</p>
+
+<p>昨日の記事は<a href="http://qiita.com/kasei-san/items/6eb5acfb0cb596371718">RaspberryPi - サイバーサングラスの調整でハマったファイルシステムのお話 - Qiita</a>という記事でした。アイエエエエ! ニンジャ!? ニンジャナンデ!?</p>
+
+<p>いかがお過ごしでしょうか。tjinjinです。<br>
+クリスマスの予定はモンハン大会の予定です。</p>
+
+<p>さて、先日弊社は事業拡大に伴うオフィスの移転をしたのですが、その際にオフィス移転PJチームでインフラ周りを担当しましたので、その知見を共有できたらと思います！</p>
+
+
+        <p class="entry-readmore"><a href="/office-relocation.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/advent-calendar-2015.html">feedforceアドベントカレンダー2015が始まります！</a></h1>
+        <ul>
+          <li class="entry-time">2015.12.01</li>
+          <li class="entry-cat"><a href="/category/announcement/">お知らせ</a></li>
+          <li class="entry-author"><a href="/author/r-suzuki">r-suzuki</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/r-suzuki"><img src="/images/authors/r-suzuki.jpg" /></a>
+      </div>
+      <div class="entry-body">
+        <p>こんにちは！長女がサンタさんに「ねじとてーぶるをください」という謎の手紙を書いていて困惑している鈴木です。<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup></p>
+
+<p>サンタさんといえばクリスマス、クリスマスといえばアドベントカレンダー。ということで<a href="http://www.adventar.org/calendars/906">feedforceアドベントカレンダー2015</a>が始まりますよ！というお知らせです。「feedforceメンバーでやったら面白いかもー」というSlack上での雑談から、弊社としては初のアドベントカレンダーが実現しました。</p>
+
+<p>初日ということで、feedforceという会社とそこで働くエンジニアについて簡単に紹介したいと思います！</p>
+
+
+        <p class="entry-readmore"><a href="/advent-calendar-2015.html">Read more</a></p>
+      </div>
+    </article>
+
+    <div id="entry-link">
+      <ul>
+            <li id="older-link"><a href="/page/6/">< Older posts</a></li>
+            <li id="newer-link"><a href="/page/4/">Newer posts ></a></li>
+      </ul>
+    </div>
+
+    </div>
+
+    <p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+  </body>
+</html>

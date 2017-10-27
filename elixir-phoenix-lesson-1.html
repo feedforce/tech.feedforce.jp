@@ -1,0 +1,589 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>今から始めるRubyエンジニアのためのElixir Phoenix part1 | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは!2016卒エンジニア内定者のtsubですなかなか社内での呼び名が安定しなくて困っています。つらいちなみに自分が使っている名前のtsubは tsub(ティーサブ) と呼ぶらしい。\最近知った!/さて、もうすぐ4月になりますが、この時期になると（´-`）.｡oO(なんか春だしいつもと違う言語とか手を出してみようかな...)とか思っちゃいますよね！ということで、満を持して以前から気になっていたElixirとPhoenixを学んでみようと思います（PhoenixはElixirで実装されたウェブアプリケーションフレームワークです）。第1回目の今回は、Elixirの基本的な構文や制御文について触れていきます。">
+      <link rel="canonical" href="http://tech.feedforce.jp/elixir-phoenix-lesson-1.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="今から始めるRubyエンジニアのためのElixir Phoenix part1 | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは!2016卒エンジニア内定者のtsubですなかなか社内での呼び名が安定しなくて困っています。つらいちなみに自分が使っている名前のtsubは tsub(ティーサブ) と呼ぶらしい。\最近知った!/さて、もうすぐ4月になりますが、この時期になると（´-`）.｡oO(なんか春だしいつもと違う言語とか手を出してみようかな...)とか思っちゃいますよね！ということで、満を持して以前から気になっていたElixirとPhoenixを学んでみようと思います（PhoenixはElixirで実装されたウェブアプリケーションフレームワークです）。第1回目の今回は、Elixirの基本的な構文や制御文について触れていきます。">
+      <meta property="og:url" content="http://tech.feedforce.jp/elixir-phoenix-lesson-1.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/elixir-phoenix-lesson-1.html">今から始めるRubyエンジニアのためのElixir Phoenix part1</a></h1>
+      <ul>
+        <li class="entry-time">2016.03.30</li>
+        <li class="entry-cat"><a href="/category/elixir/">Elixir/Phoenix</a></li>
+        <li class="entry-author"><a href="/author/tsub">tsub</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/tsub"><img src="/images/authors/tsub.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは!2016卒エンジニア内定者のtsubです<br>
+なかなか社内での呼び名が安定しなくて困っています。つらい<br>
+ちなみに自分が使っている名前のtsubは <strong>tsub(ティーサブ)</strong> と呼ぶらしい。\最近知った!/</p>
+
+<p>さて、もうすぐ4月になりますが、この時期になると<br>
+（´-`）.｡oO(なんか春だしいつもと違う言語とか手を出してみようかな...)<br>
+とか思っちゃいますよね！</p>
+
+<p>ということで、満を持して以前から気になっていたElixirとPhoenixを学んでみようと思います（PhoenixはElixirで実装されたウェブアプリケーションフレームワークです）。</p>
+
+<p>第1回目の今回は、Elixirの基本的な構文や制御文について触れていきます。</p>
+
+<!--more-->
+
+<h2>この記事の対象読者</h2>
+
+<ul>
+<li>RailsエンジニアだけどPhoenixなにそれカッコイイじゃんな人</li>
+<li>Railsとか書いたことないけどこの機会にPhoenixでweb書いてみたい人</li>
+<li>Elixir、Phoenixに興味がある人</li>
+</ul>
+
+<h2>この記事の目的</h2>
+
+<ul>
+<li>Elixirの基本的な構文を理解して簡単なプログラムが書けるようになる</li>
+</ul>
+
+<h2>Elixir環境構築</h2>
+
+<h3>インストール</h3>
+
+<p>macの場合はbrewを使って簡単に構築できます</p>
+
+<pre><code class="prettyprint">$ brew update
+$ brew install elixir
+</code></pre>
+
+<p>それ以外の環境の方は以下の公式サイトを参考にしてください</p>
+
+<ul>
+<li><a href="http://elixir-lang.org/install.html">Installing Elixir - Elixir</a></li>
+</ul>
+
+<h3>REPLの起動・終了</h3>
+
+<p>ファイルにコードを書いて実行してもいいですが、ElixirはREPL(Read Eval Print Loop)を提供していますのでそれを使って学んでいきます</p>
+
+<p><code class="prettyprint">iex</code>で起動できます</p>
+
+<pre><code class="prettyprint">$ iex
+Erlang/OTP 18 [erts-7.2.1] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false] [dtrace]
+
+Interactive Elixir (1.2.3) - press Ctrl+C to exit (type h() ENTER for help)
+iex(1)&gt;
+</code></pre>
+
+<p>終了するときは<code class="prettyprint">Ctrl-C</code>です</p>
+
+<pre><code class="prettyprint">iex(1)&gt;
+BREAK: (a)bort (c)ontinue (p)roc info (i)nfo (l)oaded
+       (v)ersion (k)ill (D)b-tables (d)istribution
+a↩︎
+</code></pre>
+
+<h2>Elixirの構文を学ぶ(簡単に)</h2>
+
+<p>ElixirはRubyによく似た構文を持っているため、Rubyエンジニアは親しみを持ちやすいのではないでしょうか</p>
+
+<p>例えば、以下のコードを比較すると、</p>
+
+<p><strong>Elixir</strong></p>
+
+<pre><code class="prettyprint">defmodule FizzBuzz do
+  def call(x) do
+    cond do
+      rem(x, 15) == 0 -&gt; &quot;FizzBuzz&quot;
+      rem(x, 3) == 0 -&gt; &quot;Fizz&quot;
+      rem(x, 5) == 0 -&gt; &quot;Buzz&quot;
+      true -&gt; x
+    end
+  end
+end
+
+1..30 |&gt; Enum.map(fn i -&gt; IO.inspect FizzBuzz.call(i) end)
+</code></pre>
+
+<p><strong>Ruby</strong></p>
+
+<pre><code class="prettyprint">class Fixnum
+  def fizzbuzz
+    return &quot;FizzBuzz&quot; if self % 15 == 0
+    return &quot;Fizz&quot; if self % 3 == 0
+    return &quot;Buzz&quot; if self % 5 == 0
+    return self
+  end
+end
+
+(1..100).map { |i| i.fizzbuzz }.each { |i| puts i }
+</code></pre>
+
+<p>関数型言語とオブジェクト指向言語という大きな違いはあるもののなんとなく似ているような気がします。</p>
+
+<p>今回はRubyとの比較用のコードですが、もちろんこれがElixirっぽい書き方かと言われるとそうではありません。<br>
+パターンマッチやマクロといった機能を使うのがElixirっぽいコードとしてはベターかと思われます。</p>
+
+<p>今回はそこまで深く説明しませんが、興味がある方はこちらを参考にしてみてください</p>
+
+<ul>
+<li><a href="http://elixir-lang.org/getting-started/pattern-matching.html">Pattern matching - Elixir</a></li>
+<li><a href="http://elixir-lang.org/getting-started/meta/macros.html">Macros - Elixir</a></li>
+</ul>
+
+<p>ちなみに<code class="prettyprint">class Fixnum</code>のようにRubyではモンキーパッチが使えますが、Elixirはコンパイラ型言語のためオープンクラスのような概念はありません。</p>
+
+<h3>基本的な型</h3>
+
+<p>さて、まずは基本的な型について学んでいきます。</p>
+
+<p>公式のドキュメントを参考に進めていきます。</p>
+
+<ul>
+<li><a href="http://elixir-lang.org/getting-started/basic-types.html">Basic types - Elixir</a></li>
+</ul>
+
+<p>よく使うものはこのあたりになるかと思います</p>
+
+<pre><code class="prettyprint">iex&gt; 1              # integer
+iex&gt; 1.0            # float
+iex&gt; true           # boolean
+iex&gt; :atom          # atom / symbol
+iex&gt; &quot;elixir&quot;       # string
+iex&gt; [1, 2, 3]      # list
+iex&gt; [hoge: &quot;fuga&quot;] # list
+iex&gt; {1, 2, 3}      # tuple
+</code></pre>
+
+<p>ほとんどRubyに近いですね。</p>
+
+<p>それぞれの型について細かく見ていきましょう。</p>
+
+<h4>整数、小数 Integer, Float</h4>
+
+<p>整数や浮動小数の扱いは基本的にはRubyと変わりません</p>
+
+<pre><code class="prettyprint">iex&gt; 1 + 2 # =&gt; 3
+iex&gt; 5 * 5 # =&gt; 25
+iex&gt; 10 / 2 # =&gt; 5.0
+iex&gt; 1.0 + 2 # =&gt; 3.0
+iex&gt; Float.ceil(1.6) # =&gt; 2.0
+iex&gt; Float.floor(1.6) # =&gt; 1.0
+</code></pre>
+
+<p><code class="prettyprint">10 / 2</code>が<code class="prettyprint">5.0</code>になる点だけ注意が必要です。<br>
+Elixirにおける<code class="prettyprint">/</code>演算子は常に浮動小数を返します。</p>
+
+<p>もし整数が必要なら<code class="prettyprint">div()</code>を使います。</p>
+
+<pre><code class="prettyprint">iex&gt; div(10, 2) # =&gt; 5
+iex&gt; is_integer(10 / 2) # =&gt; false
+iex&gt; is_integer(div(10, 2)) # =&gt; true
+</code></pre>
+
+<h4>真偽値 Boolean</h4>
+
+<p>Elixirの真偽値はRubyと同じで、<code class="prettyprint">false</code>, <code class="prettyprint">nil</code>のみfalseとして扱い、それ以外は全てtrueになります。</p>
+
+<pre><code class="prettyprint">iex&gt; if &quot;hoge&quot;
+...&gt;   &quot;fuga&quot;
+...&gt; end
+&quot;fuga&quot;
+iex&gt; if nil
+...&gt;   &quot;fuga&quot;
+...&gt; end
+nil
+</code></pre>
+
+<h4>アトム Atom / Symbol</h4>
+
+<p><code class="prettyprint">:atom</code>はRubyのSymbolに近いですが、ElixirではAtomとも呼びます<br>
+Atomと呼ぶ方が主流みたいです</p>
+
+<p>ちなみにBooleanのtrue, falseもAtomで定義されています</p>
+
+<pre><code class="prettyprint">iex&gt; true == :true # =&gt; true
+iex&gt; false == :false # =&gt; true
+</code></pre>
+
+<h4>文字列 String</h4>
+
+<p>Rubyと同様に変数の文字列展開が可能です</p>
+
+<pre><code class="prettyprint">iex&gt; hoge = &quot;world&quot;
+iex&gt; &quot;Hello, #{hoge}!&quot; # =&gt; &quot;Hello, world!&quot;
+</code></pre>
+
+<p>その他各種関数が提供されています</p>
+
+<pre><code class="prettyprint">iex&gt; String.length(&quot;hoge&quot;) # =&gt; 4
+iex&gt; String.upcase(&quot;hoge&quot;) # =&gt; &quot;HOGE&quot;
+</code></pre>
+
+<h4>配列 List</h4>
+
+<p>Listにはどんな型の値も入れることができます</p>
+
+<pre><code class="prettyprint">iex&gt; [&quot;hoge&quot;, 1, :foo, true, [&quot;fuga&quot;]]
+</code></pre>
+
+<p>Listの連結や差し引きもできます</p>
+
+<pre><code class="prettyprint">iex&gt; [1, 2] ++ [3, 4] # =&gt; [1, 2, 3, 4]
+iex&gt; [1, 2, 3, 4] -- [3, 4] # =&gt; [1, 2]
+</code></pre>
+
+<p>連想配列もできます</p>
+
+<pre><code class="prettyprint">iex&gt; list = [hoge: &quot;fuga&quot;, foo: &quot;bar&quot;]
+iex&gt; list[:hoge] # =&gt; &quot;fuga&quot;
+</code></pre>
+
+<h4>タプル Tuple</h4>
+
+<p>TupleはRubyにはないので少しわかりづらいかもしれません。<br>
+Listに似ているようですが役割が違います。</p>
+
+<p>まず、Listと挙動を比較してみます。</p>
+
+<pre><code class="prettyprint">iex&gt; list = [&quot;hoge&quot;, &quot;fuga&quot;]
+iex&gt; tuple = {&quot;hoge&quot;, &quot;fuga&quot;}
+
+# 値の取得
+iex&gt; Enum.at(list, 0) # =&gt; &quot;hoge&quot;
+iex&gt; elem(tuple, 0) # =&gt; &quot;hoge&quot;
+
+# 値の追加
+iex&gt; List.insert_at(list, -1, &quot;foo&quot;) # =&gt; [&quot;hoge&quot;, &quot;fuga&quot;, &quot;foo&quot;]
+iex&gt; Tuple.append(tuple, &quot;foo&quot;) # =&gt; {&quot;hoge&quot;, &quot;fuga&quot;, &quot;foo&quot;}
+
+# 値の削除
+iex&gt; List.delete_at(list, 1) # =&gt; [&quot;hoge&quot;]
+iex&gt; Tuple.delete_at(tuple, 1) # =&gt; {&quot;hoge&quot;}
+
+# 追加・削除した時は新たなList, Tupleを返すため、元の変数の値は変わらない
+iex&gt; list # =&gt; [&quot;hoge&quot;, &quot;fuga&quot;]
+iex&gt; tuple # =&gt; {&quot;hoge&quot;, &quot;fuga&quot;}
+</code></pre>
+
+<p>このように、全く別々の関数が提供されているため、扱いに注意しなければいけません。</p>
+
+<p>また大きな違いとして、Listは各要素に次の要素のメモリ番地が入っていますが、Tupleの場合は連続した番地に入るように確保されます。</p>
+
+<p>例えばそれぞれの長さを知りたい場合、Listだと最初の要素から最後まで順番にアクセスしていかなければならないため遅いです。<br>
+しかし、Tupleだと最初から一定の長さでメモリを確保しているため、長さを知るのは速いです。</p>
+
+<pre><code class="prettyprint">iex&gt; length(list) # 遅い
+iex&gt; tuple_size(tuple) # 速い
+</code></pre>
+
+<p>同様にListだと指定したインデックスの値を参照するには最初から辿っていく必要があるので遅いですが、Tupleだと速いです。</p>
+
+<pre><code class="prettyprint">iex&gt; Enum.at(list, 1) # 遅い
+iex&gt; elem(tuple, 1) # 速い
+</code></pre>
+
+<p>一方で、値の追加や削除をする場合はListだと1つの番地を確保して、参照先を変更するだけで済むため速いです。<br>
+しかし、Tupleは新しく連続した番地を確保しなければいけないため遅いです。</p>
+
+<pre><code class="prettyprint">iex&gt; List.insert_at(list, -1, &quot;foo&quot;) # 速い
+iex&gt; Tuple.append(tuple, &quot;foo&quot;) # 遅い
+</code></pre>
+
+<h3>制御構文</h3>
+
+<p>次に、Elixirの基本的な制御構文について見ていきます。</p>
+
+<p>制御構文についても、公式ドキュメントを参考に進めていきます</p>
+
+<ul>
+<li><a href="http://elixir-lang.org/getting-started/case-cond-and-if.html">case, cond and if - Elixir</a></li>
+</ul>
+
+<h4>if, unless</h4>
+
+<p>if文、unless文はRubyと違い、<code class="prettyprint">do</code>が必要です</p>
+
+<pre><code class="prettyprint">iex&gt; if true do
+...&gt;   &quot;This works!&quot;
+...&gt; end
+&quot;This works!&quot;
+iex&gt; unless true do
+...&gt;   &quot;This works!&quot;
+...&gt; end
+nil
+</code></pre>
+
+<p>もちろんelseも使えます</p>
+
+<pre><code class="prettyprint">iex&gt; if false do
+iex&gt;   &quot;This won&#39;t be seen&quot;
+iex&gt; else
+iex&gt;   &quot;This will&quot;
+iex&gt; end
+</code></pre>
+
+<p>ただし、elsifはありませんので後述のcondを使いましょう</p>
+
+<h4>case</h4>
+
+<p>case文は以下のように書きます。</p>
+
+<pre><code class="prettyprint">iex&gt; x = 10
+iex&gt; case x do
+...&gt;   1  -&gt; &quot;Won&#39;t match&quot;
+...&gt;   10 -&gt; &quot;Will match&quot;
+...&gt;   _  -&gt; &quot;Won&#39;t match&quot;
+...&gt; end
+&quot;Will match&quot;
+</code></pre>
+
+<p>ちなみにElixirでは以下のように書くこともできます。</p>
+
+<pre><code class="prettyprint">iex&gt; x = {1, 2, 3}
+iex&gt; case x do
+...&gt;   {1, x, 3} when x &gt; 0 -&gt;
+...&gt;     &quot;Will match&quot;
+...&gt;   _ -&gt;
+...&gt;     &quot;Won&#39;t match&quot;
+...&gt; end
+&quot;Will match&quot;
+</code></pre>
+
+<p>ただし、このような書き方はパターンマッチの概念を理解する必要がありますので今回は割愛させていただきます。</p>
+
+<h4>cond</h4>
+
+<p>caseは最初に定義した１つの値が複数の値と比較してマッチするかで分岐していましたが、condは複数の条件式を比較してtrueになったかで分岐するという用途に使います。</p>
+
+<p>例えば以下のように書きます。</p>
+
+<pre><code class="prettyprint">iex&gt; cond do
+...&gt;   2 + 2 == 5 -&gt;
+...&gt;     &quot;This will not be true&quot;
+...&gt;   2 * 2 == 3 -&gt;
+...&gt;     &quot;Nor this&quot;
+...&gt;   1 + 1 == 2 -&gt;
+...&gt;     &quot;But this will&quot;
+...&gt; end
+&quot;But this will&quot;
+</code></pre>
+
+<p>この中だと<code class="prettyprint">1 + 1 == 2</code>の条件式がtrueになるのでBut this willが出力されます</p>
+
+<h4>Recursion</h4>
+
+<p>Elixirではfor文がなく、代わりに再帰でループ処理を表現します。</p>
+
+<p>例えば、Rubyでは以下のようにループを書きます</p>
+
+<pre><code class="prettyprint">(0...3).each do
+  p &#39;Hello!&#39;
+end
+</code></pre>
+
+<p>一方、Elixirはこのように書きます。</p>
+
+<pre><code class="prettyprint">defmodule Recursion do
+  def print_multiple_times(msg, n) when n &lt;= 1 do
+    IO.puts msg
+  end
+
+  def print_multiple_times(msg, n) do
+    IO.puts msg
+    print_multiple_times(msg, n - 1)
+  end
+end
+
+Recursion.print_multiple_times(&quot;Hello!&quot;, 3)
+</code></pre>
+
+<p>このように、ループを表現する際には再帰的な関数を用意します。</p>
+
+<p>ちなみに、<code class="prettyprint">print_multiple_times(msg, n)</code>が2つ定義されてますが、Elixirではこのように複数の同名関数を定義し、条件によって呼び出すものを変えることができます。</p>
+
+<p>しかしながら、これもパターンマッチの一種となりますので本記事では詳しく扱いません。</p>
+
+<h2>まとめ</h2>
+
+<p>今回はRubyと比較をしながら、Elixirの導入方法や、基本的な構文、制御文について学びました。</p>
+
+<p>次回はPhoenixについて学んでいきたいと思います。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/elixir-phoenix-lesson-1.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="今から始めるRubyエンジニアのためのElixir Phoenix part1" data-url="http://tech.feedforce.jp/elixir-phoenix-lesson-1.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/elixir-phoenix-lesson-1.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/elixir-phoenix-lesson-1.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/skillmap.html" rel="next">スキルマップで開発チームのスキル状況を見える化してみました</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/mha-and-consul.html" rel="prev">mhaとconsulでDBサーバーの冗長化をしています</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

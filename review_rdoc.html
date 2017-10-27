@@ -1,0 +1,426 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>おさらいRDoc | feedforce Engineers' blog</title>
+      <meta name="description" content="Rubyエンジニアのみなさん、RDoc書いてますか？「人が書いたRDocは読むけど、自分ではあまり書かない...」という方もいらっしゃるかもしれません。そこで今回はRDocを書くための要点について整理してみました。">
+      <link rel="canonical" href="http://tech.feedforce.jp/review_rdoc.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="おさらいRDoc | feedforce Engineers' blog">
+      <meta property="og:description" content="Rubyエンジニアのみなさん、RDoc書いてますか？「人が書いたRDocは読むけど、自分ではあまり書かない...」という方もいらっしゃるかもしれません。そこで今回はRDocを書くための要点について整理してみました。">
+      <meta property="og:url" content="http://tech.feedforce.jp/review_rdoc.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/review_rdoc.html">おさらいRDoc</a></h1>
+      <ul>
+        <li class="entry-time">2010.08.24</li>
+        <li class="entry-cat"><a href="/category/ruby/">Ruby/Rails</a>, <a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/r-suzuki">r-suzuki</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/r-suzuki"><img src="/images/authors/r-suzuki.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>Rubyエンジニアのみなさん、RDoc書いてますか？「人が書いたRDocは読むけど、自分ではあまり書かない...」という方もいらっしゃるかもしれません。そこで今回はRDocを書くための要点について整理してみました。</p>
+
+<!--more-->  
+
+<h2>RDocの特徴</h2>
+
+<p>RDocとは、ソースコードを解析してHTML形式などのドキュメントを出力するツールです。Rubyはもちろん、Cで書かれたライブラリのコードも解析の対象となります。</p>
+
+<p>ドキュメントはモジュール、クラス、メソッドといったプログラムの構造や、コメント部分から生成されます。独立した文書ではなくソースコードから生成されるので、メンテナンスしやすいと言えるでしょう。</p>
+
+<h2>インストール</h2>
+
+<p>ruby1.8系と一緒にインストールされるrdocはバージョンが古いので、gemで新しいものをインストールしておくとよいでしょう。今回はruby1.8.7とrdoc2.3.0を使用します。（最新版は2.5.11ですが、後述のhannaテンプレートを利用するため2.3.0を選んでいます）</p>
+
+<pre><code class="prettyprint">$ sudo gem install rdoc -v 2.3.0
+$ rdoc --version
+rdoc 2.3.0
+</code></pre>
+
+<h2>ドキュメントの生成</h2>
+
+<p>ドキュメントの生成はrdocコマンドで行います。ドキュメントは指定のファイル、または指定ディレクトリ以下のファイルから生成され、docディレクトリ以下に出力されます。（出力先の指定は-oオプションで可能）ためしに既存のソースコードから生成してみましょう。</p>
+
+<pre><code class="prettyprint">$ rdoc [オプション] [ファイルまたはディレクトリのパス...]
+</code></pre>
+
+<h3>主なオプション</h3>
+
+<p>rdocコマンドの主なオプションを以下に紹介します。詳細は rdoc --help で確認してください。</p>
+
+<ul>
+<li>-c, --charset : 出力文字コードの指定</li>
+<li>-U, --force-update : 変更されたソースがなくても生成しなおす</li>
+<li>-f, --format : フォーマット（HTML, riなど）の指定</li>
+<li>-S, --inline-source : ソースコード表示をインラインにする</li>
+<li>-N, --line-numbers : ソースコード表示に行番号を表示</li>
+<li>-m, --main : 先頭ページの指定</li>
+<li>-o, --op : 出力先ディレクトリの指定</li>
+<li>-T, --template : HTMLテンプレートの指定（後述）</li>
+</ul>
+
+<h3>RDOCOPT</h3>
+
+<p>例えば出力文字コードのように、毎回指定するのが面倒なオプションがあります。こういったオプションは環境変数RDOCOPTに設定しておくことで、コマンド入力時の指定を省略することができます。ご自分の環境に合わせて ~/.zshrc などに設定を追加してみましょう。</p>
+
+<pre><code class="prettyprint"># ~/.zshrcに以下を記述することで-cオプションの指定を省略できる（zshの場合）
+export RDOCOPT=&quot;-c UTF8&quot;
+</code></pre>
+
+<h2>書き方</h2>
+
+<p>rdocはモジュールやクラス、メソッドなどの直前に書かれたコメント部分をそれらの説明としてドキュメント化します。</p>
+
+<pre><code class="prettyprint">=begin rdoc
+先頭のコメント部分はファイルの説明として扱われる
+=end
+
+# クラスの説明
+class Sample
+  # 定数の例
+  CONST_SAMPLE = &#39;sample&#39;
+
+ # 属性(リーダー)
+  attr_reader :reader
+  # 属性(ライター)
+  attr_writer :writer
+  # 属性(アクセッサ)
+  attr_accessor :accessor
+
+ # メソッドの説明
+  def sample_method
+    # ...
+  end
+end
+
+</code></pre>
+
+<p>例えば上記のソースコードからRDocを生成すると、出力結果は以下のようになります。（htmlフォーマットを指定した場合）</p>
+
+<p><a title="RDoc出力例" href="/images/2010/08/rdoc_sample.png"><img alt="RDoc出力例" src="/images/2010/08/rdoc_sample.thumbnail.png" /></a></p>
+
+<h3>マークアップ</h3>
+
+<p>決められたルールに従ったコメントを記述することで、出力結果に書式を設定することができます。以下に主な書式を紹介します。</p>
+
+<h4>見出し</h4>
+
+<pre><code class="prettyprint">=見出し1
+==見出し2
+===見出し3
+...
+</code></pre>
+
+<p><img alt="書式: 見出し" src="/images/2010/08/rdoc_header.png" /></p>
+
+<h4>リスト</h4>
+
+<pre><code class="prettyprint">* リスト1
+* リスト2
+  * ネストはインデントを下げる
+1. 数字リスト
+2. 数字リスト
+3. 数字リスト
+</code></pre>
+
+<p><img alt="書式: リスト" src="/images/2010/08/rdoc_list1.png" /></p>
+
+<h4>ラベル付きリスト</h4>
+
+<pre><code class="prettyprint">[list1] リスト1
+[list2] リスト2
+list1:: リスト1
+list2:: リスト2
+</code></pre>
+
+<p><img alt="書式: ラベル付きリスト" src="/images/2010/08/rdoc_list2.png" /></p>
+
+<h4>文字スタイル</h4>
+
+<pre><code class="prettyprint">*bold*
+_italic_
++typewriter+
+</code></pre>
+
+<p>アルファベット、アンダースコア以外を含む場合は以下を使用します</p>
+
+<pre><code class="prettyprint">&lt;b&gt;太字&lt;/b&gt;
+&lt;em&gt;イタリック&lt;/em&gt;
+&lt;tt&gt;タイプライター体&lt;/tt&gt;
+</code></pre>
+
+<p><img alt="書式: 文字スタイル" src="/images/2010/08/rdoc_style.png" /></p>
+
+<h4>リンク</h4>
+
+<p>URLとみなされる文字列はリンクになります。リンク文字列を指定することも可能です。画像のURLはドキュメントに挿入されます。</p>
+
+<pre><code class="prettyprint">http://tech.feedforce.jp
+{FFTT}[http://tech.feedforce.jp]
+http://www.feedforce.jp/recruit/img/feature/fftt.gif
+</code></pre>
+
+<p><img alt="書式: リンク" src="/images/2010/08/rdoc_link.png" /></p>
+
+<h3>ディレクティブ</h3>
+
+<p>ドキュメントの生成について細かな指定を行うディレクティブが用意されています。</p>
+
+<h4>:nodoc:</h4>
+
+<p>指定の要素をドキュメントに含めないよう指定することができます。「:nodoc:」と指定した場合と「:nodoc: all」と指定した場合でドキュメント対象が異なります。</p>
+
+<pre><code class="prettyprint"># このモジュール自体はドキュメント化されない
+module HiddenModule1 # :nodoc:
+  # このクラスはドキュメント化される
+  class Visible
+  end
+end
+
+module HiddenModule2 # :nodoc: all
+  # このクラスはドキュメント化されない
+  class Invisible
+  end
+end
+</code></pre>
+
+<h4>:yield:</h4>
+
+<p>yield呼び出しを含むメソッドは、そのパラメータ名が表示されます。:yield:ディレクティブを指定すると、その表示パラメータ名を変更できます。</p>
+
+<p><img alt="ディレクティブ: yield" src="/images/2010/08/rdoc_yield.png" /></p>
+
+<p>その他のマークアップやディレクティブについては <a href="http://rdoc.rubyforge.org/RDoc.html">RDocのドキュメント</a>を参照してください。</p>
+
+<h2>テンプレート</h2>
+
+<p>組み込みでDarkfishやhtmlといったテンプレート（フォーマット）が用意されていますが、その他に公開されているテンプレートを利用することもできます。試しに <a href="http://github.com/mislav/hanna">hanna</a>というテンプレートを利用してみましょう。</p>
+
+<h3>インストールとドキュメントの生成</h3>
+
+<p>hannaテンプレートはgemで提供されています。</p>
+
+<pre><code class="prettyprint">$ sudo gem install hanna
+</code></pre>
+
+<p>hannaテンプレートを使ったドキュメント生成は以下のように実行します。</p>
+
+<pre><code class="prettyprint">rdoc -f html -S -T hanna [ファイルまたはディレクトリのパス...]
+# または
+hanna [オプション] [ファイルまたはディレクトリのパス...]
+</code></pre>
+
+<p>先ほど生成したドキュメントをhannaテンプレートで生成すると以下のようになります。Ajaxによるメソッドの検索が可能です。</p>
+
+<p><a title="hannaテンプレート" href="/images/2010/08/rdoc_hanna.png"><img alt="hannaテンプレート" src="/images/2010/08/rdoc_hanna.thumbnail.png" /></a></p>
+
+<h3>その他のテンプレート</h3>
+
+<ul>
+<li><a href="http://blog.evanweaver.com/files/doc/fauna/allison/files/README.html">Allison</a></li>
+<li><a href="http://github.com/voloko/sdoc">sdoc</a></li>
+</ul>
+
+<h2>Rakeタスクの定義</h2>
+
+<p>環境変数RDOCOPTでrdocコマンド共通のオプションは指定できますが、チームメンバー間での共有やプロジェクト別の指定には対応できません。そこでRakeタスクを定義して、ドキュメント生成作業を定型化してみましょう。例えば以下のようにRakefileを記述することで、ドキュメント生成タスク:rdocを定義できます。</p>
+
+<pre><code class="prettyprint">require &#39;rake/rdoctask&#39;
+gem &#39;rdoc&#39;, &#39;2.3.0&#39; # gemでインストールされたrdocを使う場合に必要
+require &#39;rdoc&#39;
+
+Rake::RDocTask.new(:rdoc) do |rdoc|
+  rdoc.options
+</code></pre>
+
+<p>なお弊社内のプロジェクトでは <a href="http://cruisecontrolrb.thoughtworks.com/">CruiseControl.rb</a>でのビルドの際にRDocを生成し、ビルドサーバからいつでも参照できるようにしています。</p>
+
+<h2>おわりに</h2>
+
+<p>以上のように、RDocは比較的少ない労力で参照しやすいドキュメントを生成することができます。特にチーム開発をされている場合は、円滑なコミュニケーションのために役立ててみてはいかがでしょうか。</p>
+
+<h3>参考</h3>
+
+<ul>
+<li><a href="http://rdoc.rubyforge.org/">rdoc Documentation</a></li>
+<li><a href="http://www.amazon.co.jp/gp/product/4873114454?ie=UTF8&amp;tag=htmlmmg-22&amp;linkCode=as2&amp;camp=247&amp;creative=7399&amp;creativeASIN=4873114454">『Rubyベストプラクティス』</a><img src="http://www.assoc-amazon.jp/e/ir?t=htmlmmg-22&amp;l=as2&amp;o=9&amp;a=4873114454" /></li>
+<li><a href="http://www.amazon.co.jp/gp/product/4274068099?ie=UTF8&amp;tag=htmlmmg-22&amp;linkCode=as2&amp;camp=247&amp;creative=7399&amp;creativeASIN=4274068099">『プログラミングRuby 1.9 －言語編－』</a><img src="http://www.assoc-amazon.jp/e/ir?t=htmlmmg-22&amp;l=as2&amp;o=9&amp;a=4274068099" /></li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/review_rdoc.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="おさらいRDoc" data-url="http://tech.feedforce.jp/review_rdoc.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/review_rdoc.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/review_rdoc.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/homebrew.html" rel="next">Homebrew のご紹介</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/packagemaker.html" rel="prev">Macアプリのパッケージ作成方法</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

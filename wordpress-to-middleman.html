@@ -1,0 +1,330 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>ブログをWordPressからMiddlemanに移行しました！ | feedforce Engineers' blog</title>
+      <meta name="description" content="お初にお目にかかります。鉛弾を敵の眉間にブチ込むゲームが好きなdkimuraです。先月末に当ブログを、WordPressからMiddlemanへ移行いたしました。その際にハマった/悩んだところをご紹介させていただきます。">
+      <link rel="canonical" href="http://tech.feedforce.jp/wordpress-to-middleman.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="ブログをWordPressからMiddlemanに移行しました！ | feedforce Engineers' blog">
+      <meta property="og:description" content="お初にお目にかかります。鉛弾を敵の眉間にブチ込むゲームが好きなdkimuraです。先月末に当ブログを、WordPressからMiddlemanへ移行いたしました。その際にハマった/悩んだところをご紹介させていただきます。">
+      <meta property="og:url" content="http://tech.feedforce.jp/wordpress-to-middleman.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/wordpress-to-middleman.html">ブログをWordPressからMiddlemanに移行しました！</a></h1>
+      <ul>
+        <li class="entry-time">2015.01.16</li>
+        <li class="entry-cat"><a href="/category/ruby/">Ruby/Rails</a>, <a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/dkimura">dkimura</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/dkimura"><img src="/images/authors/dkimura.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>お初にお目にかかります。鉛弾を敵の眉間にブチ込むゲームが好きなdkimuraです。</p>
+
+<p>先月末に当ブログを、<a href="https://wordpress.org/">WordPress</a>から<a href="https://middlemanapp.com/">Middleman</a>へ移行いたしました。<br>
+その際にハマった/悩んだところをご紹介させていただきます。</p>
+
+<!--more-->
+
+<h2>移行の流れ</h2>
+
+<ol>
+<li>WordPressから、記事データをXMLでエクスポートする</li>
+<li><strong>エクスポートした記事データをMarkdownに変換</strong></li>
+<li><strong>middleman-blogコーディング</strong></li>
+<li>Github Pagesでホスティング</li>
+</ol>
+
+<p>今回は<strong>太字</strong>になっている箇所で苦労したお話をさせていただだきます。</p>
+
+<h2>エクスポートした記事データをMarkdownに変換</h2>
+
+<p>既に記事移行用に、Rubyスクリプトが公開されていたのでForkして使用しました。<br>
+大半の記事は上手くMarkdownに変換できましたが、変換後の確認と調整は必要です。</p>
+
+<blockquote>
+<p>salmansqadeer/wordpress-to-middleman<br>
+<a href="https://github.com/salmansqadeer/wordpress-to-middleman">https://github.com/salmansqadeer/wordpress-to-middleman</a></p>
+</blockquote>
+
+<h3>Forkしたもの</h3>
+
+<p>Diffは、<a href="https://github.com/dkimura/wordpress-to-middleman/compare/salmansqadeer:master...master">こちら</a>からご確認ください。</p>
+
+<blockquote>
+<p>dkimura/wordpress-to-middleman<br>
+<a href="https://github.com/dkimura/wordpress-to-middleman">https://github.com/dkimura/wordpress-to-middleman</a></p>
+</blockquote>
+
+<h3>変更したところ</h3>
+
+<ul>
+<li>htmlからMarkdownへ変換してくれるgemを変更した</li>
+<li>記事のファイル名と記事タイトル/ファイル名を別々にした</li>
+</ul>
+
+<h3>変換後、手動で修正したところ</h3>
+
+<ul>
+<li>埋め込みツイートが使われている記事</li>
+<li>WordPressのショートコード([caption]とか)が入っている記事</li>
+<li>空見出し等、変な改行が入っている記事</li>
+</ul>
+
+<h2>middleman-blogコーディング</h2>
+
+<h3>ハマり/悩みどころ</h3>
+
+<ol>
+<li>カテゴリの表示名とスラッグが別のものをどうするか</li>
+<li>検索機能をどうするか</li>
+</ol>
+
+<h4>カテゴリ(タグ)の表示名とスラッグが別のものをどうするか</h4>
+
+<p>Middlemanは、WordPressと違ってスラッグ名/表示名の指定ができないため、<br>
+記事で指定した<code class="prettyprint">tags</code>の内容を、表示名に変換する必要がありました。</p>
+
+<p>上記の対応はカスタムヘルパーを作って対処しました。</p>
+
+<h5>helpers/custom.rb</h5>
+
+<pre><code class="prettyprint ruby">def slug_to_japanese(en_text)
+  jp_text = &#39;&#39;
+
+  data.category.each do |key, value|
+    if en_text == key.en then
+      jp_text = key.ja
+    end
+  end
+
+  return jp_text
+end
+</code></pre>
+
+<h5>data/category.yml</h5>
+
+<pre><code class="prettyprint yaml">- en: &quot;ruby&quot;
+  ja: &quot;Ruby&quot;
+- en: &quot;infrastructure&quot;
+  ja: &quot;インフラ&quot;
+- en: &quot;resume&quot;
+  ja: &quot;勉強会資料&quot;
+- en: &quot;operation&quot;
+  ja: &quot;運用事例&quot;
+- en: &quot;test&quot;
+  ja: &quot;テスト&quot;
+- en: &quot;dev_style&quot;
+  ja: &quot;開発スタイル&quot;
+- en: &quot;aws&quot;
+  ja: &quot;AWS&quot;
+
+# en: スラッグ
+# ja: 表示名
+</code></pre>
+
+<h5>ERBでのコード例</h5>
+
+<pre><code class="prettyprint erb">&lt;% blog.tags.each do |tag, articles| %&gt;
+  &lt;li&gt;&lt;%= link_to &quot;#{slug_to_japanese(tag)}&quot;, tag_path(tag) %&gt;&lt;/li&gt;
+&lt;% end %&gt;
+</code></pre>
+
+<h4>検索機能をどうするか</h4>
+
+<p>Middlemanは静的サイトであるため、サイト内検索機能がありません。</p>
+
+<p>現在は、<a href="https://www.google.co.jp/cse/compare">Googleのカスタム検索</a>で補ってますが、<br>
+検索ボックスのデザインが変わってしまっているので何とかしたい気持ちが…。</p>
+
+<p>代替措置は結構選択肢がありますので、そのうち試したいと思っています。</p>
+
+<ul>
+<li><a href="http://ja.ngs.io/2015/01/02/middleman-blog-search/">Middleman+GitHub で構築したサイトの検索画面を作る</a></li>
+<li><a href="http://gold-experience.jp/articles/2014/02/16/middleman_blog_search.html">Middlemanでブログの検索機能を実装する！</a></li>
+<li><a href="https://swiftype.com/">Swiftype</a></li>
+</ul>
+
+<h2>まとめ</h2>
+
+<ul>
+<li>移行作業の大半は、XMLとの戦いだった</li>
+<li><strong>静的サイト</strong>なので動的サイトである故に出来てたことはできなくなるから考慮しようね</li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/wordpress-to-middleman.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="ブログをWordPressからMiddlemanに移行しました！" data-url="http://tech.feedforce.jp/wordpress-to-middleman.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/wordpress-to-middleman.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/wordpress-to-middleman.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/github-pages-deploy-with-circleci.html" rel="next">このブログはGitHub Pages＋CircleCIで運用しています</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/aws-iam-billing.html" rel="prev">AWSで請求情報をIAMユーザーでも閲覧できるようにする</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

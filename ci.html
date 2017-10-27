@@ -1,0 +1,308 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>継続的インテグレーション | feedforce Engineers' blog</title>
+      <meta name="description" content="ここしばらく公開できる勉強会の資料がなかったので久方ぶりに社内の開発の様子について書いてみます。今回はXPのプラクティスにも挙げられている継続的インテグレーションについて。">
+      <link rel="canonical" href="http://tech.feedforce.jp/ci.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="継続的インテグレーション | feedforce Engineers' blog">
+      <meta property="og:description" content="ここしばらく公開できる勉強会の資料がなかったので久方ぶりに社内の開発の様子について書いてみます。今回はXPのプラクティスにも挙げられている継続的インテグレーションについて。">
+      <meta property="og:url" content="http://tech.feedforce.jp/ci.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/ci.html">継続的インテグレーション</a></h1>
+      <ul>
+        <li class="entry-time">2007.05.29</li>
+        <li class="entry-cat"><a href="/category/test/">テスト</a>, <a href="/category/dev_style/">開発スタイル</a></li>
+        <li class="entry-author"><a href="/author/akahige">akahige</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/akahige"><img src="/images/authors/no-image.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>ここしばらく公開できる勉強会の資料がなかったので久方ぶりに社内の開発の様子について書いてみます。</p>
+
+<p>今回はXPのプラクティスにも挙げられている継続的インテグレーションについて。</p>
+
+<!--more-->  
+
+<h2>継続的インテグレーションってなんだろう</h2>
+
+<p>一応よくまとめられているページを紹介しておきます。<br>
+■ <a href="http://www.objectclub.jp/community/XP-jp/xp_relate/cont-j">継続的インテグレーション - オブジェクト倶楽部</a></p>
+
+<p>要は<br>
+- バグは早く見つけるほど修正のコストがかからない<br>
+- そのためにソフトウェアのビルドを頻繁に行うのがよい<br>
+- ビルドが「成功したビルド」であるか確認するために都度テストを行う<br>
+- 頻繁に行えるようにビルドとテストをできる限り自動化する</p>
+
+<p>という取り組みです。</p>
+
+<p>うちの会社で開発に使っているのは主にスクリプト言語なのでコンパイル等は行わないのですが、ファイルをテスト用サーバに配備して動く状態にすることをビルドと同義に考えます。 とにかくアプリケーションを動かせる状態にするのがビルドと言うことで。</p>
+
+<p>ともあれ継続的インテグレーションはアプリケーションの品質を保つためにはかなり有効なプラクティスです。</p>
+
+<p>継続的インテグレーションは英語でContinuous IntegrationなのでCIなどと略して呼ぶ場合もあります。</p>
+
+<h2>継続的インテグレーションの実践</h2>
+
+<p>FFの社内では実際に以下のようなサイクルで動いてます。<br>
+- 毎日深夜にCI環境のアプリケーションの更新（ビルド）<br>
+  - リポジトリ上のHEADのソースが配備される<br>
+  - データベースのスキーマも最新のバージョンに<br>
+- CI環境での自動テストの実行<br>
+  - ユニットテストとSeleniuimによるテスト<br>
+  - 結果をメンバーにメールで通知<br>
+- 翌朝の確認<br>
+  - 問題があれば確認担当が朝会で報告して対処</p>
+
+<p>というわけで1日1回のビルドとテストです。<br><br>
+もっと頻繁に回せればベストなのですが、自動テストのSeleniumの実行にかなりの時間がかかるので1日1回としています。</p>
+
+<p>それでもテストがこけていた場合は前日行った変更が原因と言うところまで絞り込めるので、修正はかなり楽です。</p>
+
+<p>二年余り機能追加を続けているアプリケーションが腐らずに運用できているのも、継続的インテグレーションのおかげです。</p>
+
+<h2>継続的インテグレーションの構築の仕方</h2>
+
+<p>ビルドの自動化とテストの自動化さえできればCIの構築は簡単です。<br><br>
+自動化さえ出来ていれば、あとはそれをスケジューリングして確認する運用を組み立てるだけです。</p>
+
+<p>逆に言うと自動化が出来ていなければまずその自動化をする必要があります。</p>
+
+<h3>ビルドの自動化</h3>
+
+<p>FFでは以下の仕組みを駆使してビルドの自動化を実現しています。<br>
+- Subversion<br>
+- Rake<br>
+- マイグレーション</p>
+
+<p>基本的にRakeからsvnコマンドを叩いてファイルを配備し、マイグレーションによってデータベーススキーマを更新します。</p>
+
+<p>これによりPHPアプリでは以下の二つのコマンドを実行するだけでビルド完了です。（初回はこのほかにチェックアウトがいりますが）</p>
+
+<pre><code class="prettyprint">$ rake release_all stag=trunk ptag=trunk
+$ rake migrate
+</code></pre>
+
+<p>Railsのマイグレーションが激しく便利なのでPHPでも簡単なマイグレーションの仕組みを作って使っています。</p>
+
+<p>Railsアプリでは同じく二つのコマンドでビルドが完了します。（同じく初回は要チェックアウト）</p>
+
+<pre><code class="prettyprint">$ svn up
+$ rake db:migrate
+</code></pre>
+
+<p>自動化は割と真面目にやろうとするとしんどいことも多く、中途半端なところまででお茶を濁したくなることもありますが、徹底的にやったほうが後々幸せになれます。 規模が大きくなるほど手間もかかりますが、見返りも大きいです。</p>
+
+<h3>テストの自動化</h3>
+
+<p>テストの自動化は以下の二本の柱で行っています。<br>
+- ユニットテスト<br>
+- Selenium</p>
+
+<p>これら自動テストの作成に関しては機能追加や修正が続く間は並行して継続的に行っていく必要があります。<br><br>
+開発の際のお約束として習慣化するのがよいです。</p>
+
+<p>ある機能に関して作成や変更を行った場合は、セットでテストの作成や変更も行います。<br><br>
+たくさんの機能を一気に作って、あとでまとめてテストを作るとか考えるとたいていうまくいきません。</p>
+
+<h3>運用</h3>
+
+<p>自動化ができていれば、あとはそれらを組み合わせて運用を組むだけです。<br>
+- ビルドの定期的な実行<br>
+- テストの定期的な実行<br>
+- 結果の通知と確認<br>
+- 「成功したビルド」が得られなかった場合の対処</p>
+
+<p>これに関してはLinuxサーバ側のCronでビルドとユニットテストを行い、WindowsテストマシンのタスクスケジューラでSeleniumを実行するようにしています。<br><br>
+そして結果はメンバーにメールで送られてきますので、それを確認します。<br><br>
+何かテストが失敗していたら「成功したビルド」が得られなかったということで、それを得るために優先的に失敗した部分の修正作業を行います。</p>
+
+<p>ちなみに確認まできちんと運用に組み込まないと、何日もテストが失敗していたのに気がつかなかったなんてこともあります。<br><br>
+成功しないビルドでは意味がありませんので、運用を考える際にはそこまで考慮に入れる必要があります。</p>
+
+<h2>まとめ</h2>
+
+<p>以上、ウェブアプリケーションの開発で継続的インテグレーションやってるよと言う話でした。</p>
+
+<p>運用の構築にはそれなりに手間がかかりますが、回りだしてしまえば運用コストは高くないので、構築にかけたコストは確実にペイできると思います。 （アプリケーションが小規模すぎるものだと見合わないかもしれませんが）</p>
+
+<p>またビルドとテストの自動化はリリース作業と確認の簡略化にも役立ちますので頻繁なリリースの助けにもなっています。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/ci.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="継続的インテグレーション" data-url="http://tech.feedforce.jp/ci.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/ci.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/ci.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/iptables.html" rel="next">iptables講習会</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/ruby-gettext.html" rel="prev">ruby-gettext</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

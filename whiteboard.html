@@ -1,0 +1,408 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>ホワイトボードを使ったタスク管理 | feedforce Engineers' blog</title>
+      <meta name="description" content="はじめに弊社では、技術チームのタスク管理に、ホワイトボードを利用しています。毎朝、ホワイトボードの前にチームメンバーを集めて、スタンドアップミーティングを行っています。今回のコラムでは、このホワイトボードとタスク管理についてお話しします。  ">
+      <link rel="canonical" href="http://tech.feedforce.jp/whiteboard.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="ホワイトボードを使ったタスク管理 | feedforce Engineers' blog">
+      <meta property="og:description" content="はじめに弊社では、技術チームのタスク管理に、ホワイトボードを利用しています。毎朝、ホワイトボードの前にチームメンバーを集めて、スタンドアップミーティングを行っています。今回のコラムでは、このホワイトボードとタスク管理についてお話しします。  ">
+      <meta property="og:url" content="http://tech.feedforce.jp/whiteboard.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/whiteboard.html">ホワイトボードを使ったタスク管理</a></h1>
+      <ul>
+        <li class="entry-time">2008.03.11</li>
+        <li class="entry-cat"><a href="/category/dev_style/">開発スタイル</a></li>
+        <li class="entry-author"><a href="/author/ff_koshigoe">ff_koshigoe</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/ff_koshigoe"><img src="/images/authors/koshigoe.gif" /></a>
+    </div>
+    <div class="entry-body">
+      <h2>はじめに</h2>
+
+<p>弊社では、技術チームのタスク管理に、ホワイトボードを利用しています。毎朝、ホワイトボードの前にチームメンバーを集めて、スタンドアップミーティングを行っています。</p>
+
+<p>今回のコラムでは、このホワイトボードとタスク管理についてお話しします。</p>
+
+<p><img alt="ホワイトボードの写真" src="http://resource.feedforce.jp/study/whiteboard/white-board-practice.jpg" />  </p>
+
+<!--more-->
+
+<ul>
+<li><p>はじめに</p>
+
+<ul>
+<li>前知識</li>
+</ul></li>
+<li><p>目的および効果</p>
+
+<ul>
+<li>見える化</li>
+<li>意識合わせ</li>
+<li>振り返り</li>
+</ul></li>
+<li><p>ホワイトボードの使い方</p>
+
+<ul>
+<li>(1) Q内の月別予定</li>
+<li>(2) KPT</li>
+<li>(3) 直近のタスクプール</li>
+<li>(4) 先延ばしタスクプール</li>
+<li>(5) 定期タスクプール</li>
+<li>(6) メンバーのタスク管理表</li>
+<li>(6a) 実行中タスク</li>
+<li>(6b) 各曜日別の実行済みタスク</li>
+<li>(7) メンバー用の汎用タスクプール</li>
+</ul></li>
+<li><p>タスクをホワイトボードで管理するメリット</p>
+
+<ul>
+<li>朝ミーティングの効率</li>
+<li>一目瞭然</li>
+<li>振り返りの効率</li>
+<li>公開性</li>
+</ul></li>
+<li><p>まとめ</p></li>
+<li><p>最後に</p></li>
+</ul>
+
+<h2>はじめに</h2>
+
+<p>弊社では、技術チームのタスク管理に、ホワイトボードを利用しています。毎朝、ホワイトボードの前にチームメンバーを集めて、スタンドアップミーティングを行っています。</p>
+
+<p>今回のコラムでは、このホワイトボードとタスク管理についてお話しします。</p>
+
+<p><img alt="ホワイトボードの写真" src="http://resource.feedforce.jp/study/whiteboard/white-board-practice.jpg" /></p>
+
+<h3>前知識</h3>
+
+<p>これ以降の文章の中で、「タスクカード」という言葉が登場します。これは、タスクを書き留める付箋の事です。この付箋をホワイトボードに貼り付けて、タスク管理を行っています。</p>
+
+<p><img alt="タスクカード例" src="http://resource.feedforce.jp/study/whiteboard/task_card.png" />  </p>
+
+<ul>
+<li>色でおおまかに分類
+
+<ul>
+<li>プロダクトの色、バグは赤、汎用の色、など</li>
+</ul></li>
+<li>(1) BTS管理されているならそのID</li>
+<li>(2) タスクの簡潔な見出し</li>
+<li>(3) 実施期間</li>
+<li>(4) 見積り(時間単位)</li>
+<li>(5) 実働時間(時間単位)</li>
+</ul>
+
+<p>ちなみに、付箋は強粘着がおすすめです。</p>
+
+<h2>目的および効果</h2>
+
+<ul>
+<li>見える化</li>
+<li>意識合わせ</li>
+<li>振り返り</li>
+</ul>
+
+<h3>見える化</h3>
+
+<p>チームで仕事をするにあたって、誰が何をどの程度行っているのかを、目に見える形で管理したいという要望から、ホワイトボードによるタスク管理は始まりました。  </p>
+
+<h3>意識合わせ</h3>
+
+<p>また、毎朝ホワイトボードの前で、数分〜十数分間のスタンドアップミーティングを行い、意識合わせおよびメンバーのタスク状況の把握などが効率よく行えます。  </p>
+
+<h3>振り返り</h3>
+
+<p>さらに、週末には振り返りを実施しており、その際にも、仕事量や見積もり誤差の把握に役立っています。振り返りの際には、その週のKPTも報告しあい、それをホワイトボードに書き留めており、反省等を忘れずに意識し続ける事にも役立っています。</p>
+
+<h2>ホワイトボードの使い方</h2>
+
+<p>ホワイトボードは、いくつかの領域に分けて使用しています。</p>
+
+<p><img alt="ホワイトボード例" src="http://resource.feedforce.jp/study/whiteboard/whiteboard.png" /></p>
+
+<ul>
+<li>(1) Q内の月別予定</li>
+<li>(2) KPT</li>
+<li>(3) 直近のタスクプール</li>
+<li>(4) 先延ばしタスクプール</li>
+<li>(5) 定期タスクプール</li>
+<li>(6) メンバーのタスク管理表
+
+<ul>
+<li>(6a) 実行中タスク  - (6b) 各曜日別の実行済みタスク</li>
+</ul></li>
+<li>(7) メンバー用の汎用タスクプール</li>
+</ul>
+
+<h3>(1) Q内の月別予定</h3>
+
+<p>Q(3ヶ月)内の予定を、各月に分けて掲示する領域です。大きめなマイルストーンや、イベント事などが主に掲示されています。</p>
+
+<p>チームによっては、各月でやりきる予定のタスクカードを貼り付けていたりします。  </p>
+
+<h3>(2) KPT</h3>
+
+<p>振り返りミーティングで報告された内容を書き留めておく領域です。重要な事は延々と残しておき、習慣づいたり、改善されたような事は消していきます。  </p>
+
+<h3>(3) 直近のタスクプール</h3>
+
+<p>だいたい、1週間以内で実行する予定のタスクカードを貼り付ける領域です。お知らせを書いたりもします。  </p>
+
+<h3>(4) 先延ばしタスクプール</h3>
+
+<p>諸事情から、優先度が下がって先延ばしになったタスクカードを、念のため忘れ去られない様に貼付けておく領域です。だいたい、Q末に整理する様にしています。  </p>
+
+<h3>(5) 定期タスクプール</h3>
+
+<p>定期的に実行しているタスクカードを貼り付ける領域です。担当者が休んでいる様な場合にも、忘れられない様に注意しています。  </p>
+
+<h3>(6) メンバーのタスク管理表</h3>
+
+<p>各メンバーごとに担当している(完了した)タスクカードを貼り付ける領域です。  </p>
+
+<h4>(6a) 実行中タスク</h4>
+
+<p>現在実行中のタスクカードを貼り付けるブロックです。  </p>
+
+<h4>(6b) 各曜日別の実行済みタスク</h4>
+
+<p>実行済みタスクカードを貼り付けるブロックです。月曜から金曜までに分かれています。  </p>
+
+<h3>(7) メンバー用の汎用タスクプール</h3>
+
+<p>担当が決まっていつつ、諸事情から優先度が下がったり、ペンディング中となったタスクカードを貼付けておく領域です。</p>
+
+<h2>タスクをホワイトボードで管理するメリット</h2>
+
+<p>弊社では、原則すべてのタスクをBTSで管理しています。すでに管理されているタスクを、さらにホワイトボードでも管理する意味はいったいなんなのでしょうか。冗長な事をして無駄ではないでしょうか。</p>
+
+<h3>朝ミーティングの効率</h3>
+
+<p>大前提として、朝ミーティングは欠かせません。</p>
+
+<p>BTSでタスクを管理している為、誰が何をしているのか、どういう状況なのかなどは、注意を払えば大体の事は分かります。しかし、注意を払っても大体の事しか分からず、開発メンバーにそれほどの余裕はありません。</p>
+
+<p>他のメンバーの状況等を知りたいという潜在的な欲求はあるはずですが、期日(翌週のリリース日)に向けて集中している中で、他の事に目を向ける余裕はなかなか生まれません。</p>
+
+<p>毎朝、スタンドアップミーディングを行う事で、短時間で集中して、チーム内での情報共有や意識合わせを行えるわけです。その際に、タスク状況を目に見えて分かりやすく管理している、 <strong>アナログな</strong> ホワイトボードは非常に役に立ちます。  </p>
+
+<h3>一目瞭然</h3>
+
+<p>ふと顔を上げ、ホワイトボードを見れば、誰がどの様な状況かを知る事が出来ます。</p>
+
+<p>例えば、何かに煮詰まって助けを求めたい場合に、比較的手が空いていそうな人を探すのに役立ちます。</p>
+
+<p>デジタルな世界に関するプロフェッショナルとはいえ、一般的な人生を歩んでいる限りは、大抵の場合でアナログなツールの方が分かりやすかったり親しみやすかったりします。</p>
+
+<p><a href="http://tech.feedforce.jp/bts-2.html">FFTT : BTS - バグトラッキングシステムの利用（２）</a>でお話しした、BTS人形もそうですが、時にはアナログな方法を採用した方が効率的な場合があります。  </p>
+
+<h3>振り返りの効率</h3>
+
+<p>週で実施したタスクがホワイトボードに貼付けられているので、その週の振り返りが手ぶらで行えます。</p>
+
+<p>振り返りといっても、深く突っ込んだ内容ではありません。その週に何を行い、その見積もり誤差がどの程度で何が原因なのか、次に活かすべき事は何かなど、簡潔な内容ですませています。</p>
+
+<p>深く突っ込んだ振り返りは、Q末に開発プラクティス等全般的な見直しミーティングや、技術チーム内での面談等で実施しています。これは、今回のお話とは趣旨がずれますので、割愛します。</p>
+
+<p>つまり、言いたい事は、ささっと意味のある簡潔な振り返りが手間いらずで出来ます、という事です。</p>
+
+<p>また、KTPをホワイトボードに記録しているので、これも効果的な振り返りを助けてくれています。  </p>
+
+<h3>公開性</h3>
+
+<p>これについては、技術チームの人の意見を聞いたわけではないので自信がありませんが、公開されている事にも意味がある様に思います。</p>
+
+<p>例えば、管理的な立場の人が、ぱっと見て進捗具合を把握できるツールがあるというのは、重要ではないでしょうか。</p>
+
+<p>朝ミーティングにはプロダクトを統括する人にも参加してもらっていますが、後でふとした時にも簡単に確認できるので、非常に彼らの助けになっているだろうと期待しています。</p>
+
+<h2>まとめ</h2>
+
+<p>タスクをアナログな方法でみんなに見える様に、簡潔に管理する事は、チーム作業において大きな助けとなってくれます。</p>
+
+<h2>最後に</h2>
+
+<p>今回ご紹介した利用例や目的は、弊社で最適化したものになっているため、皆様の環境にはそぐわないかもしれません。しかしながら、私の実感で、非常に役に立ってくれる無くてはならないツールであるというのは、まぎれも無い事実です。</p>
+
+<p>このような事例を参考に、もしよろしければ、皆様の環境でも似た様な取り組みを導入・ご検討されてみてはいかがでしょうか。</p>
+
+<p>余談ですが、先日、弊社の企画・デザイン混合チームでも、ホワイトボードでのタスク管理を始めたようです。どうやら、開発側とは少し違った使い方をしている様で、興味深く見守っていきたいと思います。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/whiteboard.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="ホワイトボードを使ったタスク管理" data-url="http://tech.feedforce.jp/whiteboard.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/whiteboard.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/whiteboard.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/ua-classify.html" rel="next">フィードとユーザーエージェントに関する基礎知識</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/openid_auth_20.html" rel="prev">OpenID認証2.0〜概論</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

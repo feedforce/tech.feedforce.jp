@@ -1,0 +1,414 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>JenkinsでサーバのCIを始めました | feedforce Engineers' blog</title>
+      <meta name="description" content="お久しぶりです。アジャイル推進おじさん改め、サーバCIおじさんの増田です。プライベートではベヨネッタ2をやっています。3rdクライマックスはクリアできそうです。最高難易度はたぶん無理です。2015.3.13 追記社内で共有するレシピのリポジトリをsite-cookbooksからff-cookbooksに変更しました。">
+      <link rel="canonical" href="http://tech.feedforce.jp/jenkins-server-ci.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="JenkinsでサーバのCIを始めました | feedforce Engineers' blog">
+      <meta property="og:description" content="お久しぶりです。アジャイル推進おじさん改め、サーバCIおじさんの増田です。プライベートではベヨネッタ2をやっています。3rdクライマックスはクリアできそうです。最高難易度はたぶん無理です。2015.3.13 追記社内で共有するレシピのリポジトリをsite-cookbooksからff-cookbooksに変更しました。">
+      <meta property="og:url" content="http://tech.feedforce.jp/jenkins-server-ci.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/jenkins-server-ci.html">JenkinsでサーバのCIを始めました</a></h1>
+      <ul>
+        <li class="entry-time">2014.10.17</li>
+        <li class="entry-cat"><a href="/category/infrastructure/">インフラ</a>, <a href="/category/test/">テスト</a></li>
+        <li class="entry-author"><a href="/author/masutaka">masutaka</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/masutaka"><img src="/images/authors/masutaka.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p><img alt="jenkins logo" src="/images/2014/10/logo-title.png" /></p>
+
+<p>お久しぶりです。アジャイル推進おじさん改め、サーバCIおじさんの増田です。</p>
+
+<p>プライベートではベヨネッタ2をやっています。3rdクライマックスはクリアできそうです。最高難易度はたぶん無理です。</p>
+
+<p>2015.3.13 追記<br>
+社内で共有するレシピのリポジトリをsite-cookbooksからff-cookbooksに変更しました。</p>
+
+<!--more-->
+
+<h2>フィードフォースのサーバリポジトリ</h2>
+
+<p>弊社は今年の4月くらいから <a href="http://serverspec.org/">serverspec</a>を導入しましたが、CIはしていませんでした。構成管理にはChef-soloを使っており、GitHubのリポジトリはこのようになっております(数字は参照順です)。</p>
+
+<ul>
+<li>server-social-plus
+
+<ol>
+<li>site-cookbooks</li>
+<li>cookbooks</li>
+<li>ff-cookbooks (git submodule)</li>
+</ol></li>
+<li>server-datafeed-plus
+
+<ol>
+<li>site-cookbooks</li>
+<li>cookbooks</li>
+<li>ff-cookbooks (git submodule)</li>
+</ol></li>
+<li>...
+
+<ol>
+<li>site-cookbooks</li>
+<li>cookbooks</li>
+<li>ff-cookbooks (git submodule)</li>
+</ol></li>
+<li>ff-cookbooks</li>
+</ul>
+
+<p>Chefデフォルトのcookbooks、site-cookbooksに加え、社内でff-cookbooksを共有しています。</p>
+
+<p>弊社はサービス毎にサーバのリポジトリを用意しているため、数が多いです。今数えたら9ありました(3月に入社してびっくりしたことの1つ)。</p>
+
+<p>怖くてレシピを変更しづらいし、PullRequestのレビューにも時間がかかるため、最近作ったサーバでCIをはじめました。</p>
+
+<h2>サーバのCI</h2>
+
+<ul>
+<li>本番環境
+
+<ul>
+<li>AWS</li>
+</ul></li>
+<li>CIツール
+
+<ul>
+<li>Jenkins on Gentoo Linux</li>
+</ul></li>
+<li>構成管理
+
+<ul>
+<li>Chef-solo</li>
+</ul></li>
+<li>テストフレームワーク
+
+<ul>
+<li>serverspec</li>
+</ul></li>
+</ul>
+
+<p>特殊なことはしていなくて、このような流れです。</p>
+
+<ol>
+<li>vagrant upでEC2インスタンスを起動</li>
+<li>knife solo cook</li>
+<li>serverspec</li>
+<li>vagrant destroy</li>
+</ol>
+
+<p>※ Gentooにはあらかじめ、Vagrantとvagrant-aws pluginをインストールしておきます。</p>
+
+<p>サーバもCIすると、変更に強くなるしレシピが壊れたのにすぐ気づけるので良いです。本来集中すべきことに集中できますね。</p>
+
+<p>よく言われることですが、リポジトリを作ったタイミングでCIを導入したので、負債があまりありません。反面、今までのレシピの負債が見えてしまったので対応することになりましたが。。</p>
+
+<p>Jenkinsの設定とVagrantfile、テスト用のスクリプトはこの記事の最後に貼りました。興味あればご覧ください。</p>
+
+<h2>最後に</h2>
+
+<p>今回は最近始めたJenkinsを使ったサーバのCIについて書きました。</p>
+
+<p>次回は <a href="https://circleci.com/">CircleCI</a>を使ったサーバのCIについて誰かが書くかもしれません(?)。Bootstrap層(aws-sdk, <a href="http://www.terraform.io/">terraform</a>あたり)も整理していきたいです。</p>
+
+<h2>おまけ</h2>
+
+<p>サーバのCIも思うところがあって、少し前 <a href="http://tech.feedforce.jp/author/sugiuchi">sugiuchi</a>、 <a href="http://tech.feedforce.jp/author/r-suzuki">r-suzuki</a>とこんな話をしました。</p>
+
+<p>「確かにサーバはテスト出来ているけど、ff-cookbooks自体のテストはないから、本当に正しいレシピなのか分からないよね。でもchefspec書くの？辛くない？」等々</p>
+
+<p>どうなんでしょうね？</p>
+
+<h2>付録</h2>
+
+<h3>Jenkinsの設定</h3>
+
+<ul>
+<li>AWS_ACCESS_KEY_IDとAWS_SECRET_ACCESS_KEYは環境変数でセットしており、Jenkinsの <a href="https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin">EnvInject Plugin</a>を使っています。- JenkinsからGitHubへの通知は鉄板の <a href="https://wiki.jenkins-ci.org/display/JENKINS/GitHub+pull+request+builder+plugin">GitHub pull request builder plugin</a>です。</li>
+</ul>
+
+<p><a href="/images/2014/10/jenkins-settings.png"><img alt="jenkins-settings-s" src="/images/2014/10/jenkins-settings-s.png" /></a></p>
+
+<h3>Gemfile</h3>
+
+<pre><code class="prettyprint">source &#39;https://rubygems.org&#39;
+ruby &#39;2.1.3&#39;
+
+gem &#39;knife-solo&#39;
+gem &#39;rake&#39;
+gem &#39;serverspec&#39;
+gem &#39;aws-sdk&#39;
+gem &#39;ci_reporter_rspec&#39;
+</code></pre>
+
+<h3>Vagrantfile</h3>
+
+<p>一部伏せ字です。</p>
+
+<pre><code class="prettyprint"># -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don&#39;t touch unless you know what you&#39;re doing!
+VAGRANTFILE_API_VERSION = &quot;2&quot;
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.define :gw do |gw|
+    gw.vm.box = &quot;chef/centos-6.5&quot;
+    gw.vm.network &quot;private_network&quot;, ip: &quot;192.168.33.21&quot;
+    gw.cache.scope = :box if Vagrant.has_plugin? &#39;vagrant-cachier&#39;
+  end
+
+ config.vm.define :app do |app|
+    app.vm.box = &quot;chef/centos-6.5&quot;
+    app.vm.network &quot;private_network&quot;, ip: &quot;192.168.33.23&quot;
+    app.cache.scope = :box if Vagrant.has_plugin? &#39;vagrant-cachier&#39;
+  end
+
+ config.vm.define :ec2, autostart: false do |ec2|
+    ec2.vm.box = &#39;dummy&#39;
+    ec2.vm.box_url = &#39;https://raw.githubusercontent.com/mitchellh/vagrant-aws/master/dummy.box&#39;
+    ec2.vm.synced_folder &#39;.&#39;, &#39;/vagrant&#39;, disabled: true
+    ec2.vm.provider :aws do |aws, override|
+      aws.access_key_id = ENV[&#39;AWS_ACCESS_KEY_ID&#39;]
+      aws.secret_access_key = ENV[&#39;AWS_SECRET_ACCESS_KEY&#39;]
+      aws.region = &#39;ap-northeast-1&#39;
+      aws.instance_type = &#39;t1.micro&#39;
+      aws.ami = &#39;ami-81294380&#39;
+      aws.subnet_id = &#39;subnet- ********&#39;
+      aws.security_groups = [&#39;sg- ********&#39;]
+      aws.keypair_name = &#39;socialplus&#39;
+      aws.tags = { &#39;Name&#39; =&gt; &#39;vagrant&#39; }
+      override.ssh.username = &#39;root&#39;
+      override.ssh.private_key_path = &#39;~/.ssh/socialplus.pem&#39;
+    end
+  end
+end
+</code></pre>
+
+<h3>script/ci.sh</h3>
+
+<p>エラーがあれば即時終了しますが(-e)、これだけだとテスト失敗でEC2インスタンスが増え続けるため、trapで捕捉しvagrant destroyしています。</p>
+
+<pre><code class="prettyprint">#!/bin/sh -e
+
+if [! $(which vagrant)]; then
+    echo &#39; x You need to install Vagrant:&#39;
+    echo &#39; http://www.vagrantup.com/&#39;
+    exit 1
+fi
+
+if ! vagrant plugin list | fgrep -q vagrant-aws; then
+    echo &#39; x You need to install vagrant-aws:&#39;
+    echo &#39; $ vagrant plugin install vagrant-aws&#39;
+    exit 1
+fi
+
+if [! -f &quot;$HOME/.ssh/socialplus.pem&quot;]; then
+    echo &#39; x You need ssh private key $HOME/.ssh/socialplus.pem&#39;
+    exit 1
+fi
+
+if [-z &quot;$AWS_ACCESS_KEY_ID&quot;]; then
+    echo &#39; x You need to export $AWS_ACCESS_KEY_ID&#39;
+    exit 1
+fi
+
+if [-z &quot;$AWS_SECRET_ACCESS_KEY&quot;]; then
+    echo &#39; x You need to export $AWS_SECRET_ACCESS_KEY&#39;
+    exit 1
+fi
+
+vagrant -v
+vagrant plugin list
+
+vagrant up ec2 --provider=aws
+
+vagrant ssh-config ec2 --host=ci-gw &gt; vagrant-ssh.conf
+
+trap &#39;vagrant destroy ec2 -f; rm -f vagrant-ssh.conf&#39; 0 1 2 3 15
+
+bundle install --path vendor/bundle --quiet
+bundle exec knife solo bootstrap ci-gw -F vagrant-ssh.conf
+sed -i -e &#39;s@User root$@User dev@&#39; vagrant-ssh.conf
+
+bundle exec rake ci:setup:rspec spec:ci:gw
+</code></pre>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/jenkins-server-ci.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="JenkinsでサーバのCIを始めました" data-url="http://tech.feedforce.jp/jenkins-server-ci.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/jenkins-server-ci.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/jenkins-server-ci.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/engineer-tools.html" rel="next">feedforceで使っている開発ツールたち(Slackはじめました)</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/summer_intern2014.html" rel="prev">フィードフォースで初めてエンジニア向けサマーインターンをやってみた</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

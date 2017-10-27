@@ -1,0 +1,358 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>roadworkerを使ってRoute53を管理する | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは。tjinjinです。ついにMGSが発売されましたね！弊社内の一部で話題になっています！さて、本日は弊社内で利用を始めたroadworkerというツールについてご紹介させていただきます。">
+      <link rel="canonical" href="http://tech.feedforce.jp/roadworker.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="roadworkerを使ってRoute53を管理する | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは。tjinjinです。ついにMGSが発売されましたね！弊社内の一部で話題になっています！さて、本日は弊社内で利用を始めたroadworkerというツールについてご紹介させていただきます。">
+      <meta property="og:url" content="http://tech.feedforce.jp/roadworker.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/roadworker.html">roadworkerを使ってRoute53を管理する</a></h1>
+      <ul>
+        <li class="entry-time">2015.09.10</li>
+        <li class="entry-cat"><a href="/category/aws/">AWS</a>, <a href="/category/infrastructure/">インフラ</a>, <a href="/category/operation/">運用事例</a></li>
+        <li class="entry-author"><a href="/author/tjinjin">tjinjin</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/tjinjin"><img src="/images/authors/tjinjin.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは。tjinjinです。ついにMGSが発売されましたね！弊社内の一部で話題になっています！<br>
+さて、本日は弊社内で利用を始めたroadworkerというツールについてご紹介させていただきます。</p>
+
+<!--more-->
+
+<h2>背景</h2>
+
+<p>弊社では社内にBINDでDNSサーバを立てており、各ドメインのネームサーバをそこに向けるようにしていました。ただ、BINDのセキュリティアップデートの作業コストの増加があり、自前運用をやめるため、AWSのサービスであるRoute53に移転を検討しました。そのうえで、移転後のレコードの管理をコードで行いたいという思いがありましたので、roadworkerを導入することにしました。</p>
+
+<h2>roadworkerとは</h2>
+
+<p><a href="https://github.com/winebarrel/roadworker">roadworker</a>とは、Route53を管理できるツールで、既存の設定からのエクスポート機能など便利な機能が揃っているツールです。gemになっており、気軽に利用できます。</p>
+
+<h2>roadworkerを使うメリット</h2>
+
+<ul>
+<li>PRベースで設定の変更ができ品質の向上につながる</li>
+<li>エクスポート機能を使うことで既存のレコードを簡単に設定ファイルに落とすことができる</li>
+<li>設定ファイルが間違っていないか判断するための<code class="prettyprint">--dry-run</code>機能がある</li>
+<li>振る舞いのテストが付属しており、テストも簡単に実行できる</li>
+</ul>
+
+<p>様々なメリットを書きましたが、エクスポート機能が一番便利かもしれません。</p>
+
+<h2>実際に使ってみる</h2>
+
+<h3>準備</h3>
+
+<h4>roadworkerを導入する</h4>
+
+<p>roadworkderはgemなので、Rubyがあれば<code class="prettyprint">$ gem install roadworker</code>で導入できます。</p>
+
+<h4>direnvを使ってAWSの環境変数を用意する</h4>
+
+<p>AWSにアクセスするのでcredencialの情報が必要です。引数としても渡せるようですが、direnvを使っています。</p>
+
+<pre><code class="prettyprint">$ export AWS_ACCESS_KEY_ID=XXX
+$ export AWS_SECRET_ACCESS_KEY=YYY
+</code></pre>
+
+<h3>AWSのレコードをRoutefileにエクスポートする</h3>
+
+<p>既存のレコードの情報をエクスポートしてみます。</p>
+
+<pre><code class="prettyprint">$ bundle exec roadwork -e -o Routefile
+</code></pre>
+
+<p>-e：エクスポート<br>
+-o：出力先ファイル</p>
+
+<pre><code class="prettyprint">$ bundle exec roadwork -e --split
+</code></pre>
+
+<p>--split：Hosted_zone毎に分割して管理する</p>
+
+<p>最初の書き方だとそのアカウントに紐づくレコードを全て１つのファイルに出力してしまうので、レコード数が多いと若干見辛いです。そこで、<code class="prettyprint">--split</code>オプションが用意されており、Hosted_zone毎に設定ファイルを分けることができます。</p>
+
+<h3>roadworkerを使ったレコード適用する</h3>
+
+<h4>レコードを修正する</h4>
+
+<p>追加したいhosted_zoneにレコードを追加します。</p>
+
+<pre><code class="prettyprint">hosted_zone &quot;example.jp.&quot; do
+  rrset &quot;example.jp.&quot;, &quot;A&quot; do
+    ttl 300
+    resource_records(
+      &quot;192.168.1.2&quot;
+    )
+  end
+end
+</code></pre>
+
+<p>今回は基本的なAレコードだけですが、他にもhealthcheckやfailoverの機能もあるようです。roadworkerのリポジトリにサンプルがあるので、ご確認いただければと思います。</p>
+
+<h4>レコードの設定テストをする</h4>
+
+<p><code class="prettyprint">--dry-run</code>オプションを使うことで、実際には適用されずsyntaxのチェックができます。</p>
+
+<pre><code class="prettyprint">$ bundle exec roadwork -a --dry-run
+Apply `Routefile` to Route53 (dry-run)
+Create ResourceRecordSet: example.jp  (dry-run)
+No change
+</code></pre>
+
+<p>このように何が作成されるかなどがわかるので、非常に便利です。（実際には色がついています）</p>
+
+<h4>レコードを適用する</h4>
+
+<p>実際にレコードを追加するには<code class="prettyprint">-a</code>オプションを利用します。</p>
+
+<pre><code class="prettyprint">$ bundle exec roadwork -a
+Apply `Routefile` to Route53
+Create ResourceRecordSet: example.jp A
+</code></pre>
+
+<h4>レコードの振る舞いのテストをする</h4>
+
+<p>レコード適用後、本当にDNSレコードが引けるかテストしてくれるようです。</p>
+
+<pre><code class="prettyprint">$ bundle exec roadwork -t
+............F.........................................................................................
+example.jp. TXT:
+  expected=v=spf1 include:example.jp ~all(60)
+    actual=
+    102 examples, 1 failure)
+</code></pre>
+
+<p>上記はイメージになりますが、テスト結果も見やすいです。ただ反映後キャッシュの影響ですぐに切り替わらないこともあります。そういう場合はnameserverを指定することができます。</p>
+
+<pre><code class="prettyprint">$ bundle exec roadwork -t --nameservers ns-xxx.awsdns-xx.com
+$ bundle exec roadwork -t --nameservers ns-xxx.aws.dns-xx.com --nameservers ns-yyy.aws.dns.yy.com
+</code></pre>
+
+<p>こうすることで設定値が正しく引けているか確認が可能です。複数のnameserverを指定することも可能です。</p>
+
+<h3>注意点</h3>
+
+<p>同じレコードへの変更が二重で書いてある場合は、後勝ちになります。</p>
+
+<pre><code class="prettyprint">hosted_zone &quot;example.jp.&quot; do
+  rrset &quot;example.jp&quot;, &quot;TXT&quot; do
+    ttl 60
+    resource_records(
+      &quot;\&quot;192.168.1.6\&quot;&quot;
+    )
+  end
+
+  rrset &quot;example.jp&quot;, &quot;TXT&quot; do
+    ttl 60
+    resource_records(
+      &quot;\&quot;192.168.1.5\&quot;&quot;
+    )
+  end
+end
+
+</code></pre>
+
+<p>となっている場合、実際に適用されるのは192.168.1.5のみでした。複数レコードを設定したい場合は下記のようにする必要があります。</p>
+
+<pre><code class="prettyprint">hosted_zone &quot;example.jp.&quot; do
+  rrset &quot;example.jp&quot;, &quot;TXT&quot; do
+    ttl 60
+    resource_records(
+      &quot;\&quot;192.168.1.5\&quot;&quot;,
+      &quot;\&quot;192.168.1.6\&quot;&quot;
+    )
+  end
+</code></pre>
+
+<h2>感想</h2>
+
+<p>roadworkerを使うことでDNSレコードの管理が格段にしやすくなりました。振る舞いのテストも行える点が非常によかったです。<br>
+DNS周りの課題としては、ドメインの管理をAWSではなく他のリセラーで行っているため、ネームサーバの設定変更作業が大変な点です。どこかのタイミングでドメインの移行も検討したいと考えています。</p>
+
+<h2>参考資料</h2>
+
+<ul>
+<li><a href="https://github.com/winebarrel/roadworker">https://github.com/winebarrel/roadworker</a></li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/roadworker.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="roadworkerを使ってRoute53を管理する" data-url="http://tech.feedforce.jp/roadworker.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/roadworker.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/roadworker.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/modelless-table-on-rails.html" rel="next">Rails で動的にテーブルを作成して、大きな CSV のデータをインポートする方法</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/introduce-udf.html" rel="prev">BigQueryで待望のUDF(user-defined function)がリリースされたので早速試してみた</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

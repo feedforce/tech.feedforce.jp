@@ -1,0 +1,464 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>Rails で動的にテーブルを作成して、大きな CSV のデータをインポートする方法 | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは！SQL 大好き kano-e です。「データ更新のたびに新規にテーブルを作って、そこにデータを投入したい」とか。「お客様を DB に登録したら、合わせてそのお客様専用のテーブルを作っておきたい」とか。「とにかくこの CSV の内容を DB に投入したい、10万件」とか。こんな状況、意外と遭遇していませんか？この記事では、そんな時に多分役立つ「Rails で動的にテーブルを作成して、大きな CSV のデータを PostgreSQL にインポートする方法」について、思いつくままにまとめてみました。合わせて読みたい「動的に作成したテーブルを db/schema.rb に含めない方法」のおまけ付きです。">
+      <link rel="canonical" href="http://tech.feedforce.jp/modelless-table-on-rails.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="Rails で動的にテーブルを作成して、大きな CSV のデータをインポートする方法 | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは！SQL 大好き kano-e です。「データ更新のたびに新規にテーブルを作って、そこにデータを投入したい」とか。「お客様を DB に登録したら、合わせてそのお客様専用のテーブルを作っておきたい」とか。「とにかくこの CSV の内容を DB に投入したい、10万件」とか。こんな状況、意外と遭遇していませんか？この記事では、そんな時に多分役立つ「Rails で動的にテーブルを作成して、大きな CSV のデータを PostgreSQL にインポートする方法」について、思いつくままにまとめてみました。合わせて読みたい「動的に作成したテーブルを db/schema.rb に含めない方法」のおまけ付きです。">
+      <meta property="og:url" content="http://tech.feedforce.jp/modelless-table-on-rails.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/modelless-table-on-rails.html">Rails で動的にテーブルを作成して、大きな CSV のデータをインポートする方法</a></h1>
+      <ul>
+        <li class="entry-time">2015.10.01</li>
+        <li class="entry-cat"><a href="/category/ruby/">Ruby/Rails</a></li>
+        <li class="entry-author"><a href="/author/e-takano">e-takano</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/e-takano"><img src="/images/authors/kano-e.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは！SQL 大好き kano-e です。</p>
+
+<p>「データ更新のたびに新規にテーブルを作って、そこにデータを投入したい」とか。<br>
+「お客様を DB に登録したら、合わせてそのお客様専用のテーブルを作っておきたい」とか。<br>
+「とにかくこの CSV の内容を DB に投入したい、10万件」とか。<br>
+こんな状況、意外と遭遇していませんか？</p>
+
+<p>この記事では、そんな時に多分役立つ「Rails で動的にテーブルを作成して、大きな CSV のデータを PostgreSQL にインポートする方法」について、思いつくままにまとめてみました。<br>
+合わせて読みたい「動的に作成したテーブルを db/schema.rb に含めない方法」のおまけ付きです。</p>
+
+<!--more-->
+
+<h2>はじめに</h2>
+
+<p>この記事では、以下の内容についてまとめています。</p>
+
+<ul>
+<li>Rails で動的にテーブルを CREATE/DROP する</li>
+<li>テーブルに対応するモデルを用意せずに SQL を組み立て/発行する</li>
+<li>サイズの大きい CSV のデータを DB (PostgreSQL) に投入する</li>
+<li>(おまけ) db/schema.rb に特定のテーブルを含めない方法</li>
+</ul>
+
+<p>全体的に Rails (ActiveRecord) と PostgreSQL を使っていることが前提の内容ですので、ご注意くださいませ。</p>
+
+<p>動作確認環境は以下の通りです。</p>
+
+<ul>
+<li>Ruby 2.2.3</li>
+<li>Rails 4.2.4</li>
+<li>PostgreSQL 9.3.5</li>
+</ul>
+
+<h2>動的にテーブルを作成・削除したい</h2>
+
+<p>動的なテーブル操作はとても簡単です。</p>
+
+<p>テーブルを作成したい場合は <code class="prettyprint">#create_table</code> で</p>
+
+<pre><code class="prettyprint ruby">ActiveRecord::Base.connection.create_table(table_name) do |t|
+  t.string :code   t.string :name
+end
+</code></pre>
+
+<p>マイグレーションと同じです。</p>
+
+<p>テーブルの削除は、もちろん <code class="prettyprint">#drop_table</code> です。</p>
+
+<pre><code class="prettyprint ruby">ActiveRecord::Base.connection.drop_table(table_name)
+</code></pre>
+
+<p>create や drop を繰り返していると「今現在テーブルが存在するか？」を確認したくなると思いますが、その場合には <code class="prettyprint">#table_exists?</code> が使えます。</p>
+
+<pre><code class="prettyprint ruby">ActiveRecord::Base.cnnection.table_exists?(table_name)
+</code></pre>
+
+<p>例えば。</p>
+
+<p>「<code class="prettyprint">Product#name</code> をテーブル名に使ってテーブルを作成し処理が終わったらテーブルを削除したい！」という時は</p>
+
+<pre><code class="prettyprint ruby">connection = ActiveRecord::Base.connection
+product = Product.take
+table_name = &quot;temporary_#{product.name}&quot;
+
+connection.create_table(table_name) do |t|
+  t.string :title
+  t.string :description
+end
+
+connection.execute(...)
+
+connection.drop_table(table_name)
+</code></pre>
+
+<p>「テーブルが存在しない時だけ、テーブルを作成したい！」場合なら</p>
+
+<pre><code class="prettyprint ruby">unless connection.table_exists?(table_name)
+  connection.create_table(table_name) do |t|
+    t.string :title
+    t.string :description
+  end
+end
+</code></pre>
+
+<p>ちなみに、これは社内で教えてもらったのですが、「テーブル作成前に既存のテーブルがあれば削除したい！」だけであれば、<code class="prettyprint">#table_exists?</code> を使わなくても <code class="prettyprint">#create_table</code> の force オプションが使えます。</p>
+
+<pre><code class="prettyprint ruby">connection.create_table(table_name, force: true) do |t|
+  t.string :title
+  t.string :description
+end
+</code></pre>
+
+<h2>動的に作成したテーブルの操作</h2>
+
+<h3>対応するモデルを作成する</h3>
+
+<p>動的に作成したテーブルに対応するモデルを作ってしまえば、 ActiveRecord の恩恵を存分に受けられます。</p>
+
+<p>テーブル名が固定できないのであれば、モデルも動的に定義することになります。</p>
+
+<pre><code class="prettyprint ruby">klass = Class.new(ActiveRecord::Base) do |c|
+  c.table_name = table_name
+end
+Object.const_set(model_name, klass)
+</code></pre>
+
+<p><code class="prettyprint">ActiveRecord::Base</code> を継承した Class は <code class="prettyprint">ActiveRecord::Base.subclasses</code> に追加されるため、何度も <code class="prettyprint">Class.new</code> で <code class="prettyprint">ActiveRecord::Base</code> を継承していると、メモリリークの原因になりかねません。<br>
+なので <code class="prettyprint">Class.new</code> しないように、 <code class="prettyprint">Object.const_defined?(model_name)</code> で確認して定義済みの場合は <code class="prettyprint">Class.new</code> せずに <code class="prettyprint">Object.const_get(model_name)</code> する、といった工夫が必要です。<br>
+(この辺りは社内の知見にだいぶ助けられています)</p>
+
+<p>動的にカラムが変わる可能性がある場合には、Class インスタンスを使いまわしているとスキーマに追随できなくなってしまうため、テーブルを作り直すなどのタイミングで <code class="prettyprint">klass.reset_column_information</code> を呼ぶ必要があります。</p>
+
+<h3>モデルを作らずに SQL を実行する</h3>
+
+<p>モデルを作らずに <code class="prettyprint">ActiveRecord::Base.connection.execute</code> で頑張ることも可能です。</p>
+
+<p>SQL 組み立て時に、埋め込む値を適宜クオートするために <code class="prettyprint">#quote_table_name</code> と <code class="prettyprint">#quote_column_name</code> が使えます。<br>
+(クオートしなくても動くことは多いですが、クオートする方が安心ですよね)</p>
+
+<pre><code class="prettyprint ruby">ActiveRecord::Base.connection.quote_table_name(&#39;table_name&#39;)
+ActiveRecord::Base.connection.quote_column_name(&#39;column_name&#39;)
+</code></pre>
+
+<p>これで、それぞれテーブル名とカラム名が、使っているデータベースの仕様に応じてクオートされます。</p>
+
+<p>カラムに入れる値のクオートは、カラム情報が必要になるため、もう一手間かかります。</p>
+
+<p>モデルが存在する場合は <code class="prettyprint">ModelClass.column_for_attribute(column_name)</code> でカラム情報を取得できますが、なにせ今回はモデルを作っていません。<br>
+なんだかモデルを作りたいような気持ちが湧き上がってきますが、目をつぶって、まずはカラム情報を取得します。</p>
+
+<pre><code class="prettyprint ruby">ActiveRecord::Base.connection.columns(table_name)
+</code></pre>
+
+<p>これで対象テーブルのカラム情報が配列で返ってきます。<br>
+配列の中から値を投入するカラムを見付け (<code class="prettyprint">#name</code> が使えます)、それをクオートしたい値とともに <code class="prettyprint">#quote</code> に渡します。</p>
+
+<pre><code class="prettyprint ruby">columns = ActiveRecord::Base.connection.columns(table_name)
+column = columns.find{|c| c.name == column_name }
+ActiveRecord::Base.connection.quote(value, column)
+</code></pre>
+
+<p>それらを利用して SQL を組み立て <code class="prettyprint">ActiveRecord::Base.connection.execute</code> に渡せば SQL の結果が返ってきます。</p>
+
+<pre><code class="prettyprint ruby">connection = ActiveRecord::Base.connection
+
+count_sql = &quot;SELECT COUNT(*) AS #{connection.quote_column_name(&#39;count&#39;)} FROM #{connection.quote_table_name(table_name)}&quot;
+count_result = connection.execute(count_sql)
+count_result.first #=&gt; {&quot;count&quot; =&gt; 0}
+
+column = connection.columns(table_name).find{|c| c.name == column_name }
+update_sql = &lt;&lt;&quot;SQL&quot;
+UPDATE #{connection.quote_table_name(table_name)}
+  SET #{connectionn.quote_column_name(column_name)} = #{connection.quote(str, column)}
+  WHERE #{connectionn.quote_column_name(column_name)} IS NULL
+SQL
+update_result = connection.execute(update_sql)
+update_result.cmd_status #=&gt; &quot;UPDATE 2&quot;
+update_result.cmd_tuples #=&gt; 2
+</code></pre>
+
+<h2>行数の多い CSV のデータを DB に投入したい</h2>
+
+<h3>COPY 〜 FROM 〜 WITH csv</h3>
+
+<p>PostgreSQL の COPY コマンドは CSV のパスや標準入力などを受け取って、指定のテーブルにデータをコピーします。</p>
+
+<p>CSV のパスを指定する場合、postgres サーバが直接 CSV を読み込むため postgres サーバからアクセス可能な場所に CSV を置かないといけません。<br>
+そのため、 AWS を使っていて EC2 にある CSV ファイルの中身を RDS に投入したい、という時には使えません。</p>
+
+<p>標準入力を渡す場合は EC2 インスタンスからでも <code class="prettyprint">psql</code> 経由で、データの投入が可能です。<br>
+CSV を元に以下のような SQL ファイルを用意して、</p>
+
+<pre><code class="prettyprint">COPY table_name (column1, column2, column3) FROM stdin WITH csv;
+data1,data2,data3
+...
+\.
+</code></pre>
+
+<p>これを psql に渡します。</p>
+
+<pre><code class="prettyprint">$ psql -U username -h host --dbname database --file=/path/to/copy.sql
+</code></pre>
+
+<h3>\copy</h3>
+
+<p>メタコマンド <code class="prettyprint">\copy</code> も COPY コマンドのように、 CSV のパスや標準入力からデータをコピーします。</p>
+
+<p><code class="prettyprint">\copy</code> に CSV のパスを渡した場合、クライアントである psql がファイルを読み込んでからサーバに送信するので、 AWS を使っていて EC2 にある CSV ファイルの中身を RDS に投入したい、という時にも使えます。</p>
+
+<pre><code class="prettyprint">\copy table_name (column1, column2, column3) from &#39;/path/to/copy.sql&#39; with csv;
+</code></pre>
+
+<h3>Rails から実行する</h3>
+
+<p>pg gem ではメタコマンドが扱えないため、 Rails からは <code class="prettyprint">\copy</code> を手軽に扱うことはできません。<br>
+どうしてもメタコマンドを実行したい場合、 Rails から <code class="prettyprint">psql</code> コマンドを実行する必要があります。</p>
+
+<p>一方 COPY コマンドですが、 pg gem には <code class="prettyprint">#copy_data</code>, <code class="prettyprint">#put_copy_data</code> という COPY コマンドを実行するためのメソッドがあります。<br>
+なので Rails からは</p>
+
+<pre><code class="prettyprint ruby">connection = ActiveRecord::Base.connection
+io = File.open(&#39;/path/to/copy.csv&#39;)
+connection.raw_connection.copy_data &#39;COPY table_name (column1, column2, column3) FROM stdin WITH csv&#39; do
+  while line = io.gets do
+    connection.raw_connectioon.put_copy_data line
+  end
+end
+io.close
+</code></pre>
+
+<p>これで実行できます。</p>
+
+<p><a href="https://github.com/diogob/postgres-copy">postgres-copy</a> という <code class="prettyprint">#copy_data</code> を手軽に扱える gem もあります。<br>
+実は、この gem のコードを読んでいて、初めて pg gem の <code class="prettyprint">#copy_data</code> の存在に気付きました。<br>
+その使い方も、かなりの部分をこの gem のコードで学びました。</p>
+
+<p>そんな便利な postgres-copy の詳細な使い方はこの記事では省きますが、モデルのテーブルにデータ投入するだけであれば <code class="prettyprint">ModelName.copy_from &#39;/path/to/copy.csv&#39;</code> だけでできるようになります。<br>
+今回はモデルを持たないテーブルが対象ですが、その場合も</p>
+
+<pre><code class="prettyprint ruby">ModelName.copy_from &#39;/path/to/copy.csv&#39;, tabel: table_name, columns: [column1, column2, column3]
+</code></pre>
+
+<p>のように table_name や columns をオプションで渡すことができます。</p>
+
+<p>postgres-copy を使う利点としては、</p>
+
+<ul>
+<li>CSV 以外にも、複数のフォーマットのデータを扱える</li>
+<li>テーブルスキーマと CSV データのマッピングを手軽に行える</li>
+<li>CSV の内容に手を加えた上で実行できるようになっている</li>
+</ul>
+
+<p>辺りでしょうか。</p>
+
+<p>逆に、</p>
+
+<ul>
+<li>CSV ファイルのフォーマットがある程度決まっていて</li>
+<li>手を加える必要なくデータ投入できる</li>
+</ul>
+
+<p>といったケースでは、 postgres-copy の利点が活かせないため直接 pg の <code class="prettyprint">#copy_data</code> を使っても良いかと思います。<br>
+多少ながら、いくつかの処理を省ける分 postgres-copy を使うよりも CPU 負荷を少なくすることができます。</p>
+
+<h2>おまけ: 動的に作ったテーブルが db/schema.rb に含まれて面倒</h2>
+
+<p>開発環境で動的なテーブル生成を試していると db/schema.rb に無駄な差分ができてしまい、面倒で悲しい気分になることがあります。</p>
+
+<p>そういう時は <code class="prettyprint">ActiveRecord::SchemaDumper.ignore_tables</code> を設定することで、特定のテーブルを schema に含まないようにできます。<br>
+(会社の Slack で困ってると呟いたら教えてもらいました！)</p>
+
+<p>複数指定可、正規表現での指定可なので、動的にテーブル名が変わるような場合でも、prefix や suffix を決めておくことで、以下のように指定できます。</p>
+
+<pre><code class="prettyprint ruby"># config/environments/development.rb
+
+Rails.application.configure do
+  # (略)
+
+  ActiveRecord::SchemaDumper.ignore_tables = [
+    /\Aprefix_[a-z0-9][_a-z0-9]+\z/,
+    /\A[a-z0-9]+_suffix\z/,
+  ]
+end
+</code></pre>
+
+<p>これで、無駄な差分に煩わされなくなりました。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/modelless-table-on-rails.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="Rails で動的にテーブルを作成して、大きな CSV のデータをインポートする方法" data-url="http://tech.feedforce.jp/modelless-table-on-rails.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/modelless-table-on-rails.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/modelless-table-on-rails.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/cto-announcement.html" rel="next">マネージャー改め、CTOと名乗ることにしました</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/roadworker.html" rel="prev">roadworkerを使ってRoute53を管理する</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

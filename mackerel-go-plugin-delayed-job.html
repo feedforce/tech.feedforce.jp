@@ -1,0 +1,369 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>Go で Mackerel の delayed_job plugin を作った | feedforce Engineers' blog</title>
+      <meta name="description" content="増田です。椅子を新調したら腰痛が始まりました。でも元気です。さて、少し前に Go で Mackerel の delayed_job plugin を作りました。">
+      <link rel="canonical" href="http://tech.feedforce.jp/mackerel-go-plugin-delayed-job.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="Go で Mackerel の delayed_job plugin を作った | feedforce Engineers' blog">
+      <meta property="og:description" content="増田です。椅子を新調したら腰痛が始まりました。でも元気です。さて、少し前に Go で Mackerel の delayed_job plugin を作りました。">
+      <meta property="og:url" content="http://tech.feedforce.jp/mackerel-go-plugin-delayed-job.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/mackerel-go-plugin-delayed-job.html">Go で Mackerel の delayed_job plugin を作った</a></h1>
+      <ul>
+        <li class="entry-time">2016.09.27</li>
+        <li class="entry-cat"><a href="/category/operation/">運用事例</a></li>
+        <li class="entry-author"><a href="/author/masutaka">masutaka</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/masutaka"><img src="/images/authors/masutaka.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>増田です。椅子を新調したら腰痛が始まりました。でも元気です。</p>
+
+<p>さて、少し前に Go で Mackerel の delayed_job plugin を作りました。</p>
+
+<!--more-->
+
+<!-- textlint-disable -->
+
+<p><a class="embedly-card" href="https://github.com/masutaka/mackerel-plugin-delayed-job-count">masutaka/mackerel-plugin-delayed-job-count</a><br>
+<script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script></p>
+
+<!-- textlint-enable -->
+
+<h2>なぜ作ったか？</h2>
+
+<p>最近、私が関わっているソーシャルPLUSで、新しいサービスを作り始めました。今までは Zabbix で監視していたのですが、今回も採用すると Zabbix を稼働させるサーバや（Zabbix のための）ある意味特殊スキルが必要で、導入すべきか悩んでいました。そういった事情から、今回は <a href="https://mackerel.io/">Mackerel</a> を採用したのが事の発端です。</p>
+
+<p>このサービスでは <a href="https://rubygems.org/gems/delayed_job">delayed_job</a> が動いています。delayed_job の監視は大きく 2 つが必要です。</p>
+
+<ol>
+<li>プロセス数の監視</li>
+<li>Job Queue の監視</li>
+</ol>
+
+<p>1 については Ruby で書いた Mackerel plugin を作りました。pgrep を使ってプロセス数をカウントする素朴なスクリプトです。</p>
+
+<pre><code class="prettyprint ruby">#!/usr/bin/env ruby
+
+if ENV[&#39;MACKEREL_AGENT_PLUGIN_META&#39;] == &#39;1&#39;
+  require &#39;json&#39;
+
+  meta = {
+    graphs: {
+      &#39;delayed_job&#39; =&gt; {
+        label: &#39;delayed_job processes&#39;,
+        unit: &#39;integer&#39;,
+        metrics: [
+          {
+            name: &#39;processes&#39;,
+            label: &#39;processes&#39;
+          }
+        ]
+      }
+    }
+  }
+
+  puts &#39;# mackerel-agent-plugin&#39;
+  puts meta.to_json
+  exit 0
+end
+
+process_count = %x(pgrep -fc &#39;^delayed_job&#39;).chomp
+
+puts [ &#39;delayed_job.processes&#39;,  process_count, Time.now.to_i ].join(&quot;\t&quot;)
+</code></pre>
+
+<p>2 も当初は Ruby で書く予定でしたが、以下の理由により Go で書くことにしました。</p>
+
+<ul>
+<li>システムに mysql2 などの Gem をインストールする必要があり、Chef レシピの依存が増えてしまう
+
+<ul>
+<li>そういう意味では 1 も Ruby との依存が出来ている</li>
+</ul></li>
+<li>業務で Go を書いてみたい。そういう文化を作りたい</li>
+</ul>
+
+<h2>どのように作ったか？</h2>
+
+<p>初めは <a href="https://github.com/monochromegane/mackerel-plugin-delayed-job-count">monochromegane/mackerel-plugin-delayed-job-count</a> をそのまま使う予定でした。</p>
+
+<p>でも、取りたいメトリクスや、設定の渡し方がそれなりに違ったため、あれこれいじっていたら別物になってしまいました。</p>
+
+<h2>何ができるか？</h2>
+
+<p>現在は MySQL のみ対応しています。PostgreSQL 等への対応も難しくないようなので、いずれ対応するかもです。</p>
+
+<p>今回の masutaka/mackerel-plugin-delayed-job-count は以下のメトリクスを Mackerel に送信します。実際の SQL は発行回数を減らすため、若干違います。</p>
+
+<ul>
+<li>Processed Job Count
+
+<ul>
+<li>直近 1 分で処理したジョブ数</li>
+<li><code class="prettyprint">SHOW TABLE STATUS LIKE &#39;delayed_jobs&#39;</code> で取得した <code class="prettyprint">Auto_increment</code> を -1 して、差分を Mackerel に送信</li>
+</ul></li>
+<li>Queued Job Count
+
+<ul>
+<li>現在キューに溜まっているジョブ数</li>
+<li><code class="prettyprint">SELECT COUNT(*) FROM delayed_jobs WHERE failed_at IS NULL AND locked_by IS NULL</code></li>
+</ul></li>
+<li>Processing Job Count
+
+<ul>
+<li>現在処理中のジョブ数</li>
+<li><code class="prettyprint">SELECT COUNT(*) FROM delayed_jobs WHERE failed_at IS NULL AND locked_by IS NOT NULL</code></li>
+</ul></li>
+<li>Failed Job Count
+
+<ul>
+<li>失敗したジョブ数</li>
+<li><code class="prettyprint">SELECT COUNT(*) FROM delayed_jobs WHERE failed_at IS NOT NULL</code></li>
+</ul></li>
+</ul>
+
+<p>参考までに monochromegane/mackerel-plugin-delayed-job-count は以下のメトリクスを Mackerel に送信します。</p>
+
+<ul>
+<li>Job Count
+
+<ul>
+<li>現在キューに溜まっている、または処理中のジョブ数</li>
+<li><code class="prettyprint">SELECT COUNT(id) FROM delayed_jobs</code></li>
+</ul></li>
+<li>Error Job Count
+
+<ul>
+<li>失敗したジョブ数</li>
+<li><code class="prettyprint">SELECT COUNT(id) FROM delayed_jobs WHERE failed_at IS NOT NULL</code></li>
+</ul></li>
+</ul>
+
+<h2>どのように使うか？</h2>
+
+<p>macOS と Linux 用のバイナリを GitHub にリリースしています。</p>
+
+<p><a href="https://github.com/masutaka/mackerel-plugin-delayed-job-count/releases">https://github.com/masutaka/mackerel-plugin-delayed-job-count/releases</a></p>
+
+<p>例えばこのような Chef レシピを書けば、/usr/local/bin/mackerel-plugin-delayed-job-count としてインストール出来ます。Ruby スクリプトと違って、レシピに依存関係が出来なくて良いですね。</p>
+
+<pre><code class="prettyprint ruby">remote_file &#39;/usr/local/bin/mackerel-plugin-delayed-job-count&#39; do
+  version = &#39;v0.0.1&#39;
+  checksum = &#39;db8c1460da2f393b76a3717ed39d036d1cea3445e6b65557654d81cad217ffc1&#39;
+
+  source &quot;https://github.com/masutaka/mackerel-plugin-delayed-job-count/releases/download/#{version}/mackerel-plugin-delayed-job-count_linux_amd64&quot;
+  checksum checksum
+  mode 0755
+end
+</code></pre>
+
+<p>あとは /etc/mackerel-agent/mackerel-agent.conf に以下を追記し mackerel-agent を reload すれば、Mackerel への送信が始まります。</p>
+
+<pre><code class="prettyprint">[plugin.metrics.delayed_job_count]
+command = &quot;/usr/local/bin/mackerel-plugin-delayed-job-count -dsn=&#39;DSN&#39;&quot;
+</code></pre>
+
+<p>DSN は AWS であれば <code class="prettyprint">id:password@tcp(your-amazonaws-uri.com:3306)/dbname</code> といった書式です。詳しくは <a href="https://github.com/go-sql-driver/mysql/#dsn-data-source-name">https://github.com/go-sql-driver/mysql/#dsn-data-source-name</a> をどうぞ。</p>
+
+<h2>悩んでいること</h2>
+
+<ul>
+<li>公式の <a href="https://github.com/mackerelio/mackerel-agent-plugins">mackerelio/mackerel-agent-plugins</a> に PR を出すべきか
+
+<ul>
+<li>テストを書いていない</li>
+<li>delayed_job で必要なメトリクスは用途によって違いそう。PR を出す前にオプションで指定可能にすべきか</li>
+</ul></li>
+<li>社内の Mackerel plugin が複数のリポジトリに散らばってきた
+
+<ul>
+<li>少なくとも Ruby スクリプトくらいは１つのリポジトリにまとめようか</li>
+</ul></li>
+</ul>
+
+<h2>まとめ</h2>
+
+<ul>
+<li>Go を使えて満足！</li>
+<li>要望等あれば GitHub の <a href="https://github.com/masutaka/mackerel-plugin-delayed-job-count/issues">Issue</a> や <a href="https://github.com/masutaka/mackerel-plugin-delayed-job-count/pulls">PR</a> に挙げて下さい！</li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/mackerel-go-plugin-delayed-job.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="Go で Mackerel の delayed_job plugin を作った" data-url="http://tech.feedforce.jp/mackerel-go-plugin-delayed-job.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/mackerel-go-plugin-delayed-job.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/mackerel-go-plugin-delayed-job.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/discuss-moving-from-zenhub-to-github-project.html" rel="next">GitHub Project機能が強化されたのでZenHubから移行することを検討してみた</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/log-visualization-with-redash.html" rel="prev">Re:dashを使ったログの可視化をさくっと始めてみた</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

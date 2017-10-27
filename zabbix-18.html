@@ -1,0 +1,340 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>ZABBIX 1.8でサーバ監視 | feedforce Engineers' blog</title>
+      <meta name="description" content="一時期はサーバの死活監視・リソースチェックといえばNagios + Cacti/MRTGでしたが、最近はZABBIXが割と話題に上ることも多いので、昨年末に1.8がリリースされたこともあり、筆者自宅での事例を交えつつご紹介したいと思います。">
+      <link rel="canonical" href="http://tech.feedforce.jp/zabbix-18.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="ZABBIX 1.8でサーバ監視 | feedforce Engineers' blog">
+      <meta property="og:description" content="一時期はサーバの死活監視・リソースチェックといえばNagios + Cacti/MRTGでしたが、最近はZABBIXが割と話題に上ることも多いので、昨年末に1.8がリリースされたこともあり、筆者自宅での事例を交えつつご紹介したいと思います。">
+      <meta property="og:url" content="http://tech.feedforce.jp/zabbix-18.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/zabbix-18.html">ZABBIX 1.8でサーバ監視</a></h1>
+      <ul>
+        <li class="entry-time">2010.02.10</li>
+        <li class="entry-cat"><a href="/category/infrastructure/">インフラ</a>, <a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/meihong">meihong</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/meihong"><img src="/images/authors/meihong.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>一時期はサーバの死活監視・リソースチェックといえばNagios + Cacti/MRTGでしたが、最近はZABBIXが割と話題に上ることも多いので、昨年末に1.8がリリースされたこともあり、筆者自宅での事例を交えつつご紹介したいと思います。</p>
+
+<!--more-->
+
+<h2>ZABBIXとは?</h2>
+
+<ul>
+<li>Nagiosでのリソース監視/死活監視、Cactiなどでの視覚化をワンパッケージで。
+
+<ul>
+<li>1.6は監視のための負荷が結構あったが、1.8で改善された印象。</li>
+<li>ホストの死活監視。</li>
+<li>リソース監視。</li>
+<li>サービスの死活監視。</li>
+<li>プロセスの死活監視・同時実行数の監視など。</li>
+<li>HTTPベースでのWebサイト死活監視。</li>
+</ul></li>
+<li>SNMP以外に、各ホストで実行するZABBIXエージェントでのポーリングが可能。</li>
+<li>任意のトリガーに対するアクションで、ZABBIXエージェントに任意のコマンドを実行させることが可能。
+
+<ul>
+<li>ネットワークが回復したらデーモンを再起動。</li>
+<li>監視対象が落ちたらアラート。 etc.</li>
+<li>複数ホストのリソースを1画面で監視。</li>
+</ul></li>
+</ul>
+
+<h2>必要なもの</h2>
+
+<ul>
+<li>ZABBIXサーバ・フロントエンド
+
+<ul>
+<li>MySQLやPostgreSQLなどのRDB。なければsqliteでも可。</li>
+<li>PHP 5.2。5.3では何かと問題が。</li>
+</ul></li>
+<li>ZABBIXエージェント
+
+<ul>
+<li>KIAI</li>
+</ul></li>
+</ul>
+
+<h2>監視の流れ</h2>
+
+<h3>3つの要素</h3>
+
+<ul>
+<li>アイテム - ZABBIXでの監視対象。CPU負荷、プロセス数 etc.</li>
+<li>トリガー - アイテムに対する監視条件。</li>
+<li>アクション - トリガーと組み合わせて、条件を満たしたときに行うアクション。
+
+<ul>
+<li>メール通知</li>
+<li>任意のホスト上のZABBIXエージェントでコマンドを実行。etc.</li>
+</ul></li>
+</ul>
+
+<p>上記3つを組み合わせて、監視対象と「問題」とする閾値、そしてそれに対するアクションを設定していく。  </p>
+
+<h3>深刻度</h3>
+
+<p>トリガーには以下の4通りの深刻度がある。  </p>
+
+<ul>
+<li>致命的</li>
+<li>重度</li>
+<li>軽度</li>
+<li>情報</li>
+</ul>
+
+<p>アクションの実行条件で、「トリガーの深刻度が一定以上の場合」といった設定も可能。  </p>
+
+<h2>監視設定</h2>
+
+<h3>深刻度が一定以上の場合にアラートメール</h3>
+
+<p>Nagiosなどでもよくあるアラートメールを、各観測値ではなくトリガーの深刻度が一定以上の場合に送信するようにしてみます。なお、事前に送信対象のユーザのメールアドレスを設定しておく必要があります。  </p>
+
+<ol>
+<li>[設定]→[アクション]→[アクションの作成]</li>
+<li>名前は適当に設定。</li>
+<li>[アクションのコンディション - 新規]→[トリガーの深刻度][&gt;=][任意の深刻度]と設定→追加</li>
+<li>[アクションのオペレーション - 追加]→[オペレーションのタイプ]を[メッセージの送信]→メールの送信先を適宜設定→[ユーザのメディア]を[Email]→[追加]</li>
+<li>[アクション]のところの[保存]</li>
+</ol>
+
+<h3>Web死活監視</h3>
+
+<p>Web死活監視を行うには、Web死活監視用のアイテム(シナリオ)を追加します。  </p>
+
+<ol>
+<li>[設定]→[ウェブ]→[シナリオの追加]</li>
+<li>[アプリケーション]は適宜選択。「Web Services」など追加してもいいかもしれません。追加は[設定]→[アプリケーション]→[アプリケーションの作成]です。</li>
+<li>[名前]は適当に設定。</li>
+<li>[Basic認証] - ZABBIX 1.8から追加になりました。必要に応じて設定します。</li>
+<li>[更新間隔]は必要がない限りデフォルトの60秒で問題ないかと思います。</li>
+<li>[エージェント] - 偽装するユーザエージェントを適宜選択します。</li>
+<li>[変数]は必要がない限り空欄でokです。</li>
+<li>[ステップ]→[追加]で、実際にどこにアクセスして何が返ってくるべきかを設定します。ステップは複数指定できます。
+
+<ol>
+<li>[名前]は適当に設定。</li>
+<li>[URL]は、アクセス先のURLを設定します。</li>
+<li>POSTメソッドで何らかのパラメータを与える場合は[POST]に設定します。設定しない場合はGETでアクセスします。</li>
+<li>[タイムアウト]はデフォルトで問題ないかと思いますが、Railsアプリケーションなどのようにレスポンスが返ってくるまでに時間がかかる可能性がある場合は適宜のばすといいでしょう。</li>
+<li>[要求文字列]は、レスポンスに指定した文字列が含まれるかをチェックします。</li>
+<li>[ステータスコード]は通常200で問題ありませんが、リダイレクトしたり特定のステータスであることを保証する必要がある場合は変更します。</li>
+<li>[保存]を押してステップを追加します。</li>
+</ol></li>
+</ol>
+
+<p>シナリオを追加した後、それに対応するトリガーとアクションを設定してください。私の場合は面倒なのもあって、深刻度を「重度」にした上で、「重度」以上のトリガーが発生した場合はアラートメールを送信するようにしています。  </p>
+
+<h3>アラートボイス</h3>
+
+<p>会社によっては、深刻な問題が発生したときにパトライトを回したりする会社があるようですが、個人環境なのにそれが羨ましかったのでアラートボイスを流す設定をしてみました。アラートボイスには、Falcon 4.0というゲームに含まれる「F-16C」戦闘機実機とほぼ同じ「WARNING!」という音声を選びました。</p>
+
+<p>まず、ZABBIXエージェントがリモートコマンドを実行できるようにする必要があります。ZABBIXエージェントの設定ファイルを編集し、  </p>
+
+<pre><code class="prettyprint">EnableRemoteCommands=1
+</code></pre>
+
+<p>にした上でエージェントを再起動します。</p>
+
+<p>次に、zabbixユーザから/dev/dsp*に読み書きできるようにします。筆者自宅環境のGentoo機ではaudioグループに追加すればいいので、  </p>
+
+<pre><code class="prettyprint">gpasswd -a zabbix audio
+</code></pre>
+
+<p>です。今回は/dev/dsp*にアクセスできればいいので問題ないのですが、例えばapacheが落ちたときにapacheを再起動したいといった場合は、zabbixユーザでsudoできるように設定する必要があります。</p>
+
+<p>準備ができたら、あとは対応するアクションを設定します。[アクションのオペレーション - 追加]で[オペレーションのタイプ]を[リモートコマンド]に、[リモートコマンド]欄に実行するコマンドを記述します。コマンドを記述する際、先頭にコマンドを実行するホスト名を「:」区切りで書く必要があります。筆者環境の場合、ulyssesで/usr/local/bin/alert.shを実行ですので、  </p>
+
+<pre><code class="prettyprint">ulysses:/usr/local/bin/alert.sh {STATUS}
+</code></pre>
+
+<p>となります。引数の{STATUS}は、問題発生時に&quot;PROBLEM&quot;、回復時に&quot;OK&quot;が入ります。なお、ホスト名はDNS上のホスト名ではなく、ZABBIX上でのホスト名になります。  </p>
+
+<h2>監視設定</h2>
+
+<p>勉強会では時間も限られていたので、フロントエンドのPHPスクリプトに手を入れないと日本語でグラフが表示されないといったインストールの苦労やインストール手順などは割愛しました。 グラフなどビジュアルな部分は「それを見てニヤニヤすること」がモチベーションとなりますが、様々な監視については万が一に備えてのものなのでどうしてもおざなりになり、実際に直面してからそれを監視対象に含めるという作業になりがちです。 ですので、今回はいくつかの監視パターンを中心にご紹介してみました。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/zabbix-18.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="ZABBIX 1.8でサーバ監視" data-url="http://tech.feedforce.jp/zabbix-18.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/zabbix-18.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/zabbix-18.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/packagemaker.html" rel="next">Macアプリのパッケージ作成方法</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/twitter-streaming-api.html" rel="prev">Twitter の Streaming API について</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

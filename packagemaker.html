@@ -1,0 +1,361 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>Macアプリのパッケージ作成方法 | feedforce Engineers' blog</title>
+      <meta name="description" content="MacOSXのアプリケーションはコピーしてインストールが済んでしまうものも多いですが、動作するシステム条件があったり、複数の製品を一度にインストールしたい場合などはインストーラからのインストールが便利です。 今回はインストーラからインストールするために必要となるパッケージの作成方法について説明します。">
+      <link rel="canonical" href="http://tech.feedforce.jp/packagemaker.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="Macアプリのパッケージ作成方法 | feedforce Engineers' blog">
+      <meta property="og:description" content="MacOSXのアプリケーションはコピーしてインストールが済んでしまうものも多いですが、動作するシステム条件があったり、複数の製品を一度にインストールしたい場合などはインストーラからのインストールが便利です。 今回はインストーラからインストールするために必要となるパッケージの作成方法について説明します。">
+      <meta property="og:url" content="http://tech.feedforce.jp/packagemaker.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/packagemaker.html">Macアプリのパッケージ作成方法</a></h1>
+      <ul>
+        <li class="entry-time">2010.04.01</li>
+        <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/nakano">nakano</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/nakano"><img src="/images/authors/no-image.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>MacOSXのアプリケーションはコピーしてインストールが済んでしまうものも多いですが、動作するシステム条件があったり、複数の製品を一度にインストールしたい場合などはインストーラからのインストールが便利です。 今回はインストーラからインストールするために必要となるパッケージの作成方法について説明します。</p>
+
+<!--more-->
+
+<h2>アプリケーションの配布</h2>
+
+<p>Appleはアプリケーションの配布方法として以下の2つを推奨しています。</p>
+
+<h3>マニュアルインストール</h3>
+
+<p>対象のファイルをドラッグ&amp;ドロップなどでインストール先のフォルダにコピーする方法です。コピーするだけなのでとても簡単です。</p>
+
+<h3>インストーラを使ったインストール</h3>
+
+<p>インストーラアプリケーションを起動してインストールする方法です。</p>
+
+<p>このインストール方法を利用するとOSやCPUなどのシステム条件を指定したり、インストール先のフォルダの指定、複数のファイルを配置することなど、細かなオプションを設定して自動でインストール作業を行うことができます。</p>
+
+<p>インストーラからインストールするためにはパッケージを作成する必要があります。  </p>
+
+<h2>PackageMaker</h2>
+
+<p>パッケージの作成にはPackageMakerを利用します。Xcodeがインストール済みであれば、/Developer/Applications/Utilitiesの下にPackageMaker.appがあります。</p>
+
+<p>今回の説明はバージョン3.0.4を対象にしています。</p>
+
+<h2>パッケージの作成</h2>
+
+<p> ここからはパッケージを作成する手順を説明します。</p>
+
+<h2>プロジェクト作成</h2>
+
+<p>まず、PackageMakerを開いてプロジェクトを作成します。</p>
+
+<p><a title="100326-0001.png" href="/images/2010/03/100326-0001.png"><img alt="100326-0001.png" src="/images/2010/03/100326-0001.thumbnail.png" /></a></p>
+
+<p> </p>
+
+<p>Organization : 逆DNS形式の組織名 Minimum Target : OSのバージョン</p>
+
+<h2>コンテンツを追加する</h2>
+
+<p>アプリケーションやドキュメント、Spotlightプラグインなどパッケージに含める製品を追加します。  </p>
+
+<p>メニューの[Project]&gt;[Add Contents]で指定します。</p>
+
+<h2>パッケージコンポーネントの設定</h2>
+
+<p>パッケージに含めるそれぞれの製品についての設定です。</p>
+
+<h3>Configuration</h3>
+
+<p><a title="100120-0002.png" href="/images/2010/03/100120-0002.png"><img alt="100120-0002.png" src="/images/2010/03/100120-0002.thumbnail.png" /></a></p>
+
+<p>Insatll: インストールするファイル Destination: インストール先のファルダ Allow custom location: インストール先の変更を許可 Package Identifier: パッケージの識別子 Package Version: バージョン番号 Restart Action: 再起動の要求 - None : いらない - Require Logout :  ログアウト - Require Restart : 再起動 - Require Shoutdown : シャットダウン Require admin authentication: 管理者権限が必要  </p>
+
+<p>Allow custom location にチェックを入れるとユーザがインストール時にインストール先を指定できるようになります。</p>
+
+<h3>Contents</h3>
+
+<p><a title="100120-0003.png" href="/images/2010/03/100120-0003.png"><img alt="100120-0003.png" src="/images/2010/03/100120-0003.thumbnail.png" /></a></p>
+
+<p>Owner: ファイルのオーナー Group: ファイルのグループ Mode: ファイルのパーミッション File Filters: パッケージに含めないファイルの指定</p>
+
+<p>File Filtersでは正規表現を用いてパッケージに入れたくないファイルやフォルダの指定ができます。 デフォルトでは、.svnやCVSなどが指定されています。</p>
+
+<p><a title="100326-0002.png" href="/images/2010/03/100326-0002.png"><img alt="100326-0002.png" src="/images/2010/03/100326-0002.thumbnail.png" /></a></p>
+
+<h3>Components</h3>
+
+<p><a title="100121-0001.png" href="/images/2010/03/100121-0001.png"><img alt="100121-0001.png" src="/images/2010/03/100121-0001.thumbnail.png" /></a></p>
+
+<p>Allow Relocation : インストール後に移動したコンポーネントを探すことを許可 Allow Downgrade : ダウングレードを許可</p>
+
+<p>ダウングレードの判断はConfigurationのPackage Versionで指定してある値から判断されます。</p>
+
+<h3>Scripts</h3>
+
+<p><a title="100121-0002.png" href="/images/2010/03/100121-0002.png"><img alt="100121-0002.png" src="/images/2010/03/100121-0002.thumbnail.png" /></a></p>
+
+<p>scripts directory : 実行スクリプトがあるフォルダを指定する Preinstall : インストール前に実行するスクリプト Postinstall : インストール後に実行するスクリプト</p>
+
+<p>スクリプトはシェルスクリプトやperlスクリプトでも可能です。  </p>
+
+<p>MacOSX10.5ではPreinstallとPostinstallの指定したスクリプトしか実行されないようなので注意が必要です。</p>
+
+<p> </p>
+
+<h2>インストールパッケージの設定</h2>
+
+<p>パッケージ全体に関する設定を行ないます。  </p>
+
+<h3>Configuration</h3>
+
+<p><a title="100121-0003.png" href="/images/2010/03/100121-0003.png"><img alt="100121-0003.png" src="/images/2010/03/100121-0003.thumbnail.png" /></a></p>
+
+<p>Title : タイトル User Sees : インストールオプション - Easy Install Only :簡易インストールのみ - Custom Install Only : カスタムインストールのみ - Easy and Custom Install : 簡易インストールとカスタムインストールの両方 Install Destination : インストール先 - Volume selected by user : ユーザが選択可能 - System volume : システムのボリュームのみ - User home directory : ホームディレクトリ Description : 概要  </p>
+
+<p>Custom Installにチェックが入っている場合、ユーザがパッケージに入っている製品を選択してインストールしたいものだけをインストールできるようになります。</p>
+
+<h3>Requirements</h3>
+
+<p> システムの条件を指定します。以下、ここで指定できるいくつかの例です。</p>
+
+<p><a title="100121-0004.png" href="/images/2010/03/100121-0004.png"><img alt="100121-0004.png" src="/images/2010/03/100121-0004.thumbnail.png" /></a></p>
+
+<p>Megabytes Available on Target : 空きディスク容量 Maximum CPU Frequency(Hz) : CPUのクロック周波数 Number of CPUs  : CPUの数 USB Device Exists : USBデバイスの有無 Result of Script : 指定したスクリプトの実行結果</p>
+
+<p>Result of Scriptで指定できるように、自前のスクリプトの結果からインストールするかどうかを判断することもできます。  </p>
+
+<h3>Actions</h3>
+
+<p>インストール前とインストール後での動作を指定します。</p>
+
+<p><a title="100121-0005.png" href="/images/2010/03/100121-0005.png"><img alt="100121-0005.png" src="/images/2010/03/100121-0005.thumbnail.png" /></a></p>
+
+<p>以下は設定できる項目の例です。</p>
+
+<p>Show File in Finder : ファインダーで指定のパスを開く Open URL : ブラウザで指定のURLを開く Create Alias : エイリアスの作成</p>
+
+<p><a title="100121-0006.png" href="/images/2010/03/100121-0006.png"><img alt="100121-0006.png" src="/images/2010/03/100121-0006.thumbnail.png" /></a></p>
+
+<h2>選択項目の設定</h2>
+
+<p>インストール時にユーザが必要な製品のみインストールできるように選択項目についての設定を行います。</p>
+
+<h3>Configuration</h3>
+
+<p><a title="100121-0007.png" href="/images/2010/03/100121-0007.png"><img alt="100121-0007.png" src="/images/2010/03/100121-0007.thumbnail.png" /></a></p>
+
+<p>Choice Name : 選択時の名前 identifier : 選択識別子 initial state デフォルト状態 - Selected : 選択されている - Enabled : 選択変更が可能 - Hidden : ユーザに選択状態を見せない Destination : インストール先 Tooltip : 短かいメッセージの表示 Description : 説明</p>
+
+<p>ここでDestinationを指定した場合、パッケージの設定で指定したインストール先は上書きされるので注意が必要です。  </p>
+
+<h3>Requirements</h3>
+
+<p>選択パッケージの個別にシステム条件を設定します。 条件項目については、パッケージ設定のActionsタブ中のものと同じです。</p>
+
+<p><a title="100121-0008.png" href="/images/2010/03/100121-0008.png"><img alt="100121-0008.png" src="/images/2010/03/100121-0008.thumbnail.png" /></a></p>
+
+<p>ここではシステム条件を満たせなかった場合の選択項目の動きを指定できます。</p>
+
+<p>Selected, Enabled, Hiddenのそれぞれに対して、 - Yes : チェックを入れる - No : チェックを外す - Unchanged : 変更しない  </p>
+
+<p>を設定します。</p>
+
+<h2>インタフェースの編集</h2>
+
+<p>インストーラの起動後に表示される背景画像やライセンスの文言などをここで設定します。</p>
+
+<p><a title="100122-0001.png" href="/images/2010/03/100122-0001.png"><img alt="100122-0001.png" src="/images/2010/03/100122-0001.thumbnail.png" /></a></p>
+
+<p>background : 背景画像 Introduction : 前書き Read Me : 注意書き License : ライセンス Finish Up : 完了後のメッセージ</p>
+
+<h2>パッケージのビルド</h2>
+
+<p>メニューの[Project] -&gt;[Build and Run]を選択するとパッケージが作成され、インストーラが起動して確認することができます。</p>
+
+<p> </p>
+
+<h2>おわりに</h2>
+
+<p>Macアプリをインストーラからインストールするためのパッケージ作成方法について説明しました。 設定項目がたくさんありますが、パッケージを作ることでユーザはより簡単にインストール作業を行うことができるようになります。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/packagemaker.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="Macアプリのパッケージ作成方法" data-url="http://tech.feedforce.jp/packagemaker.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/packagemaker.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/packagemaker.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/review_rdoc.html" rel="next">おさらいRDoc</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/zabbix-18.html" rel="prev">ZABBIX 1.8でサーバ監視</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

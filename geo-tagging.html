@@ -1,0 +1,376 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>Geo Tagging関連情報まとめ | feedforce Engineers' blog</title>
+      <meta name="description" content="Google Maps APIがGeoRSSに対応したことで、RSSに位置情報を追加するGeoRSSがにわかに注目を集めています(個人的に)。一般にウェブや画像やRSSフィードに位置情報のメタデータを追加することを“GeoTagging”と呼ぶそうです。そこで今日はGeoRSSに手をつける前に、GeoTagging関連の情報を整理して紹介します。(まとめネタです。)">
+      <link rel="canonical" href="http://tech.feedforce.jp/geo-tagging.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="Geo Tagging関連情報まとめ | feedforce Engineers' blog">
+      <meta property="og:description" content="Google Maps APIがGeoRSSに対応したことで、RSSに位置情報を追加するGeoRSSがにわかに注目を集めています(個人的に)。一般にウェブや画像やRSSフィードに位置情報のメタデータを追加することを“GeoTagging”と呼ぶそうです。そこで今日はGeoRSSに手をつける前に、GeoTagging関連の情報を整理して紹介します。(まとめネタです。)">
+      <meta property="og:url" content="http://tech.feedforce.jp/geo-tagging.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/geo-tagging.html">Geo Tagging関連情報まとめ</a></h1>
+      <ul>
+        <li class="entry-time">2007.04.03</li>
+        <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/fukunaga">fukunaga</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/fukunaga"><img src="/images/authors/no-image.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p><a href="http://googlemapsapi.blogspot.com/2007/03/kml-and-georss-support-added-to-google.html">Google Maps APIがGeoRSSに対応した</a>ことで、RSSに位置情報を追加するGeoRSSがにわかに注目を集めています(個人的に)。</p>
+
+<p>一般にウェブや画像やRSSフィードに位置情報のメタデータを追加することを“GeoTagging”と呼ぶそうです。そこで今日はGeoRSSに手をつける前に、GeoTagging関連の情報を整理して紹介します。(まとめネタです。)</p>
+
+<!--more-->
+
+<ul>
+<li>GeoTagging
+
+<ul>
+<li>マイクロフォーマット</li>
+<li>使い方
+
+<ul>
+<li>3つのクラスを使う場合</li>
+<li>1つのクラスを使う場合</li>
+<li>注意</li>
+</ul></li>
+<li>Geocaching</li>
+<li>画像にGeoTagging</li>
+<li>Flickr: GeoTagging Flickr</li>
+<li>GeoURL</li>
+<li>ウェブサイトをGeoTagging</li>
+<li>GeoURLへpingを送信</li>
+<li>GeoURLでRSSフィードにGeoTagging</li>
+<li>さらにRSSフィードにGeoTagging</li>
+<li>GeoRSS</li>
+<li>Simple GeoRSS</li>
+<li>GML</li>
+<li>Google Maps APIでのKML/GeoRSS対応</li>
+<li>参考資料</li>
+</ul></li>
+</ul>
+
+<h2>GeoTagging</h2>
+
+<p><a href="http://en.wikipedia.org/wiki/GeoTagging">GeoTagging - Wikipedia, the free encyclopedia</a><br><br>
+ウェブや画像やRSSフィードに位置情報のメタデータを追加する処理のことです。緯度と経度がメインですが、それ以外に高度や地名をタギングすることもあります。</p>
+
+<h3>マイクロフォーマット</h3>
+
+<p><a href="http://en.wikipedia.org/wiki/Geo_%28microformat%29">Geo (microformat) - Wikipedia, the free encyclopedia</a><br><br>
+マイクロフォーマットにも位置情報のためのフォーマットが規定されています。</p>
+
+<h4>使い方</h4>
+
+<h5>3つのクラスを使う場合</h5>
+
+<pre><code class="prettyprint html">&lt;div class=&quot;geo&quot;&gt;後楽園: &lt;span class=&quot;latitude&quot;&gt;35.707898&lt;/span&gt;;&lt;span class=&quot;longitude&quot;&gt;139.751864&lt;/span&gt;&lt;/div&gt;
+</code></pre>
+
+<h5>1つのクラスを使う場合</h5>
+
+<p>セミコロン区切りで緯度;経度の順に記述します。</p>
+
+<pre><code class="prettyprint html">後楽園は&lt;span class=&quot;geo&quot;&gt;52.686; -2.193&lt;/span&gt;の地点にあります。
+後楽園は&lt;abbr class=&quot;geo&quot; title=&quot;52.686;-2.193&quot;&gt;52.686, -2.193&lt;/abbr&gt;の地点にあります。
+後楽園は&lt;abbr class=&quot;geo&quot; title=&quot;52.686;-2.193&quot;&gt;素敵な場所&lt;/abbr&gt;です。
+</code></pre>
+
+<h5>注意</h5>
+
+<ul>
+<li>緯度が出現する場合は経度も出現しなければなりません。- 小数点以下の桁数はゼロ詰めで揃えることが推奨されます。</li>
+</ul>
+
+<h3>Geocaching</h3>
+
+<p><a href="http://en.wikipedia.org/wiki/Geocaching">Geocaching - Wikipedia, the free encyclopedia</a><br><br>
+GPSなどを利用した全地球的な宝探し。位置情報をキャッシュするわけではありません。GeoTagginとはあまり関係ありません。</p>
+
+<h3>画像にGeoTagging</h3>
+
+<p><a href="http://en.wikipedia.org/wiki/Geocoded_photo">Geocoded photo - Wikipedia, the free encyclopedia</a>画像の場合はExifヘッダに位置情報を埋め込むらしいです。Exifは最近のデジタルカメラはほとんどが採用しています。位置情報を付加できるデジカメがあるかどうかは定かではありませんが、GPS搭載の携帯なら位置情報を記録する機能があります。また、 <a href="http://www.rbbtoday.com/news/20060802/32829.html">デジカメと連携して位置情報を記録</a>する商品はあるようです。</p>
+
+<h3>Flickr: GeoTagging Flickr</h3>
+
+<p>Flickrは2006年にGeoTag対応しています。(via <a href="http://kengo.preston-net.com/archives/002780.shtml">Going My Way: GeoTagが入力可能になったFlickr</a>)</p>
+
+<dl>
+<dt><a href="http://www.flickr.com/help/screencasts/vol1" class="external">Flickr Help Screencast Volume 1: Geotags &amp; You</a></dt>
+<dd>FlickrでのGeoTaggingの方法(Screencast)。</dd>
+<dt><a href="http://www.flickr.com/groups/geotagging/" class="external">Flickr: GeoTagging Flickr</a></dt>
+<dd>Flickr内にあるGeoTaggingグループ。</dd>
+<dt><a href="http://www.flickr.com/map/" class="external">Flickr: Explore everyone's geotagged photos on a Map</a></dt>
+<dd>FlickrでGeoTaggingされた写真を表示。</dd>
+<dt><a href="http://www.flickr.com/people/revdancatt/" class="external">Flickr: Rev Dan Catt</a></dt>
+<dd>Flickrの中の人。<a href="http://www.geobloggers.com/archives/" class="external">geobloggers</a>で有名です。</dd>
+</dl>
+
+<h3>GeoURL</h3>
+
+<p><a href="http://geourl.org/">GeoURL (2.0)</a>とは“location-to-URL”のディレクトリサービスです。<br>
+- <a href="http://koshigoe.sakura.ne.jp/dokuwiki/doku.php?id=koshigoewiki:feed:geourl">koshigoewiki:feed:geourl</a>(via 第2回勉強会資料)- <a href="http://postneo.com/icbm/">ICBM RSS Module</a></p>
+
+<h4>ウェブサイトをGeoTagging</h4>
+
+<pre><code class="prettyprint html">&lt;meta name=&quot;ICBM&quot; content=&quot;XXX.XXXXX, XXX.XXXXX&quot;&gt;
+&lt;meta name=&quot;DC.title&quot; content=&quot;THE NAME OF YOUR SITE&quot;&gt;
+</code></pre>
+
+<p><a href="http://geourl.org/add.html">Adding yourself to GeoURL - GeoURL (2.0)</a></p>
+
+<h4>GeoURLへpingを送信</h4>
+
+<p><a href="http://geourl.org/ping/">GeoURL (2.0) ping</a></p>
+
+<h4>GeoURLでRSSフィードにGeoTagging</h4>
+
+<pre><code class="prettyprint xml">&lt;item rdf:about=&quot;http://ericrichardson.com/&quot;&gt;
+ &lt;title&gt;eWorld: eric richardson meets the web&lt;/title&gt;
+ &lt;link&gt;http://ericrichardson.com/&lt;/link&gt;
+ &lt;description&gt;About 9.4 km away. Near Los Angeles.&lt;/description&gt;
+ &lt;geourl:longitude&gt;-118.25201&lt;/geourl:longitude&gt;
+ &lt;geourl:latitude&gt;34.0456&lt;/geourl:latitude&gt;
+&lt;/item&gt;
+(ref [[GeoURL Log: Latitude and longitude data in the RSS feeds - GeoURL (2.0)|http://geourl.org/news/2005/04/26/rssplus.html]])
+</code></pre>
+
+<h4>さらにRSSフィードにGeoTagging</h4>
+
+<p><a href="http://hiki.koshigoe.jp/?%5BFeed%5Dgeourl%A4%C7%C3%CF%CD%FD%BE%F0%CA%F3">koshigoe hiki - [Feed]geourlで地理情報</a></p>
+
+<h3>GeoRSS</h3>
+
+<p><a href="http://www.georss.org/">GeoRSS Home</a></p>
+
+<h4>Simple GeoRSS</h4>
+
+<pre><code class="prettyprint xml">&lt;georss:point&gt;45.256 -71.92&lt;/georss:point&gt;
+</code></pre>
+
+<h4>GML</h4>
+
+<pre><code class="prettyprint xml">&lt;georss:where&gt;
+ &lt;gml:Point&gt;
+  &lt;gml:pos&gt;45.256 -71.92&lt;/gml:pos&gt;
+ &lt;/gml:Point&gt;
+&lt;/georss:where&gt;
+</code></pre>
+
+<p><a href="http://www.opengeospatial.org/groups/?iid=31">GML</a>はAtom1.0, RSS2.0, RSS1.0での利用を想定していますが、RSS以外の通常のXMLファイルでも使用することができます。</p>
+
+<p><a href="http://www.georss.org/gml.html#examples">GeoRSS GML Example</a></p>
+
+<h2>Google Maps APIでのKML/GeoRSS対応</h2>
+
+<p><a href="http://www.google.com/apis/maps/documentation/#XML_Overlays">KML/GeoRSS Overlays</a>Google Maps APIでKMLやGeoRSSのファイルを取得して利用するには、GGeoXmlオブジェクトを利用します。GGeoXmlはGOverlayオブジェクトを返します。</p>
+
+<pre><code class="prettyprint javascript">var map = new GMap2(document.getElementById(&quot;map&quot;)); 
+var geoXml = new GGeoXml(&quot;http://www.example.com/rss.xml&quot;);
+map.addOverlay(geoXml);
+</code></pre>
+
+<h2>参考資料</h2>
+
+<ul>
+<li><a href="http://googlemapsapi.blogspot.com/2007/03/kml-and-georss-support-added-to-google.html">Google Maps API Official Blog: KML and GeoRSS Support Added to the Google Maps API</a></li>
+<li><a href="http://en.wikipedia.org/wiki/GeoTagging">GeoTagging - Wikipedia, the free encyclopedia</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Geo_%28microformat%29">Geo (microformat) - Wikipedia, the free encyclopedia</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Geocaching">Geocaching - Wikipedia, the free encyclopedia</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Geocoded_photo">Geocoded photo - Wikipedia, the free encyclopedia</a></li>
+<li><a href="http://www.rbbtoday.com/news/20060802/32829.html">デジカメと持ち歩き、撮影場所を特定できる携帯型のGPSユニット：デジタル家電総合情報サイト：Digital Freak 2006/08/02</a></li>
+<li><a href="http://kengo.preston-net.com/archives/002780.shtml">Going My Way: GeoTagが入力可能になったFlickr</a></li>
+<li><a href="http://www.flickr.com/help/screencasts/vol1">Flickr Help Screencast Volume 1: Geotags &amp; You</a></li>
+<li><a href="http://www.flickr.com/groups/geotagging/">Flickr: GeoTagging Flickr</a></li>
+<li><a href="http://www.flickr.com/map/">Flickr: Explore everyone&#39;s geotagged photos on a Map</a></li>
+<li><a href="http://www.flickr.com/people/revdancatt/">Flickr: Rev Dan Catt</a></li>
+<li><a href="http://www.geobloggers.com/archives/">geobloggers</a></li>
+<li><a href="http://geourl.org/">GeoURL (2.0)</a></li>
+<li><a href="http://koshigoe.sakura.ne.jp/dokuwiki/doku.php?id=koshigoewiki:feed:geourl">koshigoewiki:feed:geourl</a></li>
+<li><a href="http://postneo.com/icbm/">ICBM RSS Module</a></li>
+<li><a href="http://geourl.org/news/2005/04/26/rssplus.html">GeoURL Log: Latitude and longitude data in the RSS feeds - GeoURL (2.0)</a></li>
+<li><a href="http://hiki.koshigoe.jp/?%5BFeed%5Dgeourl%A4%C7%C3%CF%CD%FD%BE%F0%CA%F3">koshigoe hiki - [Feed]geourlで地理情報</a></li>
+<li><a href="http://www.georss.org/">GeoRSS Home</a></li>
+<li><a href="http://www.opengeospatial.org/groups/?iid=31">GML</a></li>
+<li><a href="http://www.google.com/apis/maps/documentation/#XML_Overlays">KML/GeoRSS Overlays</a></li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/geo-tagging.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="Geo Tagging関連情報まとめ" data-url="http://tech.feedforce.jp/geo-tagging.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/geo-tagging.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/geo-tagging.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/mysql_40_to_50.html" rel="next">MySQL4.0系→MySQL5.0系</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/bts-2.html" rel="prev">BTS - バグトラッキングシステムの利用（２）</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

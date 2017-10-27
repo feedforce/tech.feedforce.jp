@@ -1,0 +1,2853 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>feedforce Engineers' blog</title>
+  <subtitle>株式会社フィードフォース技術チームのサイト。社内勉強会資料や開発の様子および成果の公開など。</subtitle>
+  <id>http://tech.feedforce.jp</id>
+  <link href="http://tech.feedforce.jp"/>
+  <link href="http://tech.feedforce.jp" rel="self"/>
+  <updated>2017-09-11T00:00:00+09:00</updated>
+  <author>
+    <name>feedforce Inc.</name>
+  </author>
+  <entry>
+    <title>DynamoDB を Rails で使えるようにするためのあれこれ</title>
+    <link rel="alternate" href="http://tech.feedforce.jp/dynamodb-setup-on-rails.html"/>
+    <id>http://tech.feedforce.jp/dynamodb-setup-on-rails.html</id>
+    <published>2017-09-11T00:00:00+09:00</published>
+    <updated>2017-09-11T00:00:00+09:00</updated>
+    <author>
+      <name>ryosuke_sato</name>
+    </author>
+    <content type="html">&lt;p&gt;初めまして。バックエンドエンジニアの佐藤と申します。&lt;br&gt;
+弊社プロダクト &lt;a href="https://socialplus.jp/"&gt;ソーシャルPLUS&lt;/a&gt; では &lt;a href="https://aws.amazon.com/jp/dynamodb/"&gt;Amazon DynamoDB&lt;/a&gt; を使用しております。しかし、導入手順が思ったより煩雑でハマった点も多かったため、備忘録として記事にしておこうと思います。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2&gt;どうやるの？&lt;/h2&gt;
+
+&lt;h3&gt;開発環境に Docker を使用している場合の設定&lt;/h3&gt;
+
+&lt;p&gt;DynamoDB のローカルでの開発環境には AWS が公開している &lt;a href="https://aws.amazon.com/jp/blogs/aws/dynamodb-local-for-desktop-development/"&gt;DynamoDB Local&lt;/a&gt; があります。これを利用しても良いのですが、ソーシャルPLUSチームでは開発環境に Docker を採用しているので、 DynamoDB の Docker イメージを利用します。&lt;br&gt;
+ここでは &lt;a href="https://hub.docker.com/r/deangiberson/aws-dynamodb-local/"&gt;deangiberson/aws-dynamodb-local&lt;/a&gt; という Docker イメージを使います。これは DynamoDB Local を個人で Docker イメージにしたものを公開されているようです。この記事では触れませんが、 &lt;a href="https://hub.docker.com/r/atlassianlabs/localstack/"&gt;atlassianlabs/localstack &lt;/a&gt; を利用する、という方法もあります。&lt;br&gt;
+ちなみに後述する CircleCI での設定でも Docker イメージの話は出てきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class="prettyprint"&gt;docker-compose.yml&lt;/code&gt; に以下の設定を追加します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint yaml"&gt;msgdynamodb:
+  image: deangiberson/aws-dynamodb-local
+  ports:
+    - 8001:8000
+  environment:
+    DEFAULT_REGION: ap-northeast-1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;今回は同一の Docker ネットワーク内で複数の DynamoDB を利用しているため、&lt;code class="prettyprint"&gt;ports&lt;/code&gt; でポート番号を変えていますが、単一でしか利用していない場合は設定不要になります。&lt;/p&gt;
+
+&lt;h3&gt;Rails アプリケーションの設定&lt;/h3&gt;
+
+&lt;h4&gt;Dynamoid を使用するための準備&lt;/h4&gt;
+
+&lt;p&gt;ActiveRecord は MySQL など RDB の O/R マッパーなので、 DynamoDB の場合は &lt;code class="prettyprint"&gt;dynamoid&lt;/code&gt; という O/Rマッパーを使用します。Gemfile に以下のコードを追加します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint rb"&gt;gem &amp;#39;dynamoid&amp;#39;, &amp;#39;~&amp;gt; 1&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code class="prettyprint"&gt;aws-sdk&lt;/code&gt; の v2 が必要になってくるのでご注意ください。ちなみに &lt;code class="prettyprint"&gt;aws-sdk&lt;/code&gt; は v1 と v2 が共存できるので安心です。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class="prettyprint"&gt;config/initializers/dynamoid.rb&lt;/code&gt; を作成し、以下のように記述します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint rb"&gt;# frozen_string_literal: true
+# see: https://github.com/Dynamoid/Dynamoid#prerequisities
+Dynamoid.configure do |config|
+  config.region = &amp;#39;ap-northeast-1&amp;#39;
+  config.endpoint = Settings.aws.dynamodb.endpoint
+  config.namespace = Settings.aws.dynamodb.namespace
+  config.read_capacity = Settings.aws.dynamodb.read_capacity
+  config.write_capacity = Settings.aws.dynamodb.write_capacity
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;設定値の詳細は Rails の Config を利用して &lt;code class="prettyprint"&gt;config/settings/xxx.yml&lt;/code&gt; へ記述しています。ここでは &lt;code class="prettyprint"&gt;development&lt;/code&gt; と &lt;code class="prettyprint"&gt;test&lt;/code&gt; の例を記載します。&lt;/p&gt;
+
+&lt;p&gt;config/settings/development.yml&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint yaml"&gt;aws:
+  dynamodb:
+    namespace: development
+    endpoint: http://msgdynamodb:8000
+    read_capacity: 5
+    write_capacity: 5
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;config/settings/test.yml&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint yaml"&gt;aws:
+  dynamodb:
+    namespace: test
+    endpoint: &amp;lt;%= ENV.fetch(&amp;#39;CIRCLECI_DYNAMODB_ENDPOINT&amp;#39;, &amp;#39;http://msgdynamodb:8000&amp;#39;) %&amp;gt;
+    read_capacity: 5
+    write_capacity: 5
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code class="prettyprint"&gt;read_capacity&lt;/code&gt; と &lt;code class="prettyprint"&gt;write_capacity&lt;/code&gt; は読み書きの制限値になります。この値によって課金額が変化するので、本番環境以外は少なめの値に設定しておくと良いと思います。ちなみに最近では &lt;a href="https://aws.amazon.com/jp/blogs/news/new-auto-scaling-for-amazon-dynamodb/"&gt;DynamoDB が Auto Scaling に対応&lt;/a&gt; したので、アクセスが増えた時に自動的にスケールするようにできるようになりました。しかし、 Auto Scaling の設定は Dynamoid からは設定できないようなので、 AWS のコンソールから手動で設定する必要があります。&lt;/p&gt;
+
+&lt;h4&gt;実際に動かしてからやること&lt;/h4&gt;
+
+&lt;p&gt;Model の実装については &lt;code class="prettyprint"&gt;dynamoid&lt;/code&gt; の &lt;a href="https://github.com/Dynamoid/Dynamoid"&gt;GitHub&lt;/a&gt; を見て頂くとして、実際に動かしてからのことを書きます。&lt;code class="prettyprint"&gt;dynamoid&lt;/code&gt; は実行時に対応するテーブルが存在していないと、自動的に AWS 上でテーブルの作成までやってくれます。ですが、この時に例外が発生してしまうので、本番への適用時に一度試験的に動作させるなどが必要になってくるかと思います。AWS のマネジメントコンソールにも、エラーとして記録が残りますが、原因は同様です。&lt;br&gt;
+テーブルが作成されたら、コンソールから名前などが適切であるか確認しましょう。そして、前述のように &lt;strong&gt;Auto Scaling の設定&lt;/strong&gt; も忘れずにやりましょう。&lt;/p&gt;
+
+&lt;h3&gt;Rspec の設定&lt;/h3&gt;
+
+&lt;h4&gt;DynamoDB のデータをリセットする機能を追加する&lt;/h4&gt;
+
+&lt;p&gt;ActiveRecord であれば &lt;code class="prettyprint"&gt;use_transactional_fixtures = true&lt;/code&gt; と記述すれば、テスト毎にテーブルの内容がリセットされるのですが、Dynamoid においては自前でリセットの仕組みを用意する必要があります。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/Dynamoid/Dynamoid#test-environment"&gt;https://github.com/Dynamoid/Dynamoid#test-environment&lt;/a&gt; を参考に、&lt;code class="prettyprint"&gt;spec/support/dynamoid_reset.rb&lt;/code&gt; に以下のような処理を記述します。&lt;/p&gt;
+
+&lt;p&gt;spec/support/dynamoid_reset.rb&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint rb"&gt;# frozen_string_literal: true
+# see: https://github.com/Dynamoid/Dynamoid#test-environment
+module DynamoidReset
+  def self.all
+    Dynamoid.adapter.list_tables.each do |table|
+      if table.match?(/^#{Dynamoid::Config.namespace}/)
+        Dynamoid.adapter.delete_table(table)
+      end
+    end
+    Dynamoid.adapter.tables.clear
+    Dynamoid.included_models.each(&amp;amp;:create_table)
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;そして &lt;code class="prettyprint"&gt;spec/rails_helper.rb&lt;/code&gt; に以下の処理を追記します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint rb"&gt;# see: https://github.com/Dynamoid/Dynamoid#test-environment
+config.before :each, dynamodb: true do
+  DynamoidReset.all
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;このリセット処理は意外に重たい処理なので、実行するのは dynamodb に関連するテストのみにした方が良いかと思います。 &lt;code class="prettyprint"&gt;dynamodb: true&lt;/code&gt; というオプションを付けておくと、以下のようなテストの場合のみ、この初期化処理が有効になります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint rb"&gt;RSpec.describe Hoge, dynamodb: true do
+  # このブロック内のテスト全てに `dynamodb: true` が適用されます。
+end
+
+RSpec.describe Fuga do
+  it &amp;#39;foo&amp;#39;, dynamodb: true do
+    # `it` 毎に設定することもできます。
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4&gt;WebMock を使用している場合&lt;/h4&gt;
+
+&lt;p&gt;多くの Rspec で外部APIへの接続をモック化する &lt;code class="prettyprint"&gt;WebMock&lt;/code&gt; を利用していると思います。&lt;br&gt;
+そのままだとローカルの DynamoDB に接続できないので、&lt;code class="prettyprint"&gt;spec/rails_helper.rb&lt;/code&gt; に以下の処理を追記します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint rb"&gt;config.before :suite do
+  WebMock.disable_net_connect!(allow: Settings.aws.dynamodb.endpoint)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4&gt;AWS SDK で &lt;code class="prettyprint"&gt;stub_responses: true&lt;/code&gt; を適用している場合&lt;/h4&gt;
+
+&lt;p&gt;AWS SDK v2 では、&lt;code class="prettyprint"&gt;Aws.config[:stub_responses] = true&lt;/code&gt; と設定することで、SDK 経由での AWS 利用をスタブ化することができます。しかしそのままだとローカルで建てた DynamoDB へのアクセスまでスタブ化されてしまうので、以下の記述が必要です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint rb"&gt;config.before :suite do
+  Aws.config[:stub_responses] = true
+  Aws.config[:dynamodb] = { stub_responses: false } # &amp;lt;= これ！
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;こういう記述が出来ることを調べるのに随分苦労しました。。&lt;/p&gt;
+
+&lt;h3&gt;CircleCI 2.0 での設定&lt;/h3&gt;
+
+&lt;p&gt;CircleCI 2.0 から Docker イメージを使用するようになったことは周知かと思います。Docker の設定の項でも使用した Docker イメージを設定していきます。&lt;code class="prettyprint"&gt;.circleci/config.yml&lt;/code&gt; に以下の設定を追加します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint diff"&gt;version: 2
+  jobs:
+    build:
+      docker: &amp;amp;docker
+        - image: circleci/ruby:2.4.1
+          environment:
+            TZ: /usr/share/zoneinfo/Asia/Tokyo
+            RAILS_ENV: test
++           CIRCLECI_DYNAMODB_ENDPOINT: http://localhost:8000
+        - image: circleci/mysql:5.7
++       - image: deangiberson/aws-dynamodb-local
++         environment:
++           SERVICES: dynamodb
++         entrypoint: [&amp;#39;/usr/bin/java&amp;#39;, &amp;#39;-Xms1G&amp;#39;, &amp;#39;-Xmx1G&amp;#39;, &amp;#39;-Djava.library.path=.&amp;#39;, &amp;#39;-jar&amp;#39;, &amp;#39;DynamoDBLocal.jar&amp;#39;, &amp;#39;-dbPath&amp;#39;, &amp;#39;/var/dynamodb_local&amp;#39;, &amp;#39;-port&amp;#39;, &amp;#39;8000&amp;#39;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;重要なのが &lt;code class="prettyprint"&gt;entrypoint: [&amp;#39;/usr/bin/java&amp;#39;, &amp;#39;-Xms1G&amp;#39;, &amp;#39;-Xmx1G&amp;#39;...&lt;/code&gt; の部分でして、これは &lt;a href="http://docs.oracle.com/cd/E22646_01/doc.40/b61439/tune_footprint.htm"&gt;Java プロセスのメモリー占有領域を制限するためのオプション&lt;/a&gt; です。 &lt;code class="prettyprint"&gt;-Xms1G&lt;/code&gt;, &lt;code class="prettyprint"&gt;-Xmx1G&lt;/code&gt; とすると、 Java のメモリ領域を 1 GByte に制限してくれます。&lt;br&gt;
+この設定が無いと、 DynamoDB Local のメモリ使用量が爆発して CircleCI でのテストが死にます。。&lt;br&gt;
+&lt;code class="prettyprint"&gt;atlassianlabs/localstack&lt;/code&gt; を使用していた時も同様でした。&lt;/p&gt;
+
+&lt;p&gt;これも原因を調べるのに随分苦労したので、皆さんは罠にはまらないように気を付けてください。&lt;/p&gt;
+
+&lt;h2&gt;終わりに&lt;/h2&gt;
+
+&lt;p&gt;以上の設定で Rails で DynamoDB が利用できるようなったかと思います。&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</title>
+    <link rel="alternate" href="http://tech.feedforce.jp/run-e2e-test-on-circleci-2_0.html"/>
+    <id>http://tech.feedforce.jp/run-e2e-test-on-circleci-2_0.html</id>
+    <published>2017-05-08T00:00:00+09:00</published>
+    <updated>2017-05-08T00:00:00+09:00</updated>
+    <author>
+      <name>ff_koshigoe</name>
+    </author>
+    <content type="html">&lt;p&gt;こんにちは、あっという間に社内勉強会の順番がやってきそうでフルえているコシゴエです。気がついたら二年近く会社ブログを書いていませんでした…。&lt;/p&gt;
+
+&lt;p&gt;最近、ようやく重い腰を上げて Docker と CircleCI 2.0 を使い始めたので、E2E テストでの活用を試みている話をしたいと思います。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2&gt;はじめに&lt;/h2&gt;
+
+&lt;p&gt;突然ですが、弊社プロダクト &lt;a href="https://dfplus.io/"&gt;dfplus.io&lt;/a&gt; では、&lt;a href="https://testcafe.devexpress.com/"&gt;TestCafe&lt;/a&gt; を使用して E2E テストを自動化しています。&lt;/p&gt;
+
+&lt;p&gt;dfplus.io は、異なるリポジトリで管理しているフロントエンド(JS)とバックエンド(Ruby)から構成され、E2E テストはフロントエンドのリポジトリで管理しています。E2E テストはリポジトリへの push をトリガーに &lt;a href="https://circleci.com/"&gt;CircleCI&lt;/a&gt; で実行し、このときのバックエンドは E2E 用に用意した共用環境(Heroku 環境)を利用しています。&lt;/p&gt;
+
+&lt;p&gt;E2E テストをしばらく運用した結果、いくつかの課題が見えてきました。今回は、その課題を &lt;a href="https://circleci.com/beta-access/"&gt;CircleCI 2.0 Beta&lt;/a&gt; を利用して解決を試みた取り組みについて紹介します。&lt;/p&gt;
+
+&lt;h2&gt;現在 E2E テストで抱えている問題&lt;/h2&gt;
+
+&lt;p&gt;dfplus.io では、E2E テストの自動化を始めて間もなく、十分な知見があるとは言えない状況です。プロダクト開発チームが本質的な問題に集中できる様に、E2E テスト自動化に取り組む時間を捻出して手探りながらも着実に改善を進めていますが、いくつか目に見える問題を抱えています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;E2E テストに時間がかかりすぎる(push の度に 20 分以上待たされる事も…)&lt;/li&gt;
+&lt;li&gt;共用バックエンドの状態に依存するため思わぬところでテストが通らない(20 分待たされたあげくに…)&lt;/li&gt;
+&lt;li&gt;E2E テスト実行スクリプトの今の実装上、対象テストケースを分割した並行実行が行えない(並行実行すれば時間短縮は可能)&lt;/li&gt;
+&lt;li&gt;バックエンド実行環境が E2E 実行環境から離れた場所にあり DB アクセス権がない(テストデータセットアップのトリガーが…)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;問題解決のアイデア&lt;/h2&gt;
+
+&lt;p&gt;まず、バックエンドが共用である点と、バックエンドが E2E 実行環境から隔離された環境で動いている点について考えます。&lt;/p&gt;
+
+&lt;p&gt;CircleCI 2.0 では任意の Docker イメージから作った任意の数のコンテナを動かす事ができるので、各 E2E テスト専用のバックエンドをオンデマンドに動かす事ができます。このバックエンドは E2E テスト実行環境から直接触る事ができる場所で動くため、必要なテストデータを自由にセットアップさせる事もできます。&lt;/p&gt;
+
+&lt;p&gt;※ CircleCI 1.0 でも Docker を上手く使えるのかもしれませんが、元々 CircleCI に詳しくなかったため、Docker により近づいた印象を(勝手に)受けた 2.0 を使う事にします。&lt;/p&gt;
+
+&lt;h2&gt;前提知識：CircleCI 2.0 のさわり&lt;/h2&gt;
+
+&lt;p&gt;前提知識として簡単に CircleCI 2.0 について説明しようと思いましたが、ドキュメントに言語ごとの&lt;a href="https://circleci.com/docs/2.0/language-ruby/"&gt;チュートリアル&lt;/a&gt;が用意されているので CircleCI 2.0 をご存じない方はざっと目を通すと概要をつかめると思います。&lt;/p&gt;
+
+&lt;p&gt;CircleCI 2.0 では、一度のジョブで行われる一連の流れのほぼ全てを設定ファイル &lt;code class="prettyprint"&gt;.circleci/config.yml&lt;/code&gt; に記述する必要があります。CircleCI 1.0 はおおよその流れが決まっていて、適宜オーバーライドする形式なので &lt;code class="prettyprint"&gt;circle.yml&lt;/code&gt; に数行書く程度で実行出来ました。1.0 と比べて 2.0 は非常に面倒だと思う方が多いかもしれません。反面、任意のファイルを任意の処理位置でキャッシュし、次回以降のジョブで使い回す事ができるといった面に魅力を感じる方も多いと思います。&lt;/p&gt;
+
+&lt;p&gt;また、ジョブを実行する環境として、2.0 では &lt;a href="https://circleci.com/docs/2.0/executor-types/"&gt;Docker イメージか今まで同様の VM (Machine) が利用できます&lt;/a&gt;。Docker イメージを使えば、ジョブの実行環境をあらかじめ用意しておく事もできます。&lt;a href="https://circleci.com/docs/2.0/circleci-images/"&gt;CircleCI から提供されている Docker イメージ&lt;/a&gt;もあるので、必要に応じて使い分けると良いでしょう。ちなみに、TestCafe を用いた E2E テストにおいては、必要となるものが多いため、CircleCI 提供のイメージをベースとする事をおすすめします。&lt;/p&gt;
+
+&lt;p&gt;なお、 &lt;code class="prettyprint"&gt;circle.yml&lt;/code&gt; よりも &lt;code class="prettyprint"&gt;.circleci/config.yml&lt;/code&gt; が優先されるので、いつでも 1.0 に戻れる様に &lt;code class="prettyprint"&gt;circle.yml&lt;/code&gt; を 1.0 の内容で残しておくと良いかもしれません。&lt;/p&gt;
+
+&lt;p&gt;※ 真面目に計測していないので正確なデータは出せないのですが、ホストとなるマシンの性能かジョブの隠れたオーバーヘッドが取り除かれるのか、1.0 よりも 2.0 の方がトータルで速いと実感しています。キャッシュが使いやすいからかもしれません。&lt;/p&gt;
+
+&lt;h3&gt;例：node_modules ディレクトリのリストアとキャッシュ&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint yaml"&gt;# バージョン番号
+version: 2
+# 任意個のジョブを記述できる(一度に一つのジョブを実行)
+jobs:
+  # build という名前のジョブがデフォルトで実行される
+  build:
+    # ジョブの実行環境に Docker を使う
+    docker:
+      # 一つ目が primary container となり、steps 以下で記述されるコマンドを実行する環境となる
+      - image: circleci/node:6.10.2-browsers
+      # ポートを EXPOSE している場合、primary container の localhost からフォワードできる様になっている
+      # `localhost:6379` で Redis サーバに接続可能
+      - image: redis
+    ..
+    # ジョブで行う事は steps 以下に記述する
+    steps:
+      ...
+      # キーに前方一致するキャッシュがあれば元のパスに復元してくれる
+      # Rebuild without cache ボタンではこの手順がスキップされるだけでキャッシュ自体は消えない
+      # 手軽にキャッシュを無かった事にしたい場合に備え、以下の様に環境変数を含めるという先人の知恵に習っている
+      # http://engineer.crowdworks.jp/entry/2017/04/04/202719
+      - restore_cache:
+          name: Restore cache
+          keys:
+            - yarn-{{ .Environment.CACHE_KEY }}-{{ checksum &amp;quot;yarn.lock&amp;quot; }}
+            - yarn-{{ .Environment.CACHE_KEY }}-
+      - run:
+          name: Install npm packages
+          command: yarn install --prefer-offline
+      - save_cache:
+          name: Save cache
+          key: yarn-{{ .Environment.CACHE_KEY }}-{{ checksum &amp;quot;yarn.lock&amp;quot; }}
+          paths:
+            - ~/.cache/yarn
+            - ~/app/node_modules
+      ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;バックエンドのコンテナ化&lt;/h2&gt;
+
+&lt;p&gt;まず大前提として、dfplus.io はコンテナを使った本番運用を行っていません。昔ながらの心温まる EC2(CLB) と &lt;a href="https://aws.amazon.com/jp/autoscaling/"&gt;Auto Scaling&lt;/a&gt; で運用しています。今回は、あくまで E2E テストにおけるコンテナ利用のみを考えます。ざっくりと、以下の方針で粛々と作業を進めました。詳細な内容は、Rails をコンテナで動かすという特筆することのない単純なものなので割愛します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Alpine Linux を使う&lt;/li&gt;
+&lt;li&gt;アプリケーションのソースコードをコンテナに含める&lt;/li&gt;
+&lt;li&gt;アプリケーションが依存するパッケージ類(gem など)もコンテナに含める&lt;/li&gt;
+&lt;li&gt;アプリケーションが依存するミドルウェアもそれぞれコンテナにする&lt;/li&gt;
+&lt;li&gt;レジストリは Amazon ECR を利用する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;余談：Docker イメージの自動ビルド&lt;/h3&gt;
+
+&lt;p&gt;ちなみに、バックエンドのコンテナ化作業は CircleCI 2.0 を使い始める前に進めていたため、イメージの自動ビルドには &lt;a href="https://aws.amazon.com/jp/codepipeline/"&gt;AWS CodePipeline&lt;/a&gt; (&lt;a href="https://aws.amazon.com/jp/codebuild/"&gt;AWS CodeBuild&lt;/a&gt;) を使っています。CodePipeline 設定作業の一連で作った CodeBuild で設定した環境変数を AWS の管理画面から変更できないのが不満ですが、とても簡単に実現できました。&lt;br&gt;
+また、GitHub リポジトリへの push をフックに CodePipeline を起動していますが、CodeBuild には S3 経由で zip ファイルが渡ります。この影響で、リポジトリで管理している実行ファイルの実行権限は消える様です。&lt;/p&gt;
+
+&lt;p&gt;なお、近々 CircleCI 2.0 に移るかもしれません。&lt;/p&gt;
+
+&lt;h2&gt;CircleCI 2.0 で Docker コンテナを動かす&lt;/h2&gt;
+
+&lt;p&gt;パブリックレジストリにある Docker イメージを使う場合、設定の &lt;code class="prettyprint"&gt;jobs: &amp;gt; {job name}: &amp;gt; docker: &amp;gt; {i}: &amp;gt; image:&lt;/code&gt; でイメージを指定するだけで済みます。一方、 &lt;code class="prettyprint"&gt;jobs: &amp;gt; {job name}: &amp;gt; docker: &amp;gt; {i}: &amp;gt; image:&lt;/code&gt; にはプライベートレジストリのイメージは指定できません。自分で認証(&lt;code class="prettyprint"&gt;docker login&lt;/code&gt;)を通した上で、適宜イメージを取得(&lt;code class="prettyprint"&gt;docker image pull&lt;/code&gt; など)する必要があります。&lt;/p&gt;
+
+&lt;p&gt;さらに、CircleCI 2.0 で docker コマンドを実行するためには、&lt;a href="https://circleci.com/docs/2.0/building-docker-images/"&gt;Remote Docker Environment&lt;/a&gt; と呼ばれる隔離環境を立ち上げて使用する必要があります。これは steps: 以下に &lt;code class="prettyprint"&gt;setup_remote_docker&lt;/code&gt; を記述するだけで準備出来ます。これにより、Docker クライアント(docker コマンド)を primary container 上で実行すると、Remote Docker Environment 内でその要求が実行されます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint"&gt;# 例: setup_remote_docker のログ
+Allocating a remote Docker Engine
+...
+Remote Docker engine created. Using VM &amp;#39;prealloc-********-*************&amp;#39;
+Created container accessible with:
+  DOCKER_TLS_VERIFY=1
+  DOCKER_HOST=tcp://***.***.***.***:****
+  DOCKER_CERT_PATH=/tmp/docker-certs*********
+  DOCKER_MACHINE_NAME=*****
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;また、Remote Docker Environment で動くコンテナは、primary container とは異なるネットワークに所属します。primary container から Remote Docker Environment で動くコンテナへの直接的なネットワーク通信は行えません。&lt;a href="https://circleci.com/docs/2.0/building-docker-images/#accessing-services"&gt;通信したいコンテナが属するネットワークに参加する形で新しくコンテナを作り、その新しく作ったコンテナから通信する必要があります&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;今回のケースでは、プライベートレジストリを利用する都合とネットワーク的な制約を抱えています。バックエンドのコンテナ群を動かして E2E テストで利用するために、E2E テストも Remote Docker Environment のコンテナで実行する必要がありました。&lt;/p&gt;
+
+&lt;p&gt;制約といえば、primary container のファイルシステムを Remote Docker Environment のコンテナからマウントする事もできません。primary container のキャッシュは便利ですが、そのキャッシュを Remote Docker Environment でも無条件に利用する事はできません。直接マウントはできないので、&lt;a href="https://circleci.com/docs/2.0/building-docker-images/#mounting-folders"&gt;docker cp でコンテナにコピーする方法が提案されています&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h3&gt;例：バックエンドのコンテナ群を動かして E2E テスト&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint yaml"&gt;# .circleci/config.yml
+jobs:
+  build:
+    ...
+    steps:
+      ...
+      # E2E テストはジョブを分けておくのでここで enqueue する。
+      - deploy:
+          name: Enqueue E2E Test
+          command: |
+            curl --fail --user ${CIRCLE_API_TOKEN}: \
+              --data build_parameters[CIRCLE_JOB]=e2e \
+              --data revision=${CIRCLE_SHA1} \
+              https://circleci.com/api/v1.1/project/github/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/tree/${CIRCLE_BRANCH}
+
+  # E2E テストのためのジョブ(build とは別)
+  e2e:
+    ...
+    steps:
+      ...
+      # バックエンドサーバをコンテナで動かすために Remote Docker Environment を立ち上げる。
+      - setup_remote_docker:
+          # Remote Docker Environment を使い回せるようにしておく。
+          reusable: true
+      # イメージを取得するためにプライベートレジストリにログインしておく。
+      - run:
+          name: Login to Amazon ECR
+          command: eval $(aws ecr get-login --region ap-northeast-1)
+      ...
+      # primary container のディレクトリをマウントさせることができないので、コンテナには docker cp でファイルをコピーするためにここでコンテナを作っておく。
+      - run:
+          name: Create container for E2E Test
+          command: docker-compose -f .circleci/docker-compose.yml create --force-recreate e2e
+      # チェックアウトしたソースやキャッシュなど primary container のものを流用するために docker cp でコンテナにコピー。
+      - run:
+          name: Copy files to E2E Test container
+          command: |
+            docker cp -L /home/circleci/.yarn e2e:/home/circleci/.yarn
+            docker cp -L /home/circleci/app/. e2e:/home/circleci/app
+      # E2E テストで必要なシードデータを投入する。DB 起動待ちはエントリポイント経由で行っている。
+      - run:
+          name: Setup DB
+          command: docker-compose -f .circleci/docker-compose.yml run --rm -e FIXTURE_PATH=db/fixtures/e2e api db:setup
+      # バックエンド起動後、API サーバが応答可能になるまで待つ必要があるため、curl でリトライしている。
+      - run:
+          name: Start up containers
+          command: |
+            docker-compose -f .circleci/docker-compose.yml up -d
+            docker container run --rm --network container:api appropriate/curl --retry 10 --retry-delay 1 --retry-connrefused http://localhost:3333/heartbeat
+      # docker cp したのでパーミッションを調整した上で E2E テストをコンテナで実行する。
+      - run:
+          name: Run yarn e2e
+          command: |
+            docker-compose -f .circleci/docker-compose.yml exec e2e sudo chown -R circleci:circleci /home/circleci
+            docker-compose -f .circleci/docker-compose.yml exec e2e /home/circleci/.yarn/bin/yarn e2e
+      # スクリーンショットはコンテナに保存されているので、テスト終了後に取り出す必要がある。
+      - run:
+          name: Copy screenshots from E2E Test container
+          command: docker cp e2e:/home/circleci/app/screenshots screenshots
+      - store_artifacts:
+          path: /home/circleci/app/screenshots
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint yaml"&gt;# .circleci/docker-compose.yml
+version: &amp;#39;3&amp;#39;
+services:
+  postgres:
+    image: postgres
+  redis:
+    image: redis
+  job: &amp;amp;job
+    image: ...
+    depends_on:
+      - postgres
+      - redis
+    # DB 接続できる様になる前にコマンドを実行しない様に待つ。
+    entrypoint: ./bin/wait-for-it.sh postgres:5432 -q -s -t 120 -- bundle exec rails
+    command: [&amp;#39;jobs:work&amp;#39;]
+    environment:
+      DATABASE_URL: postgres://postgres@postgres/dfplusio
+      REDIS_URL: redis://redis:6379
+  api:
+    &amp;lt;&amp;lt;: *job
+    container_name: api
+    command: [&amp;#39;s&amp;#39;, &amp;#39;-p&amp;#39;, &amp;#39;3333&amp;#39;, &amp;#39;-b&amp;#39;, &amp;#39;0.0.0.0&amp;#39;]
+    ports:
+      - &amp;quot;3333:3333&amp;quot;
+  e2e:
+    image: feedforce/dfplusio-circleci-node:6.10.2-browsers
+    # docker cp しやすいように名前を付ける。
+    container_name: e2e
+    working_dir: /home/circleci/app
+    # up した時と同じコンテナを使いやすい様に待機のためだけのコマンドを実行しておく。
+    command: tail -f /dev/null
+    environment:
+      ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;余談：DB 起動待ち&lt;/h3&gt;
+
+&lt;p&gt;DB の起動待ちは、&lt;a href="https://docs.docker.com/compose/startup-order/"&gt;docker-compose のドキュメント&lt;/a&gt;で紹介されていた&lt;a href="https://github.com/vishnubob/wait-for-it"&gt;&lt;code class="prettyprint"&gt;wait-for-it.sh&lt;/code&gt;&lt;/a&gt;を使ってみました。&lt;/p&gt;
+
+&lt;h3&gt;余談：レイヤーキャッシュ&lt;/h3&gt;
+
+&lt;p&gt;通常、Remote Docker Environment は使い捨ての環境です。このため、ジョブの実行で作られるイメージレイヤーは他のジョブで使い回す事ができません。これを改善するためには、CircleCI に申請をしてホワイトリストに登録してもらう必要があります。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;$ Potential Premium Feature Notice: Docker Layer Caching&lt;br&gt;
+During the CircleCI 2.0 Beta we are providing early access, for no additional charge, to features (including Docker Layer Caching) that may be available for additional fees after the Beta. We welcome your feedback on this and all other aspects of CircleCI 2.0.&lt;/p&gt;
+
+&lt;p&gt;Note: This feature only works with whitelisted projects. To get it enabled, please contact your Customer Success manager (email &lt;a href="mailto:cs@circleci.com"&gt;cs@circleci.com&lt;/a&gt; and include a link to the project on CircleCI).&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://circleci.com/docs/2.0/docker-layer-caching/"&gt;Docker Layer Caching&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;将来的な価格などは分かりませんが、試しに申請したところ一営業日程度で利用できる様になりました。前回ジョブ実行時の状態が保持されているため、イメージ取得やビルドに使っていた6分くらいが丸ごと削減できました。これはお得です。&lt;/p&gt;
+
+&lt;p&gt;※ 詳しい実態や Parallelism と組み合わせたときの副作用などについては、まだ未検証です。&lt;/p&gt;
+
+&lt;p&gt;Docker Layer Caching のキャッシュ有効期限などに関する詳しい仕様については把握しきれていません。経験的には、2日間ジョブを実行していない状態で、直近のジョブを rebuild した時にイメージキャッシュを利用できました。また、デバッグのために &lt;code class="prettyprint"&gt;docker container ls -a&lt;/code&gt; した際、前回のジョブで作られたコンテナが残っている事も確認しています。Docker Layer Caching の仕様は今後変わっていくことが予想されるので、無料で利用できる Beta 期間中に色々と試してみてはいかがでしょうか。&lt;/p&gt;
+
+&lt;h2&gt;CircleCI 2.0 で TestCafe を動かすコンテナのイメージ&lt;/h2&gt;
+
+&lt;p&gt;今回のケースでは、以下をインストールしたイメージが必要となりました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Node.js
+
+&lt;ul&gt;
+&lt;li&gt;TestCafe やフロントエンドを動かすために使用&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Google Chrome
+
+&lt;ul&gt;
+&lt;li&gt;TestCafe のテストケースを動かすブラウザとして使用&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Xvfb
+
+&lt;ul&gt;
+&lt;li&gt;Google Chrome の仮想ディスプレイとして使用&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;fluxbox (window manager)
+
+&lt;ul&gt;
+&lt;li&gt;TestCafe のスクリーンショット機能で使用&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;日本語フォント
+
+&lt;ul&gt;
+&lt;li&gt;日本語表示の画面をスクリーンショットを保存する際に文字化けしない様に&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;手間を省くために primary container のイメージを流用するなら、Docker や awscli も必要になります。イメージの大きさは気になりますが、レイヤーキャッシュの効果で無視できます。&lt;/p&gt;
+
+&lt;p&gt;現時点では、 &lt;code class="prettyprint"&gt;circleci/node:6.10.2-browsers&lt;/code&gt; をベースに、fluxbox と日本語フォントと awscli を追加したイメージを利用しています。&lt;/p&gt;
+
+&lt;p&gt;ちなみに、E2E テストではない Lint やユニットテストを行うジョブでも同じベースを使っています。&lt;a href="https://github.com/flowtype/flow-bin"&gt;flow-bin&lt;/a&gt; が依存している libelf-dev のみ追加しています。&lt;/p&gt;
+
+&lt;h3&gt;余談：flow-bin と ENOENT&lt;/h3&gt;
+
+&lt;p&gt;flow-bin を使って Alpine Linux で flow を動かそうとすると、依存関係の問題で ENOENT エラーになります。flow-bin が要求するのが libelf.so.1 ですが、Alpine Linux に入るのは libelf.so.0 です。また、libelf の他に、glibc 系の依存問題もあるようです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint"&gt;/app # ldd node_modules/flow-bin/flow-linux64-v0.44.0/flow
+        /lib64/ld-linux-x86-64.so.2 (0x55aaa057e000)
+        libpthread.so.0 =&amp;gt; /lib64/ld-linux-x86-64.so.2 (0x55aaa057e000)
+Error loading shared library libelf.so.1: No such file or directory (needed by node_modules/flow-bin/flow-linux64-v0.44.0/flow)
+        libm.so.6 =&amp;gt; /lib64/ld-linux-x86-64.so.2 (0x55aaa057e000)
+        libdl.so.2 =&amp;gt; /lib64/ld-linux-x86-64.so.2 (0x55aaa057e000)
+        libc.so.6 =&amp;gt; /lib64/ld-linux-x86-64.so.2 (0x55aaa057e000)
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: elf_strptr: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: __fprintf_chk: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: __printf_chk: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: __memcpy_chk: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: elf_kind: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: __vsnprintf_chk: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: __recv_chk: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: __read_chk: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: gelf_getshdr: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: __recvfrom_chk: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: elf_version: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: elf_end: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: __realpath_chk: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: __snprintf_chk: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: elf_nextscn: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: __memmove_chk: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: elf_begin: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: elf_getshstrndx: symbol not found
+Error relocating node_modules/flow-bin/flow-linux64-v0.44.0/flow: __fdelt_chk: symbol not found
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/facebook/flow/issues/3649"&gt;Flow-bin exiting with ENOENT in alpine docker container · Issue #3649 · facebook/flow&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/gliderlabs/docker-alpine/issues/149"&gt;GLIBC symbols not found · Issue #149 · gliderlabs/docker-alpine&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;並行実行のための対象ファイル群の分割&lt;/h2&gt;
+
+&lt;p&gt;本題から若干それるため簡単な紹介程度となりますが、CircleCI 2.0 では circleci コマンドを利用してファイル群を分割する事ができます。コマンド &lt;code class="prettyprint"&gt;circleci test split&lt;/code&gt; を実行すると、リストをコンテナ数で分割してコンテナ番号に該当する範囲を返します。分割方式を選ぶことができるので、詳しくはドキュメントをご覧ください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://circleci.com/docs/2.0/parallelism-faster-jobs/"&gt;Parallelism with CircleCI CLI&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;なお、 &lt;code class="prettyprint"&gt;ruby:2.4.1-alpine&lt;/code&gt; を指定した primary container で何も準備せず circleci コマンドを使えたので、ジョブ起動時点で自動的にインストールされる様です。&lt;/p&gt;
+
+&lt;h3&gt;例&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint yaml"&gt;      - run:
+          name: Run rubocop
+          command: |
+            bundle exec rubocop -L \
+                | circleci tests split --split-by=filesize \
+                | tee -a /dev/stderr \
+                | xargs bundle exec rubocop --fail-fast
+      - run:
+          name: Run rspec
+          command: |
+            circleci tests glob &amp;quot;spec/**/*_spec.rb&amp;quot; \
+                | circleci tests split --split-by=timings --timings-type=filename \
+                | tee -a /dev/stderr \
+                | xargs bundle exec rspec
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;バックエンドをコンテナ化し、E2E テストを CircleCI 2.0 内で完結させた取り組みについて紹介させていただきました。&lt;/p&gt;
+
+&lt;p&gt;まだ『最低限のことができる様になった、できる事が分かった』という段階で、本当に効率的で生産的な E2E テストの自動化に繋がるかはこれからの取り組み次第です。CircleCI 2.0 もベータ期間中なので、今後の変更に合わせて何か良い事・悪い事があるかもしれません。&lt;/p&gt;
+
+&lt;p&gt;現時点では、目的を達成できたことと一定の成果を社内外にアピールできたことの達成感に浸り、トクホペプシで一人乾杯したいと思っております。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;E2E テスト実行単位で使える独立したバックエンドのコンテナ群を用意した&lt;/li&gt;
+&lt;li&gt;E2E テスト実行前に、任意の E2E 用テストデータをセットアップできる様にした&lt;/li&gt;
+&lt;li&gt;CircleCI 2.0 でバックエンドコンテナ群を動かせる様にした&lt;/li&gt;
+&lt;li&gt;CircleCI 2.0 内で E2E テストを完結させた&lt;/li&gt;
+&lt;li&gt;E2E テストランナーが対象テストを指定できる様にさえなれば、CircleCI で並行実行できる様になっている&lt;/li&gt;
+&lt;li&gt;CircleCI 2.0 のレイヤーキャッシュオプションが使える事もあり、トータルで 1.0 時代より 5 分程度は時間短縮できている&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
+  <entry>
+    <title>安全な Amazon RDS のアップデート</title>
+    <link rel="alternate" href="http://tech.feedforce.jp/safe-rds-update.html"/>
+    <id>http://tech.feedforce.jp/safe-rds-update.html</id>
+    <published>2017-04-06T15:00:00+09:00</published>
+    <updated>2017-04-06T15:00:00+09:00</updated>
+    <author>
+      <name>masutaka</name>
+    </author>
+    <content type="html">&lt;p&gt;こんにちは。増田です。Amazon で PS4 Pro の料金が定価に戻っていたので、日曜日にうっかりポチッとしてしまいました。今日も元気です。&lt;/p&gt;
+
+&lt;p&gt;先月、RDS for MySQL を &lt;code class="prettyprint"&gt;5.5.40&lt;/code&gt; から &lt;code class="prettyprint"&gt;5.5.53&lt;/code&gt; にアップデートしました。今月で MySQL 5.5.40 のサポートが切れ、強制アップデートされるためです。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;私が対応するのは今回で 3 回目になりますが、今までは Staging 環境で検証した後、深夜作業で Apply Immediately もしくは Reboot していました。&lt;/p&gt;
+
+&lt;p&gt;今回は MySQL のメジャーアップデートではないため、問題が起きる可能性は少ないのですが、仮に問題があった場合にロールバック出来ません。&lt;/p&gt;
+
+&lt;p&gt;そのため、出来るだけ安全側に倒してアップデートしてみました。この記事を書くことで、属人化を廃することを期待していたり、もっと良いやり方があれば知りたいという意図もあります。&lt;/p&gt;
+
+&lt;h2&gt;今回意識したこと&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;サービスのダウンタイムを出来るだけ減らす&lt;/li&gt;
+&lt;li&gt;問題が起きた時に、出来るだけ早くロールバック可能な状態にしておく&lt;/li&gt;
+&lt;li&gt;深夜作業前に出来ることは全部やり、当日やることを減らす&lt;/li&gt;
+&lt;li&gt;当日に時間のかかりそうな処理は、事前に確認しておく&lt;/li&gt;
+&lt;li&gt;少しでも不安なことがあれば、不安がなくなるまで何度でもシミュレーションする&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;今回の構成&lt;/h2&gt;
+
+&lt;p&gt;EC2 インスタンス上の Unicorn と delayed_job が RDS を参照する、標準的な構成になっています。master は Multi-AZ になっており、Read Replica が 1 台ぶら下がっています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="safe-rds-update-1" src="/images/2017/04/safe-rds-update-1.png" /&gt;&lt;/p&gt;
+
+&lt;h2&gt;事前にやったこと&lt;/h2&gt;
+
+&lt;h3&gt;Qiita:Team の記事作成&lt;/h3&gt;
+
+&lt;p&gt;深夜作業でやること、事前にやること、心配なこと、思いついたことなどをどんどん書いていきました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="safe-rds-update-qiita" src="/images/2017/04/safe-rds-update-qiita.png" /&gt;&lt;/p&gt;
+
+&lt;h3&gt;Release Note の確認&lt;/h3&gt;
+
+&lt;p&gt;5.5.40 から 5.5.53 までの Release Note を全部確認しました。&lt;/p&gt;
+
+&lt;p&gt;例: &lt;a href="https://dev.mysql.com/doc/relnotes/mysql/5.5/en/news-5-5-53.html"&gt;https://dev.mysql.com/doc/relnotes/mysql/5.5/en/news-5-5-53.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;Staging 環境でシミュレーション&lt;/h3&gt;
+
+&lt;p&gt;公式の『&lt;a href="http://docs.aws.amazon.com/ja_jp/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.MySQL.html#USER_UpgradeDBInstance.MySQL.ReducedDowntime"&gt;わずかなダウンタイムでの MySQL データベースのアップグレード&lt;/a&gt;』に従って、Staging 環境でシミュレーションしました。&lt;/p&gt;
+
+&lt;p&gt;今回は一回やった後に、もっと良い方法を思いついたので、もう一回シミュレーションしました。&lt;/p&gt;
+
+&lt;h3&gt;時間がかかりそうな処理を確認する&lt;/h3&gt;
+
+&lt;p&gt;当日時間がかかりそうな master への昇格、Multi-AZ 化、Read Replica の作成などを、本番環境と同じデータで試し、時間の目安を把握しました。経験的に時間にブレがあることは分かっているので、あくまで目安です。&lt;/p&gt;
+
+&lt;p&gt;参考までに、以下は今回の検証でかかった時間です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;スナップショット作成: 30 分程で完了&lt;/li&gt;
+&lt;li&gt;master への昇格: 4 分以内に完了&lt;/li&gt;
+&lt;li&gt;Multi-AZ 化: 9 分程度で完了&lt;/li&gt;
+&lt;li&gt;Read Replica 作成: 12 分程度で完了&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;深夜のバッチ処理時間の把握&lt;/h3&gt;
+
+&lt;p&gt;深夜に実行されるバッチ処理はあるため、作業時間に被らないように把握しました。&lt;/p&gt;
+
+&lt;h3&gt;会社 PC を自宅で作業可能にしておく&lt;/h3&gt;
+
+&lt;p&gt;会社の情報セキュリティポリシーに則り、持ち出せる状態にしておきます。&lt;/p&gt;
+
+&lt;p&gt;一部は IP アドレス制限しているため、それらもアクセス可能かを確認して、当日慌てないようにします。Zabbix や Bugsnag などのエラー監視ツールも見られるようにしておきます。&lt;/p&gt;
+
+&lt;h3&gt;昇格用の RDS インスタンス作成とアップデート&lt;/h3&gt;
+
+&lt;p&gt;昇格用の RDS インスタンス（以下 production-green）を master の Read Replica として作成しました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="safe-rds-update-2" src="/images/2017/04/safe-rds-update-2.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;さらに MySQL 5.5.53 にアップデートしておきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="safe-rds-update-3" src="/images/2017/04/safe-rds-update-3.png" /&gt;&lt;/p&gt;
+
+&lt;h3&gt;深夜作業用の Pull Request の作成&lt;/h3&gt;
+
+&lt;p&gt;予め、以下の Pull Request を作っておきました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class="prettyprint"&gt;PR1&lt;/code&gt;
+
+&lt;ul&gt;
+&lt;li&gt;アプリケーションが参照する RDS のエンドポイントを前述の &lt;code class="prettyprint"&gt;production-green&lt;/code&gt; に切り替える&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class="prettyprint"&gt;PR2&lt;/code&gt;
+
+&lt;ul&gt;
+&lt;li&gt;同様に Zabbix や fluentd のメトリクス収集元を切り替える&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;当日やったこと&lt;/h2&gt;
+
+&lt;h3&gt;仮眠&lt;/h3&gt;
+
+&lt;p&gt;作業開始は AM1:30 からにしました。仮眠はもちろん取っておきます。深夜作業でお腹が空くのも辛いので、軽食を用意するのも良いでしょう。&lt;/p&gt;
+
+&lt;h3&gt;スナップショットの作成&lt;/h3&gt;
+
+&lt;p&gt;AM1:30 からスナップショットを取り始めました。結果的に 50 分程かかりました。&lt;/p&gt;
+
+&lt;p&gt;このスナップショットは DB がクラッシュした時の命綱です。自動バックアップで作られるスナップショットは RDS インスタンスを Delete すると削除されるので、要注意です。&lt;/p&gt;
+
+&lt;p&gt;今回は人力でやりましたが、cron などで自動化したほうが良いと思います。&lt;/p&gt;
+
+&lt;h3&gt;アプリケーションの接続先を production-green に向ける&lt;/h3&gt;
+
+&lt;p&gt;前述の &lt;code class="prettyprint"&gt;PR1&lt;/code&gt; をデプロイし、接続先を Read Replica に向けます。Webアプリケーションとしては read-only になります。&lt;code class="prettyprint"&gt;PR2&lt;/code&gt; も Cook して、メトリクス収集元を切り替えます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="safe-rds-update-4" src="/images/2017/04/safe-rds-update-4.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;この状態での Write 系処理は、アプリケーションに &lt;code class="prettyprint"&gt;503 Service Unavailable&lt;/code&gt; を返させたほうが良いと思います。&lt;/p&gt;
+
+&lt;h3&gt;production-green を master に昇格&lt;/h3&gt;
+
+&lt;p&gt;昇格すると、production-blue との関係はなくなり、Web アプリケーションとして read-write 可能になります。今回は数分のダウンタイムが発生しました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="safe-rds-update-5" src="/images/2017/04/safe-rds-update-5.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;昇格時に RDS インスタンスが再起動しますが、delayed_job の場合、全てのプロセスが終了してしまいます。通知で気付けると思いますが、デプロイして起動し直す必要があります。&lt;/p&gt;
+
+&lt;h3&gt;Multi-AZ にする&lt;/h3&gt;
+
+&lt;p&gt;もうダウンタイムは発生しないので、ここからは安心して作業出来ます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="safe-rds-update-6" src="/images/2017/04/safe-rds-update-6.png" /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;結果として、インスタンスが Single-AZ から Multi-AZ に変換される際には、ダウンタイムは発生しません。 by &lt;a href="https://aws.amazon.com/jp/rds/faqs/?nc1=h_ls"&gt;よくある質問 - Amazon RDS | AWS&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3&gt;Read Replica を作る&lt;/h3&gt;
+
+&lt;p&gt;今回のサービスは、一部の処理を Read Replica に逃がしているので、作成します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="safe-rds-update-7" src="/images/2017/04/safe-rds-update-7.png" /&gt;&lt;/p&gt;
+
+&lt;h3&gt;以前の RDS インスタンスを削除する&lt;/h3&gt;
+
+&lt;p&gt;各種エラーがないことを確認できたので、次の日に削除しました。本当は翌営業日まで起動したかったのですが、コストと問題が起こる可能性を天秤にかけて、このようにしました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="safe-rds-update-8" src="/images/2017/04/safe-rds-update-8.png" /&gt;&lt;/p&gt;
+
+&lt;h2&gt;それでも問題は起こるもの&lt;/h2&gt;
+
+&lt;p&gt;今回は production-green を master に昇格した後、一部のアカウントでログインできなくなりました。ログインできるアカウントもあり、作業中は深夜作業の長期化を覚悟しました。&lt;/p&gt;
+
+&lt;p&gt;しばらくしてジョブキューの数が閾値を超えたアラートが来たので、delayed_job プロセスが全部落ちていると気づき、再デプロイで復帰することが出来ました。&lt;/p&gt;
+
+&lt;p&gt;各 EC2 インスタンスの delayed_job プロセス数は当然監視しています。今までアラートが来なかったことはなかったので、今でも本当に謎です。後日試したら速攻でアラートが来ました。&lt;/p&gt;
+
+&lt;p&gt;とは言え、深夜作業に問題はつきものです。今回はこれだけ準備した上での問題だったので、悔いや後悔はありません。&lt;/p&gt;
+
+&lt;h2&gt;終わりに&lt;/h2&gt;
+
+&lt;p&gt;今回はとにかく、ダウンタイムをゼロに近づけ、ロールバックも可能にすることを目的にしました。そのために出来る準備は全部やり、深夜作業でやることや考えることをできるだけ減らしました。&lt;/p&gt;
+
+&lt;p&gt;深夜作業はいつもより頭が回らないものです。自分を過信せず、準備に準備を重ねることが非常に重要です。&lt;/p&gt;
+
+&lt;p&gt;現在は残念ながら「production-green を master に昇格」で数分のダウンタイムが発生してしまいます。今後はこちらを改善していきます。&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</title>
+    <link rel="alternate" href="http://tech.feedforce.jp/cloudfront-tilda.html"/>
+    <id>http://tech.feedforce.jp/cloudfront-tilda.html</id>
+    <published>2017-03-02T19:04:00+09:00</published>
+    <updated>2017-03-02T19:04:00+09:00</updated>
+    <author>
+      <name>mizukmb</name>
+    </author>
+    <content type="html">&lt;p&gt;はじめまして。新卒エンジニアの &lt;a href="https://twitter.com/mizukmb"&gt;mizukmb&lt;/a&gt; です。普段はソーシャルPLUSチームでインフラ担当としてアレコレしてます。&lt;/p&gt;
+
+&lt;p&gt;先日、ソーシャルPLUSのプロモーションサイトを一新しました。  🎊 &lt;a href="https://socialplus.jp"&gt;https://socialplus.jp&lt;/a&gt;&lt;br&gt;
+それに伴いインフラ構成も CloudFront と Tilda で作り直し、いい感じの運用ができるようになりましたので紹介します。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;&lt;img alt="socialplusjp" src="/images/2017/03/promotion.png" /&gt;&lt;br&gt;
+&lt;a href="https://socialplus.jp"&gt;https://socialplus.jp&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;経緯&lt;/h2&gt;
+
+&lt;p&gt;これまで、プロモーションサイトの修正やコンテンツの追加を行う場合、マーケティングチームからエンジニアに修正の依頼をする必要がありました。これにより、&lt;strong&gt;マーケティング・エンジニアの両方に追加タスクが発生してしまう問題をこれまで抱えていました。&lt;/strong&gt;&lt;br&gt;
+そこで、コンテンツの修正などの作業がマーケティングチームだけで完結できるように、 &lt;a href="https://tilda.cc"&gt;Tilda&lt;/a&gt; と呼ばれる CMS サービスを利用することにしました。 Tilda は、ウェブサイトを直接操作するような UI を持ち、コードをいじらなくてもデザインや文言の調整を行えるのが特徴です。&lt;/p&gt;
+
+&lt;h2&gt;構成&lt;/h2&gt;
+
+&lt;p&gt;Tilda でカスタムドメインを利用する際、 http しかサポートされず https は利用できないという問題があります。&lt;a href="https://socialplus.jp/inquiry/"&gt;問い合わせフォーム&lt;/a&gt;を設置している関係上、 https 化は必須でした。そこで、 AWS が提供する &lt;a href="https://aws.amazon.com/jp/cloudfront/"&gt;CloudFront&lt;/a&gt; というCDN サービスを間に挟むことで https のカスタムドメインでもアクセスできるようにしました。&lt;sup id="fnref1"&gt;&lt;a href="#fn1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+
+&lt;p&gt;CloudFront の設定は特殊なことを行っておらず、 Origin Domain Name に Tilda 側の URL をセットして、 default TTL を短めに設定したことくらいです。また、上記理由により http は利用できないため、アクセスは全て https にリダイレクトさせています。&lt;/p&gt;
+
+&lt;p&gt;以下全体図。&lt;br&gt;
+ドメインや SSL 証明書の管理は、同じく AWS が提供する &lt;a href="https://aws.amazon.com/jp/route53/"&gt;Route53&lt;/a&gt; と &lt;a href="https://aws.amazon.com/jp/certificate-manager/"&gt;Certificate Manager&lt;/a&gt; で行っています。CloudFront で Certificate Manager を利用する場合はバージニア北部 ( us-east-1 ) で取得しなければならない点は注意が必要です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="socialplusjp" src="/images/2017/03/socialplusjp.png" /&gt;&lt;/p&gt;
+
+&lt;h2&gt;得られた恩恵&lt;/h2&gt;
+
+&lt;p&gt;今回の変更によって、 &lt;strong&gt;コンテンツの管理やサイトの改修をマーケティングチームだけで完結するようになりました。&lt;/strong&gt;&lt;br&gt;
+Tilda 側でコンテンツに何かしらの変更が加えられると、CloudFront が自動でキャッチしていい感じに各エッジロケーションへデプロイしてくれます。&lt;br&gt;
+マーケティングチームはインフラ面を気にすることのない、完全にコンテンツにのみ集中できる環境になりました。&lt;/p&gt;
+
+&lt;p&gt;また、&lt;strong&gt;ドメインや SSL 証明書、 CDN 全てを AWS 上で管理できるようにもなりました。&lt;/strong&gt; ソーシャルPLUSチームではこれらを &lt;a href="https://www.terraform.io"&gt;terraform&lt;/a&gt; を使ってコード化しているので、 GitHub 上で管理ができたりと非常に便利になりました。&lt;/p&gt;
+
+&lt;h2&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;CloudFront と Tilda を使ってプロモーションサイトを一新したことと、そこから得られた恩恵について紹介しました。&lt;/p&gt;
+
+&lt;div class="footnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+
+&lt;li id="fn1"&gt;
+&lt;p&gt;Tilda 公式の&lt;a href="https://help.tilda.ws/https"&gt;ヘルプページ&lt;/a&gt;でも、 CDN サービスを利用するように紹介されています。&amp;nbsp;&lt;a href="#fnref1" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;/ol&gt;
+&lt;/div&gt;
+</content>
+  </entry>
+  <entry>
+    <title>自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</title>
+    <link rel="alternate" href="http://tech.feedforce.jp/vue-elasticsearch.html"/>
+    <id>http://tech.feedforce.jp/vue-elasticsearch.html</id>
+    <published>2017-02-20T15:00:00+09:00</published>
+    <updated>2017-02-20T15:00:00+09:00</updated>
+    <author>
+      <name>masutaka</name>
+    </author>
+    <content type="html">&lt;p&gt;こんにちは。寒がりすぎな増田です。いつからだろう？&lt;/p&gt;
+
+&lt;p&gt;先週金曜日に社内勉強会で掲題の発表をしました。感想や質問も頂いたので、返信という形で記事として記録しておきます。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2&gt;スライド&lt;/h2&gt;
+
+&lt;script async class="speakerdeck-embed" data-id="514f1a6d5b9b49f6b50368fd5cc18e41" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
+
+&lt;h2&gt;発表の内容&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://masutaka.net/chalow/"&gt;https://masutaka.net/chalow/&lt;/a&gt; に自前で検索機能を付けた
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://masutaka.net/chalow/search.html"&gt;https://masutaka.net/chalow/search.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;フロントエンドは &lt;a href="https://jp.vuejs.org/"&gt;Vue.js&lt;/a&gt; で実装。バックエンドは &lt;a href="https://nginx.org"&gt;nginx&lt;/a&gt; のリバースプロキシを介した &lt;a href="https://www.elastic.co/jp/products/elasticsearch"&gt;Elasticsearch&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;今のところ、記事データの Index は Elasticsearch の Bulk API でデプロイのたびに作り直している&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;ついでに &lt;a href="https://cse.google.co.jp/"&gt;Google Custom Search Engine&lt;/a&gt; でも実装した
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://masutaka.net/chalow/search-google.html"&gt;https://masutaka.net/chalow/search-google.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;『&lt;a href="http://0xcc.net/unimag/1/"&gt;ChangeLog メモ&lt;/a&gt;』と、その静的 HTML ジェネレータ &lt;a href="http://chalow.org/"&gt;chalow&lt;/a&gt; も紹介&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;感想や質問&lt;/h2&gt;
+
+&lt;p&gt;※ リストの 2 階層目は私からのコメントです。&lt;/p&gt;
+
+&lt;h3&gt;今回の検索機能&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ちゃんとかたまり１つ作り上げるのすごい... 自分の、やり切り力足りなさ
+
+&lt;ul&gt;
+&lt;li&gt;今回はむしろスライド作成に心が折れそうになりました...&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;検索データは html から作ってたけど、元の txt ファイルからじゃダメなの？
+
+&lt;ul&gt;
+&lt;li&gt;chalow を改造すれば、絶対そのほうが良いです。今回は疲れていたので、Ruby に逃げました（chalow は Perl 製）&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;私は全文検索に &lt;a href="https://www.algolia.com/"&gt;Algolia&lt;/a&gt; つかってます :)
+
+&lt;ul&gt;
+&lt;li&gt;search.masutaka.net 使っていいよー&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;隠しコマンド良い&lt;/li&gt;
+&lt;li&gt;隠しリンク！
+
+&lt;ul&gt;
+&lt;li&gt;90 年代に初めてホームページ(!)を作った頃を思い出して付けました&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;ユーザーに検索機能どのくらい使われてますか？
+
+&lt;ul&gt;
+&lt;li&gt;多分私だけです(ｷﾘｯ&lt;/li&gt;
+&lt;li&gt;nginx のログを Kibana で可視化すれば把握は可能です&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://rubygems.org/gems/oga"&gt;Oga&lt;/a&gt; 知らなかった
+
+&lt;ul&gt;
+&lt;li&gt;Nokogiri と違って、libxml 使わないのが最高です&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://qiita.com/gravitonMain/items/720f441713b1378fe55c"&gt;IO を渡せば、Nokogiri より速いみたいです&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;もう Nokogiri を使う理由はないと思いますね&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;インポートの負荷は高くないのかな？ デプロイの時間も気になる
+
+&lt;ul&gt;
+&lt;li&gt;HTML をパースして JSON を作るのに 60 〜 70秒、インポートは 10 秒未満ですね。パースが長い&lt;/li&gt;
+&lt;li&gt;デプロイ時間は 4 〜 5 分で、そのうち HTML の生成は 15 秒ほどですね&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;フロントエンド&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;フロントの人達怖い...
+
+&lt;ul&gt;
+&lt;li&gt;やさしい方々ばかりですよ&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;マスカット Vue2 の勉強会早よ
+
+&lt;ul&gt;
+&lt;li&gt;（言えてない...）すみません！ すぐに！&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;あくしおす&lt;/li&gt;
+&lt;li&gt;あくしぃぁうす
+
+&lt;ul&gt;
+&lt;li&gt;よい発音です&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;発音がちょっと...
+
+&lt;ul&gt;
+&lt;li&gt;ｱｸｼｨｧｳｽ&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Riot.js もよろしくお願いします（◯ねって言われそう）
+
+&lt;ul&gt;
+&lt;li&gt;◯は伏せ字にしましたw&lt;/li&gt;
+&lt;li&gt;評判が良くなかったので、なんとなく避けました&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://jp.vuejs.org/v2/guide/comparison.html#Riot"&gt;Vue.js のガイドに Riot.js と比較がある&lt;/a&gt;ので、参考にしてみて下さい。他のフレームワークとの比較もあります&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Vue.js の人りりしい
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/yyx990803"&gt;たしかに...&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;（Issue や PR のリンクが Twitter に流れると、りりしいお顔が拝見できるそうです）&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Vue.js よさそう!!
+
+&lt;ul&gt;
+&lt;li&gt;とにかくハードルが低くて良いです。そこから JS の世界を広げていけばよいかと(ｵﾏｴﾓﾅｰ&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;Elasticsearch + Kibana&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;電子書籍全文検索システムで使おうと思ったことがある
+
+&lt;ul&gt;
+&lt;li&gt;その後どうしたのか気になります&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Mongo クエリよりつらそう
+
+&lt;ul&gt;
+&lt;li&gt;雰囲気が&lt;a href="https://ja.wikipedia.org/wiki/%E3%83%9D%E3%83%BC%E3%83%A9%E3%83%B3%E3%83%89%E8%A8%98%E6%B3%95"&gt;ポーランド記法&lt;/a&gt;っぽいので、慣れれば Lisper は書きやすいかも？&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Kuromoji 試したい
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/textlint/textlint"&gt;textlint&lt;/a&gt; でも使われているみたいですね&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/feedforce/tech.feedforce.jp/blob/86d7b8728b5d23e77985a41d5322c6a1b3b793b9/circle.yml#L13"&gt;この技術者ブログは CI の時に textlint を使ってます&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Kuromoji の他の Analyzer どんなのが？（Qiita とか何使ってるのかな）
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://speakerdeck.com/johtani/elastic-stackwoli-yong-site-detakarayang-naqi-dukiwojian-tukeru?slide=44"&gt;GitHub は Elasticsearch 使っているみたいですね&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://blog.qiita.com/post/101162528979/new-qiita-search"&gt;Qiita と Qiita:Team でも使っているみたいです&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;学習コスト高いですよね
+
+&lt;ul&gt;
+&lt;li&gt;そうなんですよ。ライトな検索にはコストが高いと思いました&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Kibana 5 いいなぁ〜 使いやすそう
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.elastic.co/jp/cloud"&gt;Elastic Cloud&lt;/a&gt; がいろいろお手軽です&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;img alt="ド・モルガンの法則" src="/images/2017/02/de-morgan.jpg" /&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.elastic.co/guide/en/elasticsearch/reference/5.1/query-dsl-bool-query.html"&gt;Elasticsearch の Bool Query&lt;/a&gt; に should_not がない理由で話に出しましたね&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;見学者の方から&lt;/h3&gt;
+
+&lt;p&gt;今回は社外から見学者の方もいらしてました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;アクシオス使ってみます
+
+&lt;ul&gt;
+&lt;li&gt;是非！&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;自分もブログを運営しているのですが、WordPress を使用しています。ブログといったら WordPress というイメージを持っていたので Chalow やもろもろを使って実装しているとしり驚きました
+
+&lt;ul&gt;
+&lt;li&gt;WordPress は PHP &amp;amp; MySQL という構成なので運用がヘビーですよね&lt;/li&gt;
+&lt;li&gt;アップデートをまめにしないと、乗っ取られて攻撃の踏み台とかにされるので注意です&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;その他&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;実験場良い✨
+
+&lt;ul&gt;
+&lt;li&gt;インフラに興味があるエンジニアは絶対持ったほうが良いです&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;バックエンドエンジニアは Vue &amp;gt; Angular &amp;gt; React かも
+
+&lt;ul&gt;
+&lt;li&gt;Angular はフルスタックすぎて挫折したなー&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Emacs
+
+&lt;ul&gt;
+&lt;li&gt;一生をともにします&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;自分サーバの紹介おもしろい
+
+&lt;ul&gt;
+&lt;li&gt;意外としている人いなかったか&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;setq (setq )
+
+&lt;ul&gt;
+&lt;li&gt;Kibana のタグクラウドに出てましたね&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;記事数すごい
+
+&lt;ul&gt;
+&lt;li&gt;初期はホントにメモですので&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;使ってみようと思いました
+
+&lt;ul&gt;
+&lt;li&gt;きっかけになれば幸いです&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;面白かったです!!!
+
+&lt;ul&gt;
+&lt;li&gt;うれしいです!!!&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;もくもく会の成果が出てて良かったです!!
+
+&lt;ul&gt;
+&lt;li&gt;やったー!!&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;masutaka++
+
+&lt;ul&gt;
+&lt;li&gt;これからも◯の数を増やしていきます&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;エオルゼアにもいきましょう
+
+&lt;ul&gt;
+&lt;li&gt;今週から復活します！&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&amp;quot;2001年から&amp;quot; → 15年強...！
+
+&lt;ul&gt;
+&lt;li&gt;メモが残っているといろいろ便利です&lt;/li&gt;
+&lt;li&gt;人に説明するとき URL を貼るだけで良いとか&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
+  <entry>
+    <title>障害対応についてパネルディスカッション形式で話し合ってみた</title>
+    <link rel="alternate" href="http://tech.feedforce.jp/troubleshooting_discussion.html"/>
+    <id>http://tech.feedforce.jp/troubleshooting_discussion.html</id>
+    <published>2017-01-25T12:00:00+09:00</published>
+    <updated>2017-01-25T12:00:00+09:00</updated>
+    <author>
+      <name>tjinjin</name>
+    </author>
+    <content type="html">&lt;p&gt;お久しぶりです。Nintendo Switchの予約ができなかったtjinjinです。&lt;/p&gt;
+
+&lt;p&gt;さて、先日会社内で障害対応パネルディスカッションというものをやりましたのでご紹介します。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2&gt;実施の動機&lt;/h2&gt;
+
+&lt;p&gt;先日あるプロダクトで障害が起きました。そのプロダクトのメンバーには新卒メンバーもいましたが、どう対応していいのかわからず他エンジニアが結局対応したということがありました。その時にベテランエンジニア達が新卒エンジニア達に障害対応ノウハウを伝授していました。私は近くでその話を聞いており、チーム内で閉じる必要ないよね？ と思っていました。そんなおりあるエンジニアが「障害対応の経験を伝える場とかあったらいいよね」と言っていたので、だったら場を作ってしまえと私の独断と偏見で企画したというところです。&lt;/p&gt;
+
+&lt;h2&gt;なぜパネルディスカッションなのか&lt;/h2&gt;
+
+&lt;p&gt;弊社のインフラチームでは毎週各自がネタを持ち寄って話す場があります。最近の設計の悩みだったり、chefの書き方を話したり、たまにvue.jsの触ってみたといったような話も出たりします。&lt;/p&gt;
+
+&lt;p&gt;その場が非常にいいコミュニティだと思っていて、意見も言いやすい場なのでそれの延長線上でできないかなと考えました。考えた結果（1分くらい）パネルディスカッションという形にして、あたかもそのコミュニティに入っていて近くで話を聞いているような演出ができないかなという狙いでした。&lt;/p&gt;
+
+&lt;h2&gt;パネルディスカッションにあたっての準備&lt;/h2&gt;
+
+&lt;p&gt;まずQiita:Teamでこんなことやらない？ という投げかけをしニーズを確認できたので、日程をslackで決定しました（たぶん1日、2日くらいで開催まで決めた）。あとは簡単なアンケートをgoogleフォームで作り、どんな質問がよいかを収集しました。&lt;/p&gt;
+
+&lt;p&gt;パネラーは基本的に他薦してもらい、出てあげてもいいよという人にお声がけしました。&lt;/p&gt;
+
+&lt;p&gt;パネラーがその場で回答するのは大変かなと思ったので、事前に質問リストを送っていました。&lt;/p&gt;
+
+&lt;p&gt;事前準備としてはこんな感じです。&lt;/p&gt;
+
+&lt;h2&gt;実際の内容&lt;/h2&gt;
+
+&lt;p&gt;実際に起きた障害の話とかかなーり社内事情なので深くは書けませんでしたｗ LANケーブルを束ねる際に使うケーブルのようなものを締めすぎて、ネットワークの速度が遅くなったという話とかもありました。いろいろ話した中では、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ちゃんとログ見よう&lt;/li&gt;
+&lt;li&gt;障害を全体像からとらえて少しずつ可能性を排除していくような感じで切り分けよう&lt;/li&gt;
+&lt;li&gt;障害対応発生したら、わからなくてもいいから先輩がやってることを学ぼう（参加する意思&lt;/li&gt;
+&lt;li&gt;ユーザ視点に立とう&lt;/li&gt;
+&lt;li&gt;当たり前を疑え&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;とかいろいろな意見が出ました。&lt;/p&gt;
+
+&lt;p&gt;最後に「あなたにとって障害とは？」という質問したときの答えだけ載せておきますね^^&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;『障害はより良いシステムを構築するための道標なんですよ』&lt;/li&gt;
+&lt;li&gt;『障害ははぐれメタルだ』&lt;/li&gt;
+&lt;li&gt;『精神は削られるけどスキルアップのいい機会』&lt;/li&gt;
+&lt;li&gt;『障害は祭』&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;反省点&lt;/h2&gt;
+
+&lt;p&gt;個人的反省としては、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;パネラーのトーク力任せになってしまった&lt;/li&gt;
+&lt;li&gt;当日は非エンジニアもいたので、パネラーが専門用語言いまくったときのフォローができなかった&lt;/li&gt;
+&lt;li&gt;パネラーのトークの深掘りがちょっと甘かった&lt;/li&gt;
+&lt;li&gt;会場から質問を受け付ける方法をもっと見直した方がよかった&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;と反省ばかりでした。&lt;/p&gt;
+
+&lt;p&gt;ただ、こういった緩いコミュニティ活動は社内の活性化につながると思っているので、個人的にはよかったかなと思っています。&lt;br&gt;
+あととあるメンバーが動画を取っていたようで（社内限定公開）、せっかくコストかけてやっているのでそれを再利用できるのは非常にいいなと思いました。&lt;/p&gt;
+
+&lt;p&gt;補足として当日した質問の一部を載せておきますので、よろしければご活用下さい。&lt;/p&gt;
+
+&lt;h2&gt;当日した質問（一部）&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;障害が発生しました。まず何をしますか？&lt;/li&gt;
+&lt;li&gt;これまでに経験した障害で、特に思い出に残っているものはどんなものですか？&lt;/li&gt;
+&lt;li&gt;障害対応に必要なスキルって何だと思いますか？&lt;/li&gt;
+&lt;li&gt;何らかの事情で障害に気付いたが対応できないケースはどうしますか？ もしくはどうして欲しいですか？&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
+  <entry>
+    <title>RailsエンジニアがFacebook広告を出稿してみた</title>
+    <link rel="alternate" href="http://tech.feedforce.jp/fftt263.html"/>
+    <id>http://tech.feedforce.jp/fftt263.html</id>
+    <published>2016-12-07T00:00:00+09:00</published>
+    <updated>2016-12-07T00:00:00+09:00</updated>
+    <author>
+      <name>e-takano</name>
+    </author>
+    <content type="html">&lt;p&gt;この記事は&lt;a href="http://www.adventar.org/calendars/1427"&gt;feedforce Advent Calendar 2016&lt;/a&gt;の7日目の記事です。&lt;/p&gt;
+
+&lt;p&gt;6日目の記事は kasei-san の &lt;a href="https://feedforce.qiita.com/Hanocha/items/06ca99a40c635f829746"&gt;slack に書かれた内容を Amazon Polly で読み上げてみた&lt;/a&gt; でした。&lt;br&gt;
+音声読み上げは遊び甲斐ありそう！&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;今週末のゲームマーケットが楽しみな今日この頃いかがお過ごしでしょうか、フィードフォース ボドゲ部の kano-e です。&lt;br&gt;
+Railsエンジニアです。&lt;/p&gt;
+
+&lt;p&gt;さて、先日の社内勉強会で「RailsエンジニアがFacebook広告を出稿してみた」という発表をしました。&lt;br&gt;
+この記事では、その資料を共有したいと思います。&lt;/p&gt;
+
+&lt;p&gt;主な内容はFacebook広告周辺の話です。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;script async class="speakerdeck-embed" data-id="8615bee623094af991bc682d45d02620" data-ratio="1.41436464088398" src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
+
+&lt;p&gt;以下、資料だけだと分かりにくい部分を補足します。&lt;/p&gt;
+
+&lt;h2&gt;nu board JABARANについて&lt;/h2&gt;
+
+&lt;p&gt;しばらく前に&lt;a href="https://twitter.com/tmd45/status/789318501123125248"&gt;tmd45がオススメしている&lt;/a&gt;のを見て、すぐに買いました。&lt;br&gt;
+nu boardのリングが邪魔だなーって方は、買うと幸せになれます。&lt;/p&gt;
+
+&lt;p&gt;勉強会資料はnu board JABARANに書いて、写真を撮って、消して、次を書いて、というやり方で作りました。&lt;br&gt;
+説明するほどのことじゃなかった。普通ですね。&lt;/p&gt;
+
+&lt;p&gt;自己紹介ページのアイコンだけ、印刷したものを置いて写真撮ってます。&lt;br&gt;
+自分のアイコンも手書きしたら良かったなって後から思いました。&lt;/p&gt;
+
+&lt;p&gt;普段の仕事中も立ち話中にメモを書いたり、考えをまとめる時に使ったり、説明する時に図を書いたり、写真に撮って共有したりと、滅茶苦茶便利に活用してます！&lt;br&gt;
+プライベート用にも一つ欲しいくらい。&lt;/p&gt;
+
+&lt;p&gt;あ、特にnu boardから広告料とかもらってはいないです。&lt;/p&gt;
+
+&lt;h2&gt;家畜餌マシーンについて&lt;/h2&gt;
+
+&lt;p&gt;海外にFeedmaticという会社があって、そこでは家畜の自動餌やりマシーンとか餌をつくる機械とかを販売している……んだと思います。&lt;br&gt;
+……多分ですが。&lt;/p&gt;
+
+&lt;p&gt;せっかく同じ名前なので、頑張って餌マシーンを書いてみました。&lt;br&gt;
+結構よく書けたかなーって自画自賛しています。&lt;/p&gt;
+
+&lt;h2&gt;ソーシャルメディアのインフィード&lt;/h2&gt;
+
+&lt;p&gt;図だけだとわかりにくいですね。&lt;/p&gt;
+
+&lt;p&gt;SNSの通常の投稿が流れてくる部分のことを &amp;quot;フィード&amp;quot; と呼びます。&lt;br&gt;
+その中に出る広告なので &amp;quot;インフィード&amp;quot; 広告です。&lt;/p&gt;
+
+&lt;h2&gt;ダイナミック広告&lt;/h2&gt;
+
+&lt;p&gt;フィードの商品情報や商品画像から、動的に広告のクリエイティブを作成して表示するので &amp;quot;ダイナミック(動的)&amp;quot; 広告です。&lt;/p&gt;
+
+&lt;p&gt;従来の広告であれば、商品が入れ替わるたびに広告用の画像を作り直したりといった手間が発生していました。&lt;br&gt;
+ダイナミック広告の場合、商品情報を含んだデータフィードさえ更新すれば、新しい情報で広告が表示されます。&lt;br&gt;
+データフィードの更新が自動化されていれば、担当者の更新作業は必要なくなります。&lt;/p&gt;
+
+&lt;p&gt;ここでDF PLUSの名前を書いているのは、DF PLUSがそのようなデータフィードを扱うサービスだからです。&lt;/p&gt;
+
+&lt;h2&gt;43ページ〜48ページのメモについて&lt;/h2&gt;
+
+&lt;p&gt;これは「ボドゲ部サイトを作ろう！」って思いたった後のメモで、どんなサイトにするかのイメージをノートに書きなぐったラフイメージです。&lt;/p&gt;
+
+&lt;p&gt;書きなぐりの割にコメントを何行も書いてたり、ボードゲームの名前をきっちり書いてたり、写真もそれっぽく書いたりしてますね。&lt;br&gt;
+今回見返してそのエネルギーをもっと効率良く使えなかったのだろうかという気持ちになりました。&lt;/p&gt;
+
+&lt;p&gt;広告出稿が目的だったので、タグをどうするとかは最初からあれこれ考えていた形跡も見て取れます。&lt;/p&gt;
+
+&lt;h2&gt;dfplus.ioとソーシャルPLUS&lt;/h2&gt;
+
+&lt;p&gt;セルフサーブ型データフィード管理ツールの&lt;a href="https://dfplus.io/"&gt;dfplus.io&lt;/a&gt;と、ソーシャルログインを導入できる&lt;a href="https://socialplus.jp/"&gt;ソーシャルPLUS&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;dfplus.ioはなんと&lt;a href="https://www.feedforce.jp/release/9159/"&gt;2016年12月1日にリリースしたばかり&lt;/a&gt;です！&lt;/p&gt;
+
+&lt;h2&gt;思い入れとか感情移入とか&lt;/h2&gt;
+
+&lt;p&gt;前に社長が「広告運用を知っていると、この業界ならこのくらいの数値になるって感覚がある」的なことを言っていました。&lt;br&gt;
+今改めて思い返しても、やっぱりその感覚って自分にはないんですね。&lt;/p&gt;
+
+&lt;p&gt;エンジニアとしてその感覚ができるところまでいけるのか、と言われたら、多分難しいような気はします。運用だけをやるのでなければ。&lt;br&gt;
+そもそも、エンジニアとしてその感覚がわかることは必要なのか？ と言われたら、必要ではないと答えます。&lt;br&gt;
+自分もそうなりたいわけではないです。&lt;br&gt;
+わかったら便利かな、とは思いますが。&lt;/p&gt;
+
+&lt;p&gt;それでも「自分は色々わかってないなあ」「自分が思ってるよりずっと色んなことが影響してるなあ」と思い知る機会はあった方が良いと感じています。&lt;br&gt;
+自分はそうやって、自分自身で手を動かして感情を動かして、プロダクトに対する思い入れを作っている気がします。&lt;/p&gt;
+
+&lt;h2&gt;ボドゲ部広告について&lt;/h2&gt;
+
+&lt;p&gt;ボドゲ部カルーセル広告は、35ページと74ページ目です。&lt;/p&gt;
+
+&lt;p&gt;35ページ左端は、わたしの書き込み不足のせいで最難問になってしまいました。&lt;br&gt;
+それ以外は割と特徴的なゲームを選んだつもりですので、ぜひゲーム当てしてみてください！&lt;/p&gt;
+
+&lt;p&gt;あとあと、どれも好きなゲームから選んだので、答えがわかった方、ぜひ水曜日のボドゲ部にきてください。&lt;br&gt;
+ぜひ一緒に遊びましょう。&lt;/p&gt;
+
+&lt;h2&gt;ボドゲ部について&lt;/h2&gt;
+
+&lt;p&gt;毎週水曜日に会社のカフェスペースで遊んでいます。&lt;br&gt;
+遊びにきたい方は、お近くのフィードフォース社員か &lt;a href="https://twitter.com/ff_boardgame"&gt;Twitter @ff_boardgame&lt;/a&gt; までご連絡ください！&lt;/p&gt;
+
+&lt;p&gt;ボドゲ部サイト: &lt;a href="https://ff-boardgame.herokuapp.com/"&gt;ff-boardgame.herokuapp.com&lt;/a&gt;&lt;br&gt;
+Twitter アカウント: &lt;a href="https://twitter.com/ff_boardgame"&gt;@ff_boardgame&lt;/a&gt;&lt;br&gt;
+Facebook ページ: &lt;a href="https://www.facebook.com/yushima.bg/"&gt;湯島でボドゲ&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;さて8日目の記事は荒川大好き Lorentzca の &lt;a href="https://ghost.ponpokopon.me/about-the-river-near-feedforce/"&gt;feedforceの近くを流れている川について&lt;/a&gt; です！&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>早朝の障害対応(しかも緊急度高)時にslackで通話しながら作業したらいい感じだった</title>
+    <link rel="alternate" href="http://tech.feedforce.jp/calling-when-troubleshooting.html"/>
+    <id>http://tech.feedforce.jp/calling-when-troubleshooting.html</id>
+    <published>2016-11-17T16:11:00+09:00</published>
+    <updated>2016-11-17T16:11:00+09:00</updated>
+    <author>
+      <name>kunishima</name>
+    </author>
+    <content type="html">&lt;p&gt;こんにちは。Lorentzcaです。今年はたくさんキャンプに行けたので来年も継続していきたいです。&lt;/p&gt;
+
+&lt;p&gt;さて、最近深夜に障害が発生しました。その障害対応後にCTOからこんな問いかけがありました。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;リモートからの障害対応、なるべくリアクションつけるとか状況確認しつこいくらいやれとかコツあるけど、それ新人さん共有できてるっけ？&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;これを受けて、以前早朝に発生した障害でslack通話しながら対応をしたらいい感じだったことを思い出したので共有も兼ねてその話をします。技術的な話というより、心構え的な話となります。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2&gt;早朝/深夜の障害対応はキツイ&lt;/h2&gt;
+
+&lt;p&gt;キツイ点は色々ありますが、特にキツイのは、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;寝起きで頭が働いていない&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;障害でサービスが現在進行形で止まっていることに対する &lt;strong&gt;焦り&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;イレギュラーな事態に対する耐性がなく、 &lt;strong&gt;どうして良いかわからない&lt;/strong&gt; (これは経験値にもよりそう…)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;と私は思っています。&lt;/p&gt;
+
+&lt;h2&gt;通話しよう&lt;/h2&gt;
+
+&lt;p&gt;通話することによって、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;チャットより細かいやり取りをハンズフリーで出来る(今から◯◯実行します、あーLA上がってきた ああー下がってきたなど)&lt;/li&gt;
+&lt;li&gt;ハンズフリーだと作業スピードが上がる(= 早く復旧できる)&lt;/li&gt;
+&lt;li&gt;ハンズフリーで密なやり取りが出来ることによって &lt;strong&gt;ミスが減らせる&lt;/strong&gt; (特に手動フェイルオーバーさせてから何して何する、のような複雑な作業の場合)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多少緊張が和らぐ&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;と思います。&lt;/p&gt;
+
+&lt;p&gt;何が何でも通話が良いかというとそうではなくて(通話だとテキストで記録残らないし)、クリティカルな作業や、「普段これペア作業でやってるな」みたいな作業のときに通話すると良さげです。あとはチャット打ってる時間すら惜しい状況とか。&lt;/p&gt;
+
+&lt;p&gt;通話時、寝起きでテンション低かったり焦りで早口になってるかもしれませんが、もちろん怒っているわけでは決してないので許してちょんまげ！ 😇&lt;/p&gt;
+
+&lt;p&gt;あと自分より相手の方が焦っているなとか、冷静じゃないなと思った場合は積極的に通話を提案したり実作業を肩代わりするなど、気遣いしていければ良いなと思います。&lt;/p&gt;
+
+&lt;p&gt;画像は一見冷静にやりとりしている様に見えますが二人とも焦っているの図です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt=":alt" src="/images/2016/11/call_with_slack.png" /&gt;&lt;/p&gt;
+
+&lt;h2&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;様々な工夫をしても、思わぬ要因によって障害が発生することはあります。そんなときはとにかく焦らず素早く確実に復旧するためにもどんどん周りの人を頼り、頼られて行く所存です。 💪&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>GitHub Project機能が強化されたのでZenHubから移行することを検討してみた</title>
+    <link rel="alternate" href="http://tech.feedforce.jp/discuss-moving-from-zenhub-to-github-project.html"/>
+    <id>http://tech.feedforce.jp/discuss-moving-from-zenhub-to-github-project.html</id>
+    <published>2016-10-28T19:00:00+09:00</published>
+    <updated>2016-10-28T19:00:00+09:00</updated>
+    <author>
+      <name>tsub</name>
+    </author>
+    <content type="html">&lt;p&gt;こんにちは!新卒エンジニアのtsubです!&lt;br&gt;
+本日Appleから新型のMacbook Proが発表されたということで早速ポチりました。Touch barのハックにワクワクしております。&lt;/p&gt;
+
+&lt;p&gt;そして同じく本日GitHubでProject機能が強化されました。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/blog/2272-introducing-projects-for-organizations"&gt;Introducing Projects for Organizations&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;私が所属しているチームではZenHubを利用しています。GitHubのProjectはZenHubのBoardに近い機能です。&lt;br&gt;
+できることなら余計な拡張など入れずにGitHubを純正で使いたいため、今回も移行を検討してみました。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2&gt;前回の移行検討のおさらい&lt;/h2&gt;
+
+&lt;p&gt;知っての通り、GitHubのProject機能は以前からリリースされています。&lt;br&gt;
+リリース当時にも移行を検討しましたが、その時は見送りという形になりました。&lt;/p&gt;
+
+&lt;p&gt;弊社エンジニアの &lt;a href="/author/yukiyan"&gt;@yukiyan&lt;/a&gt; が検討してくれた記事はこちらで公開されています。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://qiita.com/yukiyan/items/2f7affaaa5df5f00baf1"&gt;ZenHubからGitHub Projectsに移行することを検討してみる - Qiita&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;GitHub Projectへの移行を見送った理由&lt;/h3&gt;
+
+&lt;p&gt;詳しくは上記のリンクに書いてありますが、まとめるとこんな感じです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;複数リポジトリをまたいだProjectは作成できない&lt;/li&gt;
+&lt;li&gt;Add cardsでissueを追加するのが面倒&lt;/li&gt;
+&lt;li&gt;Estimate(タスクのポイント付け)が無い&lt;/li&gt;
+&lt;li&gt;複数のissueをまとめられるEpicが無い&lt;/li&gt;
+&lt;li&gt;issueを動かしてもSlackなどへの通知が無い&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;特に上3つは困り物で、今のチーム内でのZenHubの運用方針的にないとつらいです 😢&lt;/p&gt;
+
+&lt;h3&gt;チーム内でのZenHubの運用方針について&lt;/h3&gt;
+
+&lt;p&gt;弊社では基本的にタスクの管理をホワイトボード + 付箋でやっています。&lt;/p&gt;
+
+&lt;p&gt;私の所属するチームも以前はそうでしたが、最近ZenHubを導入してホワイトボードからおさらばしました 👋&lt;/p&gt;
+
+&lt;p&gt;ホワイトボードから移行した理由として、チーム内のエンジニアがMacbook Proを使うようになってデスク以外の場所でも自由に作業するようになったことが大きな要因です。&lt;/p&gt;
+
+&lt;p&gt;さて、それではチーム内でどのようにZenHubを使っているか、について簡単にご説明します。&lt;/p&gt;
+
+&lt;p&gt;まず、ZenHubのBoardをお見せします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt=":alt" src="/images/2016/10/discuss-moving-from-zenhub-to-github-project1.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;上記の画像にも載っていますが、以下のパイプラインを用意しています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;New Issue
+
+&lt;ul&gt;
+&lt;li&gt;新しいissueはまずここに配置します&lt;/li&gt;
+&lt;li&gt;次のスプリント計画を立てるときは優先順位に応じてここのissueをIceboxやProduct Backlogに振り分けていきます&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Icebox
+
+&lt;ul&gt;
+&lt;li&gt;優先順位の低いタスクです&lt;/li&gt;
+&lt;li&gt;スプリント中にタスクが早く完了した場合などに手を付けます&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Epic
+
+&lt;ul&gt;
+&lt;li&gt;ZenHubのEpic機能を使って作ったissueです&lt;/li&gt;
+&lt;li&gt;ここはあまり使わないので今あるEpicが完了したら消す予定です&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Product Backlog
+
+&lt;ul&gt;
+&lt;li&gt;今のスプリントではやらないけど、次回移行にやっていく比較的優先度の高いタスクです&lt;/li&gt;
+&lt;li&gt;ここのタスクを元に次のスプリント計画を立てることが多いです&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Spring Backlog
+
+&lt;ul&gt;
+&lt;li&gt;今のスプリントでやる予定のタスクです&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;In Progress
+
+&lt;ul&gt;
+&lt;li&gt;各エンジニアが作業中のタスクです&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;In Review
+
+&lt;ul&gt;
+&lt;li&gt;作業が完了してレビュー待ちになったタスクです&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Done
+
+&lt;ul&gt;
+&lt;li&gt;PRがマージされ、完了したタスクです&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Closed
+
+&lt;ul&gt;
+&lt;li&gt;後述の振り返りが終わったらissueをCloseしてここに配置されます&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;また、気づいた方もいるかと思いますが、Board上にはissueしか表示させていません。&lt;br&gt;
+これは、スプリントの終わりに今週やったタスクの振り返りをしているのですが、その際にPRだとマージしたらClosedに移動してしまってそのスプリントにやったタスクを探しづらいためです。&lt;/p&gt;
+
+&lt;p&gt;PRをマージしてもissueをDoneに移動させておくことで、そのスプリントでどのタスクをやったかが分かりやすくなります。&lt;/p&gt;
+
+&lt;p&gt;そのため、基本的にはまずissueを作ってそこからPRを作る、という流れで作業をしています。&lt;/p&gt;
+
+&lt;h2&gt;オーガニゼーション単位でProjectを作成できるようになった&lt;/h2&gt;
+
+&lt;p&gt;さて、それでは今回の新機能についてです。&lt;/p&gt;
+
+&lt;p&gt;今までリポジトリ単位でしか作成できなかったのですが、本日のアップデートによりオーガニゼーション単位で作成できるようになりました 👏&lt;/p&gt;
+
+&lt;p&gt;オーガニゼーションのトップにProjectsというタブが追加されています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt=":alt" src="/images/2016/10/discuss-moving-from-zenhub-to-github-project2.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Projectsに飛ぶとこんな感じの画面です。&lt;/p&gt;
+
+&lt;p&gt;Project名とDescriptionが書けます。&lt;br&gt;
+Descriptionはいつものmarkdownが書けるので、チームで使ってるリポジトリとか書くと良さそうですね。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt=":alt" src="/images/2016/10/discuss-moving-from-zenhub-to-github-project3.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;ボードの画面はこんな感じです。&lt;br&gt;
+以前からあったリポジトリ毎のProjectとほとんど変わらないです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt=":alt" src="/images/2016/10/discuss-moving-from-zenhub-to-github-project4.jpg" /&gt;&lt;/p&gt;
+
+&lt;h2&gt;改めてGitHub Projectの良い点 👍&lt;/h2&gt;
+
+&lt;h4&gt;Detailsのサイドバーが地味に便利&lt;/h4&gt;
+
+&lt;p&gt;ボード画面右上のDetailsをポチッと押すとサイドバーが表示されます。&lt;/p&gt;
+
+&lt;p&gt;実はProjectのDescriptionに書いた内容がここに表示されます。&lt;/p&gt;
+
+&lt;p&gt;こんな感じでリポジトリのリンクとか書いてあると便利に使えると思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt=":alt" src="/images/2016/10/discuss-moving-from-zenhub-to-github-project5.jpg" /&gt;&lt;/p&gt;
+
+&lt;h4&gt;Noteが便利&lt;/h4&gt;
+
+&lt;p&gt;issueにする必要ないんだけどメモしておきたい、というときに非常に便利です。&lt;br&gt;
+そういうことは付箋に書いてもいいんですが、他のメンバーにも周知できるのでこれは良いです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt=":alt" src="/images/2016/10/discuss-moving-from-zenhub-to-github-project6.jpg" /&gt;&lt;/p&gt;
+
+&lt;h3&gt;改めてGitHub Projectの悪い点 👎&lt;/h3&gt;
+
+&lt;h4&gt;issue側からProjectに関連付けられない&lt;/h4&gt;
+
+&lt;p&gt;ここは変わらずです。read onlyです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt=":alt" src="/images/2016/10/discuss-moving-from-zenhub-to-github-project7.jpg" /&gt;&lt;/p&gt;
+
+&lt;h4&gt;Projectの画面から新しいissueを作れない&lt;/h4&gt;
+
+&lt;p&gt;作れません。&lt;br&gt;
+一旦リポジトリ毎でissueを作り、それをProjectの画面から紐付けるだけです。&lt;/p&gt;
+
+&lt;p&gt;面倒です。&lt;/p&gt;
+
+&lt;h4&gt;Projectに紐付けていないissueは見えない&lt;/h4&gt;
+
+&lt;p&gt;ZenHubではissueを新しく作ると勝手にボードに追加されたので、それを適切な場所に動かすという運用ができたのですが、Projectは勝手にボードに追加してくれません。&lt;/p&gt;
+
+&lt;p&gt;そのため、Projectのボードを見れば、全てのissueが載っていることが保証されないため、追加忘れがあると大変なことになります。&lt;/p&gt;
+
+&lt;h2&gt;結局移行するのか 💭&lt;/h2&gt;
+
+&lt;p&gt;複数リポジトリをまたげるようになったのはかなり大きな変更です。&lt;br&gt;
+ただ、現時点ではまだ以下のような問題が残っています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Add cardsでissueを追加するのが面倒&lt;/li&gt;
+&lt;li&gt;Estimate(タスクのポイント付け)が無い&lt;/li&gt;
+&lt;li&gt;複数のissueをまとめられるEpicが無い&lt;/li&gt;
+&lt;li&gt;issueを動かしてもSlackなどへの通知が無い&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;この内、やはり上の2つが解決されていない以上つらいため今回もGitHub Projectの採用は見送りになりそうです👋&lt;/p&gt;
+
+&lt;p&gt;というわけで今後もZenHubを使います&lt;/p&gt;
+
+&lt;h2&gt;おまけ ラベルの管理について&lt;/h2&gt;
+
+&lt;p&gt;ラベル付いてると見やすいなーと思ったそこのあなた！&lt;/p&gt;
+
+&lt;p&gt;ラベルの管理方法はこのようにwikiにまとめて運用しています。&lt;br&gt;
+チーム内のエンジニアはこのルールに沿って新しいissueを作るときにラベルを付けます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt=":alt" src="/images/2016/10/discuss-moving-from-zenhub-to-github-project8.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;ラベルを付けることで視認性が上がり、またZenHubのフィルター機能によって表示/非常時を切り替えることができますので大変便利です。&lt;/p&gt;
+
+&lt;p&gt;スプリントが始まってすぐの、やる気に満ちあふれている時は&lt;code class="prettyprint"&gt;not: &amp;quot;Priority: Low&amp;quot;&lt;/code&gt;などフィルターを設定することで目の前のタスクに集中できます。&lt;/p&gt;
+
+&lt;h2&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;今回もやはりZenHubのほうがまだまだ便利だと感じて移行を見送ることになりました。&lt;br&gt;
+チームによってはGitHub Project機能を使っていたり、ホワイトボードでタスクを管理しているようですので、チームメンバーの趣向によって使い分けていけば良いと思います。&lt;/p&gt;
+
+&lt;p&gt;それでは、良い週末を! 🍻&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Go で Mackerel の delayed_job plugin を作った</title>
+    <link rel="alternate" href="http://tech.feedforce.jp/mackerel-go-plugin-delayed-job.html"/>
+    <id>http://tech.feedforce.jp/mackerel-go-plugin-delayed-job.html</id>
+    <published>2016-09-27T15:00:00+09:00</published>
+    <updated>2016-09-27T15:00:00+09:00</updated>
+    <author>
+      <name>masutaka</name>
+    </author>
+    <content type="html">&lt;p&gt;増田です。椅子を新調したら腰痛が始まりました。でも元気です。&lt;/p&gt;
+
+&lt;p&gt;さて、少し前に Go で Mackerel の delayed_job plugin を作りました。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;!-- textlint-disable --&gt;
+
+&lt;p&gt;&lt;a class="embedly-card" href="https://github.com/masutaka/mackerel-plugin-delayed-job-count"&gt;masutaka/mackerel-plugin-delayed-job-count&lt;/a&gt;&lt;br&gt;
+&lt;script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;!-- textlint-enable --&gt;
+
+&lt;h2&gt;なぜ作ったか？&lt;/h2&gt;
+
+&lt;p&gt;最近、私が関わっているソーシャルPLUSで、新しいサービスを作り始めました。今までは Zabbix で監視していたのですが、今回も採用すると Zabbix を稼働させるサーバや（Zabbix のための）ある意味特殊スキルが必要で、導入すべきか悩んでいました。そういった事情から、今回は &lt;a href="https://mackerel.io/"&gt;Mackerel&lt;/a&gt; を採用したのが事の発端です。&lt;/p&gt;
+
+&lt;p&gt;このサービスでは &lt;a href="https://rubygems.org/gems/delayed_job"&gt;delayed_job&lt;/a&gt; が動いています。delayed_job の監視は大きく 2 つが必要です。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;プロセス数の監視&lt;/li&gt;
+&lt;li&gt;Job Queue の監視&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;1 については Ruby で書いた Mackerel plugin を作りました。pgrep を使ってプロセス数をカウントする素朴なスクリプトです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint ruby"&gt;#!/usr/bin/env ruby
+
+if ENV[&amp;#39;MACKEREL_AGENT_PLUGIN_META&amp;#39;] == &amp;#39;1&amp;#39;
+  require &amp;#39;json&amp;#39;
+
+  meta = {
+    graphs: {
+      &amp;#39;delayed_job&amp;#39; =&amp;gt; {
+        label: &amp;#39;delayed_job processes&amp;#39;,
+        unit: &amp;#39;integer&amp;#39;,
+        metrics: [
+          {
+            name: &amp;#39;processes&amp;#39;,
+            label: &amp;#39;processes&amp;#39;
+          }
+        ]
+      }
+    }
+  }
+
+  puts &amp;#39;# mackerel-agent-plugin&amp;#39;
+  puts meta.to_json
+  exit 0
+end
+
+process_count = %x(pgrep -fc &amp;#39;^delayed_job&amp;#39;).chomp
+
+puts [ &amp;#39;delayed_job.processes&amp;#39;,  process_count, Time.now.to_i ].join(&amp;quot;\t&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2 も当初は Ruby で書く予定でしたが、以下の理由により Go で書くことにしました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;システムに mysql2 などの Gem をインストールする必要があり、Chef レシピの依存が増えてしまう
+
+&lt;ul&gt;
+&lt;li&gt;そういう意味では 1 も Ruby との依存が出来ている&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;業務で Go を書いてみたい。そういう文化を作りたい&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;どのように作ったか？&lt;/h2&gt;
+
+&lt;p&gt;初めは &lt;a href="https://github.com/monochromegane/mackerel-plugin-delayed-job-count"&gt;monochromegane/mackerel-plugin-delayed-job-count&lt;/a&gt; をそのまま使う予定でした。&lt;/p&gt;
+
+&lt;p&gt;でも、取りたいメトリクスや、設定の渡し方がそれなりに違ったため、あれこれいじっていたら別物になってしまいました。&lt;/p&gt;
+
+&lt;h2&gt;何ができるか？&lt;/h2&gt;
+
+&lt;p&gt;現在は MySQL のみ対応しています。PostgreSQL 等への対応も難しくないようなので、いずれ対応するかもです。&lt;/p&gt;
+
+&lt;p&gt;今回の masutaka/mackerel-plugin-delayed-job-count は以下のメトリクスを Mackerel に送信します。実際の SQL は発行回数を減らすため、若干違います。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Processed Job Count
+
+&lt;ul&gt;
+&lt;li&gt;直近 1 分で処理したジョブ数&lt;/li&gt;
+&lt;li&gt;&lt;code class="prettyprint"&gt;SHOW TABLE STATUS LIKE &amp;#39;delayed_jobs&amp;#39;&lt;/code&gt; で取得した &lt;code class="prettyprint"&gt;Auto_increment&lt;/code&gt; を -1 して、差分を Mackerel に送信&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Queued Job Count
+
+&lt;ul&gt;
+&lt;li&gt;現在キューに溜まっているジョブ数&lt;/li&gt;
+&lt;li&gt;&lt;code class="prettyprint"&gt;SELECT COUNT(*) FROM delayed_jobs WHERE failed_at IS NULL AND locked_by IS NULL&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Processing Job Count
+
+&lt;ul&gt;
+&lt;li&gt;現在処理中のジョブ数&lt;/li&gt;
+&lt;li&gt;&lt;code class="prettyprint"&gt;SELECT COUNT(*) FROM delayed_jobs WHERE failed_at IS NULL AND locked_by IS NOT NULL&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Failed Job Count
+
+&lt;ul&gt;
+&lt;li&gt;失敗したジョブ数&lt;/li&gt;
+&lt;li&gt;&lt;code class="prettyprint"&gt;SELECT COUNT(*) FROM delayed_jobs WHERE failed_at IS NOT NULL&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;参考までに monochromegane/mackerel-plugin-delayed-job-count は以下のメトリクスを Mackerel に送信します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Job Count
+
+&lt;ul&gt;
+&lt;li&gt;現在キューに溜まっている、または処理中のジョブ数&lt;/li&gt;
+&lt;li&gt;&lt;code class="prettyprint"&gt;SELECT COUNT(id) FROM delayed_jobs&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Error Job Count
+
+&lt;ul&gt;
+&lt;li&gt;失敗したジョブ数&lt;/li&gt;
+&lt;li&gt;&lt;code class="prettyprint"&gt;SELECT COUNT(id) FROM delayed_jobs WHERE failed_at IS NOT NULL&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;どのように使うか？&lt;/h2&gt;
+
+&lt;p&gt;macOS と Linux 用のバイナリを GitHub にリリースしています。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/masutaka/mackerel-plugin-delayed-job-count/releases"&gt;https://github.com/masutaka/mackerel-plugin-delayed-job-count/releases&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;例えばこのような Chef レシピを書けば、/usr/local/bin/mackerel-plugin-delayed-job-count としてインストール出来ます。Ruby スクリプトと違って、レシピに依存関係が出来なくて良いですね。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint ruby"&gt;remote_file &amp;#39;/usr/local/bin/mackerel-plugin-delayed-job-count&amp;#39; do
+  version = &amp;#39;v0.0.1&amp;#39;
+  checksum = &amp;#39;db8c1460da2f393b76a3717ed39d036d1cea3445e6b65557654d81cad217ffc1&amp;#39;
+
+  source &amp;quot;https://github.com/masutaka/mackerel-plugin-delayed-job-count/releases/download/#{version}/mackerel-plugin-delayed-job-count_linux_amd64&amp;quot;
+  checksum checksum
+  mode 0755
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;あとは /etc/mackerel-agent/mackerel-agent.conf に以下を追記し mackerel-agent を reload すれば、Mackerel への送信が始まります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint"&gt;[plugin.metrics.delayed_job_count]
+command = &amp;quot;/usr/local/bin/mackerel-plugin-delayed-job-count -dsn=&amp;#39;DSN&amp;#39;&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;DSN は AWS であれば &lt;code class="prettyprint"&gt;id:password@tcp(your-amazonaws-uri.com:3306)/dbname&lt;/code&gt; といった書式です。詳しくは &lt;a href="https://github.com/go-sql-driver/mysql/#dsn-data-source-name"&gt;https://github.com/go-sql-driver/mysql/#dsn-data-source-name&lt;/a&gt; をどうぞ。&lt;/p&gt;
+
+&lt;h2&gt;悩んでいること&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;公式の &lt;a href="https://github.com/mackerelio/mackerel-agent-plugins"&gt;mackerelio/mackerel-agent-plugins&lt;/a&gt; に PR を出すべきか
+
+&lt;ul&gt;
+&lt;li&gt;テストを書いていない&lt;/li&gt;
+&lt;li&gt;delayed_job で必要なメトリクスは用途によって違いそう。PR を出す前にオプションで指定可能にすべきか&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;社内の Mackerel plugin が複数のリポジトリに散らばってきた
+
+&lt;ul&gt;
+&lt;li&gt;少なくとも Ruby スクリプトくらいは１つのリポジトリにまとめようか&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;まとめ&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Go を使えて満足！&lt;/li&gt;
+&lt;li&gt;要望等あれば GitHub の &lt;a href="https://github.com/masutaka/mackerel-plugin-delayed-job-count/issues"&gt;Issue&lt;/a&gt; や &lt;a href="https://github.com/masutaka/mackerel-plugin-delayed-job-count/pulls"&gt;PR&lt;/a&gt; に挙げて下さい！&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Re:dashを使ったログの可視化をさくっと始めてみた</title>
+    <link rel="alternate" href="http://tech.feedforce.jp/log-visualization-with-redash.html"/>
+    <id>http://tech.feedforce.jp/log-visualization-with-redash.html</id>
+    <published>2016-07-29T14:30:00+09:00</published>
+    <updated>2016-07-29T14:30:00+09:00</updated>
+    <author>
+      <name>tjinjin</name>
+    </author>
+    <content type="html">&lt;p&gt;お久しぶりです。tjinjinです。&lt;br&gt;
+夏アニメも始まり力強く生きています！&lt;/p&gt;
+
+&lt;p&gt;今回は、私が所属しているチームでRe:dashを導入しましたので、そのお話をしたいと思います。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2&gt;これまでのログの取扱い&lt;/h2&gt;
+
+&lt;p&gt;そもそも最初は、ログの確認と言えばサーバにログインして確認するという形でした。その後fluentdを使ってS3に送ったり、Google BigQueryに送るようにしていきました。BigQueryに送ることでログを横断的に見れるため障害調査などが楽にはなったのですが、そこで終わっていました。せっかくログがあるにも関わらず可視化ができていなため、サービスの利用状況が見えづらいものでした。&lt;br&gt;
+そこで弊社増田が他プロジェクトで&lt;a href="http://tech.feedforce.jp/introduce-elasticsearch-kibana.html"&gt;kibanaを導入している話&lt;/a&gt;を聞き、何かないかと探していたところBigQueryをデータの置き場として利用できるRe:dashの存在を知り、今回導入にいたりました。&lt;/p&gt;
+
+&lt;h2&gt;Re:dashの導入方法&lt;/h2&gt;
+
+&lt;p&gt;Re:dashを簡単に導入するにはAMIが用意されているので、Terraformで簡単に構築ができます。&lt;br&gt;
+Regionに応じたAMIはこちらです。&lt;a href="http://docs.redash.io/en/latest/setup.html"&gt;Setting up Re:dash instance — Re:dash documentatio&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint"&gt;resource &amp;quot;aws_instance&amp;quot; &amp;quot;redash&amp;quot; {
+    ami = &amp;quot;ami-78967519&amp;quot;
+    instance_type = &amp;quot;t2.micro&amp;quot;
+    key_name = &amp;quot;${var.key_name}&amp;quot;
+    vpc_security_group_ids = [&amp;quot;${aws_security_group.redash.id}&amp;quot;]
+    subnet_id = &amp;quot;${aws_subnet.public.0.id}&amp;quot;
+    root_block_device {
+        delete_on_termination = &amp;quot;true&amp;quot;
+    }
+    tags {
+        Name = &amp;quot;${var.stage}-redash&amp;quot;
+        Project = &amp;quot;${var.project_name}&amp;quot;
+        Stage = &amp;quot;${var.stage}&amp;quot;
+        Role = &amp;quot;redash&amp;quot;
+        Group = &amp;quot;common&amp;quot;
+        Created = &amp;quot;terraform&amp;quot;
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これだけで簡単に起動できるので、まずは導入してみることをおすすめします。&lt;/p&gt;
+
+&lt;p&gt;実際にどんなものなのか知りたい方はデモが公開されているので一度触ってみるとよさそうです。&lt;br&gt;
+&lt;a href="https://demo.redash.io/"&gt;demo&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;Re:dashの使い方&lt;/h2&gt;
+
+&lt;h3&gt;データソースを追加する&lt;/h3&gt;
+
+&lt;p&gt;Re:dashで利用するデータを指定します。Re:dashはデータソースの対応範囲が広いため、既存のデータ基盤をそのまま利用も可能です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Amazon Redshift&lt;/li&gt;
+&lt;li&gt;BigQuery&lt;/li&gt;
+&lt;li&gt;PostgreSQL&lt;/li&gt;
+&lt;li&gt;MySQL&lt;/li&gt;
+&lt;li&gt;TresureData&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;などがあります。詳しくはこちら。&lt;a href="http://docs.redash.io/en/latest/datasources.html"&gt;Supported Data Sources — Re:dash documentation&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;BigQueryの場合は、事前にサービスアカウントの鍵を取得しておき、それを指定するだけで可能です。&lt;/p&gt;
+
+&lt;h3&gt;クエリを発行する&lt;/h3&gt;
+
+&lt;p&gt;まず可視化したいデータのクエリを発行します。クエリ自体はデータソースに応じたSQLなどを発行します。BigQueryであれば、BigQueryで対応しているSQLが発行可能です。&lt;/p&gt;
+
+&lt;h3&gt;ダッシュボードにグラフを追加する&lt;/h3&gt;
+
+&lt;p&gt;クエリを発行したらデータの可視化を行います。Re:dashでは様々なデータの可視化方法があり、必要に応じて適切な可視化を行う必要があります。&lt;/p&gt;
+
+&lt;p&gt;可視化のタイプは以下のとおりです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Boxplot&lt;/li&gt;
+&lt;li&gt;Chart&lt;/li&gt;
+&lt;li&gt;Cohort&lt;/li&gt;
+&lt;li&gt;Counter&lt;/li&gt;
+&lt;li&gt;Map&lt;/li&gt;
+&lt;li&gt;PivotTable&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;この中でPivotTableが便利で、動的にカラムを指定することができます。例えばエンジニアが基本的なクエリを発行したうえで、マーケ担当者などが自分で好きなデータをD&amp;amp;Dで分析することが可能です。うまく説明ができないので気になる方はお試しいただければと...。&lt;/p&gt;
+
+&lt;h2&gt;細かいTips&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;amiの中身はnginxなので設定を追加すればhttps化が簡単にできます&lt;/li&gt;
+&lt;li&gt;公式botを使ったslack連携も可能です&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;今後の課題&lt;/h2&gt;
+
+&lt;p&gt;現在私を含む一部のメンバーを中心にデータの分析の基礎として統計学の勉強などを始めています。ソーシャルゲームなどの業界ではデータ分析専門の方もいらっしゃると思いますが、我々の規模ではそこまでというところもあるので興味あるメンバーで進めているところです。&lt;br&gt;
+実際にデータを見れるようになったとしても、そのデータをどう分析するか?が一番大切なところなので、そのあたりをしっかりやっていきたいと思います。&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Facebook API アップデートと付き合う話</title>
+    <link rel="alternate" href="http://tech.feedforce.jp/watch-facebook-api-version.html"/>
+    <id>http://tech.feedforce.jp/watch-facebook-api-version.html</id>
+    <published>2016-07-26T16:00:00+09:00</published>
+    <updated>2016-07-26T16:00:00+09:00</updated>
+    <author>
+      <name>e-takano</name>
+    </author>
+    <content type="html">&lt;p&gt;最近買ったボードゲームはスカイアイランドとテレストレーションとストーンエイジです、こんにちは。フィードフォース ボドゲ部の kano-e です。&lt;br&gt;
+仕事では Facebook のドキュメントをいっぱい読んでいる今日この頃、Rails エンジニアです。&lt;/p&gt;
+
+&lt;p&gt;さて、先日 7/13 (日本時間だと 7/14 ですね) に Facebook API v2.7 がリリースされました。&lt;br&gt;
+弊社の ソーシャル PLUS や Feedmatic では Facebook API を利用していますので、さっそく影響範囲の確認や対応リリースが行われました。&lt;br&gt;
+(ソーシャル PLUS の対応リリースは 7/14 中でした)&lt;/p&gt;
+
+&lt;p&gt;Facebook API は三ヶ月を目安にバージョンアップが行われます。&lt;br&gt;
+ですので、Facebook API を利用している場合、定期的にその対応が必要になります。&lt;/p&gt;
+
+&lt;p&gt;この記事では、 Facebook API と長くお付き合いするためのアレコレについて、軽くまとめたいと思います。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2&gt;API バージョンの寿命&lt;/h2&gt;
+
+&lt;p&gt;冒頭でも述べましたが Facebook API の新しいバージョンは三ヶ月を目安にリリースされます。&lt;br&gt;
+過去には六ヶ月空くこともありましたが、大体三ヶ月毎に新しいバージョンがくる、と思っておくと慌てなくて済みます。&lt;/p&gt;
+
+&lt;p&gt;新しいバージョンがリリースされるタイミングで、古いバージョンが廃止される時期も決定します。&lt;br&gt;
+API バージョンがいつ廃止されるか、その寿命は Graph API と Marketing API で違っています。&lt;/p&gt;
+
+&lt;h3&gt;Graph API の場合&lt;/h3&gt;
+
+&lt;p&gt;Graph API の場合、次のバージョンがリリースされてから二年間で、そのバージョンは使えなくなります。&lt;br&gt;
+例えば &lt;code class="prettyprint"&gt;v2.7&lt;/code&gt; が 2016/07/13 にリリースされたので、 &lt;code class="prettyprint"&gt;v2.6&lt;/code&gt; はそこから2年後の 2018/07/13 が期限です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt=":alt" src="/images/2016/07/watch-facebook-api-version-graph-api-versioning.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;この辺りのことは &lt;a href="https://developers.facebook.com/docs/apps/versions"&gt;Platform Versioning&lt;/a&gt; のページにまとまっています。&lt;/p&gt;
+
+&lt;p&gt;また、 Facebook の App ID と App Secret の発行に必要な Facebook App も、 API Version という属性を持っています。&lt;br&gt;
+この API Version という属性に設定されたバージョンより古い API バージョンは、その Facebook App では利用できません。&lt;/p&gt;
+
+&lt;p&gt;この API Version は、アプリ作成時の最新の API バージョンが設定されます。&lt;br&gt;
+以降、設定されたバージョンが無効になると Facebook がこの項目を自動でアップデートします。&lt;/p&gt;
+
+&lt;p&gt;ですので Facebook API を利用する場合には、自分の所有する Facebook App の API Version も合わせて確認しておく必要があります。&lt;/p&gt;
+
+&lt;h3&gt;Marketing API の場合&lt;/h3&gt;
+
+&lt;p&gt;Marketing API の場合、寿命がもう少し短く、次の次のバージョンが出るタイミングで無効になっています。&lt;br&gt;
+例えば &lt;code class="prettyprint"&gt;v2.4&lt;/code&gt; は &lt;code class="prettyprint"&gt;v2.6&lt;/code&gt; がリリースされた 2016/04/12 の前日 2016/04/11 が期限です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt=":alt" src="/images/2016/07/watch-facebook-api-version-marketing-api-versioning.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Marketing API の期限は、次のバージョンがリリースされたタイミングで目安が公開されます。&lt;br&gt;
+今であれば &lt;code class="prettyprint"&gt;v2.7&lt;/code&gt; が公開され、 &lt;code class="prettyprint"&gt;v2.6&lt;/code&gt; の期限は 2016/10 となっています。&lt;br&gt;
+これはつまり 2016/10 に次のバージョンである &lt;code class="prettyprint"&gt;v2.8&lt;/code&gt; が出る予定、ということになります。&lt;/p&gt;
+
+&lt;h2&gt;変更点を調べる&lt;/h2&gt;
+
+&lt;p&gt;バージョンの変更点は &lt;a href="https://developers.facebook.com/docs/apps/changelog"&gt;Facebook Platform Changelog&lt;/a&gt; にまとまっています。&lt;br&gt;
+以前は Marketing API の Changelog は別ページだったのですが、 &lt;code class="prettyprint"&gt;v2.5&lt;/code&gt; のタイミングで Platform Changelog に統一されました。&lt;br&gt;
+個人的な感想を言うと、確認すべき場所が一カ所にまとまったので、確認作業が楽になって助かっています。&lt;/p&gt;
+
+&lt;p&gt;詳細については、個別のドキュメントページへのリンクになっていることが多いので、そちらも合わせて確認します。&lt;/p&gt;
+
+&lt;p&gt;パラメータやフィールドの名前が変わった、という変更であれば、影響がわかりやすいのですぐに対応できることが多いです。&lt;/p&gt;
+
+&lt;p&gt;過去には「エンドポイントが変わった」「オブジェクトの構造が変わった」「エンドポイントや機能自体が廃止になった」ということもありました。&lt;br&gt;
+2016/8/4 には完全廃止となりますが、 FQL (Facebook Query Language) という機能もありましたね、そういえば。&lt;/p&gt;
+
+&lt;p&gt;そのような影響の大きい変更だと即日対応は難しいですが、その場合は各サービス毎にスケジュールをたてて対応しています。&lt;/p&gt;
+
+&lt;p&gt;また、 Facebook には &lt;a href="https://developers.facebook.com/tools/api_versioning/"&gt;API Upgrade Tool&lt;/a&gt; というツールが用意されています。&lt;br&gt;
+Facebook App の使用履歴から、特定のバージョンで使えないリクエストがあれば、それをリストアップしてくれるツールです。&lt;br&gt;
+使い方は&lt;a href="https://developers.facebook.com/docs/graph-api/advanced/api-upgrade-tool"&gt;ドキュメント&lt;/a&gt;をご覧ください。&lt;br&gt;
+(残念ながら弊社の ソーシャル PLUS では、お客様が Facebook App を作成して管理画面に登録するというサービスですので、このツールですべて解決できないこともあります……)&lt;/p&gt;
+
+&lt;h2&gt;バージョンアップに気付きたい&lt;/h2&gt;
+
+&lt;p&gt;いつの間にか新しいバージョンがリリースされている、というのは嫌ですね。&lt;br&gt;
+特に Marketing API は寿命が短いため、できるだけ早く気付きたいものです。&lt;/p&gt;
+
+&lt;p&gt;弊社 Slack には、各認証プロバイダの開発者向け更新情報を通知するチャンネルがあります。&lt;br&gt;
+ここには Facebook の &lt;a href="https://developers.facebook.com/blog/"&gt;Developer News&lt;/a&gt; のフィードも含まれているので、API バージョンのリリースにも気付けます。&lt;/p&gt;
+
+&lt;p&gt;また &lt;a href="https://developers.facebook.com/settings/developer/contact/"&gt;Developer Settings&lt;/a&gt; から、各項目毎に通知設定ができます。&lt;br&gt;
+ここで &lt;code class="prettyprint"&gt;Notify By Email&lt;/code&gt; を &lt;code class="prettyprint"&gt;Yes&lt;/code&gt; にしておくと、自分の Facebook アカウントのプライマリなメールアドレスに、通知メールが届くようになります。&lt;/p&gt;
+
+&lt;p&gt;Marketing API だけですが、ドキュメント更新の際の通知も可能です。&lt;/p&gt;
+
+&lt;p&gt;バージョンアップによる影響調査は、それぞれのサービス毎に行われます。&lt;br&gt;
+調査内容は Github の issue にコメントされることが多いのですが、適宜 Slack や Qiita:Team での情報共有も行っています。&lt;/p&gt;
+
+&lt;p&gt;ほかの部署に影響がありそうな変更点を見つけた場合も、同じように都度共有しています。&lt;/p&gt;
+
+&lt;h2&gt;まとめ&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Facebook API バージョンのリリースは、だいたい三ヶ月毎&lt;/li&gt;
+&lt;li&gt;Facebook API バージョンの寿命は Graph API と Marketing API で違う
+
+&lt;ul&gt;
+&lt;li&gt;Graph API は &lt;a href="https://developers.facebook.com/docs/apps/versions"&gt;Platform Versioning&lt;/a&gt; を見る&lt;/li&gt;
+&lt;li&gt;Marketing API は寿命が短いので注意&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;変更点は &lt;a href="https://developers.facebook.com/docs/apps/changelog"&gt;Facebook Platform Changelog&lt;/a&gt; 見ればわかる
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://developers.facebook.com/tools/api_versioning/"&gt;API Upgrade Tool&lt;/a&gt; も参考に&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;基本的には &lt;a href="https://developers.facebook.com/blog/"&gt;Developer News&lt;/a&gt; など、開発者向けブログのフィードを購読する
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://developers.facebook.com/settings/developer/contact/"&gt;Developer Settings&lt;/a&gt; から通知を受け取るようにしておくとより良い&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;以上、Facebook API と長くお付き合いするためのアレコレでした。&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>フィードフォースの2016年度エンジニア新人研修についてまとめてみた</title>
+    <link rel="alternate" href="http://tech.feedforce.jp/memory-of-2016-rookie-engineer-training.html"/>
+    <id>http://tech.feedforce.jp/memory-of-2016-rookie-engineer-training.html</id>
+    <published>2016-07-12T12:00:00+09:00</published>
+    <updated>2016-07-12T12:00:00+09:00</updated>
+    <author>
+      <name>otofu_square</name>
+    </author>
+    <content type="html">&lt;p&gt;こんにちは、今年入社した新卒エンジニア5人の内の一人の雪田です。社内では「おとうふ」と呼ばれています。入社して早三ヶ月が過ぎますが、社内で私の本名を知る人が何人いるんだろうと不安に思う日々を過ごしています…。&lt;/p&gt;
+
+&lt;p&gt;今年、フィードフォースには10名（総合職5名、エンジニア5名）の新卒社員が入社しました。私たち新卒エンジニア5名は約2ヶ月間の新卒研修を無事に終え、今は各サービスのチームに配属され、チームの1メンバーとしてバリバリ活躍しています！&lt;/p&gt;
+
+&lt;p&gt;そんな中、我々の師であり弊社の新卒エンジニア受け入れ担当でもある &lt;a href="author/inoue"&gt;@a_know&lt;/a&gt; 師が、今年の新人研修を運営する側の視点で振り返って当ブログの &lt;a href="2016-rookie-training.html"&gt;2016年度の新卒エンジニア受け入れを終えて&lt;/a&gt; という記事にまとめて下さいました。&lt;/p&gt;
+
+&lt;p&gt;そこで今回は、新人研修を受けた弟子（新卒エンジニア）の視点から、研修内容や学んだこと・思ったことなどを簡単にまとめたいと思います。&lt;strong&gt;フィードフォースの新人研修ってどんな感じなんだろう&lt;/strong&gt; と気になる方は是非読んでいただきたいですし、&lt;strong&gt;新人研修の担当になったけどどうしようか予定が立っていない&lt;/strong&gt; という方にも何か参考になれば幸いです！&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2&gt;はじめに&lt;/h2&gt;
+
+&lt;p&gt;ボリュームのある記事となってしまったため、まずはじめにこの記事の構成についてご説明します。&lt;/p&gt;
+
+&lt;p&gt;この記事は大きく分けて以下のような3つのセクションに分かれています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="memory-of-2016-rookie-engineer-training.html#about-feedforce-training"&gt;フィードフォースのこれまでの研修と今年の研修&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="memory-of-2016-rookie-engineer-training.html#group-training"&gt;集合研修&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="memory-of-2016-rookie-engineer-training.html#tech-training"&gt;技術研修&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;「フィードフォースのこれまでの研修と今年の研修」では、フィードフォースが &lt;strong&gt;これまでどんな研修に取り組み&lt;/strong&gt;、&lt;strong&gt;今年の研修では何をしたか&lt;/strong&gt; をご紹介します。「集合研修」・「技術研修」では、今年の研修は &lt;strong&gt;どんなことをやったのか&lt;/strong&gt;、&lt;strong&gt;やってみてどう思ったか&lt;/strong&gt; をご紹介します。&lt;/p&gt;
+
+&lt;p&gt;各自で必要な箇所だけ見ていただく形でも結構ですので、ご自由にご覧いただければと思います！&lt;/p&gt;
+
+&lt;p&gt;&lt;span id="about-feedforce-training"&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;h2&gt;フィードフォースのこれまでの研修と今年の研修&lt;/h2&gt;
+
+&lt;p&gt;ここでは、フィードフォースが &lt;strong&gt;これまでどんな研修に取り組み&lt;/strong&gt;、&lt;strong&gt;今年の研修では何をしたか&lt;/strong&gt; をご紹介します。&lt;/p&gt;
+
+&lt;h3&gt;今までのフィードフォースの新人研修&lt;/h3&gt;
+
+&lt;p&gt;まず本題へと進む前に、これまでのフィードフォースの新人研修をご紹介します。&lt;/p&gt;
+
+&lt;h4&gt;2014年度 OJTベースの研修&lt;/h4&gt;
+
+&lt;p&gt;2014年度は新卒入社したエンジニアが一人だったということもあり、OJTベースで研修が行われました。初日で配属が決まり、メンターとペアプロをしながら技術書を使った学習やプロダクトのコードリーディングをすることで &lt;strong&gt;仕事をしながら技術やサービスを理解していく&lt;/strong&gt; という研修だったようです。&lt;/p&gt;
+
+&lt;p&gt;研修を受けた当事者である &lt;a href="author/t-nakano"&gt;@t-nakano&lt;/a&gt; 先輩が書いた当ブログの記事で詳しく触れられています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://tech.feedforce.jp/2014-employ-a-month.html"&gt;feedforce Engineer&amp;#39;s Blog - 入社一ヶ月経って感じたこと&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4&gt;2015年度 新入社員研修を新入社員が自ら作る研修（!?）&lt;/h4&gt;
+
+&lt;p&gt;この年は、フィードフォースで初の人事担当が誕生してから初めての研修だったこともあり、かなりユニークな研修が行われました。&lt;strong&gt;新入社員研修プログラムを新入社員が自ら創る研修&lt;/strong&gt; と題して、入社したての新卒社員が研修プログラムを1から組み立て、社員の前でプレゼンするというものです。2015年度は新卒入社のエンジニアが0人だったため、技術研修は行われなかった年でしたが、当時私がこの記事を読んだ時に衝撃を受けたのを今でも覚えています…。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="rookie-training-2015" src="/images/2016/07/rookie_training1.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;研修内容についてご興味を持たれた方は、是非下記のリンクもご覧下さい。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.feedforce.jp/release/4292/"&gt;2015.04.27 プレスリリース - 「新入社員研修プログラムを新入社員が自ら創る研修」を実施！社会人に必要となる基本知識・スキルをテーマに全社で取り組む&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://blog.feedforce.jp/archives/11984"&gt;feedforce全力ブログ - おそらく日本初の新入社員研修 「新入社員研修プログラムを新入社員が自ら創る研修」実施レポ！&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://nabeharu.hatenablog.com/entry/2015/04/19/224708"&gt;なべはるの人事徒然 - 新入社員研修講師を新入社員が務める研修をやってみた&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;僕らが今年どんな研修をやったか&lt;/h3&gt;
+
+&lt;p&gt;それでは以前までの研修について簡単に紹介したところで、いよいよフィードフォースの2016年度の新人研修についてご紹介しましょう。&lt;/p&gt;
+
+&lt;p&gt;今年の研修では、&lt;strong&gt;自走式&lt;/strong&gt;、&lt;strong&gt;徹底的相手目線&lt;/strong&gt; の2つがテーマとして掲げられました。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;自走式&lt;/strong&gt; とは、何をどのようにして学ぶかは自分たちで考えて取り組み、自ら研修を作っていってほしいということを意味します。また &lt;strong&gt;徹底的相手目線&lt;/strong&gt; とは、常に &lt;strong&gt;相手目線で考える&lt;/strong&gt; クセを身につけ他者に価値を提供できる人間になってほしい、というメッセージです。この2つのテーマを叩き込まれた上で、私たちは今回の研修へ臨むこととなりました。&lt;/p&gt;
+
+&lt;p&gt;我々新卒エンジニアは、二ヶ月間ほどの研修期間中、前半後半に分けて主に次の2つの研修を受けました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;集合研修&lt;/li&gt;
+&lt;li&gt;技術研修&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;以前の研修に比べて特に大きく変わったことは、&lt;strong&gt;職種に関係なく全員で参加する研修&lt;/strong&gt; がある点と、技術研修の中で1週間ずつそれぞれのサービスのチームに配属される &lt;strong&gt;ローテーション配属&lt;/strong&gt; の期間があった点の2つだと思います。他にも新しい取り組みとして、空き時間にも各自で学習を進められるような環境である &lt;strong&gt;オンライン学習サイト&lt;/strong&gt; の活用、現場の実践的な内容を教わり現場社員との交流の場になった &lt;strong&gt;社員が講師となる講義&lt;/strong&gt;、といったものがありました。また、それぞれの研修の内容には、過去の研修で行われた研修の形式もブラッシュアップした形で取り入れられ、&lt;strong&gt;フィードフォース史上最も充実した研修&lt;/strong&gt; になったと言えるでしょう。&lt;/p&gt;
+
+&lt;p&gt;私は入社前からフィードフォースの過去の研修の記事を見て、どんなことをやってきたかは知っていたのですが、今年の新人研修の内容を知った瞬間 &lt;strong&gt;今年はマジなヤツだ…&lt;/strong&gt; と直感しました。研修内容を知った時は、その内容からフィードフォースの新人に対する熱意や期待が感じられ、ここまで新卒にリソースを割いてくれるなんて！ と嬉しく思いました。一方で、その期待に応えなければ…！ と、やる気や緊張感がひしひしと湧いてきたのを今でも思い出します。&lt;/p&gt;
+
+&lt;p&gt;それでは以降で、それぞれの研修について簡単にご紹介したいと思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;span id="group-training"&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;h2&gt;集合研修&lt;/h2&gt;
+
+&lt;p&gt;それではまず &lt;strong&gt;集合研修&lt;/strong&gt; についてです。&lt;/p&gt;
+
+&lt;p&gt;この研修は入社してすぐに行われ、職種に関係なく今年入社した新人10人全員が参加しました。集合研修の意図は、&lt;strong&gt;「社会人としての基礎」&lt;/strong&gt; を身につけ、&lt;strong&gt;「フィードフォースについて理解するため」&lt;/strong&gt; のものである、と最初に説明がありました。&lt;/p&gt;
+
+&lt;p&gt;集合研修では、次の5つの研修を受けました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;マナー研修&lt;/li&gt;
+&lt;li&gt;オンライン学習サイトの動画視聴&lt;/li&gt;
+&lt;li&gt;社員による各種講義&lt;/li&gt;
+&lt;li&gt;2社合同で「新人研修を教え合う研修」&lt;/li&gt;
+&lt;li&gt;営業ロープレ研修&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;新人が人事にマナーを教える「相手目線のビジネスマナー研修」&lt;/h3&gt;
+
+&lt;p&gt;マナー研修では、&lt;strong&gt;「弊社の人事に新人がマナーを教える」&lt;/strong&gt; という通常とは全く逆の形式で行われました。&lt;/p&gt;
+
+&lt;p&gt;新人が人事にマナーを教えるプレゼンをするというアウトプットを目標に、そこまでの準備をほぼ自分たちだけで調査しまとめました。マナーについては、オンライン学習サイトのマナー講座の動画の視聴や、ネットの文献の調査、先輩社員に実践的な内容のインタビューなどで調査しました。最終的に、人事からも好評を得るようなプレゼンをアウトプットすることができました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="manner" src="/images/2016/07/manner.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;やはり自分たちの手で調査してまとめただけあり、受け身でマナー講座を受けるよりもインプットの量が多く、かつ実践的な知識を身につけることができたと思います。特にエンジニアに関しては、配属されてしまうと &lt;strong&gt;マナーを意識するタイミングが激減してしまう可能性&lt;/strong&gt; があるので、ここで基礎を身につけられたのは大きかったなと今になって感じています。&lt;/p&gt;
+
+&lt;p&gt;この研修に関しては弊社人事のブログでも紹介されているので、もしご興味があればぜひご覧になってみて下さい。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://nabeharu.hatenablog.com/entry/2016/04/21/225003"&gt;なべはるの人事徒然 - 入社5日目の新人にビシネスマナーを教えてもらった（研修資料付）&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;Schoo・マナビトを使った動画視聴による学習&lt;/h3&gt;
+
+&lt;p&gt;研修期間中、&lt;a href="https://schoo.jp/"&gt;Schoo&lt;/a&gt;や&lt;a href="https://manabito-online.com/"&gt;マナビトオンライン&lt;/a&gt;のアカウントが配布され、マナーや業界用語に関する動画を視聴しました。&lt;/p&gt;
+
+&lt;p&gt;必須受講の動画と視聴期限が会社側から与えられたので、動画の視聴はチームで計画を立て、研修の空き時間を使って見る形でこなしました。&lt;/p&gt;
+
+&lt;p&gt;研修の中では教えてくれないような基礎的な内容もこの動画視聴で抑えられたので、社会人の基礎や業界知識を身につける上では非常に役立ったなと感じています。また必須受講の動画以外にも豊富にコンテンツが用意されていたので、自分の興味のある動画を視聴することができる自由度の高さもこの方法ならではだなと感じました。&lt;/p&gt;
+
+&lt;h3&gt;講義&lt;/h3&gt;
+
+&lt;p&gt;この研修では、&lt;strong&gt;社員が講師&lt;/strong&gt; となって &lt;strong&gt;講義形式&lt;/strong&gt; で行われました。&lt;/p&gt;
+
+&lt;p&gt;講義内容は全て実務に関連するもので、自社のサービス内容に始まり、営業やマーケティング、果ては技術的な知識まで、&lt;strong&gt;フィードフォースに関わる全ての業務に関連する内容&lt;/strong&gt; が網羅されていました。実際に第一線で働いている社員に直に講義をして頂けたので、非常に実践的な知識を身につけることができました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="lecture" src="/images/2016/07/lecture.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;講義の中には、&lt;strong&gt;社長が講師となって会社のビジョンを語る&lt;/strong&gt; という講義もあり、会社や社員に対する社長の熱い思いを聞くことができる貴重な機会でした。また、配属後には関わる機会が少ない社員の方々ともこの講義を通して交流することができたので、社員を知るという意味でも良い機会だったなと感じています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="lecture-by-president" src="/images/2016/07/lecture_by_president.jpg" /&gt;&lt;/p&gt;
+
+&lt;h3&gt;2社合同研修&lt;/h3&gt;
+
+&lt;p&gt;株式会社マーケティングアプリケーションズ様と合同で、&lt;strong&gt;両企業の新人が研修で学んだこと&lt;/strong&gt; をお互いに発表し合いました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="mapps-and-ff-presentation" src="/images/2016/07/mapps_and_ff_presentation.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;同じ Web マーケティング業界で事業を展開している両企業ですが、事業内容や新人メンバーのキャラクターの違いが出ていて、活発で盛り上がりのあるプレゼンの場となりました。&lt;strong&gt;社外の同期の知り合いを作る&lt;/strong&gt; という意味でも貴重な場だったなと感じています。&lt;/p&gt;
+
+&lt;p&gt;弊社の公式ページにもこの研修に関するお知らせがありますので、もしご興味があれば是非ご覧ください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.feedforce.jp/information/7270/"&gt;お知らせ -「新入社員研修を教え合う研修」を2社合同で実施。“徹底的な相手目線“をテーマに研修に取り組む！&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;営業ロープレ試験&lt;/h3&gt;
+
+&lt;p&gt;この研修は、&lt;strong&gt;1. マナーが出来ていること&lt;/strong&gt;、&lt;strong&gt;2. 相手目線であること&lt;/strong&gt;、&lt;strong&gt;3. 自社のサービスを理解していること&lt;/strong&gt; の3点を確認するための研修として行われました。&lt;/p&gt;
+
+&lt;p&gt;営業チームやマーケティングチームの社員の方々に &lt;strong&gt;サービスを売り込むクライアント役&lt;/strong&gt; になってもらい、新人が &lt;strong&gt;営業担当役&lt;/strong&gt; として &lt;strong&gt;自社のサービスを売り込む商談&lt;/strong&gt; をする、という形で行われました。この研修では、クライアント役の社員の方々から合格を頂くまで再挑戦しなければならず、新人一同必死になってロープレの練習をしていました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="roleplaying" src="/images/2016/07/roleplaying.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;いざ実践の場になると分からないことがあったり、型にはまった説明で真の相手目線になっていなかったりと、相手目線やサービス理解の部分で苦戦しているメンバーも少なくなかったと思います。&lt;/p&gt;
+
+&lt;p&gt;以下のFacebookの投稿は、全員がロープレに合格した際の投稿です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.facebook.com/feedforce/posts/1255523091142723"&gt;facebook - 株式会社フィードフォース【新入社員10名全員が、営業ロープレに合格！】&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;集合研修を通して学んだこと、感じたこと&lt;/h3&gt;
+
+&lt;p&gt;それではここで一旦、集合研修を通して学んだこと、感じたことを振り返ってみたいと思います。&lt;/p&gt;
+
+&lt;h4&gt;エンジニアにとっての集合研修の重要性&lt;/h4&gt;
+
+&lt;p&gt;集合研修ではエンジニアの業務に直接関わる内容こそあまり多くはありませんでしたが、&lt;strong&gt;社会人としての基礎&lt;/strong&gt; 、&lt;strong&gt;自社のサービス理解&lt;/strong&gt; を学ぶ上でとても役立ちました。やはりエンジニアとしてサービスの開発に関わる以上、自社のサービスのことは誰よりも理解していなければならないし、サービスを使うお客様の目線からより良い物を作っていくという考え方や意識が必要不可欠だと思います。チームに配属されてからではなく、このタイミングでこれらの心構えを身につけることができて本当に良かったなと感じています。&lt;/p&gt;
+
+&lt;h4&gt;エンジニアが営業ロープレ試験を受けたことについて&lt;/h4&gt;
+
+&lt;p&gt;お恥ずかしい話になりますが、エンジニアも営業ロープレ試験をやるという話を聞いた当初は、&lt;strong&gt;「それって本当にエンジニアに必要な研修なのかな…？」&lt;/strong&gt; と疑問を持っていました。ですが実際にやってみると、お客様の課題が何かを知ること・それを解決するための最善の方法を提案できることは、サービスを売る側だけではなく &lt;strong&gt;サービスを作る側にも必要なこと&lt;/strong&gt; であると初めて知ることができました。また、相手は必ずしもお客様だけでなく、チームで開発をする上では &lt;strong&gt;チームのメンバーに対しても相手目線であること&lt;/strong&gt; が求められることも学ぶことができました。&lt;/p&gt;
+
+&lt;h4&gt;集合研修を受けてみて&lt;/h4&gt;
+
+&lt;p&gt;エンジニアとしてこの集合研修を受けてみて、この研修は &lt;strong&gt;絶対やっておいた方が良かったな&lt;/strong&gt; と強く感じています。入社直後のタイミングで、集合研修を通して今後も常に持ち続けるべき知識や考え方を学ぶことができて本当に良かったと、チームに配属された今だからこそ痛感しています。&lt;/p&gt;
+
+&lt;p&gt;&lt;span id="tech-training"&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;h2&gt;技術研修&lt;/h2&gt;
+
+&lt;p&gt;さて、集合研修が終わった後は、いよいよお待ちかねの &lt;strong&gt;技術研修&lt;/strong&gt; が始まりました。余談にはなりますが、集合研修の期間中はほとんどコードをかける機会が無く、新卒エンジニア一同コードを書きたくてムズムズしていたもどかしい期間でした笑。その反動か、このあとの技術研修はみんな生き生きと取り組んでいたのはいい思い出です。&lt;/p&gt;
+
+&lt;p&gt;この研修では、実際に業務で必要になる &lt;strong&gt;技術の学習&lt;/strong&gt; と、実際に配属される可能性のあるチームで1週間ずつ働く &lt;strong&gt;ローテーション配属&lt;/strong&gt; を経験しました。一日の半分を &lt;strong&gt;技術の学習&lt;/strong&gt; の時間、もう半分を &lt;strong&gt;ローテーション配属&lt;/strong&gt; の時間というように区切って行われました。&lt;/p&gt;
+
+&lt;p&gt;技術の学習では、我々の師である &lt;a href="author/inoue"&gt;@a_know&lt;/a&gt; が講師役となって、次の技術書の内容をなぞる形で勧められました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://www.shoeisha.co.jp/book/detail/9784798118819"&gt;ゼロから始めるデータベース操作&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://gihyo.jp/magazine/wdpress/plus/978-4-7741-4204-3"&gt;Web を支える技術&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://gihyo.jp/book/2014/978-4-7741-6516-5"&gt;パーフェクト Ruby on Rails&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;上記の本を取り上げて、講義形式やハンズオン形式、勉強会形式など様々な方法で取り組みました。ただ、 &lt;a href="author/inoue"&gt;@a_know&lt;/a&gt; が私たち新卒エンジニアに「私は講師役だからといってあなたたちに技術を教えるつもりはない、私と一緒に勉強して一緒に学びましょう」と念を押して伝えました。そのため、技術研修中は常に &lt;strong&gt;講師や本から与えられるものが全てではない&lt;/strong&gt;、自分たちで &lt;strong&gt;＋αのインプットをしていこう&lt;/strong&gt; という意識を全員が持って取り組めていたと思います。&lt;/p&gt;
+
+&lt;p&gt;また、各新卒エンジニアに対して一人の先輩エンジニアにメンターとして付いてもらいました。実はこのメンターの先輩エンジニアの方々とは、集合研修の期間から毎日ふりかえりを行い、ローテ配属やプレゼンで困ってることや集合研修の悩みなどを相談させてもらっていました。技術研修の期間中はその日の良かったことや学んだこと、悩んでることなどの共有・相談させてもらったり、技術的な質問の相手になってもらいました。&lt;/p&gt;
+
+&lt;p&gt;それでは、具体的に技術研修ではどんなことに取り組んだか、簡単にご紹介しましょう。&lt;/p&gt;
+
+&lt;h3&gt;入社前課題&lt;/h3&gt;
+
+&lt;p&gt;いきなり技術研修の話から少しそれてしまいますが、新卒エンジニアの育成に関するものだったため、こちらで紹介させていただこうと思います。&lt;/p&gt;
+
+&lt;p&gt;今年は新卒エンジニアに対して入社前課題が与えられました。課題図書として、弊社で使用されているプログラミング言語 Ruby に関する技術書 &lt;a href="http://tatsu-zine.com/books/tanoshii-ruby5"&gt;『たのしいRuby 第5版』&lt;/a&gt;  が配られ、入社日までに「その技術書の範囲の中から出題される100個の問題の解答を作る」という宿題が出されました。問題集は Gist にアップロードされ、解答も Gist 上に作成する形で行われました。以下が内定者に課された100問ですので、ご興味がある方はご覧ください。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://gist.github.com/otofu-square/71d4213ba411ec96ca76facf45d005b5"&gt;Gist - たのしい Ruby 達成度確認テスト.md&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="ruby-test" src="/images/2016/07/ruby_test.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;このタイミングで Ruby の基礎を身につけることができたので、Ruby に関しては入社後に基礎的な内容でつまずいたり、全員の理解度がバラバラということはほとんどありませんでした。&lt;/p&gt;
+
+&lt;h3&gt;データベース基礎&lt;/h3&gt;
+
+&lt;p&gt;さて、まず技術研修で一番最初に取り組んだのは、データベースの基礎についてです。&lt;/p&gt;
+
+&lt;p&gt;データベースに関しては、&lt;a href="http://www.shoeisha.co.jp/book/detail/9784798118819"&gt;『ゼロから始めるデータベース操作』&lt;/a&gt;という書籍を読みながら、&lt;strong&gt;ハンズオン形式&lt;/strong&gt; で進められました。ローカル環境に MySQL をインストールして、書籍に書いてある SQL をターミナルに手で打ち込みながら学習を行いました。この時から、毎朝 &lt;a href="author/inoue"&gt;@a_know&lt;/a&gt; が新卒エンジニアに対してその前の日に学んだ内容から質問する時間が用意されました。そのような復習のための時間があるおかげで、自然と前の日の内容をあらかじめ復習しておくという意識が身についた気がします。&lt;/p&gt;
+
+&lt;h3&gt;Web の基礎&lt;/h3&gt;
+
+&lt;p&gt;データベース基礎の学習が想定よりも早く進んだため、こちらの Web の基礎の学習は時間に少しゆとりを持って行われました。Webの基礎の学習では、&lt;a href="https://gihyo.jp/magazine/wdpress/plus/978-4-7741-4204-3"&gt;『Web を支える技術』&lt;/a&gt; を読んで学んことをまとめた記事を書き、社内の Qiita:Team というドキュメント共有ツールの &lt;strong&gt;記事にまとめる形&lt;/strong&gt; で進めました。&lt;/p&gt;
+
+&lt;p&gt;記事を書く中で、書籍に書いてある内容だけではなく &lt;strong&gt;現在の最新情報を追加で調べて&lt;/strong&gt; 書いたり &lt;strong&gt;書籍で詳しく言及されていない箇所を深堀&lt;/strong&gt; することで &lt;strong&gt;＋αで学んだことを書く&lt;/strong&gt; ようにまとめました。記事にまとめるためスピードは遅くなってしまいましたが、読んだ内容を記事としてアウトプットすることで、より質の高いインプットが得られたかなと思います。また、社内で記事を公開したため、その記事に対して社内のエンジニアからアドバイスや指摘が入ったことも記事を書く学習ならではだなと思いました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="qiita" src="/images/2016/07/qiita.png" /&gt;&lt;/p&gt;
+
+&lt;h3&gt;Rails の基礎&lt;/h3&gt;
+
+&lt;p&gt;DB の基礎、Web の基礎を学んで、次はいよいよ Ruby で実装されたWebフレームワークである Rails の基礎を学びます。Rails の基礎に関しては、&lt;a href="http://gihyo.jp/book/2014/978-4-7741-6516-5"&gt;『パーフェクト Ruby on Rails』&lt;/a&gt;の前半部分に書かれてある &lt;strong&gt;Railsの思想&lt;/strong&gt; と &lt;strong&gt;Railsの周辺技術&lt;/strong&gt; について取り上げて学習しました。&lt;/p&gt;
+
+&lt;h4&gt;最初は記事を書いてまとめようと思っていたが…&lt;/h4&gt;
+
+&lt;p&gt;最初は、Rails の基礎に関しても Web の基礎の学習の方法と同様に Qiita:Team に記事を書いてまとめる形で進める予定でした。ただ、以下の理由から Rails の基礎に関しては記事を書きながらの学習は適していないのではという意見が出ました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;記事の作成は非常に時間がかかる&lt;/li&gt;
+&lt;li&gt;研修の期間は決まっているので、ここで時間がかかると後々の Rails アプリを作る研修に時間を割けなくなる&lt;/li&gt;
+&lt;li&gt;それぞれが同じ内容の記事を作ることになるので効率が悪い&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;そこで、&lt;a href="author/inoue"&gt;@a_know&lt;/a&gt; の提案で &lt;strong&gt;これ以降の研修の進め方を全員で話し合って決める&lt;/strong&gt; ことになったのです。&lt;/p&gt;
+
+&lt;h4&gt;研修の進め方の話し合い&lt;/h4&gt;
+
+&lt;p&gt;話し合いでは、各個人が &lt;strong&gt;今の研修のいいところ&lt;/strong&gt; と &lt;strong&gt;微妙なところ・問題点&lt;/strong&gt; を付箋に書き出して意見交換をし、それらを踏まえてどういう進め方がベストかを全員で話し合いました。結果、&lt;strong&gt;Railsの思想&lt;/strong&gt; に関しては記事を書く形でまとめ、&lt;strong&gt;Railsの周辺技術&lt;/strong&gt; に関しては勉強会形式で一人一人担当の範囲を決めてお互いにプレゼンしあう方法を採用しました。勉強会形式ではそれぞれが別々の範囲を担当するため、個人個人の理解度に差が出てしまうのでは、という懸念がありました。その点は、出来る限りハンズオン形式で手を動かす時間を設けたり、サンプルコードを使って例を示すことで可能な限りカバーする工夫をしました。結果として、勉強会形式を採用したことで作業の効率や時間は大幅に改善し、この後に行う Rails アプリを作る研修に余裕を持って取り組むことができました。&lt;/p&gt;
+
+&lt;h4&gt;勉強会形式でお互いに発表し合う&lt;/h4&gt;
+
+&lt;p&gt;私たちは &lt;strong&gt;Railsの周辺技術&lt;/strong&gt; を以下の5つのテーマに分け、発表日を決めて勉強会を行いました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;JSON&lt;/li&gt;
+&lt;li&gt;Asset&lt;/li&gt;
+&lt;li&gt;Turbolinks&lt;/li&gt;
+&lt;li&gt;ロードパス（autoloadなど）&lt;/li&gt;
+&lt;li&gt;Sidekiq（非同期処理について）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;質疑応答の時間を設けて1テーマ30分で発表をしました。当日は同期内からも質問が多く上がったり、講師の &lt;a href="author/inoue"&gt;@a_know&lt;/a&gt; からも鋭いツッコミや質問が入るなど、大いに盛り上がりました。質問されて答えられなかったことや全員の理解が甘いところについては、後日記事にまとめたり全員で勉強する時間を設けることで知識の抜け漏れが無いようにしました。&lt;/p&gt;
+
+&lt;h3&gt;Rails アプリを作る研修&lt;/h3&gt;
+
+&lt;p&gt;Rails の基礎を学んだ後は、実際に Rails を使って Web アプリを作りました。基本的に&lt;a href="http://gihyo.jp/book/2014/978-4-7741-6516-5"&gt;『パーフェクト Ruby on Rails』&lt;/a&gt;の第6章以降を読んで、イベント告知アプリを実装しました。&lt;/p&gt;
+
+&lt;p&gt;この研修では、社内の業務でも使われているテスト駆動開発で行い、Vagrant 上の仮想環境にデプロイするところまでを目標にして取り組みました。実装にあたっては、GitHub に自分のアプリのリポジトリを作成し、PR を作って講師の &lt;a href="author/inoue"&gt;@a_know&lt;/a&gt; にレビューをしてもらい OK が出たらマージするという &lt;strong&gt;実際の業務でも行われている作業&lt;/strong&gt; に沿って行われました。レビューでは間違っていることを指摘されるだけでなく、&lt;strong&gt;ここはどういう意味だろう？&lt;/strong&gt; や &lt;strong&gt;ここをこうするとどうなるだろう？&lt;/strong&gt; といったような &lt;strong&gt;本を読んで写しているだけでは答えられない&lt;/strong&gt; ような質問があり、本に書かれている以上のことを学ぶことができました。また、これを通して、ただ本を読むだけではなく読んでいて気になるところを自発的に調べるような習慣がつきました。&lt;/p&gt;
+
+&lt;p&gt;最終的には、研修期間中に全員が以下の機能の実装まで行うことができました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Twitter ログイン機能&lt;/li&gt;
+&lt;li&gt;イベント登録&lt;/li&gt;
+&lt;li&gt;イベント一覧&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;アプリの実装については、本に書かれていること以外にも、社内で使われている技術を積極的に採用して実装を行いました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.deppbot.com/"&gt;deppbot&lt;/a&gt; による &lt;strong&gt;継続的な Bundle Update&lt;/strong&gt; を実現&lt;/li&gt;
+&lt;li&gt;テンプレートエンジンに &lt;strong&gt;slim&lt;/strong&gt; を導入&lt;/li&gt;
+&lt;li&gt;CircleCI による &lt;strong&gt;継続的インテグレーション&lt;/strong&gt; の実現&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;また、デプロイの環境を構築する際にサーバの設定を置くためのリポジトリを作り、Chef を使って cookbook を書いて Vagrant の環境を構築しました。Vagrant 上にアプリをデプロイする際には、capistrano を使ってデプロイの自動化を行いました。&lt;/p&gt;
+
+&lt;h3&gt;ローテーション配属研修&lt;/h3&gt;
+
+&lt;p&gt;ここでは、技術の学習の研修と並行して行われた &lt;strong&gt;ローテーション配属研修&lt;/strong&gt; （以下ローテ配属）についてご紹介します。&lt;/p&gt;
+
+&lt;p&gt;新卒エンジニアたちは、研修期間が終わった後にどのサービスの開発チームに配属されたいか希望を出すことになっていました。そこで、希望の配属先を考える上で &lt;strong&gt;チームの雰囲気や業務を体験して知っておく&lt;/strong&gt; ために用意されたのが &lt;strong&gt;ローテ配属&lt;/strong&gt; です。ローテ配属では、&lt;strong&gt;1週間ずつ計5つのサービスに配属&lt;/strong&gt; されて、そのサービスの開発チームの業務を体験しました。&lt;/p&gt;
+
+&lt;p&gt;機能の実装や修正などの業務では、基本的に現場のエンジニアと新人がペアプログラミングで作業を進める形で行われたため、普段仕事でどんな作業をするのかを知ることができました。ペアプロなどを通して効率よく作業するためのテクニックやエディタの設定なども教えてもらうことができ、エンジニアとして成長することができたと思います。自分が手を動かして作ったものがサービスの一部としてリリースされることになるため、作ったものが世の中に発信される充実感や達成感を味わうことができました。各チームではペアプロ以外にもチームのミーティングやチームランチなどのコミュニケーションの場が用意されており、普段のチームの雰囲気を知ることができる機会になったと思います。&lt;/p&gt;
+
+&lt;h3&gt;技術研修を通して学んだこと・感じたこと&lt;/h3&gt;
+
+&lt;p&gt;それでは、技術研修を終えて学んだこと・感じたことをまとめたいと思います。&lt;/p&gt;
+
+&lt;h4&gt;技術の学習とOJTのバランス&lt;/h4&gt;
+
+&lt;p&gt;今回の研修では、純粋に技術を学習する時間とローテ配属で業務をしながら学んでいく時間が半々に分かれていました。ただ知識をインプットするだけではなく、&lt;strong&gt;研修で学んだ技術を業務でアウトプットすることができる環境&lt;/strong&gt; が用意されていたため、&lt;strong&gt;インプットとアウトプットのバランス&lt;/strong&gt; が取れていたと思います。午前中の研修で学んだ知識がローテ配属先でも役に立つということも少なくありませんでした。&lt;/p&gt;
+
+&lt;p&gt;一方で、技術研修で後に学ぶ内容や習わない内容が先に業務で出てきてしまうこともあったため、もしも来年も同じような方法を採用するのであればその部分の連携が取れると更に良い研修になるかなと考えています。&lt;/p&gt;
+
+&lt;h4&gt;困った時・悩んだ時に相談しやすい環境&lt;/h4&gt;
+
+&lt;p&gt;この研修中は、困った時や悩んだ時に &lt;strong&gt;すぐ相談しやすい環境&lt;/strong&gt; が整っていたなと思います。一日の終わりにメンターとのふりかえりで都度現状を共有するタイミングあったため、そこで話しを聞いてもらって助言を頂いたりすることができました。講師の &lt;a href="author/inoue"&gt;@a_know&lt;/a&gt; との 1 on 1 面談では、技術的なアドバイスや社会人としてのアドバイスはもちろん、今後のエンジニアのキャリアの話など様々な話を聞いてもらい面倒を見ていただきました。このような場があったことで、自分が気付けていない新たな発見があったり、困っていることを相談できたため、研修時間外にも意思疎通や相談の場は大事だなと感じています。&lt;/p&gt;
+
+&lt;h4&gt;情報をアウトプットする機会が多かった&lt;/h4&gt;
+
+&lt;p&gt;技術研修では、特に基礎部分の学習において、&lt;strong&gt;アウトプットの機会が非常に多かった&lt;/strong&gt; なと感じています。エンジニアとして、自分が学んだ技術や調査した内容をまとめて何らかの形でアウトプットすることは非常に大切なことです。今回 Qiita:Team に記事をまとめたり、勉強会用のスライドをまとめるといった作業を通して、エンジニアとして &lt;strong&gt;どうやって情報をアウトプットし&lt;/strong&gt;、&lt;strong&gt;どのように共有すれば良いか&lt;/strong&gt; を学ぶことができました。これもただ受け身になって受ける研修では体験できなかったことかなと思います。&lt;/p&gt;
+
+&lt;p&gt;ただし、記事に学習内容をまとめる方法では内容が濃くなりすぎたり量が増えすぎたりしたため、どの程度の内容の記事にまとめるかはしっかりと運営側で決めてあげて &lt;strong&gt;研修の期間に見合ったスピード感で進めていく必要がある&lt;/strong&gt; かなと思いました。&lt;/p&gt;
+
+&lt;h4&gt;受ける側も運営する側も一緒になって組み立てていく研修&lt;/h4&gt;
+
+&lt;p&gt;先ほどご紹介した通り、今回の研修では、研修を計画した側が一方的に進め方を決めたわけではありません。受ける側が進め方に疑問や問題点を感じた時に、&lt;strong&gt;全員で話し合って研修の進め方を決め直しました&lt;/strong&gt;。今回全員で話し合って進め方を考えるという選択肢が出てきたのは、普段 &lt;strong&gt;アジャイルという考え方&lt;/strong&gt; に基づいて開発を行っているフィードフォースだからこその考え方なのかなと感じました。この話し合いは、研修を受ける側に寄り添いながら、受ける側にとって最適な研修はどんなものかを考える上で絶対にあったほうが良い取り組みだなと感じました。&lt;/p&gt;
+
+&lt;h2&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;さて、2016年度の新人研修についてお話ししてきました。いかがだったでしょうか。&lt;br&gt;
+フィードフォースにとっては新人研修元年とも言える年になったのではないでしょうか。&lt;/p&gt;
+
+&lt;p&gt;実は来年、私たち新卒エンジニア5名が技術研修の担当をすることが現時点で決まっています。&lt;a href="author/inoue"&gt;@a_know&lt;/a&gt; の記事でも触れられているように、&lt;a href="2016-rookie-training.html#ywt"&gt;今年の研修のふりかえり&lt;/a&gt;を行い、来年の研修につなげるため何を改善し何を行ったら良いかについてメンターを含めた全員で話し合いました。&lt;/p&gt;
+
+&lt;p&gt;来年は我々の後輩が入社してきますし、今後もフィードフォース新卒採用を続けていくはずです。その際に万全の受け入れをするためにも来年以降は今年の新人研修を更にブラッシュアップし、フィードフォースの文化として、フィードフォースならではの新人研修にしていけたらなと考えています。&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>フィードフォースにおける Elasticsearch+Kibana の導入事例</title>
+    <link rel="alternate" href="http://tech.feedforce.jp/introduce-elasticsearch-kibana.html"/>
+    <id>http://tech.feedforce.jp/introduce-elasticsearch-kibana.html</id>
+    <published>2016-06-20T13:00:00+09:00</published>
+    <updated>2016-06-20T13:00:00+09:00</updated>
+    <author>
+      <name>masutaka</name>
+    </author>
+    <content type="html">&lt;p&gt;最近遅ればせながら光の戦士になった増田です。サボり癖がなかなか直りません。&lt;/p&gt;
+
+&lt;p&gt;さて、この度 &lt;a href="https://www.elastic.co/jp/products/elasticsearch"&gt;Elasticsearch&lt;/a&gt; と &lt;a href="https://www.elastic.co/jp/products/kibana"&gt;Kibana&lt;/a&gt; の社内事例を作ることが出来ましたので、興奮のあまりお伝えします。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2&gt;ずっと導入したかった&lt;/h2&gt;
+
+&lt;p&gt;2014 年 3 月に中途で入社して以降、導入したかったものの 1 つが Elasticsearch でした。&lt;a href="https://masutaka.net/chalow/2014-12-14-1.html"&gt;個人ではすでに導入しており&lt;/a&gt;、効果を実感できていたためです。&lt;/p&gt;
+
+&lt;p&gt;その前段である fluentd の社内初事例が 2015 年 4 月のこちらの記事。気がつけば社内の他のプロジェクトにも導入が進んでいました。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://tech.feedforce.jp/elasticache.html"&gt;ElastiCacheをCloudWatch+fluentd+Zabbixで監視する | feedforce Engineers&amp;#39; blog&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;ところで私は先月から &lt;a href="https://dfplus.feedforce.jp/"&gt;DF PLUS&lt;/a&gt; というサービスにフルコミットし、主にエラー管理やログ基盤などを整備しています。&lt;/p&gt;
+
+&lt;p&gt;エラー管理については、&lt;a href="http://tech.feedforce.jp/rails-fluent-bugsnag.html"&gt;弊社ではもうお馴染みとなった Bugsnag&lt;/a&gt; で整備しました。&lt;/p&gt;
+
+&lt;p&gt;実はログ基盤は特に求められていませんでした。でも個人的には、絶対ログ基盤があるべきでサービスの可視化も絶対に必要という、根拠のない信念を持っていました。今回導入して効果を実感できているので、本当にうれしく思っています。&lt;/p&gt;
+
+&lt;h2&gt;CloudWatch Logs に送っていた&lt;/h2&gt;
+
+&lt;p&gt;これまで DF PLUS では、Rails の Production ログを fluentd 経由で CloudWatch Logs に送っていました。&lt;/p&gt;
+
+&lt;p&gt;CloudWatch Logs はお手軽なのですが、このような問題もあります。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ログ自体は設定で保持する期限を指定できるが、グラフ表示期間は 2 週間&lt;/li&gt;
+&lt;li&gt;柔軟にグラフを作ることが出来ない&lt;/li&gt;
+&lt;li&gt;AWS の UI がアレで見ようという気にならない&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;特にグラフ表示期間の 2 週間が致命的で、中長期的なメトリクスを取得することが出来ません。&lt;/p&gt;
+
+&lt;h2&gt;AWS Elasticsearch を導入した&lt;/h2&gt;
+
+&lt;p&gt;そういう状況もあり、虎視眈々と導入を狙っていました。&lt;a href="http://aws.typepad.com/aws_japan/2015/10/amazon-elasticsearch-service.html"&gt;去年の 10 月に AWS Elasticsearch がリリース&lt;/a&gt;されたときはうれしかったですね。&lt;/p&gt;
+
+&lt;p&gt;導入は&lt;a href="https://aws.amazon.com/jp/elasticsearch-service/"&gt;公式ガイド&lt;/a&gt;に加え、クラスメソッドさんのこちらの記事を参考にしました。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://dev.classmethod.jp/cloud/aws/cm-advent-calendar-2015-getting-started-again-amazon-es/"&gt;AWS再入門 Amazon Elasticsearch Service編 ｜ Developers.IO&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;機能は相当制限されています。例えば本来は elasticsearch.yml にいくつも設定を書けるのに、AWS では管理画面上から下記 2 つの設定を変更出来るだけです。elasticsearch.yml を直接編集することが出来ません。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.elastic.co/guide/en/elasticsearch/reference/1.5/url-access-control.html"&gt;rest.action.multi.allow_explicit_index&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.elastic.co/guide/en/elasticsearch/reference/1.5/index-modules-fielddata.html"&gt;indices.fielddata.cache.size&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;他にもバージョンは 1.5.2 固定だったり（2016 年 6 月現在の最新は 2.3.3）、VPC 内に作ることが出来ない等の制限があります。&lt;/p&gt;
+
+&lt;p&gt;今回はこれらが導入の障壁にならなかったため、AWS の Elasticsearch service を採用しました。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://www.elastic.co/cloud"&gt;本家の Elastic さんもホスティングサービスを出してます&lt;/a&gt;ので、検討してみるのも良いかもしれません。&lt;/p&gt;
+
+&lt;h2&gt;導入してよかったこと&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;サービスの現在を可視化出来る&lt;/li&gt;
+&lt;li&gt;サービスの現在のログを、サーバにログインすることなく見られる&lt;/li&gt;
+&lt;li&gt;複数サーバのログを横串で検索できる&lt;/li&gt;
+&lt;li&gt;データを可視化出来る&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;そこまで大量のログではないとは言え、個人サーバよりもいろいろなデータを扱えるのは面白いですね。まだまだこれからですが、エンジニア以外の方々も巻き込んでいけたらなと思っています（チームのエンジニアには相当受けが良かったw）。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Kibana" src="/images/2016/06/kibana.png" /&gt;&lt;/p&gt;
+
+&lt;h2&gt;まとめ&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ログ基盤は絶対に必要&lt;/li&gt;
+&lt;li&gt;データを可視化すると楽しい&lt;/li&gt;
+&lt;li&gt;CloudWatch Logs は甘え&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;付録&lt;/h2&gt;
+
+&lt;h3&gt;アクセスポリシーの Tips&lt;/h3&gt;
+
+&lt;p&gt;今回は Production サーバから &lt;a href="https://github.com/atomita/fluent-plugin-aws-elasticsearch-service"&gt;fluent-plugin-aws-elasticsearch-service&lt;/a&gt; 経由で AWS Elasticsearch にログを送っています。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/atomita/fluent-plugin-aws-elasticsearch-service/blob/v0.1.4/lib/fluent/plugin/out_aws-elasticsearch-service.rb#L38"&gt;この時、AWS の Credentials 情報が必要です。&lt;/a&gt;Production サーバの IP アドレスをアクセスポリシーに加えても、意味がありませんのでご注意下さい。EC2 インスタンスの場合は、Elasticsearch のパーミッションを持った IAM Role を付与すると良いでしょう。&lt;/p&gt;
+
+&lt;p&gt;今回は社内から Kibana でアクセスするための、IP アドレス制限ポリシーのみ設定しました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint"&gt;{
+  &amp;quot;Version&amp;quot;: &amp;quot;2012-10-17&amp;quot;,
+  &amp;quot;Statement&amp;quot;: [
+    {
+      &amp;quot;Sid&amp;quot;: &amp;quot;&amp;quot;,
+      &amp;quot;Effect&amp;quot;: &amp;quot;Allow&amp;quot;,
+      &amp;quot;Principal&amp;quot;: {
+        &amp;quot;AWS&amp;quot;: &amp;quot;*&amp;quot;
+      },
+      &amp;quot;Action&amp;quot;: &amp;quot;es:*&amp;quot;,
+      &amp;quot;Resource&amp;quot;: &amp;quot;arn:aws:es:ap-northeast-1:012345678901:domain/domainname/*&amp;quot;,
+      &amp;quot;Condition&amp;quot;: {
+        &amp;quot;IpAddress&amp;quot;: {
+          &amp;quot;aws:SourceIp&amp;quot;: [
+            &amp;quot;IPアドレス1&amp;quot;,
+            &amp;quot;IPアドレス2&amp;quot;
+          ]
+        }
+      }
+    }
+  ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+  </entry>
+  <entry>
+    <title>2016年度の新卒エンジニア受け入れを終えて</title>
+    <link rel="alternate" href="http://tech.feedforce.jp/2016-rookie-training.html"/>
+    <id>http://tech.feedforce.jp/2016-rookie-training.html</id>
+    <published>2016-06-16T16:00:00+09:00</published>
+    <updated>2016-06-16T16:00:00+09:00</updated>
+    <author>
+      <name>inoue</name>
+    </author>
+    <content type="html">&lt;p&gt;こんにちは！ エンジニアの井上こと &lt;a href="https://twitter.com/a_know"&gt;@a_know&lt;/a&gt; です。&lt;a href="https://github.com/a-know"&gt;GitHub では a-know&lt;/a&gt; という ID で活動しています。34歳、社会人11年目です。いつのまにやら、立派な中堅どころとなってしまいました。&lt;/p&gt;
+
+&lt;p&gt;先日、約2ヶ月に渡って行われた2016年度の新卒エンジニアの受け入れが終わり、全員が配属先となるプロダクト開発チームへと巣立って行きました。私はこの数ヶ月、今年度新卒エンジニアの受け入れ責任者として立ちまわっていたため、それぞれが配属先で活躍している様子を見て、今はまるで親鳥のようなきもちです。(\( ⁰⊖⁰)/) .｡oO(がんばるのよ...!)&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;今年は5人もの新入社員がフィードフォースエンジニアチームの仲間に加わってくれました。みんなとても優秀な若者ばかりで、嬉しく、頼もしい限りです。......ちなみに、彼らが入社する前の時点で、エンジニアチームは総勢 20人という規模でした。おわかりでしょうか、彼らの入社のインパクトの大きさが...。。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="mizup" src="/images/2016/06/rookie_training_01.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;ということで今回は、「新卒受け入れに関する何かしらの知見を共有できれば」という思いも込めて、2016年度新卒エンジニアの受け入れの記録をこの技術ブログに残したいと思います。&lt;/p&gt;
+
+&lt;p&gt;※ フィードフォースにおける「新卒社員研修」は大まかに分けて、「前半：総合職＋エンジニア職での合同研修」と「後半：職種ごとに分かれての職種別研修」という2部構成で実施しました。&lt;br&gt;
+この記事では、特に「エンジニア職」における「後半：職種ごとに分かれての職種別研修」について、お伝えしたいと思います。&lt;/p&gt;
+
+&lt;h2&gt;2016年度新卒入社の経緯&lt;/h2&gt;
+
+&lt;p&gt;昨年の秋ごろでしょうか、「どうやら来年は5人も新卒が入ってくるようだ」との噂が私の耳に入ってきました。ここ3年のエンジニアチームへの新卒社員入社の実績は、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2013年度：2人&lt;/li&gt;
+&lt;li&gt;2014年度：1人&lt;/li&gt;
+&lt;li&gt;2015年度：0人&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;という状況だったこともあり、今まではその受け入れも「入社後すぐに配属先を決定（本配属）」「配属先での OJT 形式」、という形で実施していました。&lt;/p&gt;
+
+&lt;p&gt;そんななかでの、5人入社の情報。私は当初、いち社員としてしばらく様子を見ていたのですが、だんだんと「どうやらこのままいくと、2016年度も今までと同じような受け入れをすることになりそうだぞ」という雰囲気が漂ってきていました。&lt;/p&gt;
+
+&lt;p&gt;これについて、私は「&lt;strong&gt;このままじゃ絶対にヤバイ！&lt;/strong&gt;」と直感的に思ったため、早々と「新卒エンジニア受け入れ責任者」に立候補しました。これは、最初こそ危機感が先に立ってのことでした。ですが&lt;strong&gt;「会社の未来を作ることになる新卒エンジニアの受け入れ」に責任を持って取り組めることはそうそう無い&lt;/strong&gt;し、そのことにやりがいもすごく感じましたので、責任の重さも当然ありましたがどこかワクワクもしながらあれこれと考え始めました。&lt;br&gt;
+（ちなみに受入期間中の私の業務ですが、1日の業務時間のうちの5割 〜 7割を新卒受け入れ業務に充てていました。自分の開発チームでの仕事は、正直なところ、コードレビューの実施やスクラムマスターとしての立ち回りが主となっていました。が、それくらい集中してコミットができる体制はやはり必要だったと感じています）&lt;/p&gt;
+
+&lt;h2&gt;まず考えたこと&lt;/h2&gt;
+
+&lt;p&gt;立候補はしたものの、当時の私には特に具体的なアイデアがあるわけではありませんでした。&lt;br&gt;
+ただ、2014年度に唯一一人だけ入社したエンジニアの受け入れをしたのがたまたま私であったこともあり、それを通じて「こういうことをしてあげる必要があるんじゃないかなぁ」みたいなイメージのようなものも頭のなかにはありました。&lt;/p&gt;
+
+&lt;p&gt;それは、断片的ではありますが挙げてみると、下記のようなことでした。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;エンジニアチームの全員で受け入れる感じにしたかった
+
+&lt;ul&gt;
+&lt;li&gt;今までのやり方だと、新卒エンジニアに関わることのできる人が少なかった&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;配属に関して、配属される新卒エンジニアにも主体的になってほしいなと思った
+
+&lt;ul&gt;
+&lt;li&gt;やっぱり自分から「このチームに行きたい！」と考えるほうが、よりモチベーションに繋がる&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;技術についてのレクチャーは、その時点の私の中になんとなくある、「Rails での Web アプリケーション開発のよさげな勉強方法」をベースにするしかないかなと思った
+
+&lt;ul&gt;
+&lt;li&gt;自分自身も入社から 2年たち、Rails での Web アプリケーション開発を学ぶときの「歩きやすいルート」みたいなものが見えてきていた&lt;/li&gt;
+&lt;li&gt;とはいえ 1 から 10 まで教えるのは違う気もする&lt;/li&gt;
+&lt;li&gt;そもそも「教える」というのも違う気がする&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;今回の受け入れを通じて、既存社員にも刺激を与えたい（受けたい）なと思った&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;これらをうまくカバーできるような内容にすれば、その過程で大変なことはいろいろあっても最終的には「やってよかった」とみんなが思えるものになりそうだなと、比較的楽観的に考えていました。&lt;/p&gt;
+
+&lt;h2&gt;やろうと決めたこと&lt;/h2&gt;
+
+&lt;p&gt;上記を踏まえ、以下の様なことをやってみよう、と考えました。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;「指導先輩」という仕組みの導入&lt;/li&gt;
+&lt;li&gt;ローテーション配属の実施・研修の最後に本配属面談を実施&lt;/li&gt;
+&lt;li&gt;技術研修（座学・実習）の実施&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;それぞれについて、書いてみます。&lt;/p&gt;
+
+&lt;h3&gt;「指導先輩」という仕組みの導入&lt;/h3&gt;
+
+&lt;p&gt;主に「エンジニア全員で受け入れる感じにしたかった」という点についての打ち手になります。&lt;br&gt;
+今までは、「新人受け入れというのはごく一部の人（配属先の受け入れ担当者）が考えればいい」みたいなところがあったと思っていて、その状態から抜け出したいと思っていました。なにより「今後も同程度の規模で新卒採用を継続していく」というのが会社の方針でもあったので、それも踏まえて、「新卒社員は会社全体で受け入れるもの」という文化というか雰囲気を醸造したい（しなければ）という思いがありました。&lt;/p&gt;
+
+&lt;p&gt;「指導先輩」は、「若手で」「数年後にはフィードフォースを背負って立つような人になってほしい（もらわないと困る）」ような人を、CTO とも相談の上、指名させてもらいました。一人の新卒社員に対して一人の先輩を指名し、計5名です。「人に何かを教える」には、その人自身も同等以上に知っていなければ教えられないものです。そんな動きを求められる「指導先輩」を経験することで、その先輩になる側もきっと多くのことを学べるとも考えました。&lt;/p&gt;
+
+&lt;p&gt;指導先輩には、指導後輩とのふりかえり（KPT）も毎日実施してもらました。それにより日々得た学びを定着させるお手伝いをすると同時に、毎日何かしらの改善を積み重ねていけるような働きかけもお願いしました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="rookie_kpt" src="/images/2016/06/rookie_training_02.jpg" /&gt;&lt;/p&gt;
+
+&lt;h3&gt;ローテーション配属の実施・研修の最後に本配属面談を実施&lt;/h3&gt;
+
+&lt;p&gt;「配属に関して、新卒エンジニアにも主体的になってほしい」ということに関する打ち手です。&lt;/p&gt;
+
+&lt;p&gt;「ローテーション配属」、つまり、フィードフォース内の5つのプロダクトチームに、週替りで仮配属してもらう取り組みです。&lt;/p&gt;
+
+&lt;p&gt;なぜこのような取り組みをすることにしたかですが、「配属に関して、新卒エンジニアにも主体的になってほしい」という思いは上述の通りありました。一方で、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;各プロダクトチームがどんなチーム（開発方法・利用ツール・雰囲気 etc.）か&lt;/li&gt;
+&lt;li&gt;各チームに対して、自分がどう思うか（このチームに行きたい！ or このチームはやだな... etc.）&lt;/li&gt;
+&lt;li&gt;これらを勘案して、自分はどのプロダクトチームに行きたいのか&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;......なんて、入社したばかりの新卒社員にはわからないはず。だからこその、この取組でした。&lt;/p&gt;
+
+&lt;p&gt;ローテーション配属を実施することで各チームの状況と雰囲気を自分の目と体で知り、さらに研修の最後に本配属面談を行うことで、新卒エンジニア側の気持ち・希望も考慮できるように心がけてみました。&lt;br&gt;
+（もちろん「その希望がどれくらい通るか」は、そのときのチーム状況や各人の適正なども考慮することになるとは思っていたし、そのことは本人達にも何度となく伝えました。が、配属決定時に「なぜこの配属先か」「このチームでどんな活躍を期待するか」といったメッセージは、CTO からしっかりと伝えてもらうようにもしました）&lt;/p&gt;
+
+&lt;p&gt;ローテーション配属による良い影響の狙いは、新卒エンジニア側についてだけではありません。ローテーション配属先の受け入れに関しては、基本的に「指導先輩」に主導してもらうにしても、ある程度は他の社員の助けを借りる瞬間が絶対に出てくるだろうと思っていました。&lt;br&gt;
+それによって、「エンジニア全員で受け入れる感じにしたかった」の範囲を広げられるだろう、とも考えていました。基本的に全てのエンジニアが業務において、新卒エンジニアと自然と関わるような仕組みにしたかったので、ローテーション配属という仕組みは打って付けだろうと思いました。&lt;/p&gt;
+
+&lt;p&gt;一方で、この期間中は各チームからのアウトプットのスピードが鈍化するのも目に見えていました。そのためその点については、予め私が CTO などに直談判し、許可を得ておきました。&lt;br&gt;
+（新卒社員を受け入れるっていうことはそれぐらい大変なことなんだということを、ひたすら力説しました）&lt;/p&gt;
+
+&lt;h3&gt;技術研修（座学・実習）の実施&lt;/h3&gt;
+
+&lt;p&gt;私自身がフィードフォースに入社してからこれまでに取り組んだ Rails 関連の自学習教材（Ruby, Rails 未経験だったため...）のうちのひとつに、「&lt;a href="http://www.amazon.co.jp/dp/4774165166/"&gt;パーフェクト Ruby on Rails&lt;/a&gt;」がありました。&lt;br&gt;
+この書籍は自分としてもとてもわかりやすいと感じると同時に、現在のフィードフォースでの開発業務に対するカバー範囲の広さ（Web アプリケーションの基礎から Rails アプリの構築、Infrastructure as Code まで）もあり、これはとても良い教材になると思っていました。&lt;/p&gt;
+
+&lt;p&gt;一方で、2014年度の新卒エンジニアと接してきたなかで&lt;strong&gt;「&amp;quot;Rails がよしなにやってくれているところ&amp;quot; についての認識不足」と「それによるベテランエンジニアとの齟齬の発生」は無視できないくらいにはある&lt;/strong&gt;な、とも感じていました。なので、Rails による Web アプリケーション構築技術の習得も大事ですが、&lt;strong&gt;その前提となる知識を埋めることこそ研修で実施すべき&lt;/strong&gt;と考えました。&lt;/p&gt;
+
+&lt;p&gt;上記を踏まえ、以下の3点の教材を用いて座学と実習を組み合わせて約2ヶ月間取り組むことで、Web アプリケーション開発の土台を作るところから試みました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://www.amazon.co.jp/dp/4798118818/"&gt;ゼロから始めるデータベース操作&lt;/a&gt; を用いた DB 基礎&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.amazon.co.jp/dp/4774142042/"&gt;Web を支える技術&lt;/a&gt;を用いた Web 基礎&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.amazon.co.jp/dp/4774165166/"&gt;パーフェクト Ruby on Rails&lt;/a&gt; を用いた Rails 開発基礎・Infrastructure as Code 基礎（Chef / serverspec）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;これらの本をベースにしつつ、「こういう順番で進めたほうがよりタメになるはず」という考えをベースにカリキュラムも作成しました。&lt;br&gt;
+例えば「パーフェクト Ruby on Rails」では特別 TDD をベースとした開発を徹底して書かれているわけではありませんでしたが、弊社での開発は基本的に TDD であるため、そのあたりをアレンジしたりしました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="カリキュラム" src="/images/2016/06/rookie_training_03.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;このカリキュラムをもとにレクチャーする講師は私だったわけですが、終始心がけていたことがあり、それが&lt;strong&gt;「できるだけ教えないこと」&lt;/strong&gt;でした。&lt;br&gt;
+その代わり、「本にはこう書いてあるけど、なんでそうなるの？（なると思う？）」「なんでこの1行でこの動きをするの？」「このコードはどういう挙動を期待して書いてるの？」など、様々な角度から疑問を投げかけまくりました。&lt;/p&gt;
+
+&lt;p&gt;その結果としてすぐに回答が返ってくるものもあれば、そこで初めて「自分はそれについてよくわかっていなかった」ことに気づき、あれこれ調べてくれたりした...ということもありました。当人たちは大変だったと思いますが、「講師が教える」よりもこの方法の方がきっと何倍も、身についたのではないかと思っています。&lt;/p&gt;
+
+&lt;p&gt;今後も、&lt;strong&gt;「ここ、井上さんから突っ込まれそうだな」という発想からスタートしてもまずは構わない&lt;/strong&gt; ので、目にするあれこれに疑問・興味を持って欲しいなと思っています。&lt;/p&gt;
+
+&lt;h2&gt;工夫したこと&lt;/h2&gt;
+
+&lt;p&gt;以上のようなことをやろうと決め、実際に進めていったのですが、いくつかの工夫も心がけました。&lt;br&gt;
+そのうちの一部をご紹介します。&lt;/p&gt;
+
+&lt;h3&gt;受け入れに関して考えていることは全て、とにかく Qiita:Team にアウトプットしながら準備をした&lt;/h3&gt;
+
+&lt;p&gt;「新卒エンジニアの受け入れ研修」なんてもう、フィードフォース史上初めての試みだった上に、井上のおぼろげなイメージしか拠り所がありませんでした。そのため、「それはマズいんじゃないの？」みたいな意見は常に欲していました。&lt;/p&gt;
+
+&lt;p&gt;なので、「こうしようと思う」というのは思いついた時点でまず Qiita:Team に書いて公開し、いつでもフィードバックを受けられる状態を保ちながら準備を進めていました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="qiita:team" src="/images/2016/06/rookie_training_04.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;こうしていたことで、他の社員にもなんとなく「こういうことをやるんだよね」っていう最低限のイメージの共有は行いながら進められていたように感じています。&lt;/p&gt;
+
+&lt;h3&gt;研修の進め方は考えるが、それに固執しすぎないようにした&lt;/h3&gt;
+
+&lt;p&gt;上述の通り、カリキュラムまで作成して研修に臨みました。ですが「新卒エンジニアが理解できたところ・できなかったところとその理由」などは、私の目の前でどんどんと移り変わっていきました。そんななかで、&lt;strong&gt;予め準備したカリキュラム通り進めることに意味は無い&lt;/strong&gt;とも思っていました。&lt;br&gt;
+このような状況に、「&lt;strong&gt;なんだ、これ、実際の開発現場と似てるじゃん！&lt;/strong&gt;」と思えたため、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;研修途中に 1on1 を実施し「もっとこういうふうに学びたい」という意見を吸い上げたり&lt;/li&gt;
+&lt;li&gt;「いまの進め方のいいところ・イマイチだと思うところ」「それらを踏まえて、こうしたらいいのではと思うところ」の意見交換を付箋を使用して実施したり
+
+&lt;ul&gt;
+&lt;li&gt;「今回は研修の進め方だったけど、開発の進め方だって迷ったらこういう風に話しあえばいいし、そもそも &amp;quot;アジャイル&amp;quot; ってきっとこういうこと」という話もできた&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;といった工夫を合間合間で実施しました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="rookies" src="/images/2016/06/rookie_training_05.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;↑意見交換のようす。&lt;/p&gt;
+
+&lt;p&gt;その結果として、&lt;strong&gt;私だけでは思いつかなかったような、それでいて今年の新卒エンジニアにピッタリな進め方を決められた&lt;/strong&gt;、と思っています。&lt;br&gt;
+また「&lt;strong&gt;研修は必ずしも与えられるだけのものじゃなく、自分たちでも作っていけるものなんだ&lt;/strong&gt;」ということを（おそらく来年の受け入れ・研修を考えていくことになる）今年の新卒エンジニア自身に思ってもらえたのも、大きな収穫だと考えています。&lt;/p&gt;
+
+&lt;p&gt;&lt;span id="ywt"&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;h2&gt;やってみてどうだったか？&lt;/h2&gt;
+
+&lt;p&gt;研修カリキュラムを全て終えた翌営業日、研修のふりかえりとして下記の2つの取り組みを行いました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ローテーション配属についてのふりかえりを、YWT 形式で
+
+&lt;ul&gt;
+&lt;li&gt;指導先輩5名＋新卒エンジニア 5名＋井上&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;技術研修についてのふりかえりを、YWT 形式で
+
+&lt;ul&gt;
+&lt;li&gt;新卒エンジニア 5名＋井上&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;YWT とは「やったこと」「わかったこと」「つぎにやること」の組み合わせのことで、以前このブログでも題材にしています → &lt;a href="http://tech.feedforce.jp/ywt-retrospective.html"&gt;中長期のふりかえりとしてYWT(やった,わかった,つぎにやる)を試してみました&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;ここでは、その場で挙がった事柄の一部をご紹介します。きっと、来年度の受け入れではこれらの気付きが十分反映された受け入れをすることができるだろうと思っています。&lt;/p&gt;
+
+&lt;h3&gt;ローテーション配属について&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;指導先輩のみならず、配属先のエンジニア全員で協力できた&lt;/li&gt;
+&lt;li&gt;各チームがどんな状況・雰囲気なのかがよくわかった
+
+&lt;ul&gt;
+&lt;li&gt;とはいえ、「ローテーション配属というやり方しかないか」というと、もっといいやり方はありそうな気もする！&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;配属先での環境構築作業が、意外と鬼門！&lt;/li&gt;
+&lt;li&gt;1日のうち、半日が技術研修・のこり半日でローテーション配属、という進め方について
+
+&lt;ul&gt;
+&lt;li&gt;1日をメリハリ付けて過ごすことができた一方、&lt;/li&gt;
+&lt;li&gt;まとまった仕事を依頼しにくいなどの弊害もあった！&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;技術研修について&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Rails は得意な方だったけど、井上からのツッコミでより深いところまで知ることができた&lt;/li&gt;
+&lt;li&gt;「パーフェクト Ruby on Rails」も良かったけど、来年は「Rails チュートリアル」でもいいかも！&lt;/li&gt;
+&lt;li&gt;技術研修の講師役は日々の予習が大変！&lt;/li&gt;
+&lt;li&gt;エディタやシェル周りについても色々教えて欲しかった！&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;その他・進め方などについて&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;指導先輩同士の横軸での情報共有が難しかった&lt;/li&gt;
+&lt;li&gt;研修として何をやるかを、研修を受ける自分たちで考えることができてとても良かった
+
+&lt;ul&gt;
+&lt;li&gt;講師側としても、ともすると「より意味のある研修にしなくては」と背負い込みがちだけど、その思い込みをまず外すのも大事&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;技術研修での習得状況についての共有が、ローテーション配属先と満足に行えていなかった&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;2016年度の新卒エンジニアの、主に技術的な面での受け入れについて、実際にやったことをまとめて書かせて頂きました。&lt;br&gt;
+取り組みを考えるにあたっては、昨年末にペパボさんで開催された「&lt;a href="http://pepabo.connpass.com/event/22180/"&gt;師弟登壇&lt;/a&gt;」というイベントの資料を大変参考にさせて頂きました。ありがとうございました！&lt;br&gt;
+この記録自体は「師弟登壇」と関連はないのですが、来年度以降、同じように新卒エンジニアを（大勢を・初めて）受け入れるといった会社・チームの何かしらの参考になれば幸いです。&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Mackerelの監視ルールをコード管理する</title>
+    <link rel="alternate" href="http://tech.feedforce.jp/mkr.html"/>
+    <id>http://tech.feedforce.jp/mkr.html</id>
+    <published>2016-06-10T17:00:00+09:00</published>
+    <updated>2016-06-10T17:00:00+09:00</updated>
+    <author>
+      <name>sugiuchi</name>
+    </author>
+    <content type="html">&lt;p&gt;Let&amp;#39;s DARK SOULS Ⅲ !! 最近PS4を買いました。インフラ担当の杉内です。&lt;/p&gt;
+
+&lt;p&gt;feedforceではMackerelでサーバ監視を行っていますが、使っていくにつれて監視ルールの変更をコードベースで管理したくなったので mkr を使ってコード化しました。&lt;br&gt;
+チーム内でデモを通して共有し、良さげな感じでしたので運用イメージも含めて共有します。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2&gt;mkrを使って監視ルールを管理する&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class="prettyprint"&gt;mkr&lt;/code&gt; というコマンドラインツールからMackerelの監視ルールを更新したりできる(他にも機能はある)&lt;/li&gt;
+&lt;li&gt;監視ルールは&lt;code class="prettyprint"&gt;monitors&lt;/code&gt;というサブコマンドで操作する。さらにサブコマンド &lt;code class="prettyprint"&gt;diff&lt;/code&gt;,&lt;code class="prettyprint"&gt;pull&lt;/code&gt;,&lt;code class="prettyprint"&gt;push&lt;/code&gt; がある&lt;/li&gt;
+&lt;li&gt;監視ルールはjson形式で記述できる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ドキュメント → &lt;a href="https://mackerel.io/ja/docs/entry/advanced/cli"&gt;https://mackerel.io/ja/docs/entry/advanced/cli&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;準備&lt;/h3&gt;
+
+&lt;p&gt;mkrのインストール&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint"&gt;$ brew tap mackerelio/mackerel-agent
+$ brew install mkr
+$ mkr -v
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;go getでインストールしても良いです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint"&gt;$ go get github.com/mackerelio/mkr
+$ go install github.com/mackerelio/mkr
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;APIキーをdirenvを使用して設定します。APIキーは &lt;a href="https://mackerel.io/orgs/"&gt;https://mackerel.io/orgs/&lt;/a&gt;&lt;Organization&gt; から取得します。&lt;br&gt;
+(ここでは&lt;code class="prettyprint"&gt;mackerel/&lt;/code&gt;というディレクトリを作成して設定ファイルを管理しています。特に決まりはありません)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint"&gt;$ cd mackerel/
+$ direnv edit .
+
+export MACKEREL_APIKEY=&amp;lt;API key&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;適当なコマンドを実行します。ホストの一覧が出て来ればOKです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint"&gt;$ mkr hosts
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;準備ができたのでここからは実際に監視ルールを設定していきます。&lt;/p&gt;
+
+&lt;h3&gt;監視ルールを更新する&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class="prettyprint"&gt;mackerel/&lt;/code&gt;以下で実行する
+
+&lt;ul&gt;
+&lt;li&gt;ディレクトリを変えずに -F mackerel/monitors.json で指定しても良い&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;監視のファイルは&lt;code class="prettyprint"&gt;monitors.json&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;monitors.jsonが未管理の場合は &lt;code class="prettyprint"&gt;mkr monitors pull&lt;/code&gt; をしてローカルファイルに保存する必要があります&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;まず&lt;code class="prettyprint"&gt;diff&lt;/code&gt;で確認します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint"&gt;$ mkr monitors diff
+
+Summary: 0 modify, 0 append, 0 remove
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;管理画面と手元の設定ファイルに差分はありません。&lt;br&gt;
+次に何か設定を変更し(&lt;code class="prettyprint"&gt;monitors.json&lt;/code&gt; を変更)、再度diffします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint"&gt;$ mkr monitors diff
+Summary: 1 modify, 0 append, 0 remove
+
+  {
+    &amp;quot;name&amp;quot;: &amp;quot;custom.delayed_job.process&amp;quot;,
+    &amp;quot;type&amp;quot;: &amp;quot;host&amp;quot;,
+    &amp;quot;metric&amp;quot;: &amp;quot;custom.delayed_job.process&amp;quot;,
+    &amp;quot;operator&amp;quot;: &amp;quot;&amp;lt;&amp;quot;,
+-   &amp;quot;warning&amp;quot;: 1.000000,
++   &amp;quot;warning&amp;quot;: 2.000000,
+    &amp;quot;critical&amp;quot;: 1.000000,
+    &amp;quot;duration&amp;quot;: 10,
+    &amp;quot;scopes&amp;quot;: [
+      &amp;quot;production: batch&amp;quot;,
+    ],
+  },
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;warningの閾値を 1 -&amp;gt; 2 へ変更しました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ここまで出来たらPRを作成してレビューしてもらう&lt;/li&gt;
+&lt;li&gt;PRがマージされたら反映させるので以下へ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;設定をMackerelに反映します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint"&gt;$ mkr monitors push --dry-run (dryrunオプションで確認しても良い)
+$ mkr monitors push
+      info Update a rule.
+ {
+   &amp;quot;id&amp;quot;: &amp;quot;ホストID&amp;quot;,
+   &amp;quot;name&amp;quot;: &amp;quot;custom.delayed_job.process&amp;quot;,
+   &amp;quot;type&amp;quot;: &amp;quot;host&amp;quot;,
+   &amp;quot;metric&amp;quot;: &amp;quot;custom.delayed_job.process&amp;quot;,
+   &amp;quot;operator&amp;quot;: &amp;quot;&amp;lt;&amp;quot;,
+   &amp;quot;warning&amp;quot;: 2,
+   &amp;quot;critical&amp;quot;: 1,
+   &amp;quot;duration&amp;quot;: 10,
+   &amp;quot;scopes&amp;quot;: [
+     &amp;quot;production: batch&amp;quot;
+   ]
+ },
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code class="prettyprint"&gt;--dry-run&lt;/code&gt; が成功してもpushしてからapiエラーになる場合もあります。&lt;br&gt;
+(必須項目が不足してたり)&lt;/p&gt;
+
+&lt;h3&gt;管理画面から直接編集した場合&lt;/h3&gt;
+
+&lt;p&gt;一度に多くの変更を加えるときなどは便利ですが、やはり管理画面から設定したほうが楽な場合は多いです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;新しく監視項目を追加するとき&lt;/li&gt;
+&lt;li&gt;緊急対応時とか
+
+&lt;ul&gt;
+&lt;li&gt;緊急対応でなくても画面から設定するのは問題無いです&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;その場合は管理画面を正としてコードをコミットします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="prettyprint"&gt;$ mkr monitors diff
+$ mkr monitors pull
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;pullコマンドによって管理画面の設定が&lt;code class="prettyprint"&gt;monitors.json&lt;/code&gt;に保存されるのであとはコミットしてPRを作成してください。&lt;/p&gt;
+
+&lt;h2&gt;まとめ&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;コードで管理されることによって変更点が可視化される
+
+&lt;ul&gt;
+&lt;li&gt;diffができる、履歴が残る、レビューがされる&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;GitHubを介すことによってアプリケーションと同じフローで監視ルールを設定できる
+
+&lt;ul&gt;
+&lt;li&gt;chefやterraformと同じように&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;管理画面から編集するのは全然良くて、むしろ差分があるということを認識できるのが良いと思う
+
+&lt;ul&gt;
+&lt;li&gt;そこは柔軟にやりたい&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;CircleCIとの連携してもいいのでゆとりがあったらやりたい
+
+&lt;ul&gt;
+&lt;li&gt;diffがあったらエラーにして管理画面から変更したのを忘れちゃわないようにするとか&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
+</feed>

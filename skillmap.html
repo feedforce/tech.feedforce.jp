@@ -1,0 +1,274 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>スキルマップで開発チームのスキル状況を見える化してみました | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは。去年買った春夏の洋服が窮屈に感じられる鈴木です。縮んでしまったのでしょうか。さて、このたび弊社の各開発チームで「スキルマップ」を作ってみたので、その経緯や作って感じたことをお伝えします。">
+      <link rel="canonical" href="http://tech.feedforce.jp/skillmap.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="スキルマップで開発チームのスキル状況を見える化してみました | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは。去年買った春夏の洋服が窮屈に感じられる鈴木です。縮んでしまったのでしょうか。さて、このたび弊社の各開発チームで「スキルマップ」を作ってみたので、その経緯や作って感じたことをお伝えします。">
+      <meta property="og:url" content="http://tech.feedforce.jp/skillmap.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/skillmap.html">スキルマップで開発チームのスキル状況を見える化してみました</a></h1>
+      <ul>
+        <li class="entry-time">2016.05.13</li>
+        <li class="entry-cat"><a href="/category/dev_style/">開発スタイル</a></li>
+        <li class="entry-author"><a href="/author/r-suzuki">r-suzuki</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/r-suzuki"><img src="/images/authors/r-suzuki.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは。去年買った春夏の洋服が窮屈に感じられる鈴木です。縮んでしまったのでしょうか。<br>
+さて、このたび弊社の各開発チームで「スキルマップ」を作ってみたので、その経緯や作って感じたことをお伝えします。</p>
+
+<p><img alt="スキルマップ" src="/images/2016/05/skillmap_sample.jpg" /></p>
+
+<!--more-->
+
+<h2>経緯/背景</h2>
+
+<p>以前からスキルマップの存在は知っていましたが、ryuzeeさんのブログ記事 <sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> やデブサミでの講演 <sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup> を受け「作ってみよう！」と思い立ちました。</p>
+
+<p>弊社では現在5つの開発チームがあり、それぞれに1つまたは2つの自社サービス開発を担当。各チームはフロントエンドエンジニア/バックエンドエンジニア/インフラエンジニアから構成され、すべてのチームが機能横断的であることを目指しています。期待されるスキルセットをチームとして備えていることが、スピーディな開発や自己組織化に必要と考えているからです。</p>
+
+<p>新人さんの入社時や会社として新サービスを立ち上げる際にチームメンバーの出入りが発生します。「その出入りによるスキルセットの変化を見える化したい」ということが、スキルマップを作ろうと考えた第1の理由です。</p>
+
+<h2>どう作ったか</h2>
+
+<p>スキルマップを作るのは初めて。各チームにスキルマップを意識してもらいたかったので、以下のように段階を経て作っていきました。</p>
+
+<ol>
+<li>エンジニア全員で集まり、各チーム別にスキル項目を検討/他チームと意見交換</li>
+<li>共通のテンプレート(Googleスプレッドシート)を用意(ほぼryuzeeさん記事のフォーマット)</li>
+<li>各チームで集まってスキル項目とスキル度合いを記入</li>
+<li>各チームのスキルマップを持ち寄り、今後の使い途などを意見交換</li>
+</ol>
+
+<p>3.の「スキル度合いの記入」は、チームメンバーで集まって一緒に進めることをお勧めします。各自の自己申告で済ませることもできますが、スキル度合いの「差」に注目することがチームビルディングの機会になるからです。</p>
+
+<h2>作ってみて感じたこと</h2>
+
+<p>4.の意見交換で得られた感想を以下にまとめます。</p>
+
+<h3>メンバーの優劣を示すものではない</h3>
+
+<p>「人事評価には利用しない」と言われますが、メンバー間においても「優劣を示すためのものではない」という共通認識をとっておくべきだと思います。スキルマップは「チームに期待されるスキルセットを網羅できているか」「特定の人に依存しているなどのリスクがないか」といったチームの課題を共有するためのツールです。メンバーの優劣ではなく、チームが抱える課題に目を向けさせる必要があります。</p>
+
+<h3>積極的に差をつける</h3>
+
+<p>「優劣ではない」という認識を作った上で、積極的にスキル度合いに差をつけると良いのではないか？ と感じました。差があるということは、「Aさんにはできるけど、Bさんにはできない何かがある」ことの表現です。なあなあに「同じくらいのスキルだよね」とするのではなく「あなたが持っている〇〇スキルを私は持っていないので習得していきたい」というような意見交換をする方が、メンバー同士の良い関係づくりになるでしょう。<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup></p>
+
+<h3>マネージャーと定期的に共有する</h3>
+
+<p>メンバーから「定期的に見直すべきだけど、いつやろうか？」「チームにいるメンバーのスキル習得だけではどうにもならないことあるよね？」といった意見がありました。その通りで、「足りないスキルを持つ人を採用してほしい」「スキル習得のために一定の業務時間を充てたい」などマネージャーと相談すべき状況もあるでしょう。チームとマネージャーのコミュニケーションツールとして定期的に共有することが、継続的なスキルマップ運用に必要だと感じました。</p>
+
+<h2>終わりに</h2>
+
+<p>今回スキルマップを作ってみて、</p>
+
+<ul>
+<li>チームが機能横断的であるか確認する指標として</li>
+<li>チームビルディングのツールとして</li>
+<li>チームとマネージャーのコミュニケーションツールとして</li>
+</ul>
+
+<p>有効であるという感触を得ました。4月にフロントエンドエンジニアが中途入社したので、そのチームからも「ちょうど新人さんが入ったので役に立った」という感想をもらっています。</p>
+
+<p>当初気になっていた「スキルセットの変化」は今後の運用で見ていくつもりです。特に複数の開発チームを抱えている会社/組織で試してみてはいかがでしょうか。</p>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p><a href="http://www.ryuzee.com/contents/blog/7065">スキルマップ作成のすすめ | Ryuzee.com</a>&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p><a href="http://www.ryuzee.com/contents/blog/7078">【資料公開】強いチームの作り方(デブサミ2016版) | Ryuzee.com</a>&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn3">
+<p>差をつけるあまり、それほど能力の高くない人が「エース」などと表現されるのは間違いですが&nbsp;<a href="#fnref3" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/skillmap.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="スキルマップで開発チームのスキル状況を見える化してみました" data-url="http://tech.feedforce.jp/skillmap.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/skillmap.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/skillmap.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/mkr.html" rel="next">Mackerelの監視ルールをコード管理する</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/elixir-phoenix-lesson-1.html" rel="prev">今から始めるRubyエンジニアのためのElixir Phoenix part1</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

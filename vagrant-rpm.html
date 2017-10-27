@@ -1,0 +1,289 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>Vagrantで簡単に作れる！！RubyやKyotoTycoonのrpmたち | feedforce Engineers' blog</title>
+      <meta name="description" content="皆さんお元気ですか。Debian GNU/Linux好きだけど、最近rpmの作り方を習得した増田です。">
+      <link rel="canonical" href="http://tech.feedforce.jp/vagrant-rpm.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="Vagrantで簡単に作れる！！RubyやKyotoTycoonのrpmたち | feedforce Engineers' blog">
+      <meta property="og:description" content="皆さんお元気ですか。Debian GNU/Linux好きだけど、最近rpmの作り方を習得した増田です。">
+      <meta property="og:url" content="http://tech.feedforce.jp/vagrant-rpm.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/vagrant-rpm.html">Vagrantで簡単に作れる！！RubyやKyotoTycoonのrpmたち</a></h1>
+      <ul>
+        <li class="entry-time">2014.12.08</li>
+        <li class="entry-cat"><a href="/category/ruby/">Ruby/Rails</a>, <a href="/category/infrastructure/">インフラ</a>, <a href="/category/test/">テスト</a></li>
+        <li class="entry-author"><a href="/author/masutaka">masutaka</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/masutaka"><img src="/images/authors/masutaka.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>皆さんお元気ですか。<br>
+Debian GNU/Linux好きだけど、最近rpmの作り方を習得した増田です。</p>
+
+<p><img alt="jenkins-rpm" src="/images/2014/12/jenkins-rpm.png" /></p>
+
+<!--more-->
+
+<h2>昔話</h2>
+
+<p>初めてRedHat Linuxに触れたのは7.1の頃(2002年？)。あの頃は配布されているrpmが少なく、make installに逃げていました。</p>
+
+<p>そんな中出会ったDebian GNU/Linux。配布パッケージが膨大で、手動ビルドの手間から逃れることが出来ました。Emacsとか興味あるアプリはビルドしてましたが。</p>
+
+<h2>サーバのCIとrpm作成</h2>
+
+<p>時は流れ2014年。先日こんな記事を公開しました。</p>
+
+<ul>
+<li><a href="http://tech.feedforce.jp/jenkins-server-ci.html">JenkinsでサーバのCIを始めました | feedforce Engineers&#39; blog</a></li>
+</ul>
+
+<p>実はこの時は、CookのたびにRubyやKyotoTycoonをビルドしていたため、CIに30分くらいかかっていました。CIに使うEC2インスタンスはt1.microでしたし。。</p>
+
+<p>これでは使いものにならないということで、重い腰を上げて作ったrpmがこちら。Rubyは <a href="https://github.com/hansode/ruby-2.1.x-rpm">https://github.com/hansode/ruby-2.1.x-rpm</a> からのforkです。ありがとうございます。</p>
+
+<ul>
+<li><a href="https://github.com/feedforce/ruby-rpm">https://github.com/feedforce/ruby-rpm</a></li>
+<li><a href="https://github.com/feedforce/kyototycoon-rpm">https://github.com/feedforce/kyototycoon-rpm</a></li>
+<li><a href="https://github.com/feedforce/kyotocabinet-rpm">https://github.com/feedforce/kyotocabinet-rpm</a></li>
+</ul>
+
+<p>それぞれSRPMとRPMもダウンロードできます。ご利用は自己責任で。</p>
+
+<ul>
+<li><a href="https://github.com/feedforce/ruby-rpm/releases">https://github.com/feedforce/ruby-rpm/releases</a></li>
+<li><a href="https://github.com/feedforce/kyototycoon-rpm/releases">https://github.com/feedforce/kyototycoon-rpm/releases</a></li>
+<li><a href="https://github.com/feedforce/kyotocabinet-rpm/releases">https://github.com/feedforce/kyotocabinet-rpm/releases</a></li>
+</ul>
+
+<p>32分が5分程度に短縮されました。振り切れているのが32分です。</p>
+
+<p><img alt="jenkins-graph" src="/images/2014/12/jenkins-graph.png" /></p>
+
+<p>今では簡単な修正はCIに任せているため、手元でCookすることが減り、コードを書く時間が増えました。</p>
+
+<h2>Rubyのバージョンアップに素早く追随</h2>
+
+<p>これだけだと芸がないので、<a href="https://www.vagrantup.com/">Vagrant</a>と<a href="https://www.virtualbox.org/">VirtualBox</a>を使って簡単にSRPMとRPMを作れるようにしました。</p>
+
+<p>このように機械的に作れます(<a href="https://github.com/feedforce/ruby-rpm/blob/master/README.md">README.md</a>から抜粋)。</p>
+
+<pre><code class="prettyprint shell-session">$ git clone git@github.com:feedforce/ruby-rpm.git
+$ cd ruby-2.1.x-rpm
+$ vagrant up
+$ vagrant ssh
+$ mkdir -p ~/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
+$ (cd ~/rpmbuild/SOURCES &amp;&amp; curl -LO http://cache.ruby-lang.org/pub/ruby/2.1/ruby-2.1.5.tar.gz)
+$ cp /vagrant/ruby21x.spec ~/rpmbuild/SPECS
+$ sudo yum update -y
+$ sudo yum install -y rpm-build
+$ rpmbuild -ba ~/rpmbuild/SPECS/ruby21x.spec
+エラー: ビルド依存性の失敗:
+        readline-devel は ruby-2.1.5-2.el6.x86_64 に必要とされています
+        ncurses-devel は ruby-2.1.5-2.el6.x86_64 に必要とされています
+        gdbm-devel は ruby-2.1.5-2.el6.x86_64 に必要とされています
+        glibc-devel は ruby-2.1.5-2.el6.x86_64 に必要とされています
+        gcc は ruby-2.1.5-2.el6.x86_64 に必要とされています
+        openssl-devel は ruby-2.1.5-2.el6.x86_64 に必要とされています
+        libyaml-devel は ruby-2.1.5-2.el6.x86_64 に必要とされています
+        libffi-devel は ruby-2.1.5-2.el6.x86_64 に必要とされています
+        zlib-devel は ruby-2.1.5-2.el6.x86_64 に必要とされています
+$ sudo yum install -y readline-devel ncurses-devel gdbm-devel glibc-devel gcc openssl-devel libyaml-devel libffi-devel zlib-devel
+$ rpmbuild -ba ~/rpmbuild/SPECS/ruby21x.spec
+(snip)
+書き込み完了: /home/vagrant/rpmbuild/SRPMS/ruby-2.1.5-2.el6.src.rpm
+書き込み完了: /home/vagrant/rpmbuild/RPMS/x86_64/ruby-2.1.5-2.el6.x86_64.rpm
+</code></pre>
+
+<p>実際の手順を貼り付けているのでごちゃっとしてますが、付属の<a href="https://github.com/feedforce/ruby-rpm/blob/master/ruby21x.spec">ruby21x.spec</a>を~/rpmbuild/SPECSにコピーして、rpmbuildしているだけです。</p>
+
+<p>Rubyバージョンアップによるruby21x.specの変更も<a href="https://github.com/feedforce/ruby-rpm/commit/4064fe0655cf9dc1427760ee48ef19be8a3a0366">このような些細なもの</a>です。</p>
+
+<h2>まとめ</h2>
+
+<ul>
+<li>rpmを自作したらCI時間が短縮されてハッピーになった。</li>
+<li>手元でCookすることも減り、コードを書く時間が増えた。</li>
+<li>Vagrantを使うとrpmのビルドの属人性が減る。</li>
+</ul>
+
+<p>Let&#39;s build rpm!!</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/vagrant-rpm.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="Vagrantで簡単に作れる！！RubyやKyotoTycoonのrpmたち" data-url="http://tech.feedforce.jp/vagrant-rpm.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/vagrant-rpm.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/vagrant-rpm.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/capybara-rails_with_metadata.html" rel="next">Capybaraでドキュメント・メタデータが出力されていることを確認したい</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/katakori.html" rel="prev">肩こりの原因と対策</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

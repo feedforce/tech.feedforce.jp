@@ -1,0 +1,396 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>CTO 就任にあわせて『リーダーズインテグレーション』を実施してみました！ | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは！a-know こと、いのうえです。社内でハンドルネームで呼ばれることに、未だに慣れていません(*´ｪ｀*)ﾎﾟｯさて、弊社エンジニアチームの技術マネージャーだった鈴木が、このたび CTO に就任したことは、先日の記事・マネージャー改め、CTOと名乗ることにしました でもお知らせ致しましたとおりです。私としても、フィードフォースのいちエンジニアとして、CTO と一緒にあれこれ試行錯誤しながらも前に進んでいきたいな、という所存です( ˘ω˘)。その CTO 就任の際のことなのですが、「リーダーズインテグレーションというものがあるらしい」「それをやってみたいんだ...(*´ｪ｀*)」という鈴木のつぶやきから端を発し、実際にエンジニアチームにおいて『リーダーズインテグレーション』をやってみた、ということがありましたので、今日はその出来事について書いてみたいと思います。">
+      <link rel="canonical" href="http://tech.feedforce.jp/leaders-integration.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="CTO 就任にあわせて『リーダーズインテグレーション』を実施してみました！ | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは！a-know こと、いのうえです。社内でハンドルネームで呼ばれることに、未だに慣れていません(*´ｪ｀*)ﾎﾟｯさて、弊社エンジニアチームの技術マネージャーだった鈴木が、このたび CTO に就任したことは、先日の記事・マネージャー改め、CTOと名乗ることにしました でもお知らせ致しましたとおりです。私としても、フィードフォースのいちエンジニアとして、CTO と一緒にあれこれ試行錯誤しながらも前に進んでいきたいな、という所存です( ˘ω˘)。その CTO 就任の際のことなのですが、「リーダーズインテグレーションというものがあるらしい」「それをやってみたいんだ...(*´ｪ｀*)」という鈴木のつぶやきから端を発し、実際にエンジニアチームにおいて『リーダーズインテグレーション』をやってみた、ということがありましたので、今日はその出来事について書いてみたいと思います。">
+      <meta property="og:url" content="http://tech.feedforce.jp/leaders-integration.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/leaders-integration.html">CTO 就任にあわせて『リーダーズインテグレーション』を実施してみました！</a></h1>
+      <ul>
+        <li class="entry-time">2015.10.21</li>
+        <li class="entry-cat"><a href="/category/dev_style/">開発スタイル</a></li>
+        <li class="entry-author"><a href="/author/inoue">inoue</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/inoue"><img src="/images/authors/inoue.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは！a-know こと、いのうえです。社内でハンドルネームで呼ばれることに、未だに慣れていません(*´ｪ｀*)ﾎﾟｯ</p>
+
+<p>さて、弊社エンジニアチームの技術マネージャーだった鈴木が、このたび CTO に就任したことは、先日の記事・<a href="http://tech.feedforce.jp/cto-announcement.html">マネージャー改め、CTOと名乗ることにしました</a> でもお知らせ致しましたとおりです。<br>
+私としても、フィードフォースのいちエンジニアとして、CTO と一緒にあれこれ試行錯誤しながらも前に進んでいきたいな、という所存です( ˘ω˘)。</p>
+
+<p>その CTO 就任の際のことなのですが、<strong>「リーダーズインテグレーションというものがあるらしい」「それをやってみたいんだ...(*´ｪ｀*)」</strong>という鈴木のつぶやきから端を発し、実際にエンジニアチームにおいて『リーダーズインテグレーション』をやってみた、ということがありましたので、今日はその出来事について書いてみたいと思います。</p>
+
+<!--more-->
+
+<h2>リーダーズインテグレーション、って？</h2>
+
+<p>まずはなにより、「<strong>リーダーズインテグレーション、って何よ？</strong>」ってところからだと思うのですが、私もその存在を、鈴木のつぶやきで初めて知ったくらいでした。</p>
+
+<p>そんな私が、まず参考にした記事・<a href="http://www.adoc.co.jp/blog/e000085.html">たったこれだけのことで、チームに一体感が生まれる！？</a> もご覧頂きたいとは思うのですが、一言で言ってしまうと、</p>
+
+<ul>
+<li>リーダーとチームの心理的な距離を縮めるためのコミュニケーション手法</li>
+<li>（新しい）リーダーをチームに統合し、リーダーとメンバー間の信頼感、一体感を構築、醸成することが目的のもの</li>
+</ul>
+
+<p>...というかんじのものかと思います。二言になっちゃいました (・ω&lt;) ﾃﾍﾍﾟﾛ</p>
+
+<p>まぁ、弊社・フィードフォースのエンジニアチームも、仲間が徐々に増えてきて、<strong>「全てのメンバーとの &quot;一定の深度をもったコミュニケーション&quot; を、必ずしも十分に取れているとはいえないかもしれない」「ここらで一度がっつり、話をしたいな」</strong>...というような気持ちも、鈴木の中にあったのかもしれません。</p>
+
+<p>話を戻して、このリーダーズインテグレーション、それじゃあ具体的にどんなことをどんなふうにするの、ということですが、それもある程度枠組みが決まっているそうです。</p>
+
+<ol>
+<li>リーダーから自己紹介、目標・方針発表</li>
+<li>（リーダー退場）</li>
+<li>リーダーについて知っていることを挙げてもらう</li>
+<li>リーダーについて知りたいことを挙げてもらう</li>
+<li>リーダーに知っておいて欲しいことを挙げてもらう</li>
+<li>目標・方針についてみんなにできることを挙げてもらう</li>
+<li>（メンバー退場/リーダー入場）</li>
+<li>ファシリテーターがリーダーへ議論の内容を説明</li>
+<li>（メンバー入場）</li>
+<li>挙げられた質問やコメントにリーダーが答える</li>
+<li>飲み会</li>
+</ol>
+
+<p>リーダーズインテグレーションについて一通り調べ終わって、私個人として思ったことは、</p>
+
+<ul>
+<li>たとえば、まったく新しい人があるチームにジョインしたとき、とかには有用そうだけど...</li>
+<li>今回のような、&quot;元々からその組織にいた人とそのメンバーとの対話&quot; の場合にも、うまく機能するのかなぁ？</li>
+</ul>
+
+<p>...というものでしたが、それと同時に、「でも、<strong>おもしろそう！！</strong>」という気持ちもありましたので、物は試しだ！ということで、実行に向けて準備を始めました。</p>
+
+<h2>リーダーズインテグレーション実施に向けた準備</h2>
+
+<p>準備、といっても大したことはしていないのですが、まずやったことは、下のような社内向け Qiita:Team 記事を書く、ということです。</p>
+
+<p><img alt="社内向け Qiita:Team 記事" src="/images/2015/10/leaders_integration_01.png" /></p>
+
+<p>（鈴木は、普段社内では &quot;すーさん&quot; と呼ばれています）<br>
+（&quot;FFTT&quot; とは、毎週金曜日の 18 時から実施している、エンジニアチームの集まりのことです！）</p>
+
+<p>これでもって、私がそうであったように殆どの人も知らなかったであろう &quot;リーダーズインテグレーション&quot; についてのイメージを早めに持っておいてもらいつつ、当日挙げてもらわなければならないいくつかの事柄について、予め準備をしてきてもらおう、と目論んでいました。</p>
+
+<p>というのも、このリーダーズインテグレーション、通常は 3時間くらいの枠を設けて、それこそ腰を据えてじっくりと行うもののようなのですが、今回に関しては、初めての試みであるということと FFTT の枠がもともとそうだった、ということもあり、<strong>1時間</strong> という限られた時間で行いたい、と考えていました。それには、参加者の協力の下、効率よく行うことが必須であり、それを考慮すると、こうして Qiita:Team に書いて予め読んでおいてもらうことは必要だと考えました。</p>
+
+<p>当日は、下記のような運びで行いたい、と考えていました。ファシリテーターは、私・井上が務めることになりました。</p>
+
+<table><thead>
+<tr>
+<th>所要時間</th>
+<th>内容</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>3分</td>
+<td>リーダー（今回は鈴木）から、今後のエンジニアチームとしての目標・方針の発表</td>
+</tr>
+<tr>
+<td>0分</td>
+<td>リーダー、一時退室</td>
+</tr>
+<tr>
+<td>5分</td>
+<td>『リーダーについて知っていること』を付箋に書き、ホワイトボードに張り出す</td>
+</tr>
+<tr>
+<td>5分</td>
+<td>『リーダーについて知りたいこと』を付箋に書き、ホワイトボードに張り出す</td>
+</tr>
+<tr>
+<td>5分</td>
+<td>『リーダーに知っておいて欲しいこと』（『これで困ってる』『これが大事だと思ってる』といったトピック）を付箋に書き、ホワイトボードに張り出す</td>
+</tr>
+<tr>
+<td>7分</td>
+<td>冒頭で発表された目標・方針について、私たちにできることを付箋に書き、ホワイトボードに張り出す</td>
+</tr>
+<tr>
+<td>0分</td>
+<td>ファシリテーター以外みんな、一時退室 ＆リーダー入室</td>
+</tr>
+<tr>
+<td>3分</td>
+<td>ファシリテーターがリーダーに、付箋について説明する</td>
+</tr>
+<tr>
+<td>0分</td>
+<td>退室してもらっていたみんなに入室してもらう</td>
+</tr>
+<tr>
+<td>27分</td>
+<td>リーダーが、ホワイトボードに貼られた付箋についてコメントしたり、質問したりする</td>
+</tr>
+<tr>
+<td>5分</td>
+<td>クロージング</td>
+</tr>
+</tbody></table>
+
+<p>意見は全て付箋に書き出し、ホワイトボードに張り出す、という形式を取りました。その時間は基本的に5分で、『冒頭で発表された目標・方針について、私たちにできること』についてだけ、少し長めの 7分を設定しました（『今後のエンジニアチームとしての目標・方針』の発表は当日・その場で行われるため）。</p>
+
+<h2>いざ、リーダーズインテグレーション開始！</h2>
+
+<p>いよいよ当日・18時になり、リーダーズインテグレーションを開始しました。参加者は、技術チームのほぼ全員、人数にして20名弱、といったところ。<br>
+ファシリテーターの仕事として最低限求められることが、予定通りの会の進行。iPhone のタイマー機能は手放せませんでした。</p>
+
+<p>今後のエンジニアチームとしての目標・方針の発表を、鈴木がスライド資料を使って行ったあとは、各テーマに沿った意見が書かれた付箋を張り出すターンに突入します。</p>
+
+<p>ここで、「<strong>付箋を貼り終わった人は、『冒頭で発表された目標・方針について、私たちにできること』を今のうちからでもちょっとずつ書き始めてくれてもいいですよ</strong>」という言葉も投げかけました。これは、上でも書きましたが『今後のエンジニアチームとしての目標・方針』の発表は当日・その場で行われたため、なのですが、「<strong>目標・方針のスライド、もう一度見たいなー</strong>」という声もあったため、慌てて手元の PC を開き「これ、自由に見て下さい」としました（付箋を貼るスペースとプロジェクターで投影するスペースが同じだったため）。ここらへんは想定不足というか、<strong>目標・方針の発表は、前もって行っておいてもよかったかも</strong>、と思ったところでした。</p>
+
+<p>そんなかんじで、付箋を貼っていくターンは、それはもうあっという間に時間が過ぎてしまいました。このあと、貼られた付箋について鈴木がコメントしたり、逆に質問したりするターンに入っていくのですが、ここで、その付箋の一部をご紹介したいと思います。</p>
+
+<h3>『リーダーについて知っていること』として貼られた付箋</h3>
+
+<h4>スクラムマスター</h4>
+
+<p><img alt="付箋その1" src="/images/2015/10/leaders_integration_02.png" /></p>
+
+<p>そう、実はそうなんです。鈴木は認定スクラムマスターだったりします。<br>
+（あれ、でもこの資格って有効期限があるんでしたっけ...！）</p>
+
+<h4>ずっと黙ってて怖いときがある</h4>
+
+<p><img alt="付箋その2" src="/images/2015/10/leaders_integration_03.png" /></p>
+
+<p>わぉ。これ、別に怒ったりとかしてるわけじゃなくて、つい考えこんじゃうんですよね。</p>
+
+<h3>『リーダーについて知りたいこと』として貼られた付箋</h3>
+
+<h4>好きなエディタとその理由</h4>
+
+<p><img alt="付箋その3" src="/images/2015/10/leaders_integration_04.png" /></p>
+
+<p>せ...<strong>戦争だーっ！！</strong></p>
+
+<h4>技術チームはどこまで大きくなるのか？</h4>
+
+<p><img alt="付箋その4" src="/images/2015/10/leaders_integration_05.png" /></p>
+
+<p>徐々に、とはいえ、どんどん仲間が増えていき、様子もだんだんと変化していくチームのようすについて、漠然とした不安を抱いているメンバーもいました。こうした、普段はなかなか聞きにくい、でもとっても大事なことを拾い上げるのに、こうした取り組みは効果的なのかもしれませんね。</p>
+
+<h3>『リーダーに知っておいて欲しいこと』として貼られた付箋</h3>
+
+<h4>リーダーからメンバーへの相談も気軽にして欲しい</h4>
+
+<p><img alt="付箋その5" src="/images/2015/10/leaders_integration_06.png" /></p>
+
+<p>ついつい抱え込みがちになる我らが CTO。こういうことも、普段はなかなか気恥ずかしくて言いにくいですよね！</p>
+
+<h4>現場で &quot;集中と選択&quot; を行うのは難しい</h4>
+
+<p><img alt="付箋その6" src="/images/2015/10/leaders_integration_07.png" /></p>
+
+<p>もちろん、こういうシリアスな付箋も。</p>
+
+<h3>そして、付箋をもとにした対話のターンへ</h3>
+
+<p>付箋も一通り出し終わり、いよいよその付箋を使った対話の時間に。<br>
+対話、とはいっても、「この付箋書いたの、誰ですか？」みたいなのは基本的になくて（それがあると書き出す側も書き出しにくいですよね）、付箋をひとつずつ見ながら「<strong>エディタねぇ、特にこれといって決めて愛用しているものはないんですよ〜</strong>」、といった回答をしていく、という感じ。戦争は回避されました。</p>
+
+<p><img alt="リーダーズインテグレーション実施中の様子" src="/images/2015/10/leaders_integration_08.jpg" /></p>
+
+<p>↑そのときのようす。ここでは取り上げきれないほどの大量の付箋が、ホワイトボードに貼られました。</p>
+
+<p>リーダーの表情にも、嬉し恥ずかし、といった感じが見て取れたのは私だけでしょうか(*´ｪ｀*)。うんうん、『自分自身について』が話題の場って、ついそういう感じになっちゃいますよね。わかります。</p>
+
+<p>そんなかんじで、1時間のリーダーズインテグレーションはあっという間に終わりを迎えてしまいました。貼られた付箋について回答・対話するための時間は30分弱しか取れず、全ての付箋についてそれを実施するには当然のことながら時間が足りませんでした。（後日、残りの付箋への回答記事が Qiita:Team に投稿されたりもしました。）</p>
+
+<p>それと、人事社員も見学に来てくれて、「<strong>今度、これを塚田さん（社長）に対してやってみようかなぁ</strong>」と言ってくれる、ということもありました^^。自分としてはファシリテートでてんやわんやだったのですが、傍から見ていて「良さそう！」と思ってもらえるものだったようで、その点でも「良かった...！」と思っています！</p>
+
+<h2>まとめ</h2>
+
+<p>今回、弊社技術チームマネージャーが CTO として就任したタイミングで、『リーダーズインテグレーション』という取り組みを実施してみました。<br>
+「1時間じゃちょっと（かなり）厳しいところもあるかもしれない」「もともといた人に対して実施する、というものでは、必ずしもないかもしれない」という、もともと持っていた不安は、実施してみて杞憂に終わった...、ということは、必ずしもありませんでした。もっと十分な時間があれば、とも、今回のようなケースに合ったより良い方法は他にもあるのかもしれない、とも思いました。</p>
+
+<p>ですが今回に関しては、<strong>普段なかなか伝えられないことを双方向に伝えることができた場面もあった</strong>という、反省点以上の収穫を得ることができました。<br>
+これをご覧になった方で、ちょっとやってみようかな、と思われた方にも、ぜひやってみていただきたいなと思います！</p>
+
+<h2>おまけ</h2>
+
+<p>リーダーズインテグレーション終了後、鈴木は「もっと dis られる（叱責される？）かと思ってた...」「そんな気になってるなら相談してくれたらいいのに、とも思った」とつぶやいたりもしていました。良くも悪くも、僕たちのチームはそういう段階なんでしょうね。今後も大なり小なり、こうした率直な意見のやり取りの場が増えることを期待していますし、僕たちも心がけたいな、と思いました！</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/leaders-integration.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="CTO 就任にあわせて『リーダーズインテグレーション』を実施してみました！" data-url="http://tech.feedforce.jp/leaders-integration.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/leaders-integration.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/leaders-integration.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/selinux_and_logrotate.html" rel="next">SELinuxでlogrotateが失敗した話</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/ruboty-redis.html" rel="prev">Slack上のrubotyに登録したジョブを編集する</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

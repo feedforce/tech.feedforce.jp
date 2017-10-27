@@ -1,0 +1,516 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>SELinuxでlogrotateが失敗した話 | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは！先日赤城山に登りましたが、山の上は既に紅葉が終わっていました。lorentzcaです。今回はSELinuxがメインの記事です。しかし、SELinuxを無効にする記事ではありません！SELinuxと友達になる記事です。それでは参ります。">
+      <link rel="canonical" href="http://tech.feedforce.jp/selinux_and_logrotate.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="SELinuxでlogrotateが失敗した話 | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは！先日赤城山に登りましたが、山の上は既に紅葉が終わっていました。lorentzcaです。今回はSELinuxがメインの記事です。しかし、SELinuxを無効にする記事ではありません！SELinuxと友達になる記事です。それでは参ります。">
+      <meta property="og:url" content="http://tech.feedforce.jp/selinux_and_logrotate.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/selinux_and_logrotate.html">SELinuxでlogrotateが失敗した話</a></h1>
+      <ul>
+        <li class="entry-time">2015.11.05</li>
+        <li class="entry-cat"><a href="/category/infrastructure/">インフラ</a>, <a href="/category/operation/">運用事例</a></li>
+        <li class="entry-author"><a href="/author/kunishima">kunishima</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/kunishima"><img src="/images/authors/lorentzca.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは！先日赤城山に登りましたが、山の上は既に紅葉が終わっていました。lorentzcaです。</p>
+
+<p>今回はSELinuxがメインの記事です。<br>
+しかし、SELinuxを無効にする記事ではありません！SELinuxと友達になる記事です。</p>
+
+<p>それでは参ります。</p>
+
+<!--more-->
+
+<h2>はじめに</h2>
+
+<p>この記事では、以下のことについて書いてあります。</p>
+
+<ul>
+<li>SELinuxが原因でlogrotateが失敗している事に気づいた経緯</li>
+<li>SELinuxを設定するにあたって必要な前提知識、用語</li>
+<li>SELinuxの設定方法</li>
+</ul>
+
+<p>こんな人を対象に思い浮かべて書きました。</p>
+
+<ul>
+<li>SELinuxが原因でlogrotateが失敗して困っている(困ったことがある)人</li>
+<li>SELinuxとは何なのか知りたい人</li>
+<li>SELinuxの設定方法を知りたい人</li>
+<li>もうSELinuxをdisableするのはいやだ！という人</li>
+</ul>
+
+<p>SELinuxは以下の環境で動かしました。</p>
+
+<ul>
+<li>centos7.1</li>
+<li>libselinux 2.2.2</li>
+<li>selinux-policy 3.13.1</li>
+</ul>
+
+<p>私自身、SELinuxについての理解はまだまだ浅いので、間違った記述があれば教えていただけるとたいへん嬉しいです。</p>
+
+<p><strong>注</strong> : 本文中に記載されるログやアプリのディレクトリのパス等は、本記事用にvmで再現したものです。</p>
+
+<h2>ある日、logrotateが失敗している事に気づいた</h2>
+
+<p>先日、とあるサーバーでアプリのログをlogrotateを使って世代管理することになりました。<br>
+アプリのログのパスは/var/www/test/shared/log/以下にあるので、そのようにlogrotateの設定をするPRが出されました。<br>
+一通りコードを読み、ステージ環境でlogrotateコマンドを手動実行してアプリのログがローテートされたのを確認し、PRをマージしました。そして、プロダクション環境に反映しました。</p>
+
+<p>しかしその数日後、アプリのログを確認してみるとローテートされていませんでした！わお！</p>
+
+<p>cronのログを見るとlogrotate自体は実行されているようです。logrotateはroot権限で実行されるのでファイルのパーミッションも問題にならないはずです。</p>
+
+<p>SELinuxをEnforcingにしているので、SELinux側で拒否しているのかも、と思い/var/log/audit/audit.logを確認しました。audit.logは、ausearchコマンドを使うことで多少見やすい形に整形され、日付やメッセージのタイプで出力を絞り込むことができます。</p>
+
+<p>今回はSELinuxを疑っているので、オプションでメッセージのタイプをavcに絞り込んでいます。avcとは、アクセスベクターキャッシュの略で、SELinuxのアクセス拒否、許可決定がキャッシュされたものです。</p>
+
+<p>ログには以下のような記録がありました。</p>
+
+<pre><code class="prettyprint">$ sudo ausearch -m avc
+----
+time-&gt;Fri Oct 30 03:02:09 2015
+type=SYSCALL msg=audit(1446174129.272:952): arch=c000003e syscall=257 success=no exit=-13 a0=ffffffffffffff9c a1=7fffe21ad260 a2=90800 a3=0 items=0 ppid=13754 pid=13756 auid=0 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=5 comm=&quot;logrotate&quot; exe=&quot;/usr/sbin/logrotate&quot; subj=system_u:system_r:logrotate_t:s0-s0:c0.c1023 key=(null)
+type=AVC msg=audit(1446174129.272:952): avc:  denied  { read } for  pid=13756 comm=&quot;logrotate&quot; name=&quot;log&quot; dev=&quot;dm-0&quot; ino=13507 scontext=system_u:system_r:logrotate_t:s0-s0:c0.c1023 tcontext=unconfined_u:object_r:var_t:s0 tclass=dir
+</code></pre>
+
+<p>あんまり人間に優しくないログですが、SELinuxがlogrotateを拒否したっぽいことがなんとなーく読み取れます。</p>
+
+<h2>SELinuxの概要</h2>
+
+<p>さて、どうやらSELinuxがlogrotateの作業を妨害しているらしい事がわかりました。次はSELinuxにアプリのlogrotateを許可してもらえるように設定していきたいのですが、ログにもなんだかよくわからない単語がたくさんありますし、もう少しSELinuxを理解したほうが良さそうです。</p>
+
+<p>そもそもSELinuxはいったい何に対して、どのようにアクセス制限を行っているのでしょうか。よくわかっていなかったので調べました。</p>
+
+<p>調べたのですが、難しかったので、我々が日々親しんでいるディレクトリやファイルに対するパーミッション(755とか644とかのアレ。DACという方式らしい)と何が違うのか、比べてみました。</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left"></th>
+<th style="text-align: left">DAC</th>
+<th style="text-align: left">SELinux</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">何に対して？</td>
+<td style="text-align: left">ディレクトリ、ファイル</td>
+<td style="text-align: left">ディレクトリ、ファイル</td>
+</tr>
+<tr>
+<td style="text-align: left">どのように制限？</td>
+<td style="text-align: left"><strong>ユーザー、グループ単位で制限</strong></td>
+<td style="text-align: left"><strong>プロセス単位で制限</strong></td>
+</tr>
+</tbody></table>
+
+<p>そう、SELinuxはlogrotateなどの<strong>プロセスに対して</strong>アクセス制限を行っていたのです。</p>
+
+<p>具体的にSELinuxが何をしているかというと、プロセスとディレクトリやファイルなどのリソースに対して「タイプ」というラベルを付与しています。<br>
+タイプは、プロセスがリソースまたは他のプロセスに対してどのような操作できるかの領域を示す「ドメイン」を定義しています。主にプロセスに対して付与されたタイプをドメインと呼んでいるようです。タイプは「SELinuxコンテキスト」という形式で表現されています。</p>
+
+<p>このタイプを組み合わせることによって、プロセス・リソース間、プロセス・プロセス間の柔軟なアクセス制御を行っています。例えば、タイプAが付与されているプロセスはタイプBが付与されているファイルに対し書き込み権限を持つ、といったふうに制御できます。</p>
+
+<p>そして、それは「ポリシー」で定義することができます。<br>
+SELinuxはプロセスが何かするたびにそのポリシーを元に、アクセス拒否、許可を決定しています。</p>
+
+<p>さて、SELinuxはプロセスにアクセス制限をかけていることがわかりました。しかし、<strong>ステージ環境で手動実行した際は動いたのに、なぜcronから実行したlogrotateは制限されたのか</strong>という疑問が残ります。<br>
+これはSELinuxの「ドメイン遷移」という機能によるものです。</p>
+
+<p>ドメイン遷移とは、あるプロセスから新しく別のプロセスを立ち上げた際、元のプロセスのドメインと異なるドメインを新しいプロセスに付与できる機能です。<br>
+そしてユーザーシェルのドメインは、基本的にドメイン遷移しないのです。いちいち何かコマンドを実行する度にSELinuxで制限されては困るからです。</p>
+
+<p>つまり、ユーザーシェルから実行したlogrotateのドメインはユーザーシェルのドメインのままだったのです。cronから実行されたlogrotateはユーザーシェルから実行されたlogrotateとは異なるドメインで立ち上がります。<br>
+cronのドメインから遷移したlogrotateのドメインは、ユーザーシェルのドメインより制限の多いドメインが付与されているので、今回のように実行した環境によって制限されたりされなかったりする現象が起きたのでした。</p>
+
+<h2>タイプを確認する</h2>
+
+<p>SELinuxがどのようにアクセス制御をしているか調べました。また、ポリシーとやらで制御方法を定義すればよさそうなことがわかりました。</p>
+
+<p>では、ポリシーを定義するにあたって必要なタイプが、具体的にどのようなものなのか調べてみます。</p>
+
+<h3>コマンドから確認する方法</h3>
+
+<p>プロセスに付与されたタイプはpsコマンドのオプションに<code class="prettyprint">Z</code>を付けると確認できます。ディレクトリやファイルに付与されたタイプはlsコマンドで同じく<code class="prettyprint">Z</code>オプションを付けると確認できます。</p>
+
+<p>試しにcrondプロセスのタイプと、/etc/crontabファイルのタイプを見てみます。</p>
+
+<pre><code class="prettyprint">$ ls -Z /etc/crontab
+-rw-r--r--. root root system_u:object_r:system_cron_spool_t:s0 /etc/crontab
+
+$ ps Z -C crond
+LABEL                             PID TTY      STAT   TIME COMMAND
+system_u:system_r:crond_t:s0-s0:c0.c1023 560 ? Ss     0:00 /usr/sbin/crond -n
+</code></pre>
+
+<p>この<code class="prettyprint">system_u:object_r:system_cron_spool_t:s0</code>と<code class="prettyprint">system_u:system_r:crond_t:s0-s0:c0.c1023</code>がSELinuxコンテキストです。</p>
+
+<p><code class="prettyprint">&lt;selinux user&gt;:&lt;role&gt;:&lt;type&gt;:&lt;level&gt;</code>という構成となっています。タイプ以外にselinuxユーザー、ロール、レベルという項目が有りますが、今回は割愛します！！！</p>
+
+<p>さて、今回ローテートしようとしてうまくいかなかったログファイルは/var/www/test/shared/log/以下にあります。このファイルのSELinuxコンテキストを確認すると、<code class="prettyprint">unconfined_u:object_r:var_t:s0</code>でした。これをみるとタイプは<code class="prettyprint">var_t</code>のようです。</p>
+
+<p>これで該当のログファイルのタイプはわかりましたが、logrotateプロセスのタイプはどのように確認すればよいでしょうか。logrotateはcrondなどと違ってデーモンではないので、実行時にしかpsコマンド上に現れません。</p>
+
+<p>そこで、再度audit.logの出番です。</p>
+
+<h3>ログから確認する方法</h3>
+
+<p>実は、audit.logを見ればどのドメインからのアクセスがどのタイプに対して行われたか、記録されています！なのでここで改めて先ほどのaudit.logを見てみます。</p>
+
+<pre><code class="prettyprint">time-&gt;Fri Oct 30 03:02:09 2015
+type=SYSCALL msg=audit(1446174129.272:952): arch=c000003e syscall=257 success=no exit=-13 a0=ffffffffffffff9c a1=7fffe21ad260 a2=90800 a3=0 items=0 ppid=13754 pid=13756 auid=0 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=5 comm=&quot;logrotate&quot; exe=&quot;/usr/sbin/logrotate&quot; subj=system_u:system_r:logrotate_t:s0-s0:c0.c1023 key=(null)
+type=AVC msg=audit(1446174129.272:952): avc:  denied  { read } for  pid=13756 comm=&quot;logrotate&quot; name=&quot;log&quot; dev=&quot;dm-0&quot; ino=13507 scontext=system_u:system_r:logrotate_t:s0-s0:c0.c1023 tcontext=unconfined_u:object_r:var_t:s0 tclass=dir
+</code></pre>
+
+<p>uid等色々な情報が記録されていますが、今回関係してくるものだけピックアップしてみます。</p>
+
+<ul>
+<li>scontext : リソースにアクセスしようとしたドメインのSELinuxコンテキスト</li>
+<li>tcontext : アクセス要求されたリソースのSELinuxコンテキスト</li>
+<li>denied  { read } for 部分 : 行われようとした操作とその結果</li>
+</ul>
+
+<p>これを見ると、logrotate_tドメインがvar_tタイプのリソースに対しreadしようとしたが拒否されたということがわかります。</p>
+
+<p>logrotate_tがどうやらlogrotateに付与されているタイプのようです。</p>
+
+<h2>ポリシーを追加する</h2>
+
+<p>logrotateに関係するプロセス、リソースのタイプを確認しました。logrotate_tがvar_tを扱えるようにポリシーを追加すれば良さそうですね。</p>
+
+<p>ではまずポリシーがどのように管理されているのか、見てみます。</p>
+
+<p>ポリシーの定義は/etc/selinux/targeted/policy/policy.29というファイルにあります。29の部分は環境によって異なるかもしれません。また、このファイルはバイナリファイルです。</p>
+
+<p>ポリシーに定義を新しく追加する際は、モジュールを追加する形で行います。モジュールは、/etc/selinux/targeted/modules/active/modules/以下にある&lt;name&gt;.ppというファイルです。こちらもバイナリファイルです。</p>
+
+<p>ポリシーに定義を追加する方法は以下の様な流れで行います。</p>
+
+<ol>
+<li>追加したいポリシーのルールをコードで書く</li>
+<li>コードをコンパイルする</li>
+<li>コンパイルして作成したファイルをモジュールとして追加する</li>
+</ol>
+
+<h3>audit2allowでルールを自動生成する</h3>
+
+<p>audit.logから1,2の部分を自動で行ってくれるツールがあるのでこれを使ってみます。</p>
+
+<h4>インストール</h4>
+
+<p>policycoreutils-pythonパッケージに含まれています。</p>
+
+<pre><code class="prettyprint">$ sudo yum install policycoreutils-python
+</code></pre>
+
+<h4>実行</h4>
+
+<pre><code class="prettyprint">$ sudo sh -c  &#39;audit2allow -M testapp_logrotate &lt; /var/log/audit/audit.log&#39;
+</code></pre>
+
+<p>testapp_logrotate.teとtestapp_logrotate.ppの2つのファイルが作成されます。teファイルがポリシーのルールが書かれたテキストファイル、ppファイルがteファイルをコンパイルしたバイナリファイルです。</p>
+
+<p>これでモジュールを追加する準備ができました。</p>
+
+<h3>teファイルの中身を見てみる</h3>
+
+<p>さっそくモジュール追加……の前に、どんなルールが作成されたのか、teファイルの中をみてみます。logrotate_tドメインにvar_tタイプのディレクトリに対する読み込み権限を与えていることがわかります。</p>
+
+<pre><code class="prettyprint">module testapp_logrotate 1.0;
+
+require {
+        type var_t;
+        type logrotate_t;
+        class dir read;
+}
+
+#============= logrotate_t ==============
+allow logrotate_t var_t:dir read;
+</code></pre>
+
+<h3>モジュールを追加する</h3>
+
+<p>いよいよモジュールを追加します。モジュールに関する一連の操作は、semoduleコマンドで行います。</p>
+
+<pre><code class="prettyprint">$ sudo semodule -i testapp_logrotate.pp
+</code></pre>
+
+<p>追加されたか確認してみます。よさそうですね。</p>
+
+<pre><code class="prettyprint">$ sudo semodule -l | grep testapp_logrotate
+testapp_logrotate       1.0
+</code></pre>
+
+<p>もしモジュールを削除したい場合は以下のようにします。</p>
+
+<pre><code class="prettyprint">$ sudo semodule -r testapp_logrotate
+</code></pre>
+
+<h3>手動でルールを生成する</h3>
+
+<p>さて、モジュールを取り込み再度logrotateの実行結果を確認すると、またもや失敗していました！今度はファイルに対する、getattrという権限が足りないようです。</p>
+
+<pre><code class="prettyprint">time-&gt;Tue Nov  3 03:03:35 2015
+type=SYSCALL msg=audit(1446519815.415:1396): arch=c000003e syscall=262 success=no exit=-13 a0=6 a1=1b43633 a2=7fffd921c610 a3=0 items=0 ppid=8602 pid=8604 auid=0 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=77 comm=&quot;logrotate&quot; exe=&quot;/usr/sbin/logrotate&quot; subj=system_u:system_r:logrotate_t:s0-s0:c0.c1023 key=(null)
+type=AVC msg=audit(1446519815.415:1396): avc:  denied  { getattr } for  pid=8604 comm=&quot;logrotate&quot; path=&quot;/var/www/test/shared/log/test.log&quot; dev=&quot;dm-0&quot; ino=528985 scontext=system_u:system_r:logrotate_t:s0-s0:c0.c1023 tcontext=unconfined_u:object_r:var_t:s0 tclass=file
+</code></pre>
+
+<p>ここでまたaudit2allowを実行しようとしたのですが、前回足りなかったreadのエラーログが流れてしまっており、getattrだけ許可されるルールが生成されてしまいました！ので、手動でルールを定義することにします。</p>
+
+<h4>teファイルを修正する</h4>
+
+<p>audit2allowで作成されたルールを元に、以下のように修正しました。</p>
+
+<pre><code class="prettyprint">module testapp_logrotate 1.1;
+
+require {
+        type var_t;
+        type logrotate_t;
+        class dir read;
+        class file getattr;
+}
+
+#============= logrotate_t ==============
+allow logrotate_t var_t:dir read;
+allow logrotate_t var_t:file getattr;
+</code></pre>
+
+<p>モジュールのバージョンの数字も上げています。これにより、修正後のモジュールがちゃんと追加されているか、確認しやすくなります。</p>
+
+<h4>teファイルのコンパイルに必要なパッケージをインストール</h4>
+
+<p>コンパイルに必要なMakefileが含まれています。</p>
+
+<pre><code class="prettyprint">$ sudo yum install selinux-policy-devel
+</code></pre>
+
+<h4>teファイルをコンパイルして追加する</h4>
+
+<p>teファイルがあるディレクトリで以下を実行します。</p>
+
+<pre><code class="prettyprint">$ sudo make -f /usr/share/selinux/devel/Makefile
+</code></pre>
+
+<p>すると、ppファイルが作成されるので、あとは同じように追加していきます。</p>
+
+<pre><code class="prettyprint">$ sudo semodule -i testapp_logrotate.pp
+</code></pre>
+
+<p>モジュールのバージョンが上がっていればOK！</p>
+
+<pre><code class="prettyprint">$ sudo semodule -l | grep testapp_logrotate
+testapp_logrotate       1.1
+</code></pre>
+
+<p>この後、動作確認のたび新たに足りない権限が発生したのでそのたびに調整が必要でした。<br>
+はじめから<a href="http://selinuxproject.org/page/ObjectClassesPerms">ObjectClassesPerms</a>を見て必要そうな権限を追加しておくのが良いと思います。</p>
+
+<p>結果的には必要な権限を全て満たしたルールを作成して、なんとか無事アプリのログをローテートすることができました！</p>
+
+<h2>まとめ</h2>
+
+<p>いかがでしょうか。思ったより長い記事になりましたが、SELinuxのログの見方からSELinuxの概要、具体的な設定の方法までを紹介しました。</p>
+
+<p>SELinuxは難しそうでなかなか手を出しづらい印象がありましたが、今回の調査を通してSELinuxと触れ合ったところ、やはり難しいなと感じました！<br>
+しかし、いったん自分なりにSELinuxがどういうものかまとめたことで、SELinuxに対する心理的抵抗は以前に比べ格段に少なくなりました。</p>
+
+<p>この記事をきっかけにSELinuxを使ってみよう、という方が少しでも増えれば嬉しいです！</p>
+
+<h2>参考リンク</h2>
+
+<ul>
+<li><a href="https://access.redhat.com/documentation/ja-JP/Red_Hat_Enterprise_Linux/6/html/Security-Enhanced_Linux/index.html">Security-Enhanced Linux</a>
+
+<ul>
+<li>日本語だしSELinux全体についてまとめてあり参考になりました</li>
+</ul></li>
+<li><a href="http://selinuxproject.org/">SELinux Project Wiki</a>
+
+<ul>
+<li>公式のwiki</li>
+</ul></li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/selinux_and_logrotate.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="SELinuxでlogrotateが失敗した話" data-url="http://tech.feedforce.jp/selinux_and_logrotate.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/selinux_and_logrotate.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/selinux_and_logrotate.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/advent-calendar-2015.html" rel="next">feedforceアドベントカレンダー2015が始まります！</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/leaders-integration.html" rel="prev">CTO 就任にあわせて『リーダーズインテグレーション』を実施してみました！</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

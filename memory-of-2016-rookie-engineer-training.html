@@ -1,0 +1,525 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>フィードフォースの2016年度エンジニア新人研修についてまとめてみた | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは、今年入社した新卒エンジニア5人の内の一人の雪田です。社内では「おとうふ」と呼ばれています。入社して早三ヶ月が過ぎますが、社内で私の本名を知る人が何人いるんだろうと不安に思う日々を過ごしています…。今年、フィードフォースには10名（総合職5名、エンジニア5名）の新卒社員が入社しました。私たち新卒エンジニア5名は約2ヶ月間の新卒研修を無事に終え、今は各サービスのチームに配属され、チームの1メンバーとしてバリバリ活躍しています！そんな中、我々の師であり弊社の新卒エンジニア受け入れ担当でもある @a_know 師が、今年の新人研修を運営する側の視点で振り返って当ブログの 2016年度の新卒エンジニア受け入れを終えて という記事にまとめて下さいました。そこで今回は、新人研修を受けた弟子（新卒エンジニア）の視点から、研修内容や学んだこと・思ったことなどを簡単にまとめたいと思います。フィードフォースの新人研修ってどんな感じなんだろう と気になる方は是非読んでいただきたいですし、新人研修の担当になったけどどうしようか予定が立っていない という方にも何か参考になれば幸いです！">
+      <link rel="canonical" href="http://tech.feedforce.jp/memory-of-2016-rookie-engineer-training.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="フィードフォースの2016年度エンジニア新人研修についてまとめてみた | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは、今年入社した新卒エンジニア5人の内の一人の雪田です。社内では「おとうふ」と呼ばれています。入社して早三ヶ月が過ぎますが、社内で私の本名を知る人が何人いるんだろうと不安に思う日々を過ごしています…。今年、フィードフォースには10名（総合職5名、エンジニア5名）の新卒社員が入社しました。私たち新卒エンジニア5名は約2ヶ月間の新卒研修を無事に終え、今は各サービスのチームに配属され、チームの1メンバーとしてバリバリ活躍しています！そんな中、我々の師であり弊社の新卒エンジニア受け入れ担当でもある @a_know 師が、今年の新人研修を運営する側の視点で振り返って当ブログの 2016年度の新卒エンジニア受け入れを終えて という記事にまとめて下さいました。そこで今回は、新人研修を受けた弟子（新卒エンジニア）の視点から、研修内容や学んだこと・思ったことなどを簡単にまとめたいと思います。フィードフォースの新人研修ってどんな感じなんだろう と気になる方は是非読んでいただきたいですし、新人研修の担当になったけどどうしようか予定が立っていない という方にも何か参考になれば幸いです！">
+      <meta property="og:url" content="http://tech.feedforce.jp/memory-of-2016-rookie-engineer-training.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/memory-of-2016-rookie-engineer-training.html">フィードフォースの2016年度エンジニア新人研修についてまとめてみた</a></h1>
+      <ul>
+        <li class="entry-time">2016.07.12</li>
+        <li class="entry-cat"><a href="/category/dev_style/">開発スタイル</a></li>
+        <li class="entry-author"><a href="/author/otofu_square">otofu_square</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/otofu_square"><img src="/images/authors/otofu_square.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは、今年入社した新卒エンジニア5人の内の一人の雪田です。社内では「おとうふ」と呼ばれています。入社して早三ヶ月が過ぎますが、社内で私の本名を知る人が何人いるんだろうと不安に思う日々を過ごしています…。</p>
+
+<p>今年、フィードフォースには10名（総合職5名、エンジニア5名）の新卒社員が入社しました。私たち新卒エンジニア5名は約2ヶ月間の新卒研修を無事に終え、今は各サービスのチームに配属され、チームの1メンバーとしてバリバリ活躍しています！</p>
+
+<p>そんな中、我々の師であり弊社の新卒エンジニア受け入れ担当でもある <a href="author/inoue">@a_know</a> 師が、今年の新人研修を運営する側の視点で振り返って当ブログの <a href="2016-rookie-training.html">2016年度の新卒エンジニア受け入れを終えて</a> という記事にまとめて下さいました。</p>
+
+<p>そこで今回は、新人研修を受けた弟子（新卒エンジニア）の視点から、研修内容や学んだこと・思ったことなどを簡単にまとめたいと思います。<strong>フィードフォースの新人研修ってどんな感じなんだろう</strong> と気になる方は是非読んでいただきたいですし、<strong>新人研修の担当になったけどどうしようか予定が立っていない</strong> という方にも何か参考になれば幸いです！</p>
+
+<!--more-->
+
+<h2>はじめに</h2>
+
+<p>ボリュームのある記事となってしまったため、まずはじめにこの記事の構成についてご説明します。</p>
+
+<p>この記事は大きく分けて以下のような3つのセクションに分かれています。</p>
+
+<ul>
+<li><a href="memory-of-2016-rookie-engineer-training.html#about-feedforce-training">フィードフォースのこれまでの研修と今年の研修</a></li>
+<li><a href="memory-of-2016-rookie-engineer-training.html#group-training">集合研修</a></li>
+<li><a href="memory-of-2016-rookie-engineer-training.html#tech-training">技術研修</a></li>
+</ul>
+
+<p>「フィードフォースのこれまでの研修と今年の研修」では、フィードフォースが <strong>これまでどんな研修に取り組み</strong>、<strong>今年の研修では何をしたか</strong> をご紹介します。「集合研修」・「技術研修」では、今年の研修は <strong>どんなことをやったのか</strong>、<strong>やってみてどう思ったか</strong> をご紹介します。</p>
+
+<p>各自で必要な箇所だけ見ていただく形でも結構ですので、ご自由にご覧いただければと思います！</p>
+
+<p><span id="about-feedforce-training"></span></p>
+
+<h2>フィードフォースのこれまでの研修と今年の研修</h2>
+
+<p>ここでは、フィードフォースが <strong>これまでどんな研修に取り組み</strong>、<strong>今年の研修では何をしたか</strong> をご紹介します。</p>
+
+<h3>今までのフィードフォースの新人研修</h3>
+
+<p>まず本題へと進む前に、これまでのフィードフォースの新人研修をご紹介します。</p>
+
+<h4>2014年度 OJTベースの研修</h4>
+
+<p>2014年度は新卒入社したエンジニアが一人だったということもあり、OJTベースで研修が行われました。初日で配属が決まり、メンターとペアプロをしながら技術書を使った学習やプロダクトのコードリーディングをすることで <strong>仕事をしながら技術やサービスを理解していく</strong> という研修だったようです。</p>
+
+<p>研修を受けた当事者である <a href="author/t-nakano">@t-nakano</a> 先輩が書いた当ブログの記事で詳しく触れられています。</p>
+
+<ul>
+<li><a href="http://tech.feedforce.jp/2014-employ-a-month.html">feedforce Engineer&#39;s Blog - 入社一ヶ月経って感じたこと</a></li>
+</ul>
+
+<h4>2015年度 新入社員研修を新入社員が自ら作る研修（!?）</h4>
+
+<p>この年は、フィードフォースで初の人事担当が誕生してから初めての研修だったこともあり、かなりユニークな研修が行われました。<strong>新入社員研修プログラムを新入社員が自ら創る研修</strong> と題して、入社したての新卒社員が研修プログラムを1から組み立て、社員の前でプレゼンするというものです。2015年度は新卒入社のエンジニアが0人だったため、技術研修は行われなかった年でしたが、当時私がこの記事を読んだ時に衝撃を受けたのを今でも覚えています…。</p>
+
+<p><img alt="rookie-training-2015" src="/images/2016/07/rookie_training1.jpg" /></p>
+
+<p>研修内容についてご興味を持たれた方は、是非下記のリンクもご覧下さい。</p>
+
+<ul>
+<li><a href="https://www.feedforce.jp/release/4292/">2015.04.27 プレスリリース - 「新入社員研修プログラムを新入社員が自ら創る研修」を実施！社会人に必要となる基本知識・スキルをテーマに全社で取り組む</a></li>
+<li><a href="http://blog.feedforce.jp/archives/11984">feedforce全力ブログ - おそらく日本初の新入社員研修 「新入社員研修プログラムを新入社員が自ら創る研修」実施レポ！</a></li>
+<li><a href="http://nabeharu.hatenablog.com/entry/2015/04/19/224708">なべはるの人事徒然 - 新入社員研修講師を新入社員が務める研修をやってみた</a></li>
+</ul>
+
+<h3>僕らが今年どんな研修をやったか</h3>
+
+<p>それでは以前までの研修について簡単に紹介したところで、いよいよフィードフォースの2016年度の新人研修についてご紹介しましょう。</p>
+
+<p>今年の研修では、<strong>自走式</strong>、<strong>徹底的相手目線</strong> の2つがテーマとして掲げられました。</p>
+
+<p><strong>自走式</strong> とは、何をどのようにして学ぶかは自分たちで考えて取り組み、自ら研修を作っていってほしいということを意味します。また <strong>徹底的相手目線</strong> とは、常に <strong>相手目線で考える</strong> クセを身につけ他者に価値を提供できる人間になってほしい、というメッセージです。この2つのテーマを叩き込まれた上で、私たちは今回の研修へ臨むこととなりました。</p>
+
+<p>我々新卒エンジニアは、二ヶ月間ほどの研修期間中、前半後半に分けて主に次の2つの研修を受けました。</p>
+
+<ul>
+<li>集合研修</li>
+<li>技術研修</li>
+</ul>
+
+<p>以前の研修に比べて特に大きく変わったことは、<strong>職種に関係なく全員で参加する研修</strong> がある点と、技術研修の中で1週間ずつそれぞれのサービスのチームに配属される <strong>ローテーション配属</strong> の期間があった点の2つだと思います。他にも新しい取り組みとして、空き時間にも各自で学習を進められるような環境である <strong>オンライン学習サイト</strong> の活用、現場の実践的な内容を教わり現場社員との交流の場になった <strong>社員が講師となる講義</strong>、といったものがありました。また、それぞれの研修の内容には、過去の研修で行われた研修の形式もブラッシュアップした形で取り入れられ、<strong>フィードフォース史上最も充実した研修</strong> になったと言えるでしょう。</p>
+
+<p>私は入社前からフィードフォースの過去の研修の記事を見て、どんなことをやってきたかは知っていたのですが、今年の新人研修の内容を知った瞬間 <strong>今年はマジなヤツだ…</strong> と直感しました。研修内容を知った時は、その内容からフィードフォースの新人に対する熱意や期待が感じられ、ここまで新卒にリソースを割いてくれるなんて！ と嬉しく思いました。一方で、その期待に応えなければ…！ と、やる気や緊張感がひしひしと湧いてきたのを今でも思い出します。</p>
+
+<p>それでは以降で、それぞれの研修について簡単にご紹介したいと思います。</p>
+
+<p><span id="group-training"></span></p>
+
+<h2>集合研修</h2>
+
+<p>それではまず <strong>集合研修</strong> についてです。</p>
+
+<p>この研修は入社してすぐに行われ、職種に関係なく今年入社した新人10人全員が参加しました。集合研修の意図は、<strong>「社会人としての基礎」</strong> を身につけ、<strong>「フィードフォースについて理解するため」</strong> のものである、と最初に説明がありました。</p>
+
+<p>集合研修では、次の5つの研修を受けました。</p>
+
+<ul>
+<li>マナー研修</li>
+<li>オンライン学習サイトの動画視聴</li>
+<li>社員による各種講義</li>
+<li>2社合同で「新人研修を教え合う研修」</li>
+<li>営業ロープレ研修</li>
+</ul>
+
+<h3>新人が人事にマナーを教える「相手目線のビジネスマナー研修」</h3>
+
+<p>マナー研修では、<strong>「弊社の人事に新人がマナーを教える」</strong> という通常とは全く逆の形式で行われました。</p>
+
+<p>新人が人事にマナーを教えるプレゼンをするというアウトプットを目標に、そこまでの準備をほぼ自分たちだけで調査しまとめました。マナーについては、オンライン学習サイトのマナー講座の動画の視聴や、ネットの文献の調査、先輩社員に実践的な内容のインタビューなどで調査しました。最終的に、人事からも好評を得るようなプレゼンをアウトプットすることができました。</p>
+
+<p><img alt="manner" src="/images/2016/07/manner.jpg" /></p>
+
+<p>やはり自分たちの手で調査してまとめただけあり、受け身でマナー講座を受けるよりもインプットの量が多く、かつ実践的な知識を身につけることができたと思います。特にエンジニアに関しては、配属されてしまうと <strong>マナーを意識するタイミングが激減してしまう可能性</strong> があるので、ここで基礎を身につけられたのは大きかったなと今になって感じています。</p>
+
+<p>この研修に関しては弊社人事のブログでも紹介されているので、もしご興味があればぜひご覧になってみて下さい。</p>
+
+<ul>
+<li><a href="http://nabeharu.hatenablog.com/entry/2016/04/21/225003">なべはるの人事徒然 - 入社5日目の新人にビシネスマナーを教えてもらった（研修資料付）</a></li>
+</ul>
+
+<h3>Schoo・マナビトを使った動画視聴による学習</h3>
+
+<p>研修期間中、<a href="https://schoo.jp/">Schoo</a>や<a href="https://manabito-online.com/">マナビトオンライン</a>のアカウントが配布され、マナーや業界用語に関する動画を視聴しました。</p>
+
+<p>必須受講の動画と視聴期限が会社側から与えられたので、動画の視聴はチームで計画を立て、研修の空き時間を使って見る形でこなしました。</p>
+
+<p>研修の中では教えてくれないような基礎的な内容もこの動画視聴で抑えられたので、社会人の基礎や業界知識を身につける上では非常に役立ったなと感じています。また必須受講の動画以外にも豊富にコンテンツが用意されていたので、自分の興味のある動画を視聴することができる自由度の高さもこの方法ならではだなと感じました。</p>
+
+<h3>講義</h3>
+
+<p>この研修では、<strong>社員が講師</strong> となって <strong>講義形式</strong> で行われました。</p>
+
+<p>講義内容は全て実務に関連するもので、自社のサービス内容に始まり、営業やマーケティング、果ては技術的な知識まで、<strong>フィードフォースに関わる全ての業務に関連する内容</strong> が網羅されていました。実際に第一線で働いている社員に直に講義をして頂けたので、非常に実践的な知識を身につけることができました。</p>
+
+<p><img alt="lecture" src="/images/2016/07/lecture.jpg" /></p>
+
+<p>講義の中には、<strong>社長が講師となって会社のビジョンを語る</strong> という講義もあり、会社や社員に対する社長の熱い思いを聞くことができる貴重な機会でした。また、配属後には関わる機会が少ない社員の方々ともこの講義を通して交流することができたので、社員を知るという意味でも良い機会だったなと感じています。</p>
+
+<p><img alt="lecture-by-president" src="/images/2016/07/lecture_by_president.jpg" /></p>
+
+<h3>2社合同研修</h3>
+
+<p>株式会社マーケティングアプリケーションズ様と合同で、<strong>両企業の新人が研修で学んだこと</strong> をお互いに発表し合いました。</p>
+
+<p><img alt="mapps-and-ff-presentation" src="/images/2016/07/mapps_and_ff_presentation.jpg" /></p>
+
+<p>同じ Web マーケティング業界で事業を展開している両企業ですが、事業内容や新人メンバーのキャラクターの違いが出ていて、活発で盛り上がりのあるプレゼンの場となりました。<strong>社外の同期の知り合いを作る</strong> という意味でも貴重な場だったなと感じています。</p>
+
+<p>弊社の公式ページにもこの研修に関するお知らせがありますので、もしご興味があれば是非ご覧ください。</p>
+
+<ul>
+<li><a href="https://www.feedforce.jp/information/7270/">お知らせ -「新入社員研修を教え合う研修」を2社合同で実施。“徹底的な相手目線“をテーマに研修に取り組む！</a></li>
+</ul>
+
+<h3>営業ロープレ試験</h3>
+
+<p>この研修は、<strong>1. マナーが出来ていること</strong>、<strong>2. 相手目線であること</strong>、<strong>3. 自社のサービスを理解していること</strong> の3点を確認するための研修として行われました。</p>
+
+<p>営業チームやマーケティングチームの社員の方々に <strong>サービスを売り込むクライアント役</strong> になってもらい、新人が <strong>営業担当役</strong> として <strong>自社のサービスを売り込む商談</strong> をする、という形で行われました。この研修では、クライアント役の社員の方々から合格を頂くまで再挑戦しなければならず、新人一同必死になってロープレの練習をしていました。</p>
+
+<p><img alt="roleplaying" src="/images/2016/07/roleplaying.jpg" /></p>
+
+<p>いざ実践の場になると分からないことがあったり、型にはまった説明で真の相手目線になっていなかったりと、相手目線やサービス理解の部分で苦戦しているメンバーも少なくなかったと思います。</p>
+
+<p>以下のFacebookの投稿は、全員がロープレに合格した際の投稿です。</p>
+
+<ul>
+<li><a href="https://www.facebook.com/feedforce/posts/1255523091142723">facebook - 株式会社フィードフォース【新入社員10名全員が、営業ロープレに合格！】</a></li>
+</ul>
+
+<h3>集合研修を通して学んだこと、感じたこと</h3>
+
+<p>それではここで一旦、集合研修を通して学んだこと、感じたことを振り返ってみたいと思います。</p>
+
+<h4>エンジニアにとっての集合研修の重要性</h4>
+
+<p>集合研修ではエンジニアの業務に直接関わる内容こそあまり多くはありませんでしたが、<strong>社会人としての基礎</strong> 、<strong>自社のサービス理解</strong> を学ぶ上でとても役立ちました。やはりエンジニアとしてサービスの開発に関わる以上、自社のサービスのことは誰よりも理解していなければならないし、サービスを使うお客様の目線からより良い物を作っていくという考え方や意識が必要不可欠だと思います。チームに配属されてからではなく、このタイミングでこれらの心構えを身につけることができて本当に良かったなと感じています。</p>
+
+<h4>エンジニアが営業ロープレ試験を受けたことについて</h4>
+
+<p>お恥ずかしい話になりますが、エンジニアも営業ロープレ試験をやるという話を聞いた当初は、<strong>「それって本当にエンジニアに必要な研修なのかな…？」</strong> と疑問を持っていました。ですが実際にやってみると、お客様の課題が何かを知ること・それを解決するための最善の方法を提案できることは、サービスを売る側だけではなく <strong>サービスを作る側にも必要なこと</strong> であると初めて知ることができました。また、相手は必ずしもお客様だけでなく、チームで開発をする上では <strong>チームのメンバーに対しても相手目線であること</strong> が求められることも学ぶことができました。</p>
+
+<h4>集合研修を受けてみて</h4>
+
+<p>エンジニアとしてこの集合研修を受けてみて、この研修は <strong>絶対やっておいた方が良かったな</strong> と強く感じています。入社直後のタイミングで、集合研修を通して今後も常に持ち続けるべき知識や考え方を学ぶことができて本当に良かったと、チームに配属された今だからこそ痛感しています。</p>
+
+<p><span id="tech-training"></span></p>
+
+<h2>技術研修</h2>
+
+<p>さて、集合研修が終わった後は、いよいよお待ちかねの <strong>技術研修</strong> が始まりました。余談にはなりますが、集合研修の期間中はほとんどコードをかける機会が無く、新卒エンジニア一同コードを書きたくてムズムズしていたもどかしい期間でした笑。その反動か、このあとの技術研修はみんな生き生きと取り組んでいたのはいい思い出です。</p>
+
+<p>この研修では、実際に業務で必要になる <strong>技術の学習</strong> と、実際に配属される可能性のあるチームで1週間ずつ働く <strong>ローテーション配属</strong> を経験しました。一日の半分を <strong>技術の学習</strong> の時間、もう半分を <strong>ローテーション配属</strong> の時間というように区切って行われました。</p>
+
+<p>技術の学習では、我々の師である <a href="author/inoue">@a_know</a> が講師役となって、次の技術書の内容をなぞる形で勧められました。</p>
+
+<ul>
+<li><a href="http://www.shoeisha.co.jp/book/detail/9784798118819">ゼロから始めるデータベース操作</a></li>
+<li><a href="https://gihyo.jp/magazine/wdpress/plus/978-4-7741-4204-3">Web を支える技術</a></li>
+<li><a href="http://gihyo.jp/book/2014/978-4-7741-6516-5">パーフェクト Ruby on Rails</a></li>
+</ul>
+
+<p>上記の本を取り上げて、講義形式やハンズオン形式、勉強会形式など様々な方法で取り組みました。ただ、 <a href="author/inoue">@a_know</a> が私たち新卒エンジニアに「私は講師役だからといってあなたたちに技術を教えるつもりはない、私と一緒に勉強して一緒に学びましょう」と念を押して伝えました。そのため、技術研修中は常に <strong>講師や本から与えられるものが全てではない</strong>、自分たちで <strong>＋αのインプットをしていこう</strong> という意識を全員が持って取り組めていたと思います。</p>
+
+<p>また、各新卒エンジニアに対して一人の先輩エンジニアにメンターとして付いてもらいました。実はこのメンターの先輩エンジニアの方々とは、集合研修の期間から毎日ふりかえりを行い、ローテ配属やプレゼンで困ってることや集合研修の悩みなどを相談させてもらっていました。技術研修の期間中はその日の良かったことや学んだこと、悩んでることなどの共有・相談させてもらったり、技術的な質問の相手になってもらいました。</p>
+
+<p>それでは、具体的に技術研修ではどんなことに取り組んだか、簡単にご紹介しましょう。</p>
+
+<h3>入社前課題</h3>
+
+<p>いきなり技術研修の話から少しそれてしまいますが、新卒エンジニアの育成に関するものだったため、こちらで紹介させていただこうと思います。</p>
+
+<p>今年は新卒エンジニアに対して入社前課題が与えられました。課題図書として、弊社で使用されているプログラミング言語 Ruby に関する技術書 <a href="http://tatsu-zine.com/books/tanoshii-ruby5">『たのしいRuby 第5版』</a>  が配られ、入社日までに「その技術書の範囲の中から出題される100個の問題の解答を作る」という宿題が出されました。問題集は Gist にアップロードされ、解答も Gist 上に作成する形で行われました。以下が内定者に課された100問ですので、ご興味がある方はご覧ください。</p>
+
+<p><a href="https://gist.github.com/otofu-square/71d4213ba411ec96ca76facf45d005b5">Gist - たのしい Ruby 達成度確認テスト.md</a></p>
+
+<p><img alt="ruby-test" src="/images/2016/07/ruby_test.png" /></p>
+
+<p>このタイミングで Ruby の基礎を身につけることができたので、Ruby に関しては入社後に基礎的な内容でつまずいたり、全員の理解度がバラバラということはほとんどありませんでした。</p>
+
+<h3>データベース基礎</h3>
+
+<p>さて、まず技術研修で一番最初に取り組んだのは、データベースの基礎についてです。</p>
+
+<p>データベースに関しては、<a href="http://www.shoeisha.co.jp/book/detail/9784798118819">『ゼロから始めるデータベース操作』</a>という書籍を読みながら、<strong>ハンズオン形式</strong> で進められました。ローカル環境に MySQL をインストールして、書籍に書いてある SQL をターミナルに手で打ち込みながら学習を行いました。この時から、毎朝 <a href="author/inoue">@a_know</a> が新卒エンジニアに対してその前の日に学んだ内容から質問する時間が用意されました。そのような復習のための時間があるおかげで、自然と前の日の内容をあらかじめ復習しておくという意識が身についた気がします。</p>
+
+<h3>Web の基礎</h3>
+
+<p>データベース基礎の学習が想定よりも早く進んだため、こちらの Web の基礎の学習は時間に少しゆとりを持って行われました。Webの基礎の学習では、<a href="https://gihyo.jp/magazine/wdpress/plus/978-4-7741-4204-3">『Web を支える技術』</a> を読んで学んことをまとめた記事を書き、社内の Qiita:Team というドキュメント共有ツールの <strong>記事にまとめる形</strong> で進めました。</p>
+
+<p>記事を書く中で、書籍に書いてある内容だけではなく <strong>現在の最新情報を追加で調べて</strong> 書いたり <strong>書籍で詳しく言及されていない箇所を深堀</strong> することで <strong>＋αで学んだことを書く</strong> ようにまとめました。記事にまとめるためスピードは遅くなってしまいましたが、読んだ内容を記事としてアウトプットすることで、より質の高いインプットが得られたかなと思います。また、社内で記事を公開したため、その記事に対して社内のエンジニアからアドバイスや指摘が入ったことも記事を書く学習ならではだなと思いました。</p>
+
+<p><img alt="qiita" src="/images/2016/07/qiita.png" /></p>
+
+<h3>Rails の基礎</h3>
+
+<p>DB の基礎、Web の基礎を学んで、次はいよいよ Ruby で実装されたWebフレームワークである Rails の基礎を学びます。Rails の基礎に関しては、<a href="http://gihyo.jp/book/2014/978-4-7741-6516-5">『パーフェクト Ruby on Rails』</a>の前半部分に書かれてある <strong>Railsの思想</strong> と <strong>Railsの周辺技術</strong> について取り上げて学習しました。</p>
+
+<h4>最初は記事を書いてまとめようと思っていたが…</h4>
+
+<p>最初は、Rails の基礎に関しても Web の基礎の学習の方法と同様に Qiita:Team に記事を書いてまとめる形で進める予定でした。ただ、以下の理由から Rails の基礎に関しては記事を書きながらの学習は適していないのではという意見が出ました。</p>
+
+<ul>
+<li>記事の作成は非常に時間がかかる</li>
+<li>研修の期間は決まっているので、ここで時間がかかると後々の Rails アプリを作る研修に時間を割けなくなる</li>
+<li>それぞれが同じ内容の記事を作ることになるので効率が悪い</li>
+</ul>
+
+<p>そこで、<a href="author/inoue">@a_know</a> の提案で <strong>これ以降の研修の進め方を全員で話し合って決める</strong> ことになったのです。</p>
+
+<h4>研修の進め方の話し合い</h4>
+
+<p>話し合いでは、各個人が <strong>今の研修のいいところ</strong> と <strong>微妙なところ・問題点</strong> を付箋に書き出して意見交換をし、それらを踏まえてどういう進め方がベストかを全員で話し合いました。結果、<strong>Railsの思想</strong> に関しては記事を書く形でまとめ、<strong>Railsの周辺技術</strong> に関しては勉強会形式で一人一人担当の範囲を決めてお互いにプレゼンしあう方法を採用しました。勉強会形式ではそれぞれが別々の範囲を担当するため、個人個人の理解度に差が出てしまうのでは、という懸念がありました。その点は、出来る限りハンズオン形式で手を動かす時間を設けたり、サンプルコードを使って例を示すことで可能な限りカバーする工夫をしました。結果として、勉強会形式を採用したことで作業の効率や時間は大幅に改善し、この後に行う Rails アプリを作る研修に余裕を持って取り組むことができました。</p>
+
+<h4>勉強会形式でお互いに発表し合う</h4>
+
+<p>私たちは <strong>Railsの周辺技術</strong> を以下の5つのテーマに分け、発表日を決めて勉強会を行いました。</p>
+
+<ul>
+<li>JSON</li>
+<li>Asset</li>
+<li>Turbolinks</li>
+<li>ロードパス（autoloadなど）</li>
+<li>Sidekiq（非同期処理について）</li>
+</ul>
+
+<p>質疑応答の時間を設けて1テーマ30分で発表をしました。当日は同期内からも質問が多く上がったり、講師の <a href="author/inoue">@a_know</a> からも鋭いツッコミや質問が入るなど、大いに盛り上がりました。質問されて答えられなかったことや全員の理解が甘いところについては、後日記事にまとめたり全員で勉強する時間を設けることで知識の抜け漏れが無いようにしました。</p>
+
+<h3>Rails アプリを作る研修</h3>
+
+<p>Rails の基礎を学んだ後は、実際に Rails を使って Web アプリを作りました。基本的に<a href="http://gihyo.jp/book/2014/978-4-7741-6516-5">『パーフェクト Ruby on Rails』</a>の第6章以降を読んで、イベント告知アプリを実装しました。</p>
+
+<p>この研修では、社内の業務でも使われているテスト駆動開発で行い、Vagrant 上の仮想環境にデプロイするところまでを目標にして取り組みました。実装にあたっては、GitHub に自分のアプリのリポジトリを作成し、PR を作って講師の <a href="author/inoue">@a_know</a> にレビューをしてもらい OK が出たらマージするという <strong>実際の業務でも行われている作業</strong> に沿って行われました。レビューでは間違っていることを指摘されるだけでなく、<strong>ここはどういう意味だろう？</strong> や <strong>ここをこうするとどうなるだろう？</strong> といったような <strong>本を読んで写しているだけでは答えられない</strong> ような質問があり、本に書かれている以上のことを学ぶことができました。また、これを通して、ただ本を読むだけではなく読んでいて気になるところを自発的に調べるような習慣がつきました。</p>
+
+<p>最終的には、研修期間中に全員が以下の機能の実装まで行うことができました。</p>
+
+<ul>
+<li>Twitter ログイン機能</li>
+<li>イベント登録</li>
+<li>イベント一覧</li>
+</ul>
+
+<p>アプリの実装については、本に書かれていること以外にも、社内で使われている技術を積極的に採用して実装を行いました。</p>
+
+<ul>
+<li><a href="https://www.deppbot.com/">deppbot</a> による <strong>継続的な Bundle Update</strong> を実現</li>
+<li>テンプレートエンジンに <strong>slim</strong> を導入</li>
+<li>CircleCI による <strong>継続的インテグレーション</strong> の実現</li>
+</ul>
+
+<p>また、デプロイの環境を構築する際にサーバの設定を置くためのリポジトリを作り、Chef を使って cookbook を書いて Vagrant の環境を構築しました。Vagrant 上にアプリをデプロイする際には、capistrano を使ってデプロイの自動化を行いました。</p>
+
+<h3>ローテーション配属研修</h3>
+
+<p>ここでは、技術の学習の研修と並行して行われた <strong>ローテーション配属研修</strong> （以下ローテ配属）についてご紹介します。</p>
+
+<p>新卒エンジニアたちは、研修期間が終わった後にどのサービスの開発チームに配属されたいか希望を出すことになっていました。そこで、希望の配属先を考える上で <strong>チームの雰囲気や業務を体験して知っておく</strong> ために用意されたのが <strong>ローテ配属</strong> です。ローテ配属では、<strong>1週間ずつ計5つのサービスに配属</strong> されて、そのサービスの開発チームの業務を体験しました。</p>
+
+<p>機能の実装や修正などの業務では、基本的に現場のエンジニアと新人がペアプログラミングで作業を進める形で行われたため、普段仕事でどんな作業をするのかを知ることができました。ペアプロなどを通して効率よく作業するためのテクニックやエディタの設定なども教えてもらうことができ、エンジニアとして成長することができたと思います。自分が手を動かして作ったものがサービスの一部としてリリースされることになるため、作ったものが世の中に発信される充実感や達成感を味わうことができました。各チームではペアプロ以外にもチームのミーティングやチームランチなどのコミュニケーションの場が用意されており、普段のチームの雰囲気を知ることができる機会になったと思います。</p>
+
+<h3>技術研修を通して学んだこと・感じたこと</h3>
+
+<p>それでは、技術研修を終えて学んだこと・感じたことをまとめたいと思います。</p>
+
+<h4>技術の学習とOJTのバランス</h4>
+
+<p>今回の研修では、純粋に技術を学習する時間とローテ配属で業務をしながら学んでいく時間が半々に分かれていました。ただ知識をインプットするだけではなく、<strong>研修で学んだ技術を業務でアウトプットすることができる環境</strong> が用意されていたため、<strong>インプットとアウトプットのバランス</strong> が取れていたと思います。午前中の研修で学んだ知識がローテ配属先でも役に立つということも少なくありませんでした。</p>
+
+<p>一方で、技術研修で後に学ぶ内容や習わない内容が先に業務で出てきてしまうこともあったため、もしも来年も同じような方法を採用するのであればその部分の連携が取れると更に良い研修になるかなと考えています。</p>
+
+<h4>困った時・悩んだ時に相談しやすい環境</h4>
+
+<p>この研修中は、困った時や悩んだ時に <strong>すぐ相談しやすい環境</strong> が整っていたなと思います。一日の終わりにメンターとのふりかえりで都度現状を共有するタイミングあったため、そこで話しを聞いてもらって助言を頂いたりすることができました。講師の <a href="author/inoue">@a_know</a> との 1 on 1 面談では、技術的なアドバイスや社会人としてのアドバイスはもちろん、今後のエンジニアのキャリアの話など様々な話を聞いてもらい面倒を見ていただきました。このような場があったことで、自分が気付けていない新たな発見があったり、困っていることを相談できたため、研修時間外にも意思疎通や相談の場は大事だなと感じています。</p>
+
+<h4>情報をアウトプットする機会が多かった</h4>
+
+<p>技術研修では、特に基礎部分の学習において、<strong>アウトプットの機会が非常に多かった</strong> なと感じています。エンジニアとして、自分が学んだ技術や調査した内容をまとめて何らかの形でアウトプットすることは非常に大切なことです。今回 Qiita:Team に記事をまとめたり、勉強会用のスライドをまとめるといった作業を通して、エンジニアとして <strong>どうやって情報をアウトプットし</strong>、<strong>どのように共有すれば良いか</strong> を学ぶことができました。これもただ受け身になって受ける研修では体験できなかったことかなと思います。</p>
+
+<p>ただし、記事に学習内容をまとめる方法では内容が濃くなりすぎたり量が増えすぎたりしたため、どの程度の内容の記事にまとめるかはしっかりと運営側で決めてあげて <strong>研修の期間に見合ったスピード感で進めていく必要がある</strong> かなと思いました。</p>
+
+<h4>受ける側も運営する側も一緒になって組み立てていく研修</h4>
+
+<p>先ほどご紹介した通り、今回の研修では、研修を計画した側が一方的に進め方を決めたわけではありません。受ける側が進め方に疑問や問題点を感じた時に、<strong>全員で話し合って研修の進め方を決め直しました</strong>。今回全員で話し合って進め方を考えるという選択肢が出てきたのは、普段 <strong>アジャイルという考え方</strong> に基づいて開発を行っているフィードフォースだからこその考え方なのかなと感じました。この話し合いは、研修を受ける側に寄り添いながら、受ける側にとって最適な研修はどんなものかを考える上で絶対にあったほうが良い取り組みだなと感じました。</p>
+
+<h2>まとめ</h2>
+
+<p>さて、2016年度の新人研修についてお話ししてきました。いかがだったでしょうか。<br>
+フィードフォースにとっては新人研修元年とも言える年になったのではないでしょうか。</p>
+
+<p>実は来年、私たち新卒エンジニア5名が技術研修の担当をすることが現時点で決まっています。<a href="author/inoue">@a_know</a> の記事でも触れられているように、<a href="2016-rookie-training.html#ywt">今年の研修のふりかえり</a>を行い、来年の研修につなげるため何を改善し何を行ったら良いかについてメンターを含めた全員で話し合いました。</p>
+
+<p>来年は我々の後輩が入社してきますし、今後もフィードフォース新卒採用を続けていくはずです。その際に万全の受け入れをするためにも来年以降は今年の新人研修を更にブラッシュアップし、フィードフォースの文化として、フィードフォースならではの新人研修にしていけたらなと考えています。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/memory-of-2016-rookie-engineer-training.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="フィードフォースの2016年度エンジニア新人研修についてまとめてみた" data-url="http://tech.feedforce.jp/memory-of-2016-rookie-engineer-training.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/memory-of-2016-rookie-engineer-training.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/memory-of-2016-rookie-engineer-training.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/watch-facebook-api-version.html" rel="next">Facebook API アップデートと付き合う話</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/introduce-elasticsearch-kibana.html" rel="prev">フィードフォースにおける Elasticsearch+Kibana の導入事例</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

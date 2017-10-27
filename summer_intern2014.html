@@ -1,0 +1,338 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>フィードフォースで初めてエンジニア向けサマーインターンをやってみた | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは。見た目年齢30歳の新卒1年目エンジニアt-nakanoです。もうすっかり寒くなってきましたね。今回の記事はエンジニア向けサマーインターンについてです。2014年8月18日から29日の期間で、フィードフォースで初めてエンジニア向けサマーインターンを実施しました。そこでは普段の業務で取り入れている開発方法などを体験してもらうようなプログラムにしてみました。そして実際にやってみてうまくいったりいかなかったりしたことがあるので、それらについて紹介していきたいと思います。">
+      <link rel="canonical" href="http://tech.feedforce.jp/summer_intern2014.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="フィードフォースで初めてエンジニア向けサマーインターンをやってみた | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは。見た目年齢30歳の新卒1年目エンジニアt-nakanoです。もうすっかり寒くなってきましたね。今回の記事はエンジニア向けサマーインターンについてです。2014年8月18日から29日の期間で、フィードフォースで初めてエンジニア向けサマーインターンを実施しました。そこでは普段の業務で取り入れている開発方法などを体験してもらうようなプログラムにしてみました。そして実際にやってみてうまくいったりいかなかったりしたことがあるので、それらについて紹介していきたいと思います。">
+      <meta property="og:url" content="http://tech.feedforce.jp/summer_intern2014.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/summer_intern2014.html">フィードフォースで初めてエンジニア向けサマーインターンをやってみた</a></h1>
+      <ul>
+        <li class="entry-time">2014.10.10</li>
+        <li class="entry-cat"><a href="/category/ruby/">Ruby/Rails</a>, <a href="/category/dev_style/">開発スタイル</a></li>
+        <li class="entry-author"><a href="/author/t-nakano">t-nakano</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/t-nakano"><img src="/images/authors/t-nakano.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは。見た目年齢30歳の新卒1年目エンジニアt-nakanoです。<br><br>
+もうすっかり寒くなってきましたね。<br><br>
+今回の記事はエンジニア向けサマーインターンについてです。<br><br>
+2014年8月18日から29日の期間で、フィードフォースで初めてエンジニア向けサマーインターンを実施しました。<br><br>
+そこでは普段の業務で取り入れている開発方法などを体験してもらうようなプログラムにしてみました。<br><br>
+そして実際にやってみてうまくいったりいかなかったりしたことがあるので、それらについて紹介していきたいと思います。</p>
+
+<!--more-->
+
+<h2>概要</h2>
+
+<p>日時: 2014年8月18日(月)~29日(金)<br><br>
+場所: フィードフォース 9F<br><br>
+人数: 地方学生6名(北海道から4人、九州から2人)<br><br>
+運営: <a href="http://tech.feedforce.jp/author/r-suzuki">r-suzuki</a>, <a href="http://tech.feedforce.jp/author/t-nakano">t-nakano</a>,人事の人1人の計3人<br><br>
+内容: 3つのテーマからひとつを選び、Railsを使って2週間で開発してもらう</p>
+
+<p>概要としてはこんな感じです。<br><br>
+普段社員は5Fで業務をしているのですが、9Fの見晴らしのいい会議室を使ってもらいました。<br><br>
+チーム構成は2人1チームで、3チームそれぞれ別々のテーマで、Ruby on Railsでの開発です。<br><br>
+Railsを使うようにしたのは、普段の業務でもRubyやRuby on Railsを扱っているからです。<br><br>
+また、アジャイル開発も普段の業務に取り入れているので、インターンシップでも体験してもらいました。</p>
+
+<p>今回は普段の業務からインターンシップに取り入れたもののうち、以下の6つを普段の業務を踏まえつつ、紹介していきたいと思います</p>
+
+<ol>
+<li>朝会</li>
+<li>カンバン</li>
+<li>KPT</li>
+<li>GitHub</li>
+<li>Slack</li>
+<li>社内イベント</li>
+</ol>
+
+<h2>1.朝会</h2>
+
+<p>普段、フィードフォース社員は出社するとカンバンの前に立って進捗報告や問題共有を行います。毎日です。これがないと1日が始まりません。<br><br>
+具体的には、カンバンに貼ってある付箋を元にディレクターや他のエンジニアに向けて昨日やった作業と、今日の予定を話します。<br><br>
+その後に事務連絡をしたり、朝会で話しきれなかったことなどあれば関係者で集まって続きをしたりします。話し合いで解決しないようなことがあればペアプロしたりとかもします。</p>
+
+<p>この朝会をr-suzuki主導でインターンシップにも導入してみました。<br><br>
+基本的には昨日やったことと、今日やることを各チームごとに話してもらいました。<br><br>
+すると最初は、r-suzukiに対する報告のみという形に…。<br><br>
+そこで、運営側からインターン生にはたらきかけ、チーム間での進捗報告と技術的に詰まっている部分などあれば報告するよう促してみました。<br><br>
+その結果、進捗が進んでいるチームから解決方法を教えたりなど、チーム間のコミュニケーションが促進されました。<br><br>
+また、わからない部分を運営側で把握できたので、その後の時間でr-suzukiによる技術的な指導もすることができました。<br><br>
+これはやってみて良かったと思います！</p>
+
+<h2>2.カンバン</h2>
+
+<p>では次に、先ほども出たカンバンについてお話します。<br><br>
+フィードフォースではカンバンにホワイトボードを使っています( <a href="http://tech.feedforce.jp/agile_whiteboards.html">http://tech.feedforce.jp/agile_whiteboards.html</a>)<br><br>
+付箋にタスクを書いて、それをホワイトボードに貼って進捗の可視化を行っています。<br><br>
+チームによって異なりますが、t-nakanoのチームでは普段TODO,DOING,INREVIEW,WAITING,DONEで区切っています。<br><br>
+INREVIEWはGitHub上でレビューを受けている状態で、WAITINGは外的要因でマージできないときに貼るエリアとなっています。<br><br>
+状況に合わせてこのエリアは変えたりもします。</p>
+
+<p>インターンシップではシンプルにTODO,DOING,DONEでやりました。<br><br>
+ふせんにはユーザーストーリーを教えて、それを書かせるようにしてみました。<br><br>
+しかし、インターン生はあまりユーザーストーリーを書くことに注力せず、結果的にタスクを書くことになりました。<br><br>
+場所的な問題から、各チームにホワイトボードを手配などはできなかったのですが、あるチームは壁にふせんを貼ったりなど工夫されていて、良かったです。<br><br>
+ただ、実質2人での開発だったので、あまりタスクの進捗状況を共有する必要はなかったのかもしれないです。<br><br>
+とはいえ、朝会のネタにはなっていたので、もっとコンパクトなTODOのみとかでやれたら良かったのかなと思いました。次に期待してください！</p>
+
+<h2>3.KPT</h2>
+
+<p>フィードフォースでは週に一回、開発者のみでやるKPTと、プロダクト全体で行う振り返りがあります。<br><br>
+開発者のみでやっているKPTでは、基本的に付箋を残しておいて、剥がして良さそうなふせんなどをKPTの前に振り返ります。<br><br>
+また、Keep,Problem,Try以外にも単発的なGoodやBadをあげるというやり方もしたりします。</p>
+
+<p>このKPTをインターン生とr-suzukiに加え、わたくしt-nakanoも参戦してやってみました。<br><br>
+今回の場合は2週間と短い期間のため、週一ではなく、毎日の業務時間終了間際に実施しました。<br><br>
+実際に、Keep,Problem,Tryをあげてもらったのですが、インターン生が正直な意見をたくさん言ってくれました。<br><br>
+例えば、「ペアプロしたい」というTryがあがり、次の日にはディスプレイを用意したりなどインターンシップの運営改善につながりました。<br><br>
+また、t-nakanoと面識のあるメンバーが何人かいたため、「身内トークで盛り上がっている」と他の参加者から注意を受けてしまう場面もありました。個人的にものすごく反省しています…。</p>
+
+<p>もちろん、参加者たち自身の改善もあり、「早めにデプロイすることが大事」と出た次の日にはherokuを使ってデプロイを試したり、「タイムボックスを切る」といったような具体的なTryも上がっていてとても良かったように思いました。</p>
+
+<p><img alt="KPT" src="/images/2014/10/KPT.jpeg" /></p>
+
+<h2>4.GitHub</h2>
+
+<p>少しアジャイル的な話から外れて、GitHubについて普段のフィードフォースでの開発の仕方と、インターンシップではどうだったかについて話します。</p>
+
+<p>フィードフォースでは普段はプルリクエストベースで開発しています。<br><br>
+masterは常にデプロイもしくはリリースできる状態に保っていて、必ず誰かのレビューを受けてからマージするようにしています。</p>
+
+<p>インターンでも、フィードフォースの開発をそのまま体験してもらうということで、ソース管理は全チームGitHubに統一しました。<br><br>
+その際に、GitHubを用いたチーム開発の経験者が各チームにいて、インターン生同士で教えあっていました。<br><br>
+また、社員からのソースコードに対するコメントもあり、コミュニケーションの促進につながったのではないかと思っています。</p>
+
+<p>ただ、2人での開発で頻繁にペアプロをしていたので、どうしてもプルリクエストベースとはなりませんでした。<br><br>
+プルリクエストは出されるのですが、すぐに閉じられてしまいました。<br><br>
+コメントを待っているような状態では開発が止まってしまいますので、仕方がないですよね。<br><br>
+ただ、社員から閉じられたプルリクエストに対してもコメントするなど、普段の業務があるにも関わらず積極的にコメントしていて良かったのではないかと思っています。</p>
+
+<h2>5.Slack</h2>
+
+<p>別フロアで開発を行っていたため、インターン生と社員間ではコミュニケーションを取る機会があまりなく、インターン生とのコミュニケーションは運営の人がメインでした。</p>
+
+<p>でもせっかく遠方から来てもらったので、社員とのコミュニケーションも促進したい思いがありました。<br><br>
+ただ、社員も普段の業務があり、ずっと9Fにいてもらうわけにはいかないので、 <a href="https://slack.com/">Slack</a>を導入しました。</p>
+
+<p>そこでは、社員が普段の業務の合間を縫ってGitHubの代わりにソースコードやドキュメントの指摘をしていました。<br><br>
+また、お昼のお誘いなんかもあって、社員とインターン生とのコミュニケーションの促進になったのではないかと思います。<br><br>
+他にもインターン生がSlack上で今日やることリストを作っていて、社員のいいねから更に各チームに広がったりなど、導入してみて良かったと思います。</p>
+
+<h2>6.社内イベント</h2>
+
+<p>フィードフォースには数多くの社内イベントがあるのでちょっと紹介したいと思います。</p>
+
+<p>大きく分けて2つあり、イベントチームという人達が企画した会社全体的なイベントと、技術チーム中心となって行うイベントがあります。<br><br>
+インターン中にも社内イベントとして、 <a href="http://blog.feedforce.jp/archives/9526">エクストリーム昼休み</a>を行いました。<br><br>
+皆さんとても楽しんでくれたみたいで良かったです。</p>
+
+<p>技術チームイベントにはLT大会や、もくもく会、読書会などがあります。<br><br>
+LT大会ではインターン生を巻き込んで参戦させてみたりしてみました。<br><br>
+見事に、社員顔負けのプレゼンをしてとても盛り上がりました。<br><br>
+また、もくもく会では普段顔を会わせることができない分、詰まってる部分を直接聞いてたりして充実した時間を過ごしていました。<br><br>
+その他にもブラウンバックミーティングや創立8周年記念パーティーなど様々なイベントに参加してもらいました。</p>
+
+<p><img alt="ブラウンバックミーティングその2" src="/images/2014/10/2d717f61775bd160873642e73559f70b.jpeg" /><br>
+<img alt="創立8周年記念パーティー" src="/images/2014/10/ac2f86358bc06e77818fbcb0cabb9df7.jpeg" /></p>
+
+<h2>最後に</h2>
+
+<p>参加してくれたインターン生もブログを書いてくれたようなので紹介します。</p>
+
+<ul>
+<li><a href="http://kkou0801.hatenadiary.jp/entry/2014/08/31/014308">http://kkou0801.hatenadiary.jp/entry/2014/08/31/014308</a></li>
+<li><a href="http://pokotyamu.hatenablog.com/entry/2014/08/30/150314">http://pokotyamu.hatenablog.com/entry/2014/08/30/150314</a></li>
+</ul>
+
+<p>それぞれ自分自身を見つめなおす機会にもなったみたいで良かったです。</p>
+
+<p>あと、この場を借りて遠方からわざわざ参加してくれた6名のインターン生にはお礼を言いたいです、ありがとうございました！<br><br>
+また、来年度もフィードフォースではエンジニア向けサマーインターンを実施予定です。<br><br>
+来年度は更により良いインターンシップにしていきますので、興味のある方はどしどし連絡お待ちしております！  </p>
+
+<p><img alt="みんなでハイ、チーズ！" src="/images/2014/10/71f3edca64830cbcbe144d4a994baa8a.jpeg" /></p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/summer_intern2014.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="フィードフォースで初めてエンジニア向けサマーインターンをやってみた" data-url="http://tech.feedforce.jp/summer_intern2014.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/summer_intern2014.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/summer_intern2014.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/jenkins-server-ci.html" rel="next">JenkinsでサーバのCIを始めました</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/agile_whiteboards.html" rel="prev">アジャイル開発で便利だったホワイトボードなどまとめ</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

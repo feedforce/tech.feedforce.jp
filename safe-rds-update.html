@@ -1,0 +1,365 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>安全な Amazon RDS のアップデート | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは。増田です。Amazon で PS4 Pro の料金が定価に戻っていたので、日曜日にうっかりポチッとしてしまいました。今日も元気です。先月、RDS for MySQL を 5.5.40 から 5.5.53 にアップデートしました。今月で MySQL 5.5.40 のサポートが切れ、強制アップデートされるためです。">
+      <link rel="canonical" href="http://tech.feedforce.jp/safe-rds-update.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="安全な Amazon RDS のアップデート | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは。増田です。Amazon で PS4 Pro の料金が定価に戻っていたので、日曜日にうっかりポチッとしてしまいました。今日も元気です。先月、RDS for MySQL を 5.5.40 から 5.5.53 にアップデートしました。今月で MySQL 5.5.40 のサポートが切れ、強制アップデートされるためです。">
+      <meta property="og:url" content="http://tech.feedforce.jp/safe-rds-update.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></h1>
+      <ul>
+        <li class="entry-time">2017.04.06</li>
+        <li class="entry-cat"><a href="/category/aws/">AWS</a>, <a href="/category/operation/">運用事例</a></li>
+        <li class="entry-author"><a href="/author/masutaka">masutaka</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/masutaka"><img src="/images/authors/masutaka.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは。増田です。Amazon で PS4 Pro の料金が定価に戻っていたので、日曜日にうっかりポチッとしてしまいました。今日も元気です。</p>
+
+<p>先月、RDS for MySQL を <code class="prettyprint">5.5.40</code> から <code class="prettyprint">5.5.53</code> にアップデートしました。今月で MySQL 5.5.40 のサポートが切れ、強制アップデートされるためです。</p>
+
+<!--more-->
+
+<p>私が対応するのは今回で 3 回目になりますが、今までは Staging 環境で検証した後、深夜作業で Apply Immediately もしくは Reboot していました。</p>
+
+<p>今回は MySQL のメジャーアップデートではないため、問題が起きる可能性は少ないのですが、仮に問題があった場合にロールバック出来ません。</p>
+
+<p>そのため、出来るだけ安全側に倒してアップデートしてみました。この記事を書くことで、属人化を廃することを期待していたり、もっと良いやり方があれば知りたいという意図もあります。</p>
+
+<h2>今回意識したこと</h2>
+
+<ul>
+<li>サービスのダウンタイムを出来るだけ減らす</li>
+<li>問題が起きた時に、出来るだけ早くロールバック可能な状態にしておく</li>
+<li>深夜作業前に出来ることは全部やり、当日やることを減らす</li>
+<li>当日に時間のかかりそうな処理は、事前に確認しておく</li>
+<li>少しでも不安なことがあれば、不安がなくなるまで何度でもシミュレーションする</li>
+</ul>
+
+<h2>今回の構成</h2>
+
+<p>EC2 インスタンス上の Unicorn と delayed_job が RDS を参照する、標準的な構成になっています。master は Multi-AZ になっており、Read Replica が 1 台ぶら下がっています。</p>
+
+<p><img alt="safe-rds-update-1" src="/images/2017/04/safe-rds-update-1.png" /></p>
+
+<h2>事前にやったこと</h2>
+
+<h3>Qiita:Team の記事作成</h3>
+
+<p>深夜作業でやること、事前にやること、心配なこと、思いついたことなどをどんどん書いていきました。</p>
+
+<p><img alt="safe-rds-update-qiita" src="/images/2017/04/safe-rds-update-qiita.png" /></p>
+
+<h3>Release Note の確認</h3>
+
+<p>5.5.40 から 5.5.53 までの Release Note を全部確認しました。</p>
+
+<p>例: <a href="https://dev.mysql.com/doc/relnotes/mysql/5.5/en/news-5-5-53.html">https://dev.mysql.com/doc/relnotes/mysql/5.5/en/news-5-5-53.html</a></p>
+
+<h3>Staging 環境でシミュレーション</h3>
+
+<p>公式の『<a href="http://docs.aws.amazon.com/ja_jp/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.MySQL.html#USER_UpgradeDBInstance.MySQL.ReducedDowntime">わずかなダウンタイムでの MySQL データベースのアップグレード</a>』に従って、Staging 環境でシミュレーションしました。</p>
+
+<p>今回は一回やった後に、もっと良い方法を思いついたので、もう一回シミュレーションしました。</p>
+
+<h3>時間がかかりそうな処理を確認する</h3>
+
+<p>当日時間がかかりそうな master への昇格、Multi-AZ 化、Read Replica の作成などを、本番環境と同じデータで試し、時間の目安を把握しました。経験的に時間にブレがあることは分かっているので、あくまで目安です。</p>
+
+<p>参考までに、以下は今回の検証でかかった時間です。</p>
+
+<ul>
+<li>スナップショット作成: 30 分程で完了</li>
+<li>master への昇格: 4 分以内に完了</li>
+<li>Multi-AZ 化: 9 分程度で完了</li>
+<li>Read Replica 作成: 12 分程度で完了</li>
+</ul>
+
+<h3>深夜のバッチ処理時間の把握</h3>
+
+<p>深夜に実行されるバッチ処理はあるため、作業時間に被らないように把握しました。</p>
+
+<h3>会社 PC を自宅で作業可能にしておく</h3>
+
+<p>会社の情報セキュリティポリシーに則り、持ち出せる状態にしておきます。</p>
+
+<p>一部は IP アドレス制限しているため、それらもアクセス可能かを確認して、当日慌てないようにします。Zabbix や Bugsnag などのエラー監視ツールも見られるようにしておきます。</p>
+
+<h3>昇格用の RDS インスタンス作成とアップデート</h3>
+
+<p>昇格用の RDS インスタンス（以下 production-green）を master の Read Replica として作成しました。</p>
+
+<p><img alt="safe-rds-update-2" src="/images/2017/04/safe-rds-update-2.png" /></p>
+
+<p>さらに MySQL 5.5.53 にアップデートしておきます。</p>
+
+<p><img alt="safe-rds-update-3" src="/images/2017/04/safe-rds-update-3.png" /></p>
+
+<h3>深夜作業用の Pull Request の作成</h3>
+
+<p>予め、以下の Pull Request を作っておきました。</p>
+
+<ul>
+<li><code class="prettyprint">PR1</code>
+
+<ul>
+<li>アプリケーションが参照する RDS のエンドポイントを前述の <code class="prettyprint">production-green</code> に切り替える</li>
+</ul></li>
+<li><code class="prettyprint">PR2</code>
+
+<ul>
+<li>同様に Zabbix や fluentd のメトリクス収集元を切り替える</li>
+</ul></li>
+</ul>
+
+<h2>当日やったこと</h2>
+
+<h3>仮眠</h3>
+
+<p>作業開始は AM1:30 からにしました。仮眠はもちろん取っておきます。深夜作業でお腹が空くのも辛いので、軽食を用意するのも良いでしょう。</p>
+
+<h3>スナップショットの作成</h3>
+
+<p>AM1:30 からスナップショットを取り始めました。結果的に 50 分程かかりました。</p>
+
+<p>このスナップショットは DB がクラッシュした時の命綱です。自動バックアップで作られるスナップショットは RDS インスタンスを Delete すると削除されるので、要注意です。</p>
+
+<p>今回は人力でやりましたが、cron などで自動化したほうが良いと思います。</p>
+
+<h3>アプリケーションの接続先を production-green に向ける</h3>
+
+<p>前述の <code class="prettyprint">PR1</code> をデプロイし、接続先を Read Replica に向けます。Webアプリケーションとしては read-only になります。<code class="prettyprint">PR2</code> も Cook して、メトリクス収集元を切り替えます。</p>
+
+<p><img alt="safe-rds-update-4" src="/images/2017/04/safe-rds-update-4.png" /></p>
+
+<p>この状態での Write 系処理は、アプリケーションに <code class="prettyprint">503 Service Unavailable</code> を返させたほうが良いと思います。</p>
+
+<h3>production-green を master に昇格</h3>
+
+<p>昇格すると、production-blue との関係はなくなり、Web アプリケーションとして read-write 可能になります。今回は数分のダウンタイムが発生しました。</p>
+
+<p><img alt="safe-rds-update-5" src="/images/2017/04/safe-rds-update-5.png" /></p>
+
+<p>昇格時に RDS インスタンスが再起動しますが、delayed_job の場合、全てのプロセスが終了してしまいます。通知で気付けると思いますが、デプロイして起動し直す必要があります。</p>
+
+<h3>Multi-AZ にする</h3>
+
+<p>もうダウンタイムは発生しないので、ここからは安心して作業出来ます。</p>
+
+<p><img alt="safe-rds-update-6" src="/images/2017/04/safe-rds-update-6.png" /></p>
+
+<blockquote>
+<p>結果として、インスタンスが Single-AZ から Multi-AZ に変換される際には、ダウンタイムは発生しません。 by <a href="https://aws.amazon.com/jp/rds/faqs/?nc1=h_ls">よくある質問 - Amazon RDS | AWS</a></p>
+</blockquote>
+
+<h3>Read Replica を作る</h3>
+
+<p>今回のサービスは、一部の処理を Read Replica に逃がしているので、作成します。</p>
+
+<p><img alt="safe-rds-update-7" src="/images/2017/04/safe-rds-update-7.png" /></p>
+
+<h3>以前の RDS インスタンスを削除する</h3>
+
+<p>各種エラーがないことを確認できたので、次の日に削除しました。本当は翌営業日まで起動したかったのですが、コストと問題が起こる可能性を天秤にかけて、このようにしました。</p>
+
+<p><img alt="safe-rds-update-8" src="/images/2017/04/safe-rds-update-8.png" /></p>
+
+<h2>それでも問題は起こるもの</h2>
+
+<p>今回は production-green を master に昇格した後、一部のアカウントでログインできなくなりました。ログインできるアカウントもあり、作業中は深夜作業の長期化を覚悟しました。</p>
+
+<p>しばらくしてジョブキューの数が閾値を超えたアラートが来たので、delayed_job プロセスが全部落ちていると気づき、再デプロイで復帰することが出来ました。</p>
+
+<p>各 EC2 インスタンスの delayed_job プロセス数は当然監視しています。今までアラートが来なかったことはなかったので、今でも本当に謎です。後日試したら速攻でアラートが来ました。</p>
+
+<p>とは言え、深夜作業に問題はつきものです。今回はこれだけ準備した上での問題だったので、悔いや後悔はありません。</p>
+
+<h2>終わりに</h2>
+
+<p>今回はとにかく、ダウンタイムをゼロに近づけ、ロールバックも可能にすることを目的にしました。そのために出来る準備は全部やり、深夜作業でやることや考えることをできるだけ減らしました。</p>
+
+<p>深夜作業はいつもより頭が回らないものです。自分を過信せず、準備に準備を重ねることが非常に重要です。</p>
+
+<p>現在は残念ながら「production-green を master に昇格」で数分のダウンタイムが発生してしまいます。今後はこちらを改善していきます。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/safe-rds-update.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="安全な Amazon RDS のアップデート" data-url="http://tech.feedforce.jp/safe-rds-update.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/safe-rds-update.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/safe-rds-update.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/run-e2e-test-on-circleci-2_0.html" rel="next">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/cloudfront-tilda.html" rel="prev">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>Facebook API アップデートと付き合う話 | feedforce Engineers' blog</title>
+      <meta name="description" content="最近買ったボードゲームはスカイアイランドとテレストレーションとストーンエイジです、こんにちは。フィードフォース ボドゲ部の kano-e です。仕事では Facebook のドキュメントをいっぱい読んでいる今日この頃、Rails エンジニアです。さて、先日 7/13 (日本時間だと 7/14 ですね) に Facebook API v2.7 がリリースされました。弊社の ソーシャル PLUS や Feedmatic では Facebook API を利用していますので、さっそく影響範囲の確認や対応リリースが行われました。(ソーシャル PLUS の対応リリースは 7/14 中でした)Facebook API は三ヶ月を目安にバージョンアップが行われます。ですので、Facebook API を利用している場合、定期的にその対応が必要になります。この記事では、 Facebook API と長くお付き合いするためのアレコレについて、軽くまとめたいと思います。">
+      <link rel="canonical" href="http://tech.feedforce.jp/watch-facebook-api-version.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="Facebook API アップデートと付き合う話 | feedforce Engineers' blog">
+      <meta property="og:description" content="最近買ったボードゲームはスカイアイランドとテレストレーションとストーンエイジです、こんにちは。フィードフォース ボドゲ部の kano-e です。仕事では Facebook のドキュメントをいっぱい読んでいる今日この頃、Rails エンジニアです。さて、先日 7/13 (日本時間だと 7/14 ですね) に Facebook API v2.7 がリリースされました。弊社の ソーシャル PLUS や Feedmatic では Facebook API を利用していますので、さっそく影響範囲の確認や対応リリースが行われました。(ソーシャル PLUS の対応リリースは 7/14 中でした)Facebook API は三ヶ月を目安にバージョンアップが行われます。ですので、Facebook API を利用している場合、定期的にその対応が必要になります。この記事では、 Facebook API と長くお付き合いするためのアレコレについて、軽くまとめたいと思います。">
+      <meta property="og:url" content="http://tech.feedforce.jp/watch-facebook-api-version.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/watch-facebook-api-version.html">Facebook API アップデートと付き合う話</a></h1>
+      <ul>
+        <li class="entry-time">2016.07.26</li>
+        <li class="entry-cat"><a href="/category/facebook/">Facebook</a></li>
+        <li class="entry-author"><a href="/author/e-takano">e-takano</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/e-takano"><img src="/images/authors/kano-e.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>最近買ったボードゲームはスカイアイランドとテレストレーションとストーンエイジです、こんにちは。フィードフォース ボドゲ部の kano-e です。<br>
+仕事では Facebook のドキュメントをいっぱい読んでいる今日この頃、Rails エンジニアです。</p>
+
+<p>さて、先日 7/13 (日本時間だと 7/14 ですね) に Facebook API v2.7 がリリースされました。<br>
+弊社の ソーシャル PLUS や Feedmatic では Facebook API を利用していますので、さっそく影響範囲の確認や対応リリースが行われました。<br>
+(ソーシャル PLUS の対応リリースは 7/14 中でした)</p>
+
+<p>Facebook API は三ヶ月を目安にバージョンアップが行われます。<br>
+ですので、Facebook API を利用している場合、定期的にその対応が必要になります。</p>
+
+<p>この記事では、 Facebook API と長くお付き合いするためのアレコレについて、軽くまとめたいと思います。</p>
+
+<!--more-->
+
+<h2>API バージョンの寿命</h2>
+
+<p>冒頭でも述べましたが Facebook API の新しいバージョンは三ヶ月を目安にリリースされます。<br>
+過去には六ヶ月空くこともありましたが、大体三ヶ月毎に新しいバージョンがくる、と思っておくと慌てなくて済みます。</p>
+
+<p>新しいバージョンがリリースされるタイミングで、古いバージョンが廃止される時期も決定します。<br>
+API バージョンがいつ廃止されるか、その寿命は Graph API と Marketing API で違っています。</p>
+
+<h3>Graph API の場合</h3>
+
+<p>Graph API の場合、次のバージョンがリリースされてから二年間で、そのバージョンは使えなくなります。<br>
+例えば <code class="prettyprint">v2.7</code> が 2016/07/13 にリリースされたので、 <code class="prettyprint">v2.6</code> はそこから2年後の 2018/07/13 が期限です。</p>
+
+<p><img alt=":alt" src="/images/2016/07/watch-facebook-api-version-graph-api-versioning.jpg" /></p>
+
+<p>この辺りのことは <a href="https://developers.facebook.com/docs/apps/versions">Platform Versioning</a> のページにまとまっています。</p>
+
+<p>また、 Facebook の App ID と App Secret の発行に必要な Facebook App も、 API Version という属性を持っています。<br>
+この API Version という属性に設定されたバージョンより古い API バージョンは、その Facebook App では利用できません。</p>
+
+<p>この API Version は、アプリ作成時の最新の API バージョンが設定されます。<br>
+以降、設定されたバージョンが無効になると Facebook がこの項目を自動でアップデートします。</p>
+
+<p>ですので Facebook API を利用する場合には、自分の所有する Facebook App の API Version も合わせて確認しておく必要があります。</p>
+
+<h3>Marketing API の場合</h3>
+
+<p>Marketing API の場合、寿命がもう少し短く、次の次のバージョンが出るタイミングで無効になっています。<br>
+例えば <code class="prettyprint">v2.4</code> は <code class="prettyprint">v2.6</code> がリリースされた 2016/04/12 の前日 2016/04/11 が期限です。</p>
+
+<p><img alt=":alt" src="/images/2016/07/watch-facebook-api-version-marketing-api-versioning.jpg" /></p>
+
+<p>Marketing API の期限は、次のバージョンがリリースされたタイミングで目安が公開されます。<br>
+今であれば <code class="prettyprint">v2.7</code> が公開され、 <code class="prettyprint">v2.6</code> の期限は 2016/10 となっています。<br>
+これはつまり 2016/10 に次のバージョンである <code class="prettyprint">v2.8</code> が出る予定、ということになります。</p>
+
+<h2>変更点を調べる</h2>
+
+<p>バージョンの変更点は <a href="https://developers.facebook.com/docs/apps/changelog">Facebook Platform Changelog</a> にまとまっています。<br>
+以前は Marketing API の Changelog は別ページだったのですが、 <code class="prettyprint">v2.5</code> のタイミングで Platform Changelog に統一されました。<br>
+個人的な感想を言うと、確認すべき場所が一カ所にまとまったので、確認作業が楽になって助かっています。</p>
+
+<p>詳細については、個別のドキュメントページへのリンクになっていることが多いので、そちらも合わせて確認します。</p>
+
+<p>パラメータやフィールドの名前が変わった、という変更であれば、影響がわかりやすいのですぐに対応できることが多いです。</p>
+
+<p>過去には「エンドポイントが変わった」「オブジェクトの構造が変わった」「エンドポイントや機能自体が廃止になった」ということもありました。<br>
+2016/8/4 には完全廃止となりますが、 FQL (Facebook Query Language) という機能もありましたね、そういえば。</p>
+
+<p>そのような影響の大きい変更だと即日対応は難しいですが、その場合は各サービス毎にスケジュールをたてて対応しています。</p>
+
+<p>また、 Facebook には <a href="https://developers.facebook.com/tools/api_versioning/">API Upgrade Tool</a> というツールが用意されています。<br>
+Facebook App の使用履歴から、特定のバージョンで使えないリクエストがあれば、それをリストアップしてくれるツールです。<br>
+使い方は<a href="https://developers.facebook.com/docs/graph-api/advanced/api-upgrade-tool">ドキュメント</a>をご覧ください。<br>
+(残念ながら弊社の ソーシャル PLUS では、お客様が Facebook App を作成して管理画面に登録するというサービスですので、このツールですべて解決できないこともあります……)</p>
+
+<h2>バージョンアップに気付きたい</h2>
+
+<p>いつの間にか新しいバージョンがリリースされている、というのは嫌ですね。<br>
+特に Marketing API は寿命が短いため、できるだけ早く気付きたいものです。</p>
+
+<p>弊社 Slack には、各認証プロバイダの開発者向け更新情報を通知するチャンネルがあります。<br>
+ここには Facebook の <a href="https://developers.facebook.com/blog/">Developer News</a> のフィードも含まれているので、API バージョンのリリースにも気付けます。</p>
+
+<p>また <a href="https://developers.facebook.com/settings/developer/contact/">Developer Settings</a> から、各項目毎に通知設定ができます。<br>
+ここで <code class="prettyprint">Notify By Email</code> を <code class="prettyprint">Yes</code> にしておくと、自分の Facebook アカウントのプライマリなメールアドレスに、通知メールが届くようになります。</p>
+
+<p>Marketing API だけですが、ドキュメント更新の際の通知も可能です。</p>
+
+<p>バージョンアップによる影響調査は、それぞれのサービス毎に行われます。<br>
+調査内容は Github の issue にコメントされることが多いのですが、適宜 Slack や Qiita:Team での情報共有も行っています。</p>
+
+<p>ほかの部署に影響がありそうな変更点を見つけた場合も、同じように都度共有しています。</p>
+
+<h2>まとめ</h2>
+
+<ul>
+<li>Facebook API バージョンのリリースは、だいたい三ヶ月毎</li>
+<li>Facebook API バージョンの寿命は Graph API と Marketing API で違う
+
+<ul>
+<li>Graph API は <a href="https://developers.facebook.com/docs/apps/versions">Platform Versioning</a> を見る</li>
+<li>Marketing API は寿命が短いので注意</li>
+</ul></li>
+<li>変更点は <a href="https://developers.facebook.com/docs/apps/changelog">Facebook Platform Changelog</a> 見ればわかる
+
+<ul>
+<li><a href="https://developers.facebook.com/tools/api_versioning/">API Upgrade Tool</a> も参考に</li>
+</ul></li>
+<li>基本的には <a href="https://developers.facebook.com/blog/">Developer News</a> など、開発者向けブログのフィードを購読する
+
+<ul>
+<li><a href="https://developers.facebook.com/settings/developer/contact/">Developer Settings</a> から通知を受け取るようにしておくとより良い</li>
+</ul></li>
+</ul>
+
+<p>以上、Facebook API と長くお付き合いするためのアレコレでした。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/watch-facebook-api-version.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="Facebook API アップデートと付き合う話" data-url="http://tech.feedforce.jp/watch-facebook-api-version.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/watch-facebook-api-version.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/watch-facebook-api-version.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/log-visualization-with-redash.html" rel="next">Re:dashを使ったログの可視化をさくっと始めてみた</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/memory-of-2016-rookie-engineer-training.html" rel="prev">フィードフォースの2016年度エンジニア新人研修についてまとめてみた</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

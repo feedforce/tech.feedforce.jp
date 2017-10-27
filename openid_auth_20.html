@@ -1,0 +1,876 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>OpenID認証2.0〜概論 | feedforce Engineers' blog</title>
+      <meta name="description" content="OpenID認証2.0の&quot;概論&quot;についての発表資料です仕様の詳細部分については説明を省略していますXRI周辺についての説明も省略しています(力量不足につき)仕様を把握しきれてはいないため、誤りが多く含まれている可能性があります以下は、実際の発表で使用したスライドのPDFです。- 発表資料(PDF) -- 1.1MB">
+      <link rel="canonical" href="http://tech.feedforce.jp/openid_auth_20.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="OpenID認証2.0〜概論 | feedforce Engineers' blog">
+      <meta property="og:description" content="OpenID認証2.0の&quot;概論&quot;についての発表資料です仕様の詳細部分については説明を省略していますXRI周辺についての説明も省略しています(力量不足につき)仕様を把握しきれてはいないため、誤りが多く含まれている可能性があります以下は、実際の発表で使用したスライドのPDFです。- 発表資料(PDF) -- 1.1MB">
+      <meta property="og:url" content="http://tech.feedforce.jp/openid_auth_20.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/openid_auth_20.html">OpenID認証2.0〜概論</a></h1>
+      <ul>
+        <li class="entry-time">2008.02.25</li>
+        <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/ff_koshigoe">ff_koshigoe</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/ff_koshigoe"><img src="/images/authors/koshigoe.gif" /></a>
+    </div>
+    <div class="entry-body">
+      <ul>
+<li>OpenID認証2.0の&quot;概論&quot;についての発表資料です</li>
+<li>仕様の詳細部分については説明を省略しています</li>
+<li>XRI周辺についての説明も省略しています(力量不足につき)</li>
+<li>仕様を把握しきれてはいないため、誤りが多く含まれている可能性があります</li>
+</ul>
+
+<p>以下は、実際の発表で使用したスライドのPDFです。<br>
+- <a href="http://resource.feedforce.jp/study/20080222/openid_authentication_2_0-introduction.pdf">発表資料(PDF) -- 1.1MB</a></p>
+
+<!--more-->
+
+<ul>
+<li>はじめに</li>
+<li>OpenID認証とは</li>
+<li>特徴
+
+<ul>
+<li>「オープン」</li>
+<li>「秘密情報の保護」</li>
+<li>「分散的」</li>
+<li>「HTTP」</li>
+<li>「拡張」</li>
+</ul></li>
+<li>用語</li>
+<li>プロトコル概観
+
+<ul>
+<li>開始(Initiation)</li>
+<li>正規化(Normarization)</li>
+<li>発見(Discovery)</li>
+<li>関連づけ(Association)</li>
+<li>認証要求</li>
+<li>エンドユーザーの認可</li>
+<li>承認/却下</li>
+<li>照合</li>
+</ul></li>
+<li>実例
+
+<ul>
+<li>OP-Local Identifierで始める</li>
+<li>OP Identifierで始める</li>
+<li>HTMLのURLで始める</li>
+<li>自前のYadis IDで始める</li>
+</ul></li>
+<li>セキュリティ
+
+<ul>
+<li>攻撃の予防</li>
+<li>盗聴による攻撃</li>
+<li>中間者による攻撃</li>
+<li>悪意のRPによるProxy攻撃</li>
+<li>User-Agent</li>
+<li>UI</li>
+<li>DoS攻撃</li>
+<li>信頼性と評価</li>
+</ul></li>
+<li>おまけ
+
+<ul>
+<li>参照先</li>
+<li>OPとRPの一例</li>
+<li>OP</li>
+<li>RP</li>
+<li>日本での活動</li>
+<li>手前味噌</li>
+</ul></li>
+<li>最後に</li>
+</ul>
+
+<h2>はじめに</h2>
+
+<ul>
+<li>OpenID認証2.0の&quot;概論&quot;についての発表資料です</li>
+<li>仕様の詳細部分については説明を省略しています</li>
+<li>XRI周辺についての説明も省略しています(力量不足につき)</li>
+<li>仕様を把握しきれてはいないため、誤りが多く含まれている可能性があります</li>
+<li>誤りの訂正や、内容へのご批判等、コメントやメール等でご指摘お願いします
+
+<ul>
+<li>suzuki at feedforce.jp</li>
+</ul></li>
+</ul>
+
+<p>以下は、実際の発表で使用したスライドのPDFです。<br>
+- <a href="http://resource.feedforce.jp/study/20080222/openid_authentication_2_0-introduction.pdf">発表資料(PDF) -- 1.1MB</a></p>
+
+<h2>OpenID認証とは</h2>
+
+<blockquote>
+<p>OpenID認証はエンドユーザーが管理するIdentifierを証明する方法を提供します。  </p>
+</blockquote>
+
+<dl>
+<dt>注目</dt>
+
+</dl>
+
+<ul>
+<li>Identifierはエンドユーザーが管理している</li>
+</ul>
+
+<h2>特徴</h2>
+
+<h3>「オープン」</h3>
+
+<p>公開規格である為、誰にでも自由に無償で利用可能です。当然ながら、アイデンティティを特定ドメインに限定せず、Web全体での利用を可能にします。</p>
+
+<p>また、公開規格である事から、ドメイン間を統一的な認証インターフェースで繋ぐ効果が期待できます。例えば、(擬似的な)SSOが考えられるでしょう。</p>
+
+<p>注) 実際に安全なSSOの実現が簡単であるかは別問題とします。</p>
+
+<h3>「秘密情報の保護」</h3>
+
+<p>OpenID認証では、認証を要求する側に対して、エンドユーザーのパスワードやメールアドレスなどを教える事無く、認証を完了させる事が可能です。</p>
+
+<h3>「分散的」</h3>
+
+<p>OpenID認証では、中央の権威機関などが存在しない為、分散的であると言えます。つまり、特別な機関の承認や登録を必要としません。</p>
+
+<p>また、エンドユーザーは利用する認証のサーバーを自由に選択する事が出来ます。認証のサーバーを切り替えたとしても、利用しているアイデンティティを保持する事が可能です。</p>
+
+<h3>「HTTP」</h3>
+
+<p>OpenID認証では、標準的なHTTPのリクエスト/レスポンスのみを使います。このため、User-Agentの特別な能力や、その他の特別なクライアントソフトウェアが要求される事はありません。例えば、認証の手続きの間に、Cookieの利用が強制される様な事もありません。</p>
+
+<p>HTTPベースであるため、AJAXスタイルでもうまくいきますが、この場合は、モダンブラウザやスクリプト対応などに依存する事になります。</p>
+
+<h3>「拡張」</h3>
+
+<p>OpenID認証では、認証以上の事を拡張仕様で補う様になっています。例えば、プロフィール情報の交換や、その他のアイデンティティに基づく情報の交換等が、拡張しようを利用して行われます。</p>
+
+<p>また、認証のサーバーのポリシーを取得する為の拡張しようなども提案されているようです。</p>
+
+<h2>用語</h2>
+
+<p>沢山のIdentifierが登場する為、ここで全てを理解するのは難しいと思います。後述するプロトコル概観の中で、つじつまを合わせるのが良いでしょう。</p>
+
+<dl>
+<dt>Identifier</dt>
+
+</dl>
+
+<p>いわゆるアイデンティティです。個人を特定する記号であると考えればよいでしょう。HTTPかHTTPSをスキームとするURIか、XRIで表現されます。</p>
+
+<p>OpenID認証のドキュメント中には、文脈によった様々なIdentifierが登場するので、注意してください。</p>
+
+<dl>
+<dt>User-Agent</dt>
+
+</dl>
+
+<p>HTTP/1.1を実装しているエンドユーザーのウェブブラウザです。ウェブブラウザに限定するわけでもありませんが、対話的な認証を行う場合は、一般的にウェブブラウザが使われるでしょう。</p>
+
+<dl>
+<dt>Relying Party</dt>
+
+</dl>
+
+<p>RPと呼びます。エンドユーザーが管理するIdentifierの証明を望むウェブアプリケーションの事です。</p>
+
+<dl>
+<dt>OpenID Provider</dt>
+
+</dl>
+
+<p>OPと呼びます。RPがエンドユーザーの管理するIdentifierを主張するために信頼するOpenID認証サーバーです。</p>
+
+<dl>
+<dt>OP Endpoint URL</dt>
+
+</dl>
+
+<p>User-Supplied Identifierに対して発見を行った結果に得られた、OpenID認証プトロコルのメッセージを受け取るURLです。これは、HTTPかHTTPSの絶対URLです。</p>
+
+<dl>
+<dt>OP Identifier</dt>
+
+</dl>
+
+<p>OPを表すIdentifierです。例えば、Yahoo! JAPANの場合、&quot;<a href="http://yahoo.co.jp/%22%E3%81%A7%E3%81%82%E3%82%8B%E3%81%A8%E8%80%83%E3%81%88%E3%81%A6%E3%82%88%E3%81%84%E3%81%A7%E3%81%97%E3%82%87%E3%81%86%E3%80%82">http://yahoo.co.jp/&quot;であると考えてよいでしょう。</a></p>
+
+<dl>
+<dt>User-Supplied Identifier</dt>
+
+</dl>
+
+<p>エンドユーザーによってRPに与えられるIdentifierか、OPでエンドユーザーに選択されるIdentifierの事です。</p>
+
+<dl>
+<dt>Claimed Identifier</dt>
+
+</dl>
+
+<p>エンドユーザーが自分のものであると主張するIdentifierです。OpenID認証は、この主張が真実である事を証明する事を目的としています。</p>
+
+<p>User-Supplied IdentifierがURLだった場合はそれを正規化して得られたIdentifierで、XRIだった場合はCanonicalIDです。</p>
+
+<dl>
+<dt>OP-Local Identifier</dt>
+
+</dl>
+
+<p>各OPで局所的な、エンドユーザーの為の代替Identifierです。これは、エンドユーザーの管理下にある必要はありません。</p>
+
+<h2>プロトコル概観</h2>
+
+<p>概観について、一部、実例を交えながら説明します。<br>
+- OP: Yahoo! JAPAN<br>
+- RP: Fastladder</p>
+
+<h3>開始(Initiation)</h3>
+
+<p>エンドユーザーが、User-Agent経由でRPにUser-Supplied Identifierを与えます。</p>
+
+<p><img alt="開始" src="http://resource.feedforce.jp/study/20080222/openid_initiation.png" /></p>
+
+<h3>正規化(Normarization)</h3>
+
+<p>RPは、受け取ったUser-Supplied Identifierを正規化します。</p>
+
+<pre><code class="prettyprint">yahoo.co.jp -&gt; http://yahoo.co.jp/
+</code></pre>
+
+<h3>発見(Discovery)</h3>
+
+<p>正規化したUser-Supplied Identifierに対して、発見を行います。</p>
+
+<p>発見の結果、エンドユーザーの認証に使う&quot;OP Endpoint URL&quot;が確立されます。</p>
+
+<pre><code class="prettyprint">$ curl -I http://yahoo.co.jp/
+HTTP/1.1 302 Found
+Date: Mon, 18 Feb 2008 14:08:03 GMT
+Location: http://www.yahoo.co.jp/index.html
+Connection: close
+Content-Type: text/html; charset=euc-jp
+</code></pre>
+
+<ul>
+<li>リダイレクトがある場合は追いかけます</li>
+</ul>
+
+<pre><code class="prettyprint">$ curl -I http://www.yahoo.co.jp/index.html
+HTTP/1.1 200 OK
+Date: Mon, 18 Feb 2008 14:08:23 GMT
+P3P: policyref=&quot;http://privacy.yahoo.co.jp/w3c/p3p.xml&quot;, CP=&quot;CAO DSP COR CUR ADM DEV TAI PSA PSD IVAi IVDi CONi TELo OTPi OUR DELi SAMi OTRi UNRi PUBi IND PHY ONL UNI PUR FIN COM NAV INT DEM CNT STA POL HEA PRE GOV&quot;
+Expires: -1
+Pragma: no-cache
+Cache-Control: no-cache
+X-XRDS-Location: http://open.login.yahoo.co.jp/openid20/www.yahoo.co.jp/xrds
+Connection: close
+Content-Type: text/html; charset=utf-8
+</code></pre>
+
+<ul>
+<li>詳細は省略しますが、&quot;X-XRDS-Location&quot;のURLからドキュメントを取得します</li>
+</ul>
+
+<pre><code class="prettyprint">$ curl -i http://open.login.yahoo.co.jp/openid20/www.yahoo.co.jp/xrds
+HTTP/1.1 200 OK
+Date: Mon, 18 Feb 2008 14:10:51 GMT
+P3P: policyref=&quot;http://privacy.yahoo.co.jp/w3c/p3p.xml&quot;, CP=&quot;CAO DSP COR CUR ADM DEV TAI PSA PSD IVAi IVDi CONi TELo OTPi OUR DELi SAMi OTRi UNRi PUBi IND PHY ONL UNI PUR FIN COM NAV INT DEM CNT STA POL HEA PRE GOV&quot;Last-Modified: Thu, 17 Jan 2008 01:25:25 GMT
+Accept-Ranges: bytes
+Content-Length: 354
+Connection: close
+Content-Type: application/xrds+xml
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;xrds:XRDS
+    xmlns:xrds=&quot;xri://$xrds&quot;
+    xmlns:openid=&quot;http://openid.net/xmlns/1.0&quot;
+    xmlns=&quot;xri://$xrd*($v*2.0)&quot;&gt;
+  &lt;XRD&gt;
+    &lt;Service priority=&quot;0&quot;&gt;
+      &lt;Type&gt;http://specs.openid.net/auth/2.0/server&lt;/Type&gt;
+
+ &lt;URI&gt;https://open.login.yahooapis.jp/openid/op/auth&lt;/URI&gt;
+    &lt;/Service&gt;
+  &lt;/XRD&gt;
+&lt;/xrds:XRDS&gt;
+</code></pre>
+
+<ul>
+<li>URI要素でOP Endpoint URLが示されています。</li>
+</ul>
+
+<h3>関連づけ(Association)</h3>
+
+<p>このプロセスは任意です。</p>
+
+<p>OpenID認証の手続きの中で、RPとOPはリクエスト/レスポンスの署名を確認する事で、それぞれの正当性を証明します(照合(Verification))。</p>
+
+<p>関連づけは、この照合のための余計なリクエスト/レスポンスを節約する為に役立ちます。</p>
+
+<p>具体的には、Diffie-Hellman鍵共有を利用して、RPとOPの間に関連付けを構築します。<br>
+- <a href="http://ja.wikipedia.org/wiki/Diffie-Hellman%E9%8D%B5%E5%85%B1%E6%9C%89">Diffie-Hellman鍵共有 - Wikipedia</a></p>
+
+<h3>認証要求</h3>
+
+<p>RPがエンドユーザーのUser-Agentを、認証要求パラメータをつけた&quot;OP Endpoint URL&quot;にリダイレクトさせます。</p>
+
+<dl>
+<dt>認証要求のパラメータ例</dt>
+
+</dl>
+
+<ul>
+<li>openid.ns</li>
+<li>openid.mode</li>
+<li>openid.claimed_id</li>
+<li>openid.identity</li>
+<li>openid.assoc_handle</li>
+<li>openid.return_to</li>
+<li>openid.realm</li>
+</ul>
+
+<p>パラメータの詳細には触れません。</p>
+
+<h3>エンドユーザーの認可</h3>
+
+<p>OPが、エンドユーザーが本当にOpenID認証を行うために正当であると認められているのかを確認します。</p>
+
+<p>一般に、これはエンドユーザーをログインさせる事で確かめられます。</p>
+
+<p>この方法や方針については、OpenID認証の仕様の範囲外となっています。</p>
+
+<p><img alt="エンドユーザー認可" src="http://resource.feedforce.jp/study/20080222/openid_user_auth.png" /></p>
+
+<h3>承認/却下</h3>
+
+<p>RPからの認証要求に対して、OPは承認か却下を示すメッセージを付けて、エンドユーザーのUser-AgentをRPにリダイレクトします。</p>
+
+<dl>
+<dt>メッセージのパラメータ例</dt>
+
+</dl>
+
+<ul>
+<li>openid.ns</li>
+<li>openid.mode</li>
+<li>openid.op_endpoint</li>
+<li>openid.claimed_id</li>
+<li>openid.identity</li>
+<li>openid.return_to</li>
+<li>openid.response_nonce</li>
+<li>openid.invalidate_handle</li>
+<li>openid.assoc_handle</li>
+<li>openid.signed</li>
+<li>openid.sig</li>
+</ul>
+
+<p>パラメータの詳細には触れません。</p>
+
+<h3>照合</h3>
+
+<p>OPから受け取った情報について、RPが照合を行います。<br>
+- 戻りURL<br>
+- 発見した情報<br>
+- nonce<br>
+- 署名</p>
+
+<p>この照合が全て妥当であったときに、OpenID認証による認証は成功となります。</p>
+
+<p><img alt="成功" src="http://resource.feedforce.jp/study/20080222/openid_successful.png" /></p>
+
+<h2>実例</h2>
+
+<p>幾つかの実例を見てみましょう。概観に引き続き、RPはFastladderで、OPはYahoo! JAPANです。</p>
+
+<p>以下の点に注目してみてください。<br>
+- 最終的にRPに認識されるアイデンティティ(Identifier)<br>
+- 〜Identifier</p>
+
+<p>この実例を通して特に注意してほしい事は、OPを変更した場合でもIdentifierを保持する方法がOpenID認証の中で提供されている、という事です。</p>
+
+<p>また、この実例の中で利用しているOP-Local Identifierは、各自で発行されたものに読み替えてください。</p>
+
+<h3>OP-Local Identifierで始める</h3>
+
+<p>User-Supplied IdentifierにOP-Local Identifierを使ってみましょう。</p>
+
+<ol>
+<li>まず、フォームの入力欄にYahoo! JAPANで発行されたIDを入力してボタンをクリックします
+
+<ol>
+<li><a href="https://me.yahoo.co.jp/a/Ya%5C_JyXB8ZPujNdvm8OOHJ837%5C_LRI7UJll%5C_%5C_x">https://me.yahoo.co.jp/a/Ya\_JyXB8ZPujNdvm8OOHJ837\_LRI7UJll\_\_x</a></li>
+</ol></li>
+<li>Yahoo! JAPANにリダイレクトされるので、そのままログインします</li>
+<li>ログイン後、OpenID認証を継続するか聞かれるので「続ける」ボタンをクリックします
+
+<ol>
+<li>OPによっては、ここでIdentifierを選択する事ができます</li>
+</ol></li>
+<li>Fastladderにリダイレクトされ、認証が成功して完了です</li>
+</ol>
+
+<p>このケースでは、最終的にYahoo! JAPANで発行されたIDが使われます。</p>
+
+<pre><code class="prettyprint">$ curl &quot;https://me.yahoo.co.jp/a/Ya_JyXB8ZPujNdvm8OOHJ837_LRI7UJll__x&quot;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;
+OpenID Provider 2.0 -- User&#39;s page
+&lt;/title&gt;&lt;link rel=&quot;openid2.provider&quot; href=&quot;https://open.login.yahooapis.jp/openid/op/auth&quot;&gt;
+&lt;link rel=&quot;openid.server&quot; href=&quot;https://open.login.yahooapis.jp/openid/op/1.1/auth&quot;&gt;
+&lt;/head&gt;
+&lt;script&gt;window.location.href=&#39;http://openid.yahoo.co.jp&#39;;&lt;/script&gt;
+
+&lt;body&gt;
+&lt;p&gt;
+The user&#39;s OpenID provider is 
+&lt;a href=&quot;https://open.login.yahooapis.jp/openid/op/auth&quot;&gt;
+https://open.login.yahooapis.jp/openid/op/auth&lt;/a&gt;
+&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<ul>
+<li>rel=&quot;openid2.provider&quot;があるlink要素で(OpenID認証2.0の)OP Endpoint URLが示されています</li>
+</ul>
+
+<h3>OP Identifierで始める</h3>
+
+<p>User-Supplied IdentifierにOP Identifierを使います。</p>
+
+<ol>
+<li>まず、フォームの入力欄に&quot;yahoo.co.jp&quot;と入力してボタンをクリックします</li>
+<li>Yahoo! JAPANにリダイレクトされるので、そのままログインします</li>
+<li>ログイン後、OpenID認証を継続するか聞かれるので「続ける」ボタンをクリックします</li>
+<li>Fastladderにリダイレクトされ、認証が成功して完了です</li>
+</ol>
+
+<p>このケースでは、最終的にYahoo! JAPANで発行されたIDが使われます。</p>
+
+<p>注) &quot;yahoo.co.jp&quot;からOpenID認証の手続きを始めるために、Yadisプロトコルが使われています</p>
+
+<pre><code class="prettyprint">$ curl -LI http://yahoo.co.jp
+HTTP/1.1 302 Found
+...
+Location: http://www.yahoo.co.jp/index.html
+...
+
+HTTP/1.1 200 OK
+...
+X-XRDS-Location: http://open.login.yahoo.co.jp/openid20/www.yahoo.co.jp/xrds
+...
+</code></pre>
+
+<ul>
+<li>認証を要求するために必要な情報が書かれたドキュメントが<em>X-XRDS-Location</em>ヘッダで示されています</li>
+</ul>
+
+<pre><code class="prettyprint">$ curl -i http://open.login.yahoo.co.jp/openid20/www.yahoo.co.jp/xrds
+HTTP/1.1 200 OK
+...
+Content-Type: application/xrds+xml
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+
+&lt;xrds:XRDS
+    xmlns:xrds=&quot;xri://$xrds&quot;
+    xmlns:openid=&quot;http://openid.net/xmlns/1.0&quot;
+    xmlns=&quot;xri://$xrd*($v*2.0)&quot;&gt;
+  &lt;XRD&gt;
+    &lt;Service priority=&quot;0&quot;&gt;
+      &lt;Type&gt;http://specs.openid.net/auth/2.0/server&lt;/Type&gt;
+      &lt;URI&gt;https://open.login.yahooapis.jp/openid/op/auth&lt;/URI&gt;
+
+ &lt;/Service&gt;
+  &lt;/XRD&gt;
+&lt;/xrds:XRDS&gt;
+</code></pre>
+
+<ul>
+<li>&#39;&#39;<URI><a href="https://open.login.yahooapis.jp/openid/op/auth">https://open.login.yahooapis.jp/openid/op/auth</a></URI>&#39;&#39;がOP Endpoint URLです</li>
+</ul>
+
+<h3>HTMLのURLで始める</h3>
+
+<ol>
+<li>まず、フォームの入力欄に自分で管理するIDを入力してボタンをクリックします
+
+<ol>
+<li><a href="http://id.koshigoe.jp/openid2.html">http://id.koshigoe.jp/openid2.html</a></li>
+</ol></li>
+<li>Yahoo! JAPANにリダイレクトされるので、そのままログインします</li>
+<li>ログイン後、OpenID認証を継続するか聞かれるので「続ける」ボタンをクリックします</li>
+<li>Fastladderにリダイレクトされ、認証が成功して完了です</li>
+</ol>
+
+<p>このケースでは、最終的に&quot;<a href="http://id.koshigoe.jp/openid2.html%22%E3%81%8CID%E3%81%A8%E3%81%97%E3%81%A6%E8%AA%8D%E8%AD%98%E3%81%95%E3%82%8C%E3%81%BE%E3%81%99%E3%80%82">http://id.koshigoe.jp/openid2.html&quot;がIDとして認識されます。</a></p>
+
+<p>:<a href="http://id.koshigoe.jp/openid2.html:">http://id.koshigoe.jp/openid2.html:</a></p>
+
+<pre><code class="prettyprint">&lt;html&gt;
+&lt;head&gt;
+  &lt;link rel=&quot;openid2.provider&quot; href=&quot;https://open.login.yahooapis.jp/openid/op/auth&quot; /&gt;
+  &lt;link rel=&quot;openid2.local_id&quot; href=&quot;https://me.yahoo.co.jp/a/Ya_JyXB8ZPujNdvm8OOHJ837_LRI7UJll__x&quot; /&gt;
+
+&lt;/head&gt;
+&lt;body&gt;&lt;/body&gt;&lt;/html&gt;
+</code></pre>
+
+<ul>
+<li>rel=&quot;openid2.provider&quot;のlink要素でOP Endpoint URLが示されています</li>
+<li>rel=&quot;openid2.local_id&quot;のlink要素でOP-Local Identifierが示されています</li>
+</ul>
+
+<h3>自前のYadis IDで始める</h3>
+
+<p>Yadis IDは <a href="http://yadis.org/wiki/Yadis_1.0_(HTML)">Yadisプロトコル</a>で定義されます。Yadisプロトコルは、Identifierとそれを扱うサービスおよび用途を提供するプロトコルです。  </p>
+
+<p>OpenID認証の場合、<em>OpenID認証</em>で使う<em>Identifier</em>と、それを証明する<em>OP</em>の<em>OP Endpoint URL</em>を提供して貰います。<br><br>
+詳細については省略します。</p>
+
+<ol>
+<li>まず、フォームの入力欄に自分で管理するYadis IDを入力してボタンをクリックします
+
+<ol>
+<li><a href="http://id.koshigoe.jp/">http://id.koshigoe.jp/</a></li>
+</ol></li>
+<li>Yahoo! JAPANにリダイレクトされるので、そのままログインします</li>
+<li>ログイン後、OpenID認証を継続するか聞かれるので「続ける」ボタンをクリックします</li>
+<li>Fastladderにリダイレクトされ、認証が成功して完了です</li>
+</ol>
+
+<p>このケースでは、最終的に&quot;<a href="http://id.koshigoe.jp/%22%E3%81%8CID%E3%81%A8%E3%81%97%E3%81%A6%E8%AA%8D%E8%AD%98%E3%81%95%E3%82%8C%E3%81%BE%E3%81%99%E3%80%82">http://id.koshigoe.jp/&quot;がIDとして認識されます。</a></p>
+
+<p>:<a href="http://id.koshigoe.jp/:">http://id.koshigoe.jp/:</a><br>
+- Yadis ID</p>
+
+<pre><code class="prettyprint">$ curl -I http://id.koshigoe.jp/
+HTTP/1.1 200 OK
+...
+X-XRDS-Location: http://id.koshigoe.jp/yadis_claimed-identifier.php
+...
+</code></pre>
+
+<p>:<a href="http://id.koshigoe.jp/yadis%5C_claimed-identifier.php:">http://id.koshigoe.jp/yadis\_claimed-identifier.php:</a><br>
+- Yadis document (XRDS)</p>
+
+<pre><code class="prettyprint">$ curl -i http://id.koshigoe.jp/yadis_claimed-identifier.php
+HTTP/1.1 200 OK
+...
+Content-Type: application/xrds+xml
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;xrds:XRDS xmlns:xrds=&quot;xri://$xrds&quot; xmlns=&quot;xri://$xrd*($v*2.0)&quot;&gt;
+
+ &lt;XRD&gt;
+    &lt;Service&gt;
+      &lt;Type&gt;http://specs.openid.net/auth/2.0/signon&lt;/Type&gt;
+      &lt;URI&gt;https://open.login.yahooapis.jp/openid/op/auth&lt;/URI&gt;
+      &lt;LocalID&gt;https://me.yahoo.co.jp/a/Ya_JyXB8ZPujNdvm8OOHJ837_LRI7UJll__x&lt;/LocalID&gt;
+
+ &lt;/Service&gt;
+  &lt;/XRD&gt;
+&lt;/xrds:XRDS&gt;
+</code></pre>
+
+<ul>
+<li>&#39;&#39;<Type><a href="http://specs.openid.net/auth/2.0/signon">http://specs.openid.net/auth/2.0/signon</a></Type>&#39;&#39;は、Claimed Identfierを最終的なIdentifierとして使うという様な意味です</li>
+<li>&#39;&#39;<LocalID><a href="https://me.yahoo.co.jp/a/Ya%5C_JyXB8ZPujNdvm8OOHJ837%5C_LRI7UJll%5C_%5C_x">https://me.yahoo.co.jp/a/Ya\_JyXB8ZPujNdvm8OOHJ837\_LRI7UJll\_\_x</a></LocalID>&#39;&#39;はOP-Local Identifierです</li>
+</ul>
+
+<h2>セキュリティ</h2>
+
+<h3>攻撃の予防</h3>
+
+<h4>盗聴による攻撃</h4>
+
+<p>OpenID認証は、盗聴について脆弱である可能性があります。特にnonceを確認しない場合、盗聴者は認証に成功した主張を奪いそれを利用する事が出来ます。TLSやSSLなどのトランスポート層での暗号化や、nonceを確認する様にする事で、盗聴による攻撃を防ぐ事が出来ます。</p>
+
+<h4>中間者による攻撃</h4>
+
+<p>中間者によって、署名されたフィールドが改ざんされる可能性があります。この改ざんは、関連づけを使う事で防ぐ事が出来ます。関連づけによってRPとOPは鍵を共有します。この鍵なしで署名されたフィールドを変更した場合、MACが壊れるので、その改ざんを防ぐ事が出来ると考えられます。MACに関する扱いやすい攻撃方法は知られていないようです。ただし、MACによる保護の質は、そのMACの無作為性に依存します。</p>
+
+<p>また、DNSやトランスポート層が信頼できない場合、メッセージも信頼できません。この場合、攻撃者がOPを装う事が可能な為、関連付けやステートレスモードによって、攻撃者がメッセージを不正に処理する事が出来ます。</p>
+
+<p>そして、発見に攻撃者が介入できる場合、攻撃者がOPを自由に指定できるためOPを装う必要がなくなります。XRDSドキュメントに関しては、XMLDSIGというデジタル署名を利用する事で改ざんを防ぐ事が出来ます。</p>
+
+<p>SSL通信における中間者攻撃に関しては、信頼される機関が発行する証明書を利用する事で、証明書の偽造が非常に困難になります。</p>
+
+<h4>悪意のRPによるProxy攻撃</h4>
+
+<p>悪意あるRPによって、OPとUser-Agentとの間にProxyが挟まれる可能性があります。この際、エンドユーザーがOPに対して送信するクレデンシャルを、悪意あるRPがキャプチャする事が可能です。Proxyを排除する複数の方法は存在しますが、ここでは省略します。</p>
+
+<h3>User-Agent</h3>
+
+<p>OpenID認証とは別に、User-Agentやそのホストコンピュータが、マルウェアやスパイウェアに汚染される可能性があります。これは、OpenID認証のプロトコル内で対応できる範囲を超えています。</p>
+
+<h3>UI</h3>
+
+<p>OPを模したフィッシングサイトから、エンドユーザーを保護できる作りにすべきです。また、フィッシング攻撃の可能性についてエンドユーザーを教育したり、攻撃を無効化するプラグインの様なものを使わせる様にすべきです。</p>
+
+<h3>DoS攻撃</h3>
+
+<p>OpenID認証におけるリクエストが本物であるかどうかを、素早く確認する様な仕組みは用意されていない為、DoS攻撃の可能性があります。例えば、関連づけや認証の署名を照合する為のメッセージを、RPが繰り返しリクエストする事で行われるでしょう。</p>
+
+<p>最も危険性が高いものは、関連づけにおけるDiffie-Hellman鍵共有の計算です。RPがパラメータを指定できる為、負荷が高い計算をOPに対して強制する事が可能です。</p>
+
+<p>対抗措置としては、IPベースのレート制限やリクエスト拒否を使う事が出来ます。また、&quot;openid.realm&quot;と&quot;openid.return_to&quot;を基にしたリクエスト拒否を考慮してもよいでしょう。</p>
+
+<h3>信頼性と評価</h3>
+
+<p>OpenID認証は特別な中央機関を必要としない為、それぞれのRPやOPに関する信頼性が未知数です。現状では、一般に有名な信頼できるであろう企業が提供しているOPのみを許可するRPが多いようです。この問題について、色々と議論がされているようです。</p>
+
+<h2>おまけ</h2>
+
+<h3>参照先</h3>
+
+<ul>
+<li><a href="http://openid.net/developers/specs/">OpenID &gt;&gt; Read the Specifications</a></li>
+<li><a href="http://wiki.openid.net/Libraries">Libraries - OpenID Wiki</a></li>
+<li><a href="http://yadis.org/wiki/Yadis_1.0_(HTML)">Yadis 1.0 (HTML) - Yadis</a></li>
+<li><a href="http://www.atmarkit.co.jp/fsecurity/index/index_openid.html">OpenIDの仕様と技術 連載インデックス - ＠IT -</a></li>
+</ul>
+
+<h3>OPとRPの一例</h3>
+
+<h4>OP</h4>
+
+<ul>
+<li>Yahoo! JAPAN</li>
+<li>はてな</li>
+<li>Livedoor</li>
+<li>Blogger</li>
+</ul>
+
+<h4>RP</h4>
+
+<ul>
+<li>Fastladder</li>
+<li>はてな</li>
+<li>LiveJournal</li>
+</ul>
+
+<h3>日本での活動</h3>
+
+<ul>
+<li>アイデンティティ飲み会</li>
+<li>Liberty Alliance 技術セミナー</li>
+<li>openid-ja</li>
+<li>ブログ記事</li>
+</ul>
+
+<h3>手前味噌</h3>
+
+<ul>
+<li><a href="http://lab.koshigoe.jp/en2ja/">OpenID関連の和訳文書</a>
+
+<ul>
+<li>注) 訳を鵜呑みにしないでください</li>
+</ul></li>
+</ul>
+
+<h2>最後に</h2>
+
+<p>今回の発表では、概論にとどめる為に多くを省略しています。<br>
+- XRI<br>
+- メッセージのフォーマットなど<br>
+- 手続きの詳細部分<br>
+  - 通信種類(間接通信、直接通信)<br>
+  - 署名<br>
+  - 照合<br>
+  - ほか<br>
+- OpenID認証1.1との互換性<br>
+- 拡張<br>
+- など</p>
+
+<p>今回の発表は、OpenIDの概要をつかんでもらいつつ、周辺の話題に触れてもらう事を目的としています。実際に、OpenID認証を導入しようとしたりする場合には、他の参考資料や仕様書原文をあたる必要があるでしょう。</p>
+
+<p>繰り返しになりますが、個人的に以下の資料がおすすめです。<br>
+- <a href="http://www.atmarkit.co.jp/fsecurity/index/index_openid.html">OpenIDの仕様と技術 連載インデックス - ＠IT -</a><br>
+- <a href="http://openid.net/specs/openid-authentication-2_0.html">Final: OpenID Authentication 2.0 - Final</a></p>
+
+<p>それでは、最後までおつきあいいただき、ありがとうございました。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/openid_auth_20.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="OpenID認証2.0〜概論" data-url="http://tech.feedforce.jp/openid_auth_20.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/openid_auth_20.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/openid_auth_20.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/whiteboard.html" rel="next">ホワイトボードを使ったタスク管理</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/dev-camp-report-2.html" rel="prev">開発合宿レポート＠伊東温泉</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

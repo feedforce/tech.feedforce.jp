@@ -1,0 +1,504 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>ruby-gettext | feedforce Engineers' blog</title>
+      <meta name="description" content="GNU gettextとはメッセージの国際化のためのCライブラリと各種コマンドのセット。Ruby-GetText-PackageはそのRuby版。gettextのrubyバインディングではなく、再実装。URLhttp://www.yotabanana.com/hiki/ja/ruby-gettext.html作者Masao Mutoh &lt;mailto:mutoh@highway.ne.jp&gt;">
+      <link rel="canonical" href="http://tech.feedforce.jp/ruby-gettext.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="ruby-gettext | feedforce Engineers' blog">
+      <meta property="og:description" content="GNU gettextとはメッセージの国際化のためのCライブラリと各種コマンドのセット。Ruby-GetText-PackageはそのRuby版。gettextのrubyバインディングではなく、再実装。URLhttp://www.yotabanana.com/hiki/ja/ruby-gettext.html作者Masao Mutoh &lt;mailto:mutoh@highway.ne.jp&gt;">
+      <meta property="og:url" content="http://tech.feedforce.jp/ruby-gettext.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/ruby-gettext.html">ruby-gettext</a></h1>
+      <ul>
+        <li class="entry-time">2007.05.09</li>
+        <li class="entry-cat"><a href="/category/ruby/">Ruby/Rails</a>, <a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/ozawa">ozawa</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/ozawa"><img src="/images/authors/sakuro.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>GNU gettextとはメッセージの国際化のためのCライブラリと各種コマンドのセット。</p>
+
+<p>Ruby-GetText-PackageはそのRuby版。gettextのrubyバインディングではなく、再実装。</p>
+
+<dl>
+<dt>URL</dt>
+<dd><a href="http://www.yotabanana.com/hiki/ja/ruby-gettext.html" class="external">http://www.yotabanana.com/hiki/ja/ruby-gettext.html</a></dd>
+<dt>作者</dt>
+<dd>Masao Mutoh &lt;<a href="mailto:mutoh@highway.ne.jp&gt;" class="external">mailto:mutoh@highway.ne.jp&gt;</a>
+</dd>
+
+</dl>
+
+<!--more-->
+
+<h2>基礎知識</h2>
+
+<p>GNU gettextとはメッセージの国際化のためのCライブラリと各種コマンドのセット。</p>
+
+<p>Ruby-GetText-PackageはそのRuby版。gettextのrubyバインディングではなく、再実装。</p>
+
+<dl>
+<dt>URL</dt>
+<dd><a href="http://www.yotabanana.com/hiki/ja/ruby-gettext.html" class="external">http://www.yotabanana.com/hiki/ja/ruby-gettext.html</a></dd>
+<dt>作者</dt>
+<dd>Masao Mutoh &lt;<a href="mailto:mutoh@highway.ne.jp&gt;" class="external">mailto:mutoh@highway.ne.jp&gt;</a>
+</dd>
+
+</dl>
+
+<p>インストールは</p>
+
+<pre><code class="prettyprint"># gem install gettext
+</code></pre>
+
+<p>あるいは <a href="http://rubyforge.org/frs/?group_id=855">http://rubyforge.org/frs/?group_id=855</a> からダウンロード。</p>
+
+<p>最新は1.9.0だが、Rails 1.1.6の場合はgettext 1.8.0でないとうまく動かない模様。</p>
+
+<h2>使用(生成)されるファイル</h2>
+
+<dl>
+<dt>POTファイル</dt>
+<dd>POファイルのひな形となるファイル。(PO Template)</dd>
+<dt>POファイル</dt>
+<dd>キーと翻訳メッセージのペアを定義するファイル。(Portable Object)</dd>
+<dt>MOファイル</dt>
+<dd>POファイルをバイナリ化したもの。(Machine Object)</dd>
+
+</dl>
+
+<p>ソースコード中に指定されたキーに対応する翻訳メッセージをMOファイルから抽出してキーを置き換えるというのが基本動作。</p>
+
+<h2>Railsアプリケーションのgettext対応手順</h2>
+
+<h3>config/environment.rb</h3>
+
+<pre><code class="prettyprint">$KCODE = &#39;u&#39; #Rails 1.2未満の場合
+require &#39;gettext/rails&#39;
+</code></pre>
+
+<h3>app/controllers/application.rb</h3>
+
+<pre><code class="prettyprint">class ApplicationController
+    init_gettext &#39;myapp&#39;
+end
+</code></pre>
+
+<p>あとは、翻訳対象となるメッセージを</p>
+
+<pre><code class="prettyprint">render :text =&gt; _(&#39;Not Found.&#39;)
+</code></pre>
+
+<p>や</p>
+
+<pre><code class="prettyprint">&lt;%= _(&#39;Welcome!&#39;) %&gt;
+</code></pre>
+
+<p>のように _ メソッドで囲む。</p>
+
+<p>テーブル(モデル)名、カラム名もデフォルトで翻訳対象となる。(変更可)</p>
+
+<h2>メッセージの翻訳</h2>
+
+<h3>対象文字列の抽出</h3>
+
+<pre><code class="prettyprint">$ rake updatepo
+</code></pre>
+
+<p>updatepoタスクは以下のように定義する。</p>
+
+<pre><code class="prettyprint">task :updatepo =&gt; :environment do
+    require &#39;gettext/utils&#39;
+    files = Dir[&#39;{app,lib}/**/*.{rb,rhtml}&#39;]
+    GetText.update_pofiles(PACKAGE, files, VERSION)
+end
+</code></pre>
+
+<p>POTファイルが生成される。生成の際、DB接続を行うので、必要な設定・初期化を行っておくこと。</p>
+
+<p>po/myapp.potには、いくつかのヘッダ行につづいて、</p>
+
+<pre><code class="prettyprint"># 出現ソース位置
+msgid &quot;Welcome!&quot;
+msgstr &quot;&quot;
+</code></pre>
+
+<p>のような、翻訳対象キー文字列と空文字列のペアが並ぶ。</p>
+
+<p>前回の処理以降<br>
+- 追加された文字列は、抽出される。<br>
+- 変更された文字列は、キーが差し替えられる。<br>
+- 削除された文字列は、コメントになってファイル末尾に移動する。</p>
+
+<h3>翻訳</h3>
+
+<p>POTファイルからPOファイルを生成する。</p>
+
+<pre><code class="prettyprint">$ mkdir -p po/ja
+$ msginit -i po/myapp.pot -o po/ja/myapp.po -l ja
+</code></pre>
+
+<p>単にPOTファイルをコピーしてもよいが、上のコマンド(GNU gettextに含まれる)を使うと、一部のメタ情報に適切な初期値が入る。</p>
+
+<p>msgstrの空欄に翻訳されたメッセージを書き込む。</p>
+
+<p>コメントに fuzzy と付けられたエントリーは他に見かけが似ているために間違っている可能性がある箇所を指摘している。 fuzzy コメントがついたエントリーが残っているとMOファイルの生成は行えない。 適宜修正するか、問題がなければ fuzzy コメント自体を削除すればよい。</p>
+
+<h3>MOに変換</h3>
+
+<pre><code class="prettyprint">$ rake makemo
+</code></pre>
+
+<p>makemoタスクは以下のように定義する。</p>
+
+<pre><code class="prettyprint">task :makemo do
+    require &#39;gettext/utils&#39;
+    GetText.create_mofiles(true, &#39;po&#39;, &#39;locale&#39;)
+end
+</code></pre>
+
+<p>実際に翻訳に利用するバイナリデータは　locale/ja/LC_MESSAGES/myapp.mo として生成される。</p>
+
+<h2>デモ</h2>
+
+<p>ttyrec/ttyplayによるサンプルセッション。(約10分)</p>
+
+<pre><code class="prettyprint">$ telnet 192.168.1.18 12345
+</code></pre>
+
+<p>黒地に白推奨。</p>
+
+<h2>言語の選択</h2>
+
+<p>優先度の低いほうから</p>
+
+<ol>
+<li><p>HTTPヘッダのAccept-Language</p></li>
+<li><p>クッキーに保持された lang という値</p></li>
+<li><p>QUERY_STRINGの lang というパラメータの値</p></li>
+<li><p>GetText.locale=で指定した言語</p></li>
+</ol>
+
+<p>たとえば、ブラウザが</p>
+
+<pre><code class="prettyprint">Accept-Language: ja, en
+</code></pre>
+
+<p>と送ってもURLが</p>
+
+<pre><code class="prettyprint">...?lang=en
+</code></pre>
+
+<p>なら日本語ページではなく英語ページになる。</p>
+
+<h2>可変部を含む文字列の翻訳</h2>
+
+<pre><code class="prettyprint">&quot;Hello #{h(user.name)}!&quot;
+</code></pre>
+
+<p>を翻訳する場合に #{...} を使うと、抽出時(POT作成時)にも評価されてしまうため、 正しく抽出されない。</p>
+
+<p>以下のようにする。<br>
+- 翻訳対象文字列自身は &#39;&#39; を使った固定文字列とする。<br>
+- #{...}は外に出してsprintf(あるいはString#%)に置き換える。</p>
+
+<p>すなわち</p>
+
+<pre><code class="prettyprint">sprintf(_(&#39;Hello %s!&#39;), h(user.name))
+</code></pre>
+
+<p>または</p>
+
+<pre><code class="prettyprint">_(&#39;Hello %s!&#39;) % h(user.name)
+</code></pre>
+
+<h2>語順の違いへの対応</h2>
+
+<p>たとえば</p>
+
+<pre><code class="prettyprint">_(&#39;Wrong value &quot;%s&quot; specified in field &quot;%s&quot;.&#39;) % [h(value), h(field)]
+</code></pre>
+
+<p>という英語のメッセージに対応する日本語翻訳データを素直に作ると</p>
+
+<pre><code class="prettyprint">msgid &quot;Wrong value ?&quot;%s?&quot; specified in ?&quot;%s?&quot;.&quot;
+msgstr &quot;フィールド?&quot;%s?&quot;に誤った値?&quot;%s?&quot;が指定されました。&quot;
+</code></pre>
+
+<p>のようになるが、語順が違うのでこれでは不十分。</p>
+
+<p>この場合はprintf書式の拡張形式を使い、</p>
+
+<pre><code class="prettyprint">msgstr &quot;フィールド?&quot;%2$s?&quot;に誤った値?&quot;%1$s?&quot;が指定されました。&quot;
+</code></pre>
+
+<p>と書くと、%2$sには第2引数が、%1$sには第1引数が適用される。</p>
+
+<p>Ruby-GetTextでは String#%にArrayだけでなくHashを与えることができるため、別法として、</p>
+
+<pre><code class="prettyprint">_(&#39;Wrong value &quot;%{value}&quot; specified in field &quot;%{field}&quot;.&#39;) %
+    { :value =&gt; h(value), :field =&gt; h(field) }
+</code></pre>
+
+<p>と書いておく方法もある。この場合は語順に影響されることはなく、またプレースホルダに意味のある名前を使うことができるので、翻訳がしやすくなる。</p>
+
+<h2>複数形への対処</h2>
+
+<p>日本語だけを使っていると意識する必要はないが、数に従ってメッセージを変える必要のある言語がある。 そのような言語に対応するため、数によって変化する可能性があるメッセージには、_ メソッドの代わりに n_ メソッドを使う。</p>
+
+<pre><code class="prettyprint">&lt;%= n_(&#39;%d file was uploaded.&#39;, &#39;%d files were uploaded.&#39;, count) % count %&gt;
+</code></pre>
+
+<p>2回出現する数値のうち、1つめはn_ の引数で、2つめは得られたメッセージ書式に実際に埋め込まれる値。</p>
+
+<p>翻訳部分は</p>
+
+<pre><code class="prettyprint">n_(msgid, msgid_plural, n)
+</code></pre>
+
+<p>という形式。</p>
+
+<p>msgidは通常どおり翻訳先を探すためのキーとなる。</p>
+
+<p>この種の翻訳では、msgstrは複数(0から数える)あり、nの値はPOファイル中のPlural-formsの式に渡され、これによってどの形式を使うかが決まる。 キーに対応するmsgstrが見つからない場合は、nが1ならmsgidが、nが1でないならmsgid_pluralがそのまま使われる。</p>
+
+<h3>英語の場合</h3>
+
+<pre><code class="prettyprint">&quot;Plural-Forms: nplurals=2; plural=(n != 1);&quot;
+msgid &#39;%d file was uploaded.&#39;
+msgid_plural &#39;%d file were uploaded.&#39;
+msgstr[0] &#39;%d file was uploaded.&#39;
+msgstr[1] &#39;%d files were uploaded.&#39;
+</code></pre>
+
+<p>nが1のときのみ0番を使い、それ以外は1番を使う。</p>
+
+<h3>日本語の場合</h3>
+
+<pre><code class="prettyprint">&quot;Plural-Forms: nplurals=1; plural=0;&quot;
+msgid &#39;%d file was uploaded.&#39;
+msgid_plural &#39;%d file were uploaded.&#39;
+msgstr[0] &#39;%d個のファイルがアップロードされました。&#39;
+</code></pre>
+
+<p>常に同じメッセージを使う。</p>
+
+<h3>おまけ</h3>
+
+<h4>フランス語の場合</h4>
+
+<pre><code class="prettyprint">&quot;Plural-Forms: nplurals=2; plural=n&gt;1;&quot;
+</code></pre>
+
+<p>英語とほぼ同じだが、ゼロのときは単数と同じ表記を使う。</p>
+
+<h4>ロシア語の場合</h4>
+
+<pre><code class="prettyprint">&quot;Plural-Forms: nplurals=3; ?
+plural=(n%10==1 &amp;&amp; n%100!=11 ? 0 : ?
+    n%10&gt;=2 &amp;&amp; n%10&lt;=4 &amp;&amp; (n%100&lt;10 || n%100&gt;=20) ? 1 : 2);&quot;
+</code></pre>
+
+<p>下一桁が1のとき(下二桁が11のときを除く)、下一桁が2〜4(下二桁が12〜14のときを除く)、それ以外(下二桁が11〜14のときを含む)。<br>
+- 1,21,31,...<br>
+- 2-4,22-24,32-34,...<br>
+- 5-20,25-30,35-40,...</p>
+
+<h4>スロベニア語の場合</h4>
+
+<pre><code class="prettyprint">&quot;Plural-Forms: nplurals=4; ?
+plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;&quot;
+</code></pre>
+
+<p>下二桁が01のとき、下二桁が02のとき、下二桁が03または04のとき、それ以外。<br>
+- 1,101,201,...<br>
+- 2,102,202,...<br>
+- 3-4,103-104,203-204,...<br>
+- 5-110,105-200,...</p>
+
+<p>実際の国際化はメッセージを翻訳すれば済むわけではないのが難しいところ。<br>
+- 数値(小数点・桁区切り記号・負数の書式)<br>
+- 単位(金額・温度・距離)<br>
+- 日付(書式・祝日・時差・夏時間・暦法)<br>
+- 正書法(使用文字・方向・空白の扱い・句読点や記号類)<br>
+- その他の習慣(名前や住所の形式・整列順)</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/ruby-gettext.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="ruby-gettext" data-url="http://tech.feedforce.jp/ruby-gettext.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/ruby-gettext.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/ruby-gettext.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/ci.html" rel="next">継続的インテグレーション</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/pragger.html" rel="prev">Pragger</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

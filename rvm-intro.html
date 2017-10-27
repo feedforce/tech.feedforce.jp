@@ -1,0 +1,358 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>rvmの紹介 | feedforce Engineers' blog</title>
+      <meta name="description" content="複数のRubyをインストールし、切り替えて使用できるツール rvm(Ruby Version Manager) の紹介を行いました。">
+      <link rel="canonical" href="http://tech.feedforce.jp/rvm-intro.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="rvmの紹介 | feedforce Engineers' blog">
+      <meta property="og:description" content="複数のRubyをインストールし、切り替えて使用できるツール rvm(Ruby Version Manager) の紹介を行いました。">
+      <meta property="og:url" content="http://tech.feedforce.jp/rvm-intro.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/rvm-intro.html">rvmの紹介</a></h1>
+      <ul>
+        <li class="entry-time">2009.12.11</li>
+        <li class="entry-cat"><a href="/category/ruby/">Ruby/Rails</a>, <a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/ozawa">ozawa</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/ozawa"><img src="/images/authors/sakuro.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>複数のRubyをインストールし、切り替えて使用できるツール rvm(Ruby Version Manager) の紹介を行いました。</p>
+
+<!--more-->
+
+<h2>rvmとは</h2>
+
+<ul>
+<li>Ruby Version Manager の略</li>
+<li>複数のRubyをインストールして管理し、切り替えて使う仕組み。
+
+<ul>
+<li>MRI(Matz&#39;s Ruby Implementation), JRuby, Rubinius, REE(Ruby Enterprise Edition), MacRubyに対応しています。</li>
+</ul></li>
+<li>2009年夏に登場しました。</li>
+<li>ほとんどシェル関数で実装されています。</li>
+</ul>
+
+<h3>ご注意</h3>
+
+<p>この記事の内容は2009年12月4日時点のものです。執筆時点で、rvmは活発に開発が進められているため、最新の状態とは挙動が異なる可能性があります。</p>
+
+<h2>用途(例)</h2>
+
+<ul>
+<li>広く使われるライブラリを、異なるruby実装でテストしたい。</li>
+<li>使用しているRubyが異なる古いプロダクトを保守したい。</li>
+</ul>
+
+<h2>情報源</h2>
+
+<ul>
+<li>本サイト: <a href="http://rvm.beginrescueend.com/">http://rvm.beginrescueend.com/</a></li>
+<li>GitHub: <a href="http://github.com/wayneeseguin/rvm/">http://github.com/wayneeseguin/rvm/</a>
+
+<ul>
+<li>Clone URL: git://github.com/wayneeseguin/rvm.git</li>
+</ul></li>
+</ul>
+
+<h2>インストール</h2>
+
+<h3>gemで</h3>
+
+<pre><code class="prettyprint">$ sudo gem install rvm
+$ rvm-install
+</code></pre>
+
+<p>インストールが済んだらgemは削除して構いません。</p>
+
+<pre><code class="prettyprint">$ sudo gem uninstall rvm
+</code></pre>
+
+<h3>gitで</h3>
+
+<pre><code class="prettyprint">$ git clone git://github.com/wayneeseguin/rvm.git
+$ cd rvm
+$ ./install
+</code></pre>
+
+<p>どちらの場合も ~/.rvm 以下にファイルがコピーされ、rvmコマンドが使えるようになります。 このとき ~/.bashrc・~/.bash_profile・~/.zshrc のすべてが書き換えられます。存在しない場合、作成されます。不要なら消しましょう。</p>
+
+<h2>主なコマンド</h2>
+
+<pre><code class="prettyprint">$ rvm info - 現在の実行環境を表示
+$ rvm list - 管理しているrubyの一覧を表示
+$ rvm install 名前 - 指定されたrubyをインストール
+$ rvm use 名前 - 現在のシェルで使用するrubyを切り替える
+$ rvm ruby ... - rubyを一括実行
+$ rvm gem ... - gemを一括実行
+$ rvm rake ... - rakeを一括実行
+$ rvm tests ... - rake testを一括実行
+$ rvm specs ... - rake specを一括実行
+</code></pre>
+
+<h2>rubyのインストール</h2>
+
+<p>インストールしていないものも含め、使える名前のリストを表示します。  </p>
+
+<pre><code class="prettyprint">$ rvm list --all
+(ruby-)1.8.0-tv1_8_0
+:
+(ruby-)1.8.7(-p174)
+:
+macruby-head # Build from the macruby git repository
+</code></pre>
+
+<p>リストから名前を指定してインストールします。リスト内の名前の括弧内は省略できます。  </p>
+
+<pre><code class="prettyprint">$ rvm install 1.8.7
+</code></pre>
+
+<p>~/.rvm の下にインストールしたRubyの関連ファイル一式が置かれます。</p>
+
+<h2>rubyの切り替え</h2>
+
+<p>基本的な仕組みは、</p>
+
+<ul>
+<li>PATHの先頭部に .rvmの管轄下のものを前置。あれば入れ替え。</li>
+<li>ラッパースクリプトでの環境変数(GEM_HOMEなど)の切り替え。</li>
+</ul>
+
+<pre><code class="prettyprint">で実現されています。
+$ echo $PATH
+$ rvm use 1.8.7
+$ echo $PATH (先頭部分が変化する)
+</code></pre>
+
+<p>irb, rake, gemなども対応するものが使えるようになる。</p>
+
+<h2>ディレクトリごとの自動切り替え</h2>
+
+<p>カレントディレクトリに .rvmrc ファイルがあり、そこに</p>
+
+<pre><code class="prettyprint">rvm ruby-1.8.7-p174
+</code></pre>
+
+<p>のように記述しておくと、このディレクトリおよびサブディレクトリに対するrubyを変更することが出来ます。</p>
+
+<pre><code class="prettyprint">$ cd ~/project1; ruby -v
+ruby 1.8.7 (2009-06-12 patchlevel 174) [i686-darwin9]
+$ cd ~/project2; ruby -v
+ruby 1.8.6 (2009-08-04 patchlevel 383) [i386-darwin9.8.0]
+$ cd ~/project3; ruby -v
+ruby 1.9.2dev (2009-12-02 trunk 25977) [i386-darwin9.8.0]
+</code></pre>
+
+<p>cdコマンドがシェル関数で再実装されており、ホームディレクトリや / に到達するまでディレクトリを遡って .rvmrc を探し、見つかったものを評価することで切り替えを実現しています。</p>
+
+<h2>一括実行</h2>
+
+<pre><code class="prettyprint">$ rvm ruby -v
+$ rvm gem install rails
+$ rvm specs
+</code></pre>
+
+<p>インストールされているrubyで該当処理を順次実行していきます。</p>
+
+<p>複数のRubyに対して一括でgemをインストールしたり、テストを実行したりできます。</p>
+
+<h2>gemセット</h2>
+
+<p>使用するrubyの名前の後ろに%と任意のラベルを付けてgemセットを指定することができます。この仕組みにより、同じrubyを使用しつつ、異なるgem構成を使うことができます。</p>
+
+<pre><code class="prettyprint">$ cd ~/project1; gem list
+$ cd ~/project2; gem list
+$ cd ~/project3; gem list
+</code></pre>
+
+<h2>質疑応答</h2>
+
+<h3>Q: インストールにRubyは必要?</h3>
+
+<p>A: gitで入れるなら不要。</p>
+
+<h3>Q: Passengerで使うには?</h3>
+
+<p>A: PassengerRubyには、passenger-install-apache2-module が表示するパスではなく、rvmのラッパースクリプトを指定する。ラッパーの中で必要な環境変数の設定を行ってから対象のRubyをexecしている。 [<a href="http://rvm.beginrescueend.com/passenger/">http://rvm.beginrescueend.com/passenger/</a>]</p>
+
+<p>ただし、発表者は未検証。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/rvm-intro.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="rvmの紹介" data-url="http://tech.feedforce.jp/rvm-intro.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/rvm-intro.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/rvm-intro.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/twitter-streaming-api.html" rel="next">Twitter の Streaming API について</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/introduction-to-resque.html" rel="prev">Resque 概要</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

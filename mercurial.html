@@ -1,0 +1,372 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>Mercurial はじめの一歩 | feedforce Engineers' blog</title>
+      <meta name="description" content="弊社ではソースコードの管理に Subversionを使用していますが、個人的に興味があるので、分散バージョン管理システムの一つである Mercurialを触ってみました。">
+      <link rel="canonical" href="http://tech.feedforce.jp/mercurial.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="Mercurial はじめの一歩 | feedforce Engineers' blog">
+      <meta property="og:description" content="弊社ではソースコードの管理に Subversionを使用していますが、個人的に興味があるので、分散バージョン管理システムの一つである Mercurialを触ってみました。">
+      <meta property="og:url" content="http://tech.feedforce.jp/mercurial.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/mercurial.html">Mercurial はじめの一歩</a></h1>
+      <ul>
+        <li class="entry-time">2008.05.30</li>
+        <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/ozawa">ozawa</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/ozawa"><img src="/images/authors/sakuro.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>弊社ではソースコードの管理に <a href="http://subversion.tigris.org/">Subversion</a>を使用していますが、個人的に興味があるので、分散バージョン管理システムの一つである <a href="http://www.selenic.com/mercurial/wiki/">Mercurial</a>を触ってみました。</p>
+
+<!--more-->
+
+<h2>Mercurialとは</h2>
+
+<ul>
+<li>mercurial [マ <strong>キュ</strong> リアル] 機敏な、快活な、水銀(mercury/記号Hg)の→コマンド名 hg</li>
+<li>分散バージョン管理システムのひとつ</li>
+<li>ほぼ <a href="http://www.python.org/">Python</a>で実装(diffのみC)</li>
+<li>バージョン1.0(2008/3/24) バージョン1.0.1(2008/05/22)</li>
+<li>フロントエンド <a href="http://tortoisehg.sourceforge.net/">TortoiseHg</a>(Windows) / mercurial.el(Emacs) / <a href="http://macromates.com/svn/Bundles/trunk/Bundles/Mercurial.tmbundle/">Mercurial bundle</a>( <a href="http://macromates.com/">TextMate</a>)など</li>
+</ul>
+
+<h2>分散バージョン管理システムとは</h2>
+
+<ul>
+<li>バージョン管理システムのうち、中央リポジトリを持たない (特定のリポジトリをそう看倣すのはOK)もの</li>
+<li>リポジトリを複製する。</li>
+<li>複製したリポジトリに対して自分で行った修正点を格納していく。</li>
+<li>他のリポジトリと変更点を共有したいときは、変更点を反映するコマンドを使う。</li>
+<li>他の実装 <a href="http://svk.bestpractical.com/view/HomePage">svk</a> / <a href="http://git.or.cz/">git</a> / <a href="http://darcs.net/">darcs</a> / <a href="http://bazaar-vcs.org/">bazaar</a> など</li>
+</ul>
+
+<h2>使ってみる</h2>
+
+<h3>リポジトリの作成</h3>
+
+<p>試しに <a href="http://www.rubyonrails.org/">Rails</a>アプリケーションを作成して、リポジトリに格納してみます。  </p>
+
+<pre><code class="prettyprint">$ rails -q hgdemo (管理対象作成)
+$ cd hgdemo
+$ ls -a
+./ README app/ db/ lib/ public/ test/ vendor/
+../ Rakefile config/ doc/ log/ script/ tmp/
+$ hg init (リポジトリ初期化)
+$ ls -a
+./ .hg/ Rakefile config/ doc/ log/ script/ tmp/
+../ README app/ db/ lib/ public/ test/ vendor/
+</code></pre>
+
+<p>管理用ディレクトリ .hg/ が出来ました。  </p>
+
+<pre><code class="prettyprint">$ hg add (ファイルを追加)
+adding README
+adding Rakefile
+adding app/controllers/application.rb
+:
+:
+adding script/runner
+adding script/server
+adding test/test_helper.rb
+</code></pre>
+
+<p>引数なしのaddでカレントディレクトリ以下の全てのファイルが追加対象になりました。  </p>
+
+<pre><code class="prettyprint">$ hg commit (コミット)
+</code></pre>
+
+<p>コミットログの入力を求められます。</p>
+
+<p>この状態で、このディレクトリはレポジトリになっています。  </p>
+
+<p><a href="http://www.nongnu.org/cvs/">CVS</a>やSubversionでは、どこかよそに作ったリポジトリから作業用にコードを取り出してきますが、Mercurialでは「作業用コード = リポジトリ」です。(正確には .hg/ 以下に格納される)  </p>
+
+<h3>リポジトリの複製</h3>
+
+<p>分散バージョン管理システムでは、作業コピーを作る代わりに、リポジトリ自体を複製します。複製されたリポジトリに自身による変更を行った後で、他のリポジトリと変更点のやりとりを行うことで開発を進めます。</p>
+
+<p>とりあえずローカルで別のディレクトリに複製をしてみます。  </p>
+
+<pre><code class="prettyprint">$ hg clone hgdemo hgdemo-clone
+</code></pre>
+
+<p>sshやhttpを使ってネットワーク越しに複製することも出来ます。  </p>
+
+<h3>変更点の伝搬</h3>
+
+<p>hgdemo-clone上で何か変更を行ってみます。  </p>
+
+<pre><code class="prettyprint">$ ruby script/generate model User
+$ hg add
+$ hg commit -m &#39;Add user model&#39;
+</code></pre>
+
+<p>リポジトリhgdemo-cloneにコミットが行われました。</p>
+
+<p>これを複製元のhgdemoに反映するには、  </p>
+
+<pre><code class="prettyprint">$ hg push
+</code></pre>
+
+<p>を行います。</p>
+
+<p>複製元リポジトリを読み込めるが書き込めない場合などは  </p>
+
+<pre><code class="prettyprint">$ hg export &gt; changes.diff
+</code></pre>
+
+<p>として変更点をパッチファイルとして取り出し、メールで複製元の管理者に送るなどします。</p>
+
+<p>他の人が同じように各自が複製したリポジトリから変更を反映している場合、それを手元に持ってくるには  </p>
+
+<pre><code class="prettyprint">$ hg pull
+</code></pre>
+
+<p>とします。  </p>
+
+<h2>利用例</h2>
+
+<p>普通に共同開発作業に使えるのは当然なのですが、分散バージョン管理システムならではの利用方法を考えてみました。</p>
+
+<p>以下の例は、Mercurialに限らず、他の分散バージョン管理システムでも実施可能なはずです。  </p>
+
+<h3>ネットワークが途切れた状態での開発</h3>
+
+<p>外出先などでもコミットはローカルのリポジトリに対して行われるので、自由にコミットし、ネットワーク接続が確保できたらpullを行う。</p>
+
+<p>これは分散バージョン管理システムを使うとき最初に紹介されることが多いケースです。  </p>
+
+<h3>外部リポジトリの私的複製</h3>
+
+<ul>
+<li>一般公開されているリポジトリXがある。</li>
+<li>私的な修正(改造)がしたい。</li>
+<li>でも、コミットはできない。</li>
+</ul>
+
+<p>→XをチェックアウトしてそのままMercurialリポジトリ化する。</p>
+
+<p>XがMercurialで公開されていれば、普通に hg cloneを行えばよいです。 そうでない、たとえばSubversionで公開されている場合、svn coでチェックアウトしたあと、 ローカルで hg init を行い、ローカルでは Mercurialリポジトリとして管理します。</p>
+
+<p>その後、  </p>
+
+<ul>
+<li>ローカルで行った変更点はMercurialでMercurialリポジトリへコミット。</li>
+<li>オリジナルXの変更はsvn upでローカルコードを更新したあと、やはりMercurialにコミット。</li>
+</ul>
+
+<p>という運用を行います。</p>
+
+<p>もちろん、相手がSubversionならsvkを使うほうが自然でしょう。  </p>
+
+<h3>実験ブランチ</h3>
+
+<ul>
+<li>実験的なコードを作りたい。</li>
+<li>ブランチとして作ると、あとで不要になってもリポジトリのツリー内に残ってしまう。</li>
+</ul>
+
+<p>→実験用リポジトリとして複製を行う。  </p>
+
+<ul>
+<li>複製はpushを行わない限り複製元には反映されないので、いくつでも、気兼ねなく作れます。</li>
+<li>いらなくなったら単に削除すればOK。</li>
+</ul>
+
+<h3>設定ファイルなど</h3>
+
+<ul>
+<li>さまざまなホストで参照される設定ファイル(個人のドットファイルなども含む)を管理したい。</li>
+<li>各ホストごとに異なる設定箇所もある。</li>
+</ul>
+
+<p>→ホストごとにリポジトリを複製する。  </p>
+
+<ul>
+<li>ホストごとに異なる部分は複製先にコミットするだけ。</li>
+<li>pushは行わない。共有したい変更箇所は明示的にexport &amp; importする。(changesetを選択的にpushする方法があれば、どなたか教えてください)</li>
+</ul>
+
+<h2>おわりに</h2>
+
+<p>Mercurialの簡単な使い方と分散バージョン管理システムならではの利用方法を紹介してみました。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/mercurial.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="Mercurial はじめの一歩" data-url="http://tech.feedforce.jp/mercurial.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/mercurial.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/mercurial.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/rubycocoa.html" rel="next">RubyCocoaを1杯</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/open-vz.html" rel="prev">OpenVZ - OSレベルの仮想化について</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

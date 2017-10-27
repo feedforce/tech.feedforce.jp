@@ -1,0 +1,405 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>GitHub Project機能が強化されたのでZenHubから移行することを検討してみた | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは!新卒エンジニアのtsubです!本日Appleから新型のMacbook Proが発表されたということで早速ポチりました。Touch barのハックにワクワクしております。そして同じく本日GitHubでProject機能が強化されました。Introducing Projects for Organizations私が所属しているチームではZenHubを利用しています。GitHubのProjectはZenHubのBoardに近い機能です。できることなら余計な拡張など入れずにGitHubを純正で使いたいため、今回も移行を検討してみました。">
+      <link rel="canonical" href="http://tech.feedforce.jp/discuss-moving-from-zenhub-to-github-project.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="GitHub Project機能が強化されたのでZenHubから移行することを検討してみた | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは!新卒エンジニアのtsubです!本日Appleから新型のMacbook Proが発表されたということで早速ポチりました。Touch barのハックにワクワクしております。そして同じく本日GitHubでProject機能が強化されました。Introducing Projects for Organizations私が所属しているチームではZenHubを利用しています。GitHubのProjectはZenHubのBoardに近い機能です。できることなら余計な拡張など入れずにGitHubを純正で使いたいため、今回も移行を検討してみました。">
+      <meta property="og:url" content="http://tech.feedforce.jp/discuss-moving-from-zenhub-to-github-project.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/discuss-moving-from-zenhub-to-github-project.html">GitHub Project機能が強化されたのでZenHubから移行することを検討してみた</a></h1>
+      <ul>
+        <li class="entry-time">2016.10.28</li>
+        <li class="entry-cat"><a href="/category/dev_style/">開発スタイル</a></li>
+        <li class="entry-author"><a href="/author/tsub">tsub</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/tsub"><img src="/images/authors/tsub.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは!新卒エンジニアのtsubです!<br>
+本日Appleから新型のMacbook Proが発表されたということで早速ポチりました。Touch barのハックにワクワクしております。</p>
+
+<p>そして同じく本日GitHubでProject機能が強化されました。</p>
+
+<p><a href="https://github.com/blog/2272-introducing-projects-for-organizations">Introducing Projects for Organizations</a></p>
+
+<p>私が所属しているチームではZenHubを利用しています。GitHubのProjectはZenHubのBoardに近い機能です。<br>
+できることなら余計な拡張など入れずにGitHubを純正で使いたいため、今回も移行を検討してみました。</p>
+
+<!--more-->
+
+<h2>前回の移行検討のおさらい</h2>
+
+<p>知っての通り、GitHubのProject機能は以前からリリースされています。<br>
+リリース当時にも移行を検討しましたが、その時は見送りという形になりました。</p>
+
+<p>弊社エンジニアの <a href="/author/yukiyan">@yukiyan</a> が検討してくれた記事はこちらで公開されています。</p>
+
+<p><a href="http://qiita.com/yukiyan/items/2f7affaaa5df5f00baf1">ZenHubからGitHub Projectsに移行することを検討してみる - Qiita</a></p>
+
+<h3>GitHub Projectへの移行を見送った理由</h3>
+
+<p>詳しくは上記のリンクに書いてありますが、まとめるとこんな感じです。</p>
+
+<ul>
+<li>複数リポジトリをまたいだProjectは作成できない</li>
+<li>Add cardsでissueを追加するのが面倒</li>
+<li>Estimate(タスクのポイント付け)が無い</li>
+<li>複数のissueをまとめられるEpicが無い</li>
+<li>issueを動かしてもSlackなどへの通知が無い</li>
+</ul>
+
+<p>特に上3つは困り物で、今のチーム内でのZenHubの運用方針的にないとつらいです 😢</p>
+
+<h3>チーム内でのZenHubの運用方針について</h3>
+
+<p>弊社では基本的にタスクの管理をホワイトボード + 付箋でやっています。</p>
+
+<p>私の所属するチームも以前はそうでしたが、最近ZenHubを導入してホワイトボードからおさらばしました 👋</p>
+
+<p>ホワイトボードから移行した理由として、チーム内のエンジニアがMacbook Proを使うようになってデスク以外の場所でも自由に作業するようになったことが大きな要因です。</p>
+
+<p>さて、それではチーム内でどのようにZenHubを使っているか、について簡単にご説明します。</p>
+
+<p>まず、ZenHubのBoardをお見せします。</p>
+
+<p><img alt=":alt" src="/images/2016/10/discuss-moving-from-zenhub-to-github-project1.jpg" /></p>
+
+<p>上記の画像にも載っていますが、以下のパイプラインを用意しています。</p>
+
+<ul>
+<li>New Issue
+
+<ul>
+<li>新しいissueはまずここに配置します</li>
+<li>次のスプリント計画を立てるときは優先順位に応じてここのissueをIceboxやProduct Backlogに振り分けていきます</li>
+</ul></li>
+<li>Icebox
+
+<ul>
+<li>優先順位の低いタスクです</li>
+<li>スプリント中にタスクが早く完了した場合などに手を付けます</li>
+</ul></li>
+<li>Epic
+
+<ul>
+<li>ZenHubのEpic機能を使って作ったissueです</li>
+<li>ここはあまり使わないので今あるEpicが完了したら消す予定です</li>
+</ul></li>
+<li>Product Backlog
+
+<ul>
+<li>今のスプリントではやらないけど、次回移行にやっていく比較的優先度の高いタスクです</li>
+<li>ここのタスクを元に次のスプリント計画を立てることが多いです</li>
+</ul></li>
+<li>Spring Backlog
+
+<ul>
+<li>今のスプリントでやる予定のタスクです</li>
+</ul></li>
+<li>In Progress
+
+<ul>
+<li>各エンジニアが作業中のタスクです</li>
+</ul></li>
+<li>In Review
+
+<ul>
+<li>作業が完了してレビュー待ちになったタスクです</li>
+</ul></li>
+<li>Done
+
+<ul>
+<li>PRがマージされ、完了したタスクです</li>
+</ul></li>
+<li>Closed
+
+<ul>
+<li>後述の振り返りが終わったらissueをCloseしてここに配置されます</li>
+</ul></li>
+</ul>
+
+<p>また、気づいた方もいるかと思いますが、Board上にはissueしか表示させていません。<br>
+これは、スプリントの終わりに今週やったタスクの振り返りをしているのですが、その際にPRだとマージしたらClosedに移動してしまってそのスプリントにやったタスクを探しづらいためです。</p>
+
+<p>PRをマージしてもissueをDoneに移動させておくことで、そのスプリントでどのタスクをやったかが分かりやすくなります。</p>
+
+<p>そのため、基本的にはまずissueを作ってそこからPRを作る、という流れで作業をしています。</p>
+
+<h2>オーガニゼーション単位でProjectを作成できるようになった</h2>
+
+<p>さて、それでは今回の新機能についてです。</p>
+
+<p>今までリポジトリ単位でしか作成できなかったのですが、本日のアップデートによりオーガニゼーション単位で作成できるようになりました 👏</p>
+
+<p>オーガニゼーションのトップにProjectsというタブが追加されています。</p>
+
+<p><img alt=":alt" src="/images/2016/10/discuss-moving-from-zenhub-to-github-project2.jpg" /></p>
+
+<p>Projectsに飛ぶとこんな感じの画面です。</p>
+
+<p>Project名とDescriptionが書けます。<br>
+Descriptionはいつものmarkdownが書けるので、チームで使ってるリポジトリとか書くと良さそうですね。</p>
+
+<p><img alt=":alt" src="/images/2016/10/discuss-moving-from-zenhub-to-github-project3.jpg" /></p>
+
+<p>ボードの画面はこんな感じです。<br>
+以前からあったリポジトリ毎のProjectとほとんど変わらないです。</p>
+
+<p><img alt=":alt" src="/images/2016/10/discuss-moving-from-zenhub-to-github-project4.jpg" /></p>
+
+<h2>改めてGitHub Projectの良い点 👍</h2>
+
+<h4>Detailsのサイドバーが地味に便利</h4>
+
+<p>ボード画面右上のDetailsをポチッと押すとサイドバーが表示されます。</p>
+
+<p>実はProjectのDescriptionに書いた内容がここに表示されます。</p>
+
+<p>こんな感じでリポジトリのリンクとか書いてあると便利に使えると思います。</p>
+
+<p><img alt=":alt" src="/images/2016/10/discuss-moving-from-zenhub-to-github-project5.jpg" /></p>
+
+<h4>Noteが便利</h4>
+
+<p>issueにする必要ないんだけどメモしておきたい、というときに非常に便利です。<br>
+そういうことは付箋に書いてもいいんですが、他のメンバーにも周知できるのでこれは良いです。</p>
+
+<p><img alt=":alt" src="/images/2016/10/discuss-moving-from-zenhub-to-github-project6.jpg" /></p>
+
+<h3>改めてGitHub Projectの悪い点 👎</h3>
+
+<h4>issue側からProjectに関連付けられない</h4>
+
+<p>ここは変わらずです。read onlyです。</p>
+
+<p><img alt=":alt" src="/images/2016/10/discuss-moving-from-zenhub-to-github-project7.jpg" /></p>
+
+<h4>Projectの画面から新しいissueを作れない</h4>
+
+<p>作れません。<br>
+一旦リポジトリ毎でissueを作り、それをProjectの画面から紐付けるだけです。</p>
+
+<p>面倒です。</p>
+
+<h4>Projectに紐付けていないissueは見えない</h4>
+
+<p>ZenHubではissueを新しく作ると勝手にボードに追加されたので、それを適切な場所に動かすという運用ができたのですが、Projectは勝手にボードに追加してくれません。</p>
+
+<p>そのため、Projectのボードを見れば、全てのissueが載っていることが保証されないため、追加忘れがあると大変なことになります。</p>
+
+<h2>結局移行するのか 💭</h2>
+
+<p>複数リポジトリをまたげるようになったのはかなり大きな変更です。<br>
+ただ、現時点ではまだ以下のような問題が残っています。</p>
+
+<ul>
+<li>Add cardsでissueを追加するのが面倒</li>
+<li>Estimate(タスクのポイント付け)が無い</li>
+<li>複数のissueをまとめられるEpicが無い</li>
+<li>issueを動かしてもSlackなどへの通知が無い</li>
+</ul>
+
+<p>この内、やはり上の2つが解決されていない以上つらいため今回もGitHub Projectの採用は見送りになりそうです👋</p>
+
+<p>というわけで今後もZenHubを使います</p>
+
+<h2>おまけ ラベルの管理について</h2>
+
+<p>ラベル付いてると見やすいなーと思ったそこのあなた！</p>
+
+<p>ラベルの管理方法はこのようにwikiにまとめて運用しています。<br>
+チーム内のエンジニアはこのルールに沿って新しいissueを作るときにラベルを付けます。</p>
+
+<p><img alt=":alt" src="/images/2016/10/discuss-moving-from-zenhub-to-github-project8.jpg" /></p>
+
+<p>ラベルを付けることで視認性が上がり、またZenHubのフィルター機能によって表示/非常時を切り替えることができますので大変便利です。</p>
+
+<p>スプリントが始まってすぐの、やる気に満ちあふれている時は<code class="prettyprint">not: &quot;Priority: Low&quot;</code>などフィルターを設定することで目の前のタスクに集中できます。</p>
+
+<h2>まとめ</h2>
+
+<p>今回もやはりZenHubのほうがまだまだ便利だと感じて移行を見送ることになりました。<br>
+チームによってはGitHub Project機能を使っていたり、ホワイトボードでタスクを管理しているようですので、チームメンバーの趣向によって使い分けていけば良いと思います。</p>
+
+<p>それでは、良い週末を! 🍻</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/discuss-moving-from-zenhub-to-github-project.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="GitHub Project機能が強化されたのでZenHubから移行することを検討してみた" data-url="http://tech.feedforce.jp/discuss-moving-from-zenhub-to-github-project.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/discuss-moving-from-zenhub-to-github-project.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/discuss-moving-from-zenhub-to-github-project.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/calling-when-troubleshooting.html" rel="next">早朝の障害対応(しかも緊急度高)時にslackで通話しながら作業したらいい感じだった</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/mackerel-go-plugin-delayed-job.html" rel="prev">Go で Mackerel の delayed_job plugin を作った</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

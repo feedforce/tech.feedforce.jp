@@ -1,0 +1,498 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>『最近の情報収集方法』というお題で発表しました | feedforce Engineers' blog</title>
+      <meta name="description" content="増田です。GitHub のフィードを日夜監視する毎日です。社内勉強会で『最近の情報収集方法』という発表をしたので、このブログでもお知らせします。発表後に参加者の皆さんからも情報収集方法を教えてもらったり感想を頂いたので、私のコメントともに記載しました（大変な量になってしまった...）。">
+      <link rel="canonical" href="http://tech.feedforce.jp/gathering-information.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="『最近の情報収集方法』というお題で発表しました | feedforce Engineers' blog">
+      <meta property="og:description" content="増田です。GitHub のフィードを日夜監視する毎日です。社内勉強会で『最近の情報収集方法』という発表をしたので、このブログでもお知らせします。発表後に参加者の皆さんからも情報収集方法を教えてもらったり感想を頂いたので、私のコメントともに記載しました（大変な量になってしまった...）。">
+      <meta property="og:url" content="http://tech.feedforce.jp/gathering-information.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/gathering-information.html">『最近の情報収集方法』というお題で発表しました</a></h1>
+      <ul>
+        <li class="entry-time">2015.07.22</li>
+        <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/masutaka">masutaka</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/masutaka"><img src="/images/authors/masutaka.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>増田です。GitHub のフィードを日夜監視する毎日です。</p>
+
+<p>社内勉強会で『最近の情報収集方法』という発表をしたので、このブログでもお知らせします。</p>
+
+<p>発表後に参加者の皆さんからも情報収集方法を教えてもらったり感想を頂いたので、私のコメントともに記載しました（大変な量になってしまった...）。</p>
+
+<!--more-->
+
+<h2>発表の内容</h2>
+
+<p>使ったスライドはこちらです。</p>
+
+<script async class="speakerdeck-embed" data-id="34a40b051dd14697be779dbba3ce1068" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+
+<p>※ 資料にあるリンク等をコピペしたい場合は <a href="https://speakerdeck.com/masutaka/zui-jin-falseqing-bao-shou-ji-fang-fa">Speaker Deck のページ</a>から PDF をダウンロードし、お手元のアプリで開けば可能です。</p>
+
+<h3>概要</h3>
+
+<ul>
+<li>なるべく情報を取りに行かずに済むようにしている</li>
+<li>情報の量や密度をコントロール可能にしている</li>
+<li>コードを書けたので問題解決の幅が広がった</li>
+<li>フィードフォースの社員なのでフィードと仲良く</li>
+</ul>
+
+<h3>技術系</h3>
+
+<ul>
+<li><a href="http://hbfav.bloghackers.net/">HBFav</a>
+
+<ul>
+<li>iPhone を置いておくだけで情報が降ってくる</li>
+</ul></li>
+<li><a href="https://twitter.com/">Twitter</a>
+
+<ul>
+<li>興味あるアカウントのリストを作成</li>
+<li><a href="https://twitter.com/masutakafeed">@masutakafeed</a> を作成し、フィードを <a href="https://ifttt.com/">IFTTT</a> 経由でポスト
+
+<ul>
+<li>はてブのタグフィード
+
+<ul>
+<li>はてブのタグからは柔軟にフィードを取得できる</li>
+<li>例: Rails、はてブ数 3 の新着を RSS で
+
+<ul>
+<li><a href="http://b.hatena.ne.jp/search/tag?q=rails&amp;users=3&amp;sort=recent&amp;mode=rss">http://b.hatena.ne.jp/search/tag?q=rails&amp;users=3&amp;sort=recent&amp;mode=rss</a></li>
+<li><code class="prettyprint">&amp;mode=rss</code> を外せば HTML になる</li>
+</ul></li>
+</ul></li>
+<li>GitHub のプライベートフィード
+
+<ul>
+<li>会社のフィードを除外するために <a href="https://github.com/masutaka/awesome-github-feed">Awesome GitHub Feed</a> を作成</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="https://feedly.com/">feedly</a></li>
+<li>ポッドキャスト
+
+<ul>
+<li><a href="http://rebuild.fm/">http://rebuild.fm/</a></li>
+</ul></li>
+<li>自分のブログ
+
+<ul>
+<li><a href="http://masutaka.net/chalow/">http://masutaka.net/chalow/</a></li>
+</ul></li>
+</ul>
+
+<h3>一般ニュース</h3>
+
+<ul>
+<li><a href="https://news.line.me/">LINE NEWS</a>（iOS）</li>
+<li><a href="https://www.smartnews.com/ja/">SmartNews</a>（iOS）</li>
+<li><a href="https://itunes.apple.com/jp/app/id354976659">はてなブックマーク</a>（iOS）</li>
+</ul>
+
+<h3>その他</h3>
+
+<ul>
+<li><a href="https://getpocket.com/">Pocket</a> を少々
+
+<ul>
+<li>あとで読む系のサービスはあとで読まない</li>
+</ul></li>
+<li><a href="https://www.google.co.jp/alerts">Google アラート</a>
+
+<ul>
+<li>ゲームの最新情報を追うのに良い</li>
+</ul></li>
+</ul>
+
+<h2>参加者の情報収集方法</h2>
+
+<p>発表後、付箋に書いて頂きました。参加者は全員エンジニアでした。</p>
+
+<ul>
+<li>Twitter（9名）
+
+<ul>
+<li><a href="https://twitter.com/search?q=%23gcpja&amp;src=typd&amp;vertical=default&amp;f=tweets">#gcpja</a> や <a href="https://twitter.com/search?q=%23gcpug&amp;src=typd&amp;vertical=default&amp;f=tweets">#gcpug</a></li>
+<li>tech-news リストとか、いくつかのリストを作って、<a href="http://tapbots.com/tweetbot/">Tweetbot</a> でカラム別に表示して読んでる</li>
+<li>LIST（dev, ff, FFXIV）</li>
+<li>Search（ruby, rails, middleman,...）</li>
+<li>すごい人の Twitter を見てると、なんとなく取捨選択後の情報が</li>
+<li>興味のある人をプライベートリストで</li>
+</ul></li>
+<li>はてブ（6名）
+
+<ul>
+<li><a href="http://b.hatena.ne.jp/hotentry">ホットエントリ</a></li>
+<li>会社の人のはてブ</li>
+<li><a href="https://itunes.apple.com/jp/app/id799334646">Presso</a> で興味あるタグをフォロー</li>
+<li>HBFav（3名）
+
+<ul>
+<li>HBFav のために iPhone を買った（といっても過言ではない）</li>
+<li>めっちゃフォローして Twitter みたいな使い方してます！！</li>
+</ul></li>
+</ul></li>
+<li>feedly（5名）
+
+<ul>
+<li>情弱なので RSS を少々</li>
+<li>セキュリティ関連のブログとかだけ...</li>
+<li>未読意識してないですー</li>
+</ul></li>
+<li>Qiita（3名）
+
+<ul>
+<li>特定のタグを RSS で取得できるのを知った</li>
+<li>Ruby, Vim, Rails の RSS</li>
+<li>めぼしいフィードは読む</li>
+</ul></li>
+<li><a href="https://gunosy.com/">Gunosy</a>（3名）
+
+<ul>
+<li>朝夕のメールで</li>
+<li>Web で</li>
+</ul></li>
+<li><a href="http://jser.info/">JSer.info</a></li>
+<li><a href="https://frontendweekly.tokyo/">Frontend Weekly</a>（メルマガ）</li>
+<li><a href="http://ja.stackoverflow.com/">スタック・オーバーフロー</a>
+
+<ul>
+<li>Ruby 等の RSS</li>
+</ul></li>
+<li>はてなブログを購読</li>
+<li>Facebook</li>
+<li>CentOS のメーリングリスト</li>
+<li><a href="http://www.alfredapp.com/">Alfred</a>
+
+<ul>
+<li>Qiita の Stock, Pocket, <a href="https://evernote.com/">Evernote</a>, GitHub の情報取り出しに利用</li>
+</ul></li>
+<li><a href="http://reader.livedoor.com/">Live Dwango Reader</a></li>
+<li>Pocket
+
+<ul>
+<li>feedly から <a href="https://play.google.com/store/apps/details?id=com.twentyfivesquares.press&amp;hl=ja">Press</a>（Android） 経由で POST</li>
+<li>Twitter の非公開リストから <a href="https://play.google.com/store/apps/details?id=it.mvilla.android.fenix&amp;hl=ja">Fenix</a> （Android）経由で POST</li>
+<li>帰りの電車で気にやったやつだけ読む</li>
+<li>スターを付けると IFTTT 経由で Evernote に送信</li>
+</ul></li>
+<li><a href="http://rubyweekly.com/">Ruby Weekly</a>（メルマガ）</li>
+<li>SmartNews</li>
+<li><a href="https://news.ycombinator.com/">Hacker News</a></li>
+<li>GitHub のフィード
+
+<ul>
+<li>絶対読む</li>
+</ul></li>
+<li><a href="http://im.kayac.com/">im.kayac.com</a>
+
+<ul>
+<li>メールを通知</li>
+</ul></li>
+</ul>
+
+<h2>参加者からの感想</h2>
+
+<p>感想も頂きました。リストの 2 階層目は私からのコメントです。</p>
+
+<ul>
+<li>awesome-github-feed コード見てみたい。見る
+
+<ul>
+<li>恥ずかしいです</li>
+</ul></li>
+<li>Twitter 情報の密度少ない
+
+<ul>
+<li>人生は短いですからね</li>
+</ul></li>
+<li>メンテナンスが面倒になって諦めちゃうのはどうすれば
+
+<ul>
+<li>（Twitter のリストなどのメンテナンスが面倒とのこと）</li>
+<li>自分に合う方法を取れば良いかと</li>
+</ul></li>
+<li>アウトプットをインプット、名言頂きました
+
+<ul>
+<li>ありがとうございます</li>
+</ul></li>
+<li>GitHub のプライベートフィードのモザイク気になる
+
+<ul>
+<li>ほとんどフィードフォースです。資料の公開を考えていたので</li>
+</ul></li>
+<li>Twitter フォロー減らす
+
+<ul>
+<li>もう少し厳選すれば良かったです</li>
+</ul></li>
+<li>GitHub フォローしている人のアクティビティって欲しい？
+
+<ul>
+<li>アクティビティというより、フィードが欲しいのです。手段の目的化...</li>
+</ul></li>
+<li>「アクティブデスクトップ」とかヤバい！
+
+<ul>
+<li>OFF にしてましたけどね。ブラウザも IE4 ではなく Netscape Navigator 4.0x を愛用していました</li>
+</ul></li>
+<li>Gunosy の前は Crowsnest 使ってた！
+
+<ul>
+<li>お</li>
+</ul></li>
+<li>今の情報収集方法、課題感ある？
+
+<ul>
+<li>技術書をもっと読まないと...</li>
+</ul></li>
+<li><a href="https://github.com/june29/29hours">29hours</a> 試してみようー
+
+<ul>
+<li>是非〜</li>
+</ul></li>
+<li>Twitter、公式はアドツイートが微妙ですよねー
+
+<ul>
+<li>アドはまだ技術が追いついてませんね</li>
+</ul></li>
+<li>おもしろかった！
+
+<ul>
+<li>ありがとうございます！</li>
+</ul></li>
+<li>アクティビティみられるのやだなw
+
+<ul>
+<li>申し訳ありません</li>
+</ul></li>
+<li>公開リポジトリでも全然緊張感持っていない...
+
+<ul>
+<li>機密情報だけですね。私もソースコードには緊張感持ってないです</li>
+</ul></li>
+<li>Nokogiri じゃない <a href="https://rubygems.org/gems/oga">Oga</a> っていうのあります
+
+<ul>
+<li>「のこぎり」に対する「おが」ですかw</li>
+<li>libxml 必要ないのですね。使ってみようかな</li>
+</ul></li>
+<li>組み込み 11 年のキャリア
+
+<ul>
+<li>どこかに忘れてきました...</li>
+</ul></li>
+<li>技術者ブログに up して欲しいな（色んなキャリアの人がいるよ）
+
+<ul>
+<li>I am writing...</li>
+</ul></li>
+<li>聴いている人も自分のやり方とか教えてね、というノリいいですね
+
+<ul>
+<li>ありがとうございます。気負いも減るので良いかも</li>
+</ul></li>
+<li>他の人の情報収集方法を聴けてよかった
+
+<ul>
+<li>まとまって聴く機会、少ないですよね</li>
+</ul></li>
+<li>「投資の価値ある」は価値がある情報
+
+<ul>
+<li>（発表の中で「<a href="http://reederapp.com/mac/">Reeder for Mac</a> は $9.99 と、ややお高いけど投資の価値はあると思います。」と話したことについて）</li>
+<li>値段よりも「投資の価値あるか」に重きをおいております</li>
+</ul></li>
+<li>Google アラートためしてみようかな
+
+<ul>
+<li>おお、是非に！</li>
+</ul></li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/gathering-information.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="『最近の情報収集方法』というお題で発表しました" data-url="http://tech.feedforce.jp/gathering-information.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/gathering-information.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/gathering-information.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/agile-planning.html" rel="next">現在開催中のサマーインターンで『アジャイルな計画づくり』についておはなししています</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/startup-terraform.html" rel="prev">terraformを使ってAWS環境を構築する</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

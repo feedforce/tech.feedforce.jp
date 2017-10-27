@@ -1,0 +1,461 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>memcached | feedforce Engineers' blog</title>
+      <meta name="description" content="何？オブジェクトをメモリにキャッシュするデーモン。動的ページを持つウェブアプリケーションの裏側で動くデータベースへの負荷を軽減させることを目的にデザインされている。- 公式サイト memcached: a distributed memory object caching system">
+      <link rel="canonical" href="http://tech.feedforce.jp/memcached.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="memcached | feedforce Engineers' blog">
+      <meta property="og:description" content="何？オブジェクトをメモリにキャッシュするデーモン。動的ページを持つウェブアプリケーションの裏側で動くデータベースへの負荷を軽減させることを目的にデザインされている。- 公式サイト memcached: a distributed memory object caching system">
+      <meta property="og:url" content="http://tech.feedforce.jp/memcached.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/memcached.html">memcached</a></h1>
+      <ul>
+        <li class="entry-time">2007.03.16</li>
+        <li class="entry-cat"><a href="/category/infrastructure/">インフラ</a>, <a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/akahige">akahige</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/akahige"><img src="/images/authors/no-image.png" /></a>
+    </div>
+    <div class="entry-body">
+      <h2>何？</h2>
+
+<p>オブジェクトをメモリにキャッシュするデーモン。</p>
+
+<p>動的ページを持つウェブアプリケーションの裏側で動くデータベースへの負荷を軽減させることを目的にデザインされている。<br>
+- <a href="http://www.danga.com/memcached/">公式サイト memcached: a distributed memory object caching system</a></p>
+
+<!--more-->  
+
+<h3>特徴</h3>
+
+<ul>
+<li>オブジェクトをメモリ上にキャッシュ</li>
+<li>複数ホスト間でキャッシュ共有可能（リモートからキャッシュにアクセス可能）</li>
+<li>各言語用のインタフェースライブラリがそろってます</li>
+<li>実績豊富</li>
+</ul>
+
+<h2>よくある用途</h2>
+
+<ul>
+<li>セッションストア</li>
+<li>DBへのクエリ結果のキャッシュ</li>
+<li>アプリケーションレベルのオブジェクト共有（静的インスタンス）</li>
+</ul>
+
+<h3>セッションストア</h3>
+
+<ul>
+<li>複数サーバ間のセッション情報共有</li>
+<li>DBを使う方法と比べて負荷がかからなくてうれしい</li>
+</ul>
+
+<h4>セッションストアとしての問題点</h4>
+
+<p>レプリケーションの仕組みがない。  </p>
+
+<p>ので、アプリケーションの性質によっては深刻な単一障害点になってしまう。</p>
+
+<p>そういう場合はDBをセッションストアにしてがんばるしかない。</p>
+
+<p>ほとんどのアプリでは大した問題ではないと思うけど。<br><br>
+障害時に強制的にログアウトされるとかそんくらい。</p>
+
+<h5>参考</h5>
+
+<ul>
+<li><a href="http://d.hatena.ne.jp/tokuhirom/20061216/1166231736">TokuLog 改め Perl を極めて結婚するブログ - なぜmemcachedをセッション管理用に使うのか</a></li>
+</ul>
+
+<h3>DBへのクエリ結果のキャッシュ</h3>
+
+<ul>
+<li>DBへのアクセスを減らせる</li>
+<li>DBはスケールしにくいので、その部分をサポートするのによく使われる</li>
+</ul>
+
+<p>memcachedの本来の目的。</p>
+
+<h4>MySQL自体のクエリキャッシュとの違い</h4>
+
+<p>MySQLのクエリキャッシュはテーブルの構造やテーブル内のレコードが一件でも変更されると破棄されてしまう。<br><br>
+memcachedのキャッシュは有効期限が過ぎるか明示的に削除しない限り破棄されない。</p>
+
+<p>頻繁に更新されるテーブル、取得に時間がかかるクエリに関してはmemcachedを使った方がキャッシュ効果は高い。<br>
+- <a href="http://dev.mysql.com/doc/refman/4.1/ja/query-cache.html">MySQL 4.1 リファレンスマニュアル - クエリキャッシュ</a></p>
+
+<h3>アプリケーションレベルのオブジェクト共有（静的インスタンス）</h3>
+
+<ul>
+<li>どんな言語でもアプリケーション全体でのシングルトンが実現できる</li>
+<li>排他制御は工夫が必要</li>
+</ul>
+
+<h4>排他制御について</h4>
+
+<p>サーバ側では特に排他制御する仕組みはないっぽいので、必要ならばクライアント側でがんばる。</p>
+
+<p>排他制御がいるような場所では無理に使わない方がいいかも。<br>
+- <a href="http://www.tsujita.jp/blojsom/blog/default/PHP/2007/01/12/memcached%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9FPHP%E3%81%AE%E3%82%B7%E3%83%B3%E3%82%B0%E3%83%AB%E3%83%88%E3%83%B3%E5%AE%9F%E8%A3%85.html">徒然なるままにBlog - memcachedを使ったPHPのシングルトン実装</a></p>
+
+<h2>memcachedのインストール</h2>
+
+<p>OSはCentOS。<br><br>
+以下の場所にCentOSで使えるRPMあります。<br>
+- <a href="http://dag.wieers.com/rpm/packages/libevent/">DAG: libevent RPM packages for Red Hat/Fedora</a><br>
+- <a href="http://dag.wieers.com/rpm/packages/memcached/">DAG: memcached RPM packages for Red Hat/Fedora</a></p>
+
+<p>ちなみにDebianはapt-getでいけます。</p>
+
+<h2>起動</h2>
+
+<pre><code class="prettyprint">$ memcached -d -m 128 -l 127.0.0.1 -p 11211
+</code></pre>
+
+<h3>オプション</h3>
+
+<p>manの内容は古いのでmemcached -hの方を優先的に信用。<br><br>
+ちょっと意味がわからないものもあります。（下の方にまとまってるやつ）</p>
+
+<p>| オプション | 説明 | デフォルト値 |</p>
+
+<p>| -l <ip\_addr> | memcachedがListenするIPアドレス。 セキュリティを考慮するときちんと指定したほうがよい。 | INDRR_ANY |</p>
+
+<p>| -d | デーモンとして起動 | |</p>
+
+<p>| -s <file> | Unixソケットへのパス | |</p>
+
+<p>| -P <filename> | PIDファイルの指定。デーモンとして動作した場合のみ有効。 | |</p>
+
+<p>| -u <username> | memcachedを起動するユーザーを指定。root権限で実行した場合のみ有効。 | |</p>
+
+<p>| -p <num> | ListenするTCPポート番号。 | 11211 |</p>
+
+<p>| -U <num> | ListenするUDPポート番号。 | 0, Off |</p>
+
+<p>| -m <num> | キャッシュとして利用するメモリの最大容量。単位はMB。 | 64 |</p>
+
+<p>| -c <num> | 最大同時接続数。 | 1024 |</p>
+
+<p>| -M | メモリを使い果たしたとき勝手にキャッシュを削除しないでエラーを返す | |</p>
+
+<p>| -n <bytes> | キャッシュ1件(key+value+flags)に割り当てる最小サイズ 単位はバイト。 | 48 |</p>
+
+<p>| -v | errorとwarningを出力 | |</p>
+
+<p>| -vv | -vに加えてクライアントコマンドとレスポンスを出力 | |</p>
+
+<p>| -i | ライセンス表示 | |</p>
+
+<p>| -h | バージョンとヘルプの表示 | |</p>
+
+<p>| -r | コアファイルのサイズ制限を最大化する。 | |</p>
+
+<p>| -k | 巨大なキャッシュを扱うときにキケンなオプション。 | |</p>
+
+<p>| -f <factor> | チャンクサイズの増加係数 | 1.25 |</p>
+
+<p>| -b | 管理されたインスタンスの起動 | |</p>
+
+<h2>PHPの場合</h2>
+
+<h3>導入</h3>
+
+<h4>ライブラリのインストール</h4>
+
+<p>5.2.1で試しました。</p>
+
+<pre><code class="prettyprint">$ pecl install memcache
+</code></pre>
+
+<h4>php.iniの編集</h4>
+
+<p>以下の一行追加。</p>
+
+<pre><code class="prettyprint">extension=memcache.so
+</code></pre>
+
+<p>これでMemcacheモジュールが使えるようになる。<br>
+- <a href="http://jp.php.net/memcache">PHP: Memcache 関数</a></p>
+
+<h4>httpdの再起動</h4>
+
+<pre><code class="prettyprint">$ /etc/init.d/httpd restart
+</code></pre>
+
+<p>オブジェクトはシリアライズされてから保存されるのでリソース型などのオブジェクトは保存できない</p>
+
+<h3>使い方</h3>
+
+<p>つ <a href="http://jp.php.net/memcache">マニュアル</a></p>
+
+<p>とりあえず接続テストだけ。</p>
+
+<pre><code class="prettyprint">$memcache = new Memcache;
+$memcache-&gt;connect(&#39;localhost&#39;, 11211) or die (&quot;接続できませんでした&quot;);
+</code></pre>
+
+<p>マニュアルのコピペですみません。</p>
+
+<p>じゃあもう少し。</p>
+
+<pre><code class="prettyprint">
+if (($res = $memcache-&gt;get(&#39;key&#39;)) === false) {
+    $now = date(&#39;Y-m-d H:i:s&#39;);
+    $memcache-&gt;set(&#39;key&#39;, $now, false, 3600);
+    $res = $now;
+}
+
+echo $res;
+</code></pre>
+
+<p>最初のアクセス日時がキャッシュされる分かりやすい例。</p>
+
+<p>キャッシュがなければキャッシュする。あればキャッシュを取ってくる。<br><br>
+$memcache-&gt;setの引数のfalseは圧縮するかどうか。3600はキャッシュの有効期限を秒で指定。0にすると期限なし。</p>
+
+<h3>セッション管理</h3>
+
+<p>自分で作ってもいいけど、すでに作ってる人がいるので使わせてもらうのもいいでしょう。<br>
+- <a href="http://weirdsilence.net/software/memsession/">Weird Silence ≫ MemSession</a><br>
+- <a href="http://dozo.matrix.jp/pear/index.php?PECL%2Fmemcache%2Fsession">memcachedをPHPのセッションに使う - PHP::PEAR - dozo PukiWiki</a></p>
+
+<p>上は微妙。下のやつの方がいい。</p>
+
+<h2>Ruby, Railsの場合</h2>
+
+<h3>導入</h3>
+
+<p>以下のいずれかのライブラリを使う。いずれもgemで入る。<br>
+- Ruby-MemCache<br>
+- memcache-client</p>
+
+<p>memcache-clientの方が速いらしい。</p>
+
+<h3>使い方</h3>
+
+<p>詳細はよくまとめられているところがあるので略。<br>
+- <a href="http://techno.hippy.jp/rorwiki/?HowtoChangeSessionStore">RoR Wiki 翻訳 Wiki - HowtoChangeSessionStore</a><br>
+- <a href="http://www.nubyonrails.com/articles/2006/08/17/memcached-basics-for-rails">memcached Basics for Rails - Ruby on Rails for Newbies</a></p>
+
+<h2>サーバ構成</h2>
+
+<h3>構成例</h3>
+
+<h4>memcached用のサーバを立てる</h4>
+
+<p>セッションストアとして使う場合などに。  </p>
+
+<p>たくさんのウェブサーバたちから接続される。<br>
+- 負荷分散クラスタ内のノートが死んでもセッションが切れない<br>
+- stickysessionとか使えないロードバランサでも平気</p>
+
+<h4>httpdと同じホストに突っ込む</h4>
+
+<p>データのキャッシュをする際などに。<br><br>
+ローカルからのみ参照される。<br>
+- memcachedはメモリを食うがCPUはそんなに食わない<br>
+- httpdはCPUをたくさん食う</p>
+
+<p>ので一緒のホストで動作させても相性がよくて平気。らしい。</p>
+
+<p>そのほか<br>
+- ネットワーク帯域節約<br>
+- キャッシュするタイミングの違いでそれぞれのサーバに異なるデータがキャッシュされちゃうかも</p>
+
+<ul>
+<li><p>これが問題になるかどうかはケースバイケース</p></li>
+<li><p>ロードバランサにstickysessionは欲しいかも</p></li>
+<li><p>でなければデータ更新のタイミングで必ずdeleteとかflush。</p></li>
+</ul>
+
+<p>まあ、キャッシュ使うときはいろいろ気をつけて使おう。</p>
+
+<h2>おまけ</h2>
+
+<h3>導入事例</h3>
+
+<ul>
+<li><a href="http://itpro.nikkeibp.co.jp/article/NEWS/20060330/233820/">ミクシィのCTOが語る「mixiはいかにして増え続けるトラフィックに対処してきたか」：ITpro</a></li>
+<li><a href="http://d.hatena.ne.jp/naoya/20061020/1161314770">naoyaのはてなダイアリー - はてなブックマークの裏側その後</a></li>
+<li>ほかいろいろ</li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/memcached.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="memcached" data-url="http://tech.feedforce.jp/memcached.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/memcached.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/memcached.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/python.html" rel="next">はじめましてPython</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/mochikit.html" rel="prev">MochiKit</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

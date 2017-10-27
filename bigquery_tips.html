@@ -1,0 +1,536 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>RubyでBigQuery始めました | feedforce Engineers' blog</title>
+      <meta name="description" content="初めまして！今年１月からジョインしたyukiyanです。feedforceではアプリケーションエンジニアを担当しています。最近、弊社のあるプロジェクトにて Google BigQuery を導入しました。その際、学びがいくつかあったので知見として投下します。※ Railsのプロジェクトなので、一部のサンプルコードにRailsの表現も含まれています。">
+      <link rel="canonical" href="http://tech.feedforce.jp/bigquery_tips.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="RubyでBigQuery始めました | feedforce Engineers' blog">
+      <meta property="og:description" content="初めまして！今年１月からジョインしたyukiyanです。feedforceではアプリケーションエンジニアを担当しています。最近、弊社のあるプロジェクトにて Google BigQuery を導入しました。その際、学びがいくつかあったので知見として投下します。※ Railsのプロジェクトなので、一部のサンプルコードにRailsの表現も含まれています。">
+      <meta property="og:url" content="http://tech.feedforce.jp/bigquery_tips.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/bigquery_tips.html">RubyでBigQuery始めました</a></h1>
+      <ul>
+        <li class="entry-time">2015.06.01</li>
+        <li class="entry-cat"><a href="/category/operation/">運用事例</a>, <a href="/category/bigquery/">BigQuery</a></li>
+        <li class="entry-author"><a href="/author/yukiyan">yukiyan</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/yukiyan"><img src="/images/authors/yukiyan.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p><img alt="BigQuery logo" src="/images/2015/06/bigquery_logo.jpg" /></p>
+
+<p>初めまして！今年１月からジョインしたyukiyanです。</p>
+
+<p>feedforceではアプリケーションエンジニアを担当しています。<br>
+最近、弊社のあるプロジェクトにて <a href="https://cloud.google.com/bigquery/what-is-bigquery">Google BigQuery</a> を導入しました。<br>
+その際、学びがいくつかあったので知見として投下します。<br>
+※ Railsのプロジェクトなので、一部のサンプルコードにRailsの表現も含まれています。</p>
+
+<!--more-->
+
+<h2>BigQueryとは</h2>
+
+<p>BigQueryとは、<a href="https://cloud.google.com/">Google Cloud Platform</a>(以下、GCP)が提供するクラウドサービスです。<br>
+超でかいデータをSQL風のクエリで数秒で解析できます。<br>
+5億件のデータを3秒程度でフルスキャンできます。<br>
+もっと知りたいという方は、<a href="http://qiita.com/kazunori279/items/10ac0066ac9b0b5aaaf3">hadoop - Googleの虎の子「BigQuery」をFluentdユーザーが使わない理由がなくなった理由 #gcpja - Qiita</a>を参照してください。</p>
+
+<h2>gemの選定</h2>
+
+<p>gemについては、<a href="https://cloud.google.com/bigquery/client-libraries">公式リファレンスで紹介</a>されている<a href="https://github.com/google/google-api-ruby-client">google/google-api-ruby-client</a>を使うと良いと思います。<br>
+このgemはまだalpha版でしたが、使い勝手としては十分だと思います。<br>
+また、Google API Clientとして機能するgemなので、BigQueryだけで無く、Google Cloud Storageなどのサービスにも対応しています。</p>
+
+<h3>公式以外の便利そうなgemも試してみた</h3>
+
+<p>当初は、公式ではありませんが、google-api-ruby-clientをラップして作られた<a href="https://github.com/abronte/BigQuery">abronte/BigQuery</a>というgemを使っていました。<br>
+このgemを使うことでgoogle-api-ruby-clientよりシンプルにBigQueryにAPIを投げられます。<br>
+しかし、<a href="https://github.com/abronte/BigQuery/pull/16">使えないAPIメソッド</a>や<a href="https://github.com/abronte/BigQuery/issues/17">公式で非推奨なメソッドを使っている箇所</a>があり、issueやPRを出してマージして頂いたりしましたが、結局プロダクションでの利用は断念しました。</p>
+
+<h2>認証</h2>
+
+<p>BigQueryのAPIを使う際には認証が必要です。<br>
+これは、BigQueryだけでなくGCPのサービスのAPIを叩く際には、共通して必要な作業です。<br>
+GCPは<a href="https://cloud.google.com/bigquery/bigquery-api-quickstart#authorizing">OAuth 2.0を用いた認証方法</a>を提供しています。<br>
+その中でも、Service Accountsという方式を使った認証方法をご紹介します。<br>
+これは、サービス固有のP12(<a href="http://ja.wikipedia.org/wiki/PKCS">PKCS12</a>)形式の秘密鍵を発行して認証を行い、APIを叩くという方式です。</p>
+
+<h3>P12形式の秘密鍵の取得方法</h3>
+
+<p>Google Developers Consoleから以下のようにして取得できます。</p>
+
+<p><img alt="p12_image_01" src="/images/2015/06/p12_01.jpg" /><br>
+「認証情報」を選択後、「新しいクライアントIDを作成」を押下。</p>
+
+<p><img alt="p12_image_02" src="/images/2015/06/p12_02.jpg" /><br>
+ポップアップ画面が表示されるので「サービスアカウント」を選択し、「クライアントIDを作成」を押下。</p>
+
+<p><img alt="p12_image_03" src="/images/2015/06/p12_03.jpg" /><br>
+「新しいP12キーを生成」を押下すると、p12形式の秘密鍵がダウンロードされます。</p>
+
+<p>ここで取得した秘密鍵を使って、google-api-ruby-clientから認証を行い、APIを叩きます。</p>
+
+<h3>google-api-ruby-clientを使った場合の認証のコード例</h3>
+
+<p><a href="https://github.com/google/google-api-ruby-client#authorization">README</a>にも説明がありますが、以下のようにして認証を行います。</p>
+
+<pre><code class="prettyprint ruby">
+require &#39;google/api_client&#39;
+
+client = Google::APIClient.new(application_name: &#39;sample&#39;, application_version: &#39;0.0.1&#39;)
+key = Google::APIClient::KeyUtils.load_from_pkcs12(&#39;p12のファイルパス&#39;, &#39;notasecret&#39;)
+scope = [
+  &#39;https://www.googleapis.com/auth/bigquery&#39;,
+  &#39;https://www.googleapis.com/auth/cloud-platform&#39;,
+  &#39;https://www.googleapis.com/auth/devstorage.read_only&#39;,
+  &#39;https://www.googleapis.com/auth/devstorage.read_write&#39;,
+  &#39;https://www.googleapis.com/auth/devstorage.full_control&#39;
+]
+client.authorization = Signet::OAuth2::Client.new(
+  token_credential_uri: &#39;https://accounts.google.com/o/oauth2/token&#39;,
+  audience: &#39;https://accounts.google.com/o/oauth2/token&#39;,
+  scope: scope,
+  issuer: &#39;123456789@developer.gserviceaccount.com&#39;,
+  signing_key: key)
+client.authorization.fetch_access_token!
+
+api = client.discovered_api(&#39;bigquery&#39;, &#39;v2&#39;)
+
+</code></pre>
+
+<ul>
+<li><code class="prettyprint">load_from_pkcs12</code>というメソッドの第一引数に先ほど取得した秘密鍵のファイルパスを渡します。</li>
+<li>scopeとは、どのAPIを使用できるようにするか判断するためのパラメータです。各APIメソッドごとに必要なscopeはドキュメントに載ってます。上記のコードでは<a href="https://cloud.google.com/bigquery/docs/reference/v2/jobs/insert#auth">Jobs.insertの場合のscope</a>を用いてます。</li>
+<li>issuerは、サービスアカウントのメールアドレスです。Google Developers Consoleで確認できます。</li>
+</ul>
+
+<h2>プロジェクトとデータセットという概念</h2>
+
+<p>GCP 内の 1サービスである BigQuery にデータを投入し管理する際、その単位としておさえておきたい概念として、 &quot;プロジェクト&quot; と &quot;データセット&quot; というものがあります。</p>
+
+<h3>プロジェクトとは</h3>
+
+<p>プロジェクトとは、<a href="https://cloud.google.com/bigquery/what-is-bigquery#projects">Google Cloud Platformにおけるトップレベルコンテナです。</a><br>
+サービス利用時に最初に設定します。<br>
+プロジェクト名は任意の名前ですが、プロジェクトIDはGoogle Cloud Platform全体で<strong>グローバルな値である必要がある</strong>のでユニークなIDを設定します。<br>
+プロジェクトIDは<strong>あとで変更することが不可能</strong>なので、慎重に命名してください。<br>
+弊社では以下のように、3つのプロジェクトを作成しています。</p>
+
+<p><img alt="project list" src="/images/2015/06/bigquery_project_list.jpg" /></p>
+
+<h3>プロジェクトIDの命名</h3>
+
+<p>弊社ではプロジェクトIDを以下のように命名しています。<br>
+用途が一目でわかりやすいのもそうですが、例えば、Railsで利用する場合は、コード内でプロジェクトIDを<code class="prettyprint">&quot;xxxx-#{Rails.env}&quot;</code>と参照できるので便利です。</p>
+
+<table><thead>
+<tr>
+<th style="text-align: center">プロジェクトID</th>
+<th style="text-align: center">用途</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: center">xxxx-development</td>
+<td style="text-align: center">開発用</td>
+</tr>
+<tr>
+<td style="text-align: center">xxxx-production</td>
+<td style="text-align: center">本番用</td>
+</tr>
+<tr>
+<td style="text-align: center">xxxx-test</td>
+<td style="text-align: center">テスト用</td>
+</tr>
+</tbody></table>
+
+<h3>データセットとは</h3>
+
+<p>データセットとは、<a href="https://cloud.google.com/bigquery/what-is-bigquery#datasets">BigQueryで扱うテーブルの集合です。</a><br>
+テーブルを作成するときは、このデータセットを事前に作る必要があります。</p>
+
+<p><img alt="project dataset table" src="/images/2015/06/bigquery_project_dataset_table.jpg" /></p>
+
+<h3>データセットの命名に関する注意点</h3>
+
+<p>データセットを数字から始まる名前で作成した場合は、クエリを実行する際に下記のように<code class="prettyprint">[]</code>で囲まないとエラーになるので注意が必要です。</p>
+
+<pre><code class="prettyprint sql">SELECT hoge_column FROM [20150304_load.hoge_table]
+</code></pre>
+
+<h2>BigQueryでもJOINはボトルネックになる</h2>
+
+<p>冒頭で触れたとおり、BigQueryはクエリが爆速です。<br>
+ですが、JOINを使うと話は別です。<br>
+弊社のプロジェクトでBigQueryに投げているクエリには、JOIN(又はJOIN EACH)がふんだんに使われていて、結果が返ってくるまで10分以上かかります。<br>
+扱ってるデータは400〜500万行程(5〜6GB)です。<br>
+BigQueryはそのパフォーマンスゆえ、雑なクエリを投げることに抵抗はありませんが、JOINを使う場合はクエリの最適化が必要かもしれないので注意が必要です。</p>
+
+<h2>APIでのクエリの実行方法は2種類ある</h2>
+
+<p>BigQueryではクエリを実行するAPIメソッドが２つあります。<br>
+<code class="prettyprint">Jobs.query</code>と<code class="prettyprint">Jobs.insert</code>です。<br>
+両者の違いはいくつかあります。<br>
+その中でも代表的なのはポーリング(クライアントから一定間隔でサーバに対し情報の取得要求を行うこと)が必要かどうかという点です。<br>
+つまり、クエリの実行方法に同期と非同期の2種類があるということです。</p>
+
+<ul>
+<li><a href="https://cloud.google.com/bigquery/docs/reference/v2/jobs/query">Jobs.query</a>はポーリングが<strong>不要</strong></li>
+<li><a href="https://cloud.google.com/bigquery/docs/reference/v2/jobs/insert">Jobs.insert</a>はポーリングが<strong>必要</strong></li>
+</ul>
+
+<p>google-api-ruby-clientでは以下のように書きます。</p>
+
+<h3>Jobs.queryでクエリを実行する場合</h3>
+
+<pre><code class="prettyprint ruby">require &#39;google/api_client&#39;
+
+client = Google::APIClient.new(application_name: &#39;sample&#39;, application_version: &#39;0.0.1&#39;)
+# 〜認証まわりのコードは省略〜
+
+api = client.discovered_api(&#39;bigquery&#39;, &#39;v2&#39;)
+parameters = {
+  api_method: api.jobs.query,
+  parameters: {
+    projectId: &#39;sample_project&#39;
+  },
+  body_object: {
+    query: &#39;SELECT COUNT(*) FROM [publicdata:samples.wikipedia]&#39;
+  }
+}
+
+# クエリを実行する
+response = client.execute(parameters)
+response.data.rows[0].f[0].v.to_i
+# =&gt; 313797035
+</code></pre>
+
+<h3>Jobs.insertでクエリを実行する場合</h3>
+
+<pre><code class="prettyprint ruby">require &#39;google/api_client&#39;
+
+client = Google::APIClient.new(application_name: &#39;sample&#39;, application_version: &#39;0.0.1&#39;)
+
+# 〜認証まわりのコードは省略〜
+api = client.discovered_api(&#39;bigquery&#39;, &#39;v2&#39;)
+
+parameters = {
+  api_method: api.jobs.insert,
+  parameters: {
+    projectId: &#39;sample_project&#39;
+  },
+  body_object: {
+    configuration: {
+      query: {
+        query: &#39;SELECT COUNT(*) FROM [publicdata:samples.wikipedia]&#39;
+      }
+    }
+  }
+}
+
+# クエリを実行する
+response = client.execute(parameters)
+
+parameters = {
+  api_method: api.jobs.get,
+  parameters: {
+    projectId: &#39;sample_project&#39;, jobId: response.data.jobReference.jobId
+  }
+}
+
+response = client.execute(parameters)
+
+# ポーリングする
+while response.data.status.state != &#39;DONE&#39;
+  sleep 30
+  response = client.execute(parameters)
+end
+
+parameters = {
+  api_method: api.jobs.get_query_results,
+  parameters: {
+    projectId: &#39;sample_project&#39;,
+    jobId: response.data.jobReference.jobId
+  }
+}
+
+# クエリの結果を取得する
+response = client.execute(parameters)
+response.data.rows[0].f[0].v
+# =&gt; 313797035
+</code></pre>
+
+<h3>両者のユースケース</h3>
+
+<p><code class="prettyprint">Jobs.query</code>は、クエリが実行完了し結果が返ってくるまで待ってくれます。<br>
+よって、テーブルのデータ件数のカウント等、クエリの結果が小さい場合に利用すると良いです。<br>
+逆に、クエリの結果が大きい場合や別テーブルに結果を保存したい場合は、<a href="https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.query">より柔軟なユースケースに対応</a>できる<code class="prettyprint">Jobs.insert</code>を使うべきです。</p>
+
+<ul>
+<li><code class="prettyprint">Jobs.query</code>は、クエリの結果が小さい場合に利用すべき</li>
+<li><code class="prettyprint">Jobs.insert</code>は、クエリの結果が大きい場合や別テーブルに結果を保存したい場合に利用すべき</li>
+</ul>
+
+<h3>ポーリングは自前で実装する</h3>
+
+<p>上述のJobs.insertのサンプルコードでも行ってますが、弊社では、以下の流れでポーリングを行っています。</p>
+
+<ol>
+<li><code class="prettyprint">Jobs.insert</code>でクエリ実行ジョブを投げる</li>
+<li>レスポンスからジョブIDを取得</li>
+<li>取得したジョブIDに紐づくジョブのステータスを<code class="prettyprint">Jobs.get</code>で取得</li>
+<li>ステータスが&quot;DONE&quot;になるまで3を繰り返す</li>
+<li>エラー時の処理</li>
+<li><code class="prettyprint">Jobs.getQueryResults</code>でジョブIDに紐づくクエリの結果を取得</li>
+</ol>
+
+<p>基本的な流れは公式リファレンスに記載されている<a href="https://cloud.google.com/bigquery/querying-data#asyncqueries">例</a>と同様です。<br>
+別テーブルにクエリの結果を保存する場合は6の手順は不要です。<br>
+ジョブのステータスは、&quot;PENDING&quot;→&quot;RUNNING&quot;→&quot;DONE&quot;と遷移していきます。<br>
+注意しなければならないのは、<strong>ジョブの成否に関わらず</strong>最終的に&quot;DONE&quot;になることです。<br>
+5でエラー時の処理を行っているのはそのためです。<br>
+エラーの場合は、ステータス取得時のレスポンスの<a href="https://cloud.google.com/bigquery/docs/reference/v2/jobs#status.errorResult">&quot;status.errorResult&quot;</a>というフィールドに値が入ってるのでその存在有無でエラーハンドリングを行います。</p>
+
+<h3>エラーハンドリングの例</h3>
+
+<pre><code class="prettyprint ruby"># ポーリングする
+while response.data.status.state != &#39;DONE&#39;
+  sleep 30
+  response = client.execute(parameters)
+end
+
+if error_result = response.data.status.try(:[], &#39;errorResult&#39;)
+  raise &quot;Failed. reason: #{error_result.to_json}&quot;
+end
+</code></pre>
+
+<h2>分割エクスポートの話</h2>
+
+<p>BigQueryのテーブルは、エクスポート可能です。<br>
+<a href="https://cloud.google.com/bigquery/exporting-data-from-bigquery">エクスポート方法やファイル形式等の詳しい説明</a>はリファレンスを参照してください。<br>
+なお、1つのファイルにエクスポートできるサイズは1GBまでです。<br>
+よって、1GB以上のテーブルをエクスポートする場合は、<a href="https://cloud.google.com/bigquery/exporting-data-from-bigquery#exportingmultiple">分割してエクスポート</a>する必要があります。<br>
+また、<a href="https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.extract.compression">gzip形式に圧縮した上でのエクスポート</a>もできます。<br>
+Google Cloud Storageに5GBほどのテーブルをエクスポートしてみたところ、約20ファイル程のgzipファイルが出来上がりました。<br>
+5GBだからなんとなく5ファイルできそうな気がしますが、BigQuery側が並列に複数ファイルに書き込むので1つのファイルのサイズはバラバラになりますし、サイズ指定もできません。</p>
+
+<h2>リトライの自前実装</h2>
+
+<p>BigQueryに対するクエリの実行はたまに失敗します。<br>
+だいたいはリトライすれば解決しますが、そのためにはリトライ機構を自前実装しなければなりません。<br>
+google-api-ruby-clientにはリトライの機能がありますが、<a href="https://github.com/google/google-api-ruby-client#automatic-retries--backoff">現時点では回数しか指定できません。</a><br>
+よって、「5分間隔でリトライしたい」等の細かい指定はgoogle-api-ruby-clientではできません。<br>
+弊社では、<a href="https://github.com/kamui/retriable">kamui/retriable</a>というgemを使ってリトライの自前実装を行っています。<br>
+また、このgemはgoogle-api-ruby-clientの内部でも使われているので、自前実装と言ってもモンキーパッチ的な実装で済むのでそれほど難しくはありません。</p>
+
+<h3>retriableを使う場合の注意点</h3>
+
+<p>retriableはgoogle-api-ruby-clientの内部でも使われているgemですが、retriableのメジャーバージョンを<a href="https://github.com/google/google-api-ruby-client/blob/master/google-api-client.gemspec#L34">1.x系に固定してます。</a><br>
+よって、retriableの使い方を調べる際は、<a href="https://github.com/kamui/retriable/tree/v1.4.0">1.x系のREADME</a>を読んでください。</p>
+
+<h3>リトライのサンプルコード</h3>
+
+<p>google-api-ruby-clientでは<code class="prettyprint">execute</code>というメソッドでリクエストを投げているので、以下のように実装することで、失敗時にリトライができるようにしました。</p>
+
+<pre><code class="prettyprint ruby">module RetryExecute
+  def execute(*args)
+    # 10分間隔で最大6回リトライする
+    Retriable.retriable tries: 6, interval: 10.minutes do
+      super
+    end
+  end
+end
+
+Google::APIClient.class_eval do
+  prepend RetryExecute
+end
+</code></pre>
+
+<h2>まとめ</h2>
+
+<ul>
+<li><a href="https://github.com/google/google-api-ruby-client">google/google-api-ruby-client</a>はalpha版にも関わらず、十分有用。</li>
+<li><a href="https://github.com/abronte/BigQuery">abronte/BigQuery</a>の利用は、今回は断念しましたが、PRによる改善次第では将来性があると思います。また、プロダクションでの初のBigQuery利用だったので、まずは公式で示してあるgemを使って安心したかったというのが正直な理由としてあります。</li>
+<li>弊社では1クエリ10分以上かかってしまうクエリを投げていますが、それでもちゃんと結果を返してくれるBigQueryは優秀だと思います。普通のDBでは中々実行に躊躇するクエリだと思います。</li>
+<li>ジョブの成否に関わらず、ステータスが&quot;DONE&quot;になるのは結構罠。</li>
+<li>分割エクスポートは、結局Ruby側でダウンロードして結合しなければいけないので面倒でした。</li>
+<li>リトライの自前実装はみんなどうやってるんだろう。</li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/bigquery_tips.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="RubyでBigQuery始めました" data-url="http://tech.feedforce.jp/bigquery_tips.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/bigquery_tips.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/bigquery_tips.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/monitoring-mackerel.html" rel="next">Mackerelでサーバ監視をはじめた話</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/heroku-recent-topics.html" rel="prev">数年ぶりに Heroku を使って感じたことなど</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

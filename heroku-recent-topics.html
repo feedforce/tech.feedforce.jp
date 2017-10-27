@@ -1,0 +1,285 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>数年ぶりに Heroku を使って感じたことなど | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは。腰越と申します。最近、数年ぶりに仕事で Heroku を使う様になったので、久しぶりに使って感じたこと、Heroku で最近できる様になってうれしかった事などを書いてみたいと思います。">
+      <link rel="canonical" href="http://tech.feedforce.jp/heroku-recent-topics.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="数年ぶりに Heroku を使って感じたことなど | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは。腰越と申します。最近、数年ぶりに仕事で Heroku を使う様になったので、久しぶりに使って感じたこと、Heroku で最近できる様になってうれしかった事などを書いてみたいと思います。">
+      <meta property="og:url" content="http://tech.feedforce.jp/heroku-recent-topics.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/heroku-recent-topics.html">数年ぶりに Heroku を使って感じたことなど</a></h1>
+      <ul>
+        <li class="entry-time">2015.05.20</li>
+        <li class="entry-cat"><a href="/category/operation/">運用事例</a></li>
+        <li class="entry-author"><a href="/author/ff_koshigoe">ff_koshigoe</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/ff_koshigoe"><img src="/images/authors/koshigoe.gif" /></a>
+    </div>
+    <div class="entry-body">
+      <p><img alt="Heroku logo" src="/images/2015/05/heroku-logotype-horizontal-purple.png" /></p>
+
+<p>こんにちは。腰越と申します。</p>
+
+<p>最近、数年ぶりに仕事で <a href="https://heroku.com/">Heroku</a> を使う様になったので、久しぶりに使って感じたこと、Heroku で最近できる様になってうれしかった事などを書いてみたいと思います。</p>
+
+<!--more-->
+
+<h2>GitHub 連携</h2>
+
+<p>Heroku のデプロイ機能には GitHub 連携機能があり、GitHub にあるリポジトリから Heroku デプロイする事が可能です。</p>
+
+<ul>
+<li>自動デプロイ(Automatic deploys)</li>
+<li>PRデプロイ(Review apps)
+
+<ul>
+<li>5/19 に Pull request apps から Review apps に名称が変わった様です</li>
+<li><a href="https://blog.heroku.com/archives/2015/5/19/heroku_review_apps_beta">Heroku | Heroku Review Apps Beta</a></li>
+</ul></li>
+<li>手動デプロイ(Manual deploy)</li>
+</ul>
+
+<p>管理画面からデプロイできて便利なのですが、Rails アプリでおきまりのデプロイ後処理まで実行出来るわけではないのが残念です。PRデプロイの初回のみ、app.json の postdeploy で指定したコマンドを実行出来るのでおしいところです。</p>
+
+<h3>Review apps</h3>
+
+<p>PRデプロイでは app.json というアプリケーションの定義ファイルのようなものを使います。このファイルに書かれている、デプロイ後処理を指定する postdeploy や、環境変数の設定、利用するアドオンの設定を使って Heroku アプリケーションが作られる仕組みになっています。</p>
+
+<ul>
+<li>postdeploy を書いておけば、アプリ作成時に <code class="prettyprint">rake db:setup</code> 等を実行することができる
+
+<ul>
+<li>postdeploy は初回のみの実行なので、PR デプロイ実行後のコミットでマイグレーションなどが追加されていると困る</li>
+</ul></li>
+<li>env に環境変数を書いておけば、アプリ作成時に設定される
+
+<ul>
+<li>親アプリからの継承や、作成時にランダム生成する事も可能</li>
+</ul></li>
+<li>addons に利用するアドオンを書いておけば、アプリ作成時に自動で登録される
+
+<ul>
+<li>addons にはコマンドラインオプション(--version=9.4)は書けず、PostgreSQL 9.4 がベータだった頃に困った</li>
+</ul></li>
+</ul>
+
+<p>ボタン一つで諸々のセットアップ含めて Heroku アプリの複製が作れるので、PRレビュー用の確認環境を作ったり、実験用の動作環境を作ったりといった作業が大変手軽で気軽に行えて便利です。</p>
+
+<h3>余談：Heroku ボタン</h3>
+
+<p>最近、Heroku ボタンがプライベートリポジトリに対応した様ですが、当然ながらPRデプロイと違って環境変数の引き継ぎなどは行わないため、今の所役立てる場面に遭遇していません。</p>
+
+<h2>free dyno</h2>
+
+<p>最近、dyno の新しい料金体系(public beta)が発表されました。</p>
+
+<ul>
+<li><a href="https://blog.heroku.com/archives/2015/5/7/heroku-free-dynos">Heroku | Heroku’s Free (as in beer) Dynos</a></li>
+</ul>
+
+<p>これまでの料金体系では、アプリケーションあたり 750時間分の無料 dyno 時間が貰えていたため、dyno 1 つ分までなら無料で利用する事ができました(web のみ、worker のみ、など)。</p>
+
+<ul>
+<li><a href="https://devcenter.heroku.com/articles/usage-and-billing#750-free-dyno-hours-per-app">750 free dyno-hours per app</a></li>
+</ul>
+
+<p>free dyno という新しい無料プランでは、web と worker (heroku run, Schedule 含む) の dyno を 1 つずつ無料で使える様になります。ただし、24時間のうち18時間までしか稼働できないという制限があります。</p>
+
+<p>制限はありつつも、「プロジェクト初期段階でお客様に見ていただくためのプレビュー環境を手早く用意したい。」という用途でジョブキューも使える様になった事はうれしい限りです。</p>
+
+<h2>余談：docker:release</h2>
+
+<p>最近発表された <code class="prettyprint">docker:release</code> は、気になりつつも触れていません。デプロイ後の後処理(<code class="prettyprint">rake db:migrate</code> など)をカスタマイズできる仕組みだとうれしいのですが。</p>
+
+<ul>
+<li><a href="https://blog.heroku.com/archives/2015/5/5/introducing_heroku_docker_release_build_deploy_heroku_apps_with_docker">Heroku | Introducing &#39;heroku docker:release&#39;: Build &amp; Deploy Heroku Apps with Docker</a></li>
+</ul>
+
+<h2>まとめ</h2>
+
+<ul>
+<li>Review apps は便利だと思います</li>
+<li>free dyno でジョブキューが使える様になってうれしいです</li>
+<li><code class="prettyprint">docker:release</code>は気になりますが、まだ触れていません</li>
+<li>何年経っても Tokyo リージョンはないですね</li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/heroku-recent-topics.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="数年ぶりに Heroku を使って感じたことなど" data-url="http://tech.feedforce.jp/heroku-recent-topics.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/heroku-recent-topics.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/heroku-recent-topics.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/bigquery_tips.html" rel="next">RubyでBigQuery始めました</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/rails-fluent-bugsnag.html" rel="prev">Rails のエラー通知を fluentd 経由で Bugsnag に送る</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>CircleCI + DockerでサーバCI始めました | feedforce Engineers' blog</title>
+      <meta name="description" content="はじめまして！今年１月からジョインしましたtjinjinです。feedforceではアニメインフラを担当しています。ちなみに今季オススメアニメはSHIROBAKOです。今回サーバCIにDockerを導入しましたので、実際の設定や工夫した点など投稿したいと思います。">
+      <link rel="canonical" href="http://tech.feedforce.jp/serverci-by-docker.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="CircleCI + DockerでサーバCI始めました | feedforce Engineers' blog">
+      <meta property="og:description" content="はじめまして！今年１月からジョインしましたtjinjinです。feedforceではアニメインフラを担当しています。ちなみに今季オススメアニメはSHIROBAKOです。今回サーバCIにDockerを導入しましたので、実際の設定や工夫した点など投稿したいと思います。">
+      <meta property="og:url" content="http://tech.feedforce.jp/serverci-by-docker.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/serverci-by-docker.html">CircleCI + DockerでサーバCI始めました</a></h1>
+      <ul>
+        <li class="entry-time">2015.03.13</li>
+        <li class="entry-cat"><a href="/category/infrastructure/">インフラ</a>, <a href="/category/test/">テスト</a></li>
+        <li class="entry-author"><a href="/author/tjinjin">tjinjin</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/tjinjin"><img src="/images/authors/tjinjin.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>はじめまして！今年１月からジョインしましたtjinjinです。feedforceでは<s>アニメ</s>インフラを担当しています。ちなみに今季オススメアニメはSHIROBAKOです。</p>
+
+<p>今回サーバCIにDockerを導入しましたので、実際の設定や工夫した点など投稿したいと思います。</p>
+
+<!--more-->
+
+<h2>feedforceのサーバCI</h2>
+
+<p>弊社ではこれまでCircleCIまたはJenkinsとAWSを組み合わせてサーバのCIを行って参りました。<br>
+参考: <a href="http://tech.feedforce.jp/jenkins-server-ci.html">JenkinsでサーバのCIを始めました</a></p>
+
+<p>しかし、CircleCIを利用するプロジェクトが増えるにつれ、CircleCIに実行待ちが発生するようになりました。CircleCIの実行ログを確認したところ、AWSのセットアップに時間がかかっていることがわかったので、環境のセットアップ時間を短縮できるもののはないかと探していました。そんな折、Dockerがいいのではという話を耳にしました。<a href="https://www.docker.com/">Docker</a> はDocker社が開発しているコンテナ型の仮想化ソフトウェアで、ゲスト型のVMより軽量であり、起動が速いなどの特徴があります。そこで、今回サーバCIにDockerが使えそうか検証しました。</p>
+
+<h2>Dockerの設定</h2>
+
+<h3>Dockerfileを準備する</h3>
+
+<p>DockerfileとはオリジナルのDocker imageを作成するための設定ファイルのようなものです。この設定に従いDocker imageが作成されます。主にやっていることとして3点あります。</p>
+
+<ul>
+<li>公式のDocker imageを元に既存で使っていたイメージと比較を行い、足りないパッケージを事前にインストール（ここは今後改善したい）</li>
+<li>Dockerfileの中でChefを事前にインストールさせる</li>
+<li>SSHログイン用するための設定</li>
+</ul>
+
+<p>実際の設定は下記のようになります。（一部修正しています。）</p>
+
+<pre><code class="prettyprint sh">FROM centos:6.6
+MAINTAINER FF
+RUN yum update -y
+RUN yum -y install openssh-server sudo acl attr audit authconfig bzip2 cloog-ppl cronie-anacron \
+(中略)
+yum clean all &amp;&amp; \
+
+## Create user
+    useradd docker &amp;&amp; \
+    passwd -f -u docker &amp;&amp; \
+
+## Set up SSH
+    mkdir -p /home/docker/.ssh; chown docker /home/docker/.ssh; chmod 700 /home/docker/.ssh &amp;&amp; \
+echo &quot;&lt;public_key&gt;&quot; &gt; /home/docker/.ssh/authorized_keys &amp;&amp; \
+
+    chown docker /home/docker/.ssh/authorized_keys &amp;&amp; \
+    chmod 600 /home/docker/.ssh/authorized_keys &amp;&amp; \
+
+## setup sudoers
+    echo &quot;docker ALL=(ALL) ALL&quot; &gt;&gt; /etc/sudoers.d/docker &amp;&amp; \
+
+## Set up SSHD config
+    sed -ri &#39;s/#PermitRootLogin yes/PermitRootLogin yes/g&#39; /etc/ssh/sshd_config &amp;&amp; \
+    sed -ri &#39;s/#UsePAM no/UsePAM no/g&#39; /etc/ssh/sshd_config &amp;&amp; \
+    sed -ri &#39;s/^UsePAM yes/#UsePAM yes/g&#39; /etc/ssh/sshd_config &amp;&amp; \
+
+## Pam認証が有効でもログインするための設定
+    sed -i -e &#39;s/^\(session.*pam_loginuid.so\)/#\1/g&#39; /etc/pam.d/sshd &amp;&amp; \
+
+## Chef-soloを事前にインストールする
+    curl -L https://www.chef.io/chef/install.sh | bash &amp;&amp; \
+
+## Init SSHD
+    /etc/init.d/sshd start &amp;&amp; \
+    /etc/init.d/sshd stop
+
+CMD /usr/sbin/sshd -D
+</code></pre>
+
+<p><code class="prettyprint">&amp;&amp; \</code>という形でRUNの数をなるべく減らしています。Dockerはinstruction(RUNやCMDなど)毎にイメージを差分コミットしているため、例えばyumパッケージ毎にinstructionを書いてしまうとその分だけimageが分割されます。imageが増えるほど余分な情報が増え、結果的にサイズが大きくなってしまいます。少し強引なやり方にはなりますが、ひとつのコマンドの続きとすることでimageをまとめ、サイズを抑えることが可能です。</p>
+
+<h3>CircleCIのコンテナからDockerコンテナに対してsshできるようにする</h3>
+
+<p>弊社では現在Chef-soloとserverspecを使って構成管理しているため、コンテナに対しSSHで接続する必要があります。そこで、Docker起動時にポートを指定しポートフォワーディングさせています。~/.ssh/configでそのポートに対しsshするように設定することで、接続が可能になります。</p>
+
+<pre><code class="prettyprint sh">Host test
+  HostName 127.0.0.1
+  User docker
+  Port 40122
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile ~/.ssh/&lt;secret_key_path&gt;
+  IdentitiesOnly yes
+  LogLevel FATAL
+</code></pre>
+
+<h2>CircleCIの設定</h2>
+
+<p>秘密鍵はCircleCI上に事前に設定しています。</p>
+
+<p>circle.ymlについては以下のように設定しています。</p>
+
+<pre><code class="prettyprint sh">machine:
+  timezone:
+    Asia/Tokyo
+  services:
+    - docker
+checkout:
+  post:
+    - git submodule sync
+    - git submodule update --init
+dependencies:
+  cache_directories:
+    - &quot;~/cache&quot;
+  pre:
+    - cp ./.docker/ssh-config.circleci ~/.ssh/config
+    - ./script/docker-build.sh
+    - docker run -d --privileged -p 40122:22 docker/centos-sshd; sleep 2
+test:
+  pre:
+    - bundle exec knife solo cook test:
+        timeout: 600
+  override:
+    - bundle exec rake spec:test:
+        timeout: 600
+</code></pre>
+
+<p>docker runの際には<code class="prettyprint">--privileged</code> オプションをつけています。hostnameの変更をするレシピがあり、<code class="prettyprint">--privileged</code>オプションを付けないと、hostnameの変更がうまくいかなかったためです。</p>
+
+<h3>Docker imageのキャッシュ方法</h3>
+
+<p>docker-build.shというスクリプトの中ではキャッシュの有無によって、処理を分岐しています。通常時はキャッシュされたファイルをロードし、Dockerfileに変更がある場合のみビルドをさせることで処理の最適化をしています。</p>
+
+<pre><code class="prettyprint sh">#!/bin/sh
+set -xe
+
+if [ -e ~/cache/centos-sshd.tar ] &amp;&amp; [ $(md5sum Dockerfile | cut -d&#39; &#39; -f1) = $(cat ~/cache/dockerfile.digest) ]
+then
+  docker load &lt; ~/cache/centos-sshd.tar
+else
+  mkdir -p ~/cache
+  docker build -t docker/centos-sshd .
+  md5sum Dockerfile | cut -d&#39; &#39; -f1 &gt; ~/cache/dockerfile.digest
+  docker save docker/centos-sshd &gt; ~/cache/centos-sshd.tar
+fi
+</code></pre>
+
+<h2>実施した結果</h2>
+
+<p>結果としては下記のようになりました。</p>
+
+<p><img alt="logo-title" src="/images/2015/03/result.png" /><br>
+※ <a href="https://circleci.com/docs/configuration">CircleCI</a> のカテゴリに基づいてグラフにしています</p>
+
+<p>当初の想定ではdependencies（環境のセットアップをする部分）が短縮できる想定でした。cacheが効いていない赤いグラフでも処理時間が半減していますが、更にcacheを効かせることで約５分の１まで時間を短縮できました。また、想定外の結果でしたが、test工程（chef &amp; serverspec）の時間が圧倒的に短くなりました。AWSはm3.mediumを使っていますが、CircleCIの方が圧倒的に速いみたいですね。全体として１０分以上の短縮ができ、やる意味はあったかと思います。</p>
+
+<h2>最後に</h2>
+
+<p>今回は、DockerHub上においてあるimageを使いましたが、セキュリティ上の問題も考えると管理しておきたいですね。一度共通的なDocker imageを作ってしまえば、ビルドする手間が省けるのでさらなる高速化ができそうです。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/serverci-by-docker.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="CircleCI + DockerでサーバCI始めました" data-url="http://tech.feedforce.jp/serverci-by-docker.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/serverci-by-docker.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/serverci-by-docker.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/elasticache.html" rel="next">ElastiCacheをCloudWatch+fluentd+Zabbixで監視する</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/github-pages-deploy-with-circleci.html" rel="prev">このブログはGitHub Pages＋CircleCIで運用しています</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

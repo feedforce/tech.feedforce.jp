@@ -1,0 +1,389 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>OpenVZ - OSレベルの仮想化について | feedforce Engineers' blog</title>
+      <meta name="description" content="OpenVZは、Linuxで動作するコンテナベースの仮想化ソフトです。本家URL  http://openvz.org/wiki  http://wiki.openvz.org/">
+      <link rel="canonical" href="http://tech.feedforce.jp/open-vz.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="OpenVZ - OSレベルの仮想化について | feedforce Engineers' blog">
+      <meta property="og:description" content="OpenVZは、Linuxで動作するコンテナベースの仮想化ソフトです。本家URL  http://openvz.org/wiki  http://wiki.openvz.org/">
+      <meta property="og:url" content="http://tech.feedforce.jp/open-vz.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/open-vz.html">OpenVZ - OSレベルの仮想化について</a></h1>
+      <ul>
+        <li class="entry-time">2008.04.25</li>
+        <li class="entry-cat"><a href="/category/infrastructure/">インフラ</a></li>
+        <li class="entry-author"><a href="/author/komukai">komukai</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/komukai"><img src="/images/authors/no-image.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>OpenVZは、Linuxで動作するコンテナベースの仮想化ソフトです。</p>
+
+<p>本家URL  </p>
+
+<p><a href="http://openvz.org/">http://openvz.org/</a>wiki  </p>
+
+<p><a href="http://wiki.openvz.org/">http://wiki.openvz.org/</a></p>
+
+<!--more-->
+
+<h2>OpenVZって何?</h2>
+
+<ul>
+<li>読み方は「おーぷんぶいじー」</li>
+<li>Linuxで動作するコンテナベースの仮想化ソフト</li>
+<li>Virtuozzoという商用ソフトのオープンソース版</li>
+<li>SWsoftというアメリカの会社が提供
+
+<ul>
+<li>最近Parallelsを買収したらしい</li>
+<li>本家Linuxカーネルに組み込まれることが彼らの野望</li>
+<li>すでに <a href="http://lwn.net/Articles/259217/">一部の機能</a>は組み込まれていたりもする</li>
+</ul></li>
+</ul>
+
+<h2>仮想化って?</h2>
+
+<p>ひとつのマシンのリソースを複数の実行環境に分割すること。 一口に仮想化といっても、以下の三種類がある。  </p>
+
+<ol>
+<li>仮想マシン (Virtual machines)
+
+<ul>
+<li>VMware, QEMU, Parallels, Microsoft Virtual Server</li>
+</ul></li>
+<li>準仮想化 (Paravirtualization)
+
+<ul>
+<li>Xen, UML</li>
+</ul></li>
+<li>OSレベルの仮想化 (Virtualization on the OS level)
+
+<ul>
+<li>OpenVZ, Virtuozzo, Linux-VServer, Solaris Zones, FreeBSD Jails</li>
+</ul></li>
+</ol>
+
+<p>(参考: <a href="http://wiki.openvz.org/Introduction_to_virtualization">http://wiki.openvz.org/Introduction_to_virtualization</a>)  </p>
+
+<h2>OSレベルの仮想化って？</h2>
+
+<p>仮想マシンや準仮想化と比べて、  </p>
+
+<ul>
+<li>長所
+
+<ul>
+<li>軽い!</li>
+<li>集約度が高い!</li>
+</ul></li>
+<li>短所
+
+<ul>
+<li>仮想環境にLinuxディストリビューションしか動作しない!</li>
+<li>できないことが多い!</li>
+</ul></li>
+</ul>
+
+<p>イメージとしては、chrootにリソース制限機能を付加したという感じでいいと思います。 コンテナ(仮想環境)内でファイルシステムのフォーマットをしたりだとか、カーネルを動作させるといったことはできません。  </p>
+
+<h2>OpenVZの特徴</h2>
+
+<ul>
+<li>仮想化によるCPUのコストは1-2%と低い</li>
+<li>各コンテナ毎にファイルシステム, プロセス, IPCが独立している</li>
+<li>デバイスファイルにはアクセス制限ある</li>
+<li>各コンテナ毎にネットワークが独立している</li>
+<li>Fair CPU scheduler</li>
+<li>I/O scheduler</li>
+<li>live migration機能</li>
+</ul>
+
+<p>個人的な使用感としては、同じOSレベルの仮想化である <a href="http://linux-vserver.org/Wiki_Team">Linux Vserver</a>よりも高機能だと思います。  </p>
+
+<h2>インストール</h2>
+
+<p>Wikiが充実しているので、そちらを見るのがてっとり早いです。 ここではURLを紹介して起きます。</p>
+
+<p><strong>インストール</strong>  </p>
+
+<p><a href="http://wiki.openvz.org/Quick_installation">http://wiki.openvz.org/Quick_installation</a></p>
+
+<p><strong>リソース制限</strong>  </p>
+
+<p><a href="http://wiki.openvz.org/Category:Resource_management">http://wiki.openvz.org/Category:Resource_management</a></p>
+
+<p><a href="http://wiki.openvz.org/Category:UBC">http://wiki.openvz.org/Category:UBC</a>  </p>
+
+<h2>オペレーション</h2>
+
+<p>ドキュメントは以下のサイトにあります。  </p>
+
+<p><a href="http://wiki.openvz.org/Basic_operations_in_OpenVZ_environment">http://wiki.openvz.org/Basic_operations_in_OpenVZ_environment</a></p>
+
+<p>インストール後、VE(ゲスト)を起動してみます。  </p>
+
+<pre><code class="prettyprint">$ vzctl start 101
+ Starting VE ...
+ VE is mounted
+ Adding IP address(es): 192.168.1.151
+ Setting CPU units: 60000
+ Configure meminfo: 2147483647
+ VE start in progress...
+</code></pre>
+
+<p>起動しているVEの一覧を見てみます。  </p>
+
+<pre><code class="prettyprint">$ vzlist
+ VEID NPROC STATUS IP_ADDR HOSTNAME
+ 101 14 running 192.168.1.151 -
+</code></pre>
+
+<p>無事に起動されています。 オプションに-aをつければ起動していないVEも一覧できます。  </p>
+
+<pre><code class="prettyprint">$ vzlist -a
+ VEID NPROC STATUS IP_ADDR HOSTNAME
+ 101 14 running 192.168.1.151 -
+ 102 - stopped 192.168.1.152 -
+ 103 - stopped 192.168.1.153 -
+</code></pre>
+
+<p>このホストでは、ID 101のVEの他に、102、103もインストールしています。 ホストから、VE 101のなかに入ってみます。  </p>
+
+<pre><code class="prettyprint">$ vzctl enter 101
+</code></pre>
+
+<p>VEの内部では普通のLinuxのように操作できます。  </p>
+
+<pre><code class="prettyprint">$ ps -ef
+ root 1 0 0 Apr10 ? 00:00:00 init [3]
+ root 16357 1 0 Apr10 ? 00:00:00 syslogd -m 0
+ root 16383 1 0 Apr10 ? 00:00:00 /usr/sbin/sshd
+ root 17416 1 0 Apr10 ? 00:00:00 xinetd -stayalive -pidfile /var/run/xinetd.pid
+ root 17462 1 0 Apr10 ? 00:00:00 crond
+ root 18120 1 0 Apr10 ? 00:00:00 /usr/sbin/httpd
+ apache 18122 18120 0 Apr10 ? 00:00:00 /usr/sbin/httpd
+ apache 18123 18120 0 Apr10 ? 00:00:00 /usr/sbin/httpd
+ apache 18124 18120 0 Apr10 ? 00:00:00 /usr/sbin/httpd
+ apache 18125 18120 0 Apr10 ? 00:00:00 /usr/sbin/httpd
+ apache 18126 18120 0 Apr10 ? 00:00:00 /usr/sbin/httpd
+ apache 18127 18120 0 Apr10 ? 00:00:00 /usr/sbin/httpd
+ apache 18128 18120 0 Apr10 ? 00:00:00 /usr/sbin/httpd
+ apache 18129 18120 0 Apr10 ? 00:00:00 /usr/sbin/httpd
+ root 22165 1 0 05:51 ? 00:00:00 vzctl: pts/0
+ root 22166 22165 1 05:51 pts/0 00:00:00 -bash
+ root 22180 22166 0 05:51 pts/0 00:00:00 ps -ef
+</code></pre>
+
+<p>IPアドレスが振られているインターフェースは、eth0でなくvenet0:0となっており、OpenVZ特有のものです。  </p>
+
+<pre><code class="prettyprint">$ ifconfig
+ lo Link encap:Local Loopback
+ inet addr:127.0.0.1 Mask:255.0.0.0
+ inet6 addr: ::1/128 Scope:Host
+ UP LOOPBACK RUNNING MTU:16436 Metric:1
+ RX packets:92 errors:0 dropped:0 overruns:0 frame:0
+ TX packets:92 errors:0 dropped:0 overruns:0 carrier:0
+ collisions:0 txqueuelen:0
+ RX bytes:6164 (6.0 KiB) TX bytes:6164 (6.0 KiB) venet0 Link encap:UNSPEC HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+inet addr:127.0.0.1 P-t-P:127.0.0.1 Bcast:0.0.0.0 Mask:255.255.255.255
+ UP BROADCAST POINTOPOINT RUNNING NOARP MTU:1500 Metric:1
+ RX packets:57785 errors:0 dropped:0 overruns:0 frame:0
+ TX packets:59062 errors:0 dropped:0 overruns:0 carrier:0
+ collisions:0 txqueuelen:0
+ RX bytes:47179824 (44.9 MiB) TX bytes:71213725 (67.9 MiB)
+venet0:0 Link encap:UNSPEC HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+ inet addr:192.168.1.151 P-t-P:192.168.1.151 Bcast:192.168.1.151 Mask:255.255.255.255
+ UP BROADCAST POINTOPOINT RUNNING NOARP MTU:1500 Metric:1
+</code></pre>
+
+<p>exitして、VEを停止します。  </p>
+
+<pre><code class="prettyprint">$ exit
+ exited from VE 101
+ $ vzctl stop 101
+ Stopping VE ...
+</code></pre>
+
+<h2>最後に</h2>
+
+<p>仮想化と言えば一般的にはVMwareかXenなのかもしれませんが、OSレベルの仮想化であるOpenVZの特徴はなんと言っても1台のサーバへの集約度を高められることです。 特定用途で、効果的な使い道があるかもしれません。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/open-vz.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="OpenVZ - OSレベルの仮想化について" data-url="http://tech.feedforce.jp/open-vz.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/open-vz.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/open-vz.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/mercurial.html" rel="next">Mercurial はじめの一歩</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/ua-classify.html" rel="prev">フィードとユーザーエージェントに関する基礎知識</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

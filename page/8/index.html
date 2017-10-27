@@ -1,0 +1,312 @@
+<!doctype html>
+<html>
+  <!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>feedforce Engineers' blog</title>
+      <meta name="description" content="株式会社フィードフォース技術チームのサイト。社内勉強会資料や開発の様子および成果の公開など。">
+      <link rel="canonical" href="http://tech.feedforce.jp">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="feedforce Engineers' blog">
+      <meta property="og:description" content="株式会社フィードフォース技術チームのサイト。社内勉強会資料や開発の様子および成果の公開など。">
+      <meta property="og:url" content="http://tech.feedforce.jp">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+  <body>
+    <header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+    <div id="content">
+          <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/bigquery_tips.html">RubyでBigQuery始めました</a></h1>
+        <ul>
+          <li class="entry-time">2015.06.01</li>
+          <li class="entry-cat"><a href="/category/operation/">運用事例</a>, <a href="/category/bigquery/">BigQuery</a></li>
+          <li class="entry-author"><a href="/author/yukiyan">yukiyan</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/yukiyan"><img src="/images/authors/yukiyan.jpg" /></a>
+      </div>
+      <div class="entry-body">
+        <p><img alt="BigQuery logo" src="/images/2015/06/bigquery_logo.jpg" /></p>
+
+<p>初めまして！今年１月からジョインしたyukiyanです。</p>
+
+<p>feedforceではアプリケーションエンジニアを担当しています。<br>
+最近、弊社のあるプロジェクトにて <a href="https://cloud.google.com/bigquery/what-is-bigquery">Google BigQuery</a> を導入しました。<br>
+その際、学びがいくつかあったので知見として投下します。<br>
+※ Railsのプロジェクトなので、一部のサンプルコードにRailsの表現も含まれています。</p>
+
+
+        <p class="entry-readmore"><a href="/bigquery_tips.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/heroku-recent-topics.html">数年ぶりに Heroku を使って感じたことなど</a></h1>
+        <ul>
+          <li class="entry-time">2015.05.20</li>
+          <li class="entry-cat"><a href="/category/operation/">運用事例</a></li>
+          <li class="entry-author"><a href="/author/ff_koshigoe">ff_koshigoe</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/ff_koshigoe"><img src="/images/authors/koshigoe.gif" /></a>
+      </div>
+      <div class="entry-body">
+        <p><img alt="Heroku logo" src="/images/2015/05/heroku-logotype-horizontal-purple.png" /></p>
+
+<p>こんにちは。腰越と申します。</p>
+
+<p>最近、数年ぶりに仕事で <a href="https://heroku.com/">Heroku</a> を使う様になったので、久しぶりに使って感じたこと、Heroku で最近できる様になってうれしかった事などを書いてみたいと思います。</p>
+
+
+        <p class="entry-readmore"><a href="/heroku-recent-topics.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/rails-fluent-bugsnag.html">Rails のエラー通知を fluentd 経由で Bugsnag に送る</a></h1>
+        <ul>
+          <li class="entry-time">2015.05.19</li>
+          <li class="entry-cat"><a href="/category/resume/">勉強会資料</a>, <a href="/category/operation/">運用事例</a></li>
+          <li class="entry-author"><a href="/author/ff_koshigoe">ff_koshigoe</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/ff_koshigoe"><img src="/images/authors/koshigoe.gif" /></a>
+      </div>
+      <div class="entry-body">
+        <p><img alt="bugsnag logo" src="/images/2015/05/logo-bugsnag.png" /></p>
+
+<p>こんにちは。2月に入社して以来、とうとう勉強会の担当が回ってきた腰越です。</p>
+
+<p>最近、現在進行中のプロジェクト(Rails)にて <a href="https://bugsnag.com/">Bugsnag</a> というサービスを導入いたしましたので、導入までの経緯について発表させていただきました。</p>
+
+<ul>
+<li>Bugsnag とは？</li>
+<li>なぜ Bugsnag を使うのか</li>
+<li>Bugsnag をどう使うのか</li>
+</ul>
+
+
+        <p class="entry-readmore"><a href="/rails-fluent-bugsnag.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/elasticache.html">ElastiCacheをCloudWatch+fluentd+Zabbixで監視する</a></h1>
+        <ul>
+          <li class="entry-time">2015.04.08</li>
+          <li class="entry-cat"><a href="/category/aws/">AWS</a>, <a href="/category/operation/">運用事例</a></li>
+          <li class="entry-author"><a href="/author/masutaka">masutaka</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/masutaka"><img src="/images/authors/masutaka.jpg" /></a>
+      </div>
+      <div class="entry-body">
+        <p><img alt="fluentd logo" src="/images/2015/04/fluentd-logo.png" /></p>
+
+<p>ご無沙汰しております。増田でございます。</p>
+
+<p>先日2日には<a href="http://www.nintendo.co.jp/3ds/cafj/">ゼノブレイド</a>が発売され、今月23日には<a href="http://www.jp.square-enix.com/second/">ブレイブリーセカンド</a>が発売されます。<br>
+そんな忙しい中、みなさんいかがお過ごしですか。</p>
+
+
+        <p class="entry-readmore"><a href="/elasticache.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/serverci-by-docker.html">CircleCI + DockerでサーバCI始めました</a></h1>
+        <ul>
+          <li class="entry-time">2015.03.13</li>
+          <li class="entry-cat"><a href="/category/infrastructure/">インフラ</a>, <a href="/category/test/">テスト</a></li>
+          <li class="entry-author"><a href="/author/tjinjin">tjinjin</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/tjinjin"><img src="/images/authors/tjinjin.png" /></a>
+      </div>
+      <div class="entry-body">
+        <p>はじめまして！今年１月からジョインしましたtjinjinです。feedforceでは<s>アニメ</s>インフラを担当しています。ちなみに今季オススメアニメはSHIROBAKOです。</p>
+
+<p>今回サーバCIにDockerを導入しましたので、実際の設定や工夫した点など投稿したいと思います。</p>
+
+
+        <p class="entry-readmore"><a href="/serverci-by-docker.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/github-pages-deploy-with-circleci.html">このブログはGitHub Pages＋CircleCIで運用しています</a></h1>
+        <ul>
+          <li class="entry-time">2015.02.27</li>
+          <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+          <li class="entry-author"><a href="/author/tmd45">tmd45</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/tmd45"><img src="/images/authors/tmd45.png" /></a>
+      </div>
+      <div class="entry-body">
+        <p><a href="http://tech.feedforce.jp/wordpress-to-middleman.html">前回の記事</a> からだいぶ間が開いてしまいましたが、再びこのブログの移行のお話です。</p>
+
+<p>WordPress から Middleman への移行に伴って、記事の構成管理やホスティング、デプロイについても検討して、現在は以下のようなものを使って運用しています。</p>
+
+<ul>
+<li><a href="https://pages.github.com/">GitHub Pages</a></li>
+<li><a href="https://circleci.com/">CircleCI</a></li>
+<li><a href="https://www.heroku.com">Heroku</a>（staging 環境として利用）</li>
+</ul>
+
+
+        <p class="entry-readmore"><a href="/github-pages-deploy-with-circleci.html">Read more</a></p>
+      </div>
+    </article>
+
+    <div id="entry-link">
+      <ul>
+            <li id="older-link"><a href="/page/9/">< Older posts</a></li>
+            <li id="newer-link"><a href="/page/7/">Newer posts ></a></li>
+      </ul>
+    </div>
+
+    </div>
+
+    <p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+  </body>
+</html>

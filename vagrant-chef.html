@@ -1,0 +1,347 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>Vagrantを使って手軽にChefを始める | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは。インフラ担当の杉内です。最近サーバの構成管理にchef-soloを利用していることから、社内でもcookbookの検証環境用途としてVagrantが利用されはじめています。 今回は社内勉強会で発表した内容を元に、最小限の手順でcookbookの開発ができるようになるまでを紹介しようと思います。Chefがどんなものか試してみたい、自分でcookbookを作ってみたいが手軽に実行できるサーバを用意したいというような人向けになりますのでここでは細かい動作原理などは解説していません。環境はMac OSX Mountain Lionです。">
+      <link rel="canonical" href="http://tech.feedforce.jp/vagrant-chef.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="Vagrantを使って手軽にChefを始める | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは。インフラ担当の杉内です。最近サーバの構成管理にchef-soloを利用していることから、社内でもcookbookの検証環境用途としてVagrantが利用されはじめています。 今回は社内勉強会で発表した内容を元に、最小限の手順でcookbookの開発ができるようになるまでを紹介しようと思います。Chefがどんなものか試してみたい、自分でcookbookを作ってみたいが手軽に実行できるサーバを用意したいというような人向けになりますのでここでは細かい動作原理などは解説していません。環境はMac OSX Mountain Lionです。">
+      <meta property="og:url" content="http://tech.feedforce.jp/vagrant-chef.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/vagrant-chef.html">Vagrantを使って手軽にChefを始める</a></h1>
+      <ul>
+        <li class="entry-time">2014.03.27</li>
+        <li class="entry-cat"><a href="/category/infrastructure/">インフラ</a>, <a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/sugiuchi">sugiuchi</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/sugiuchi"><img src="/images/authors/sugiuchi.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは。インフラ担当の杉内です。</p>
+
+<p>最近サーバの構成管理にchef-soloを利用していることから、社内でもcookbookの検証環境用途としてVagrantが利用されはじめています。 今回は社内勉強会で発表した内容を元に、最小限の手順でcookbookの開発ができるようになるまでを紹介しようと思います。</p>
+
+<p>Chefがどんなものか試してみたい、自分でcookbookを作ってみたいが手軽に実行できるサーバを用意したいというような人向けになりますのでここでは細かい動作原理などは解説していません。</p>
+
+<p>環境はMac OSX Mountain Lionです。</p>
+
+<!--more-->
+
+<h2>下準備</h2>
+
+<p>事前に下記のインストールを済ませておいてください。</p>
+
+<ul>
+<li><a href="https://www.virtualbox.org/">VirtualBox</a>のインストール</li>
+<li><a href="http://www.vagrantup.com/">Vagrant</a>のインストール</li>
+</ul>
+
+<h2>vagrant init</h2>
+
+<p>作業用のディレクトリを作成し、vagrant initをします。</p>
+
+<pre><code class="prettyprint">$ mkdir cookbook-test
+$ cd cookbook-test
+$ vagrant init opscode-centos-6.5 http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-6.5_chef-provisionerless.box
+</code></pre>
+
+<p>vagrant 1.5.0以上であれば <a title="vagrantcloud" href="https://vagrantcloud.com/chef/">Vagrant Cloud</a>が利用できるので下記のように実行します。</p>
+
+<pre><code class="prettyprint">$ vagrant init chef/centos-6.5
+</code></pre>
+
+<p>初回はboxのダウンロードに時間がかかります。 boxにはchef社が公開しているcentos6.5を使用します。</p>
+
+<p><a title="bento" href="http://opscode.github.io/bento/">Bento by opscode</a></p>
+
+<p>最後にVMを起動させます。</p>
+
+<pre><code class="prettyprint">$ vagrant up
+$ vagrant status
+</code></pre>
+
+<p>ここまででChefを試すサーバの用意ができました。</p>
+
+<h2>cookbookを作成する</h2>
+
+<p>実際にrecipeを作っていきましょう。 サンプルレシピとしてapacheをインストールするレシピを書きます。</p>
+
+<pre><code class="prettyprint">$ mkdir -p cookbooks/apache/recipe/
+$ vi cookbooks/apache/recipe/default.rb
+
+package &#39;httpd&#39; do
+  action :install
+end
+</code></pre>
+
+<h2>プロビジョニングする</h2>
+
+<p>さっそく作ったrecipeをサーバに適用してみましょう。 Vagrantfileにchef-soloを使う設定を記述します。</p>
+
+<pre><code class="prettyprint">$ vi Vagrantfile
+
+VAGRANTFILE_API_VERSION = &quot;2&quot;
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+   config.vm.provision :chef_solo do |chef| # プロビジョニングにchef-soloを使用
+     chef.cookbooks_path = &quot;./cookbooks&quot; # cookbooksの場所を指定します
+     chef.add_recipe &quot;apache&quot; # apacheというrecipeを適用
+   end
+end
+</code></pre>
+
+<p>では実際にrecipeを適用してみます。簡単ですね。</p>
+
+<pre><code class="prettyprint">$ vagrant provision
+</code></pre>
+
+<p>おそらくchef-solo または chef-client が見つからないというエラーが出たと思います。 さきほど起動させたVMにchefが入っていないために出るエラーですのでchefをインストールする必要があります。 これは下記のプラグインで簡単に解決できます。</p>
+
+<h2>vagrant-omnibusプラグインのインストール</h2>
+
+<p>このプラグインはプロビジョニング時にchef-clientがインストールされているかを検出し、指定したバージョンのchef-clientをインストールしてくれます。</p>
+
+<pre><code class="prettyprint">$ vagrant plugin install vagrant-omnibus
+</code></pre>
+
+<p>インストールができたらVagrantfileに下記を追記します。</p>
+
+<pre><code class="prettyprint">$ vi Vagrantfile
+
+VAGRANTFILE_API_VERSION = &quot;2&quot;
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+   config.omnibus.chef_version = :latest #omnibusのプラグインを使用する
+   config.vm.provision :chef_solo do |chef|
+   chef.cookbooks_path = &quot;./cookbooks&quot;
+     chef.add_recipe &quot;apache&quot;
+   end
+end
+</code></pre>
+
+<p>:latestのところは任意のバージョンを指定できます。:latestとした場合は最新バージョンが入ります。</p>
+
+<h2>再度プロビジョニングする</h2>
+
+<p>追記をしたらもう一度同じコマンドを実行しましょう。</p>
+
+<pre><code class="prettyprint">$ vagrant provision
+</code></pre>
+
+<p>すると vagrant-omnibus プラグインによってchefのインストールが始まります。 その後はchefによって apache レシピが実行され、VMにapacheがインストールされます。</p>
+
+<p>さっそくVMにログインして確認してみましょう。</p>
+
+<pre><code class="prettyprint">$ vagrant ssh
+$ rpm -q httpd
+httpd-2.2.15-29.el6.centos.x86_64
+</code></pre>
+
+<p>ちゃんとapacheがインストールされています！ 基本的にはこれを繰り返し、レシピを作成していきます。</p>
+
+<h2>困ったときは</h2>
+
+<p>Vagrantfileでchefのloglevelをdebugにしておくと出力が細かくなるので原因を特定するのに役に立つでしょう。</p>
+
+<p>config.vm.provision ... の下あたりに下記を追記します。</p>
+
+<pre><code class="prettyprint">chef.log_level = &quot;debug&quot;
+</code></pre>
+
+<h2>この後は...</h2>
+
+<p>これでVMを立ち上げそのVMに対してレシピを実行する流れが掴めたかと思います。 とても簡単でしたがこのやり方では下記のような疑問が残るでしょう。</p>
+
+<ul>
+<li>chefの動作原理がよくわからない</li>
+<li>ローカルのVMでは無く遠隔地にあるサーバにレシピを適用したい</li>
+</ul>
+
+<p>いい意味でも悪い意味でもvagrantがその辺りを吸収してくれているのであらかじめ動作を知っていないとわかりずらいところがあると思います。 本番サーバに適用する時などはローカル環境からchef-soloを実行してくれるknife-soloといったツールも必要になってきます。</p>
+
+<p>次の一歩となるとknife-soloを使いリモートサーバにレシピを適用するのが良いでしょう。</p>
+
+<p>また、少し前になりますが弊社blogでも概要の部分に触れた記事がありますので参考にしてください。  </p>
+
+<p><a title="はじめましてChef" href="http://tech.feedforce.jp/chef-introduction.html">はじめましてChef</a></p>
+
+<h2>今回使ったVagrantfileとrecipe</h2>
+
+<p><a href="https://github.com/critical-alert/cookbook-test">https://github.com/critical-alert/cookbook-test</a></p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/vagrant-chef.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="Vagrantを使って手軽にChefを始める" data-url="http://tech.feedforce.jp/vagrant-chef.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/vagrant-chef.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/vagrant-chef.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/2014-employ-a-month.html" rel="next">入社一ヶ月経って感じたこと</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/start-go-and-appengine.html" rel="prev">「今日から始める Go言語 と appengine」というテーマで社内勉強会をしました</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

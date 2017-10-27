@@ -1,0 +1,401 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>ElastiCacheをCloudWatch+fluentd+Zabbixで監視する | feedforce Engineers' blog</title>
+      <meta name="description" content="ご無沙汰しております。増田でございます。先日2日にはゼノブレイドが発売され、今月23日にはブレイブリーセカンドが発売されます。そんな忙しい中、みなさんいかがお過ごしですか。">
+      <link rel="canonical" href="http://tech.feedforce.jp/elasticache.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="ElastiCacheをCloudWatch+fluentd+Zabbixで監視する | feedforce Engineers' blog">
+      <meta property="og:description" content="ご無沙汰しております。増田でございます。先日2日にはゼノブレイドが発売され、今月23日にはブレイブリーセカンドが発売されます。そんな忙しい中、みなさんいかがお過ごしですか。">
+      <meta property="og:url" content="http://tech.feedforce.jp/elasticache.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/elasticache.html">ElastiCacheをCloudWatch+fluentd+Zabbixで監視する</a></h1>
+      <ul>
+        <li class="entry-time">2015.04.08</li>
+        <li class="entry-cat"><a href="/category/aws/">AWS</a>, <a href="/category/operation/">運用事例</a></li>
+        <li class="entry-author"><a href="/author/masutaka">masutaka</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/masutaka"><img src="/images/authors/masutaka.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p><img alt="fluentd logo" src="/images/2015/04/fluentd-logo.png" /></p>
+
+<p>ご無沙汰しております。増田でございます。</p>
+
+<p>先日2日には<a href="http://www.nintendo.co.jp/3ds/cafj/">ゼノブレイド</a>が発売され、今月23日には<a href="http://www.jp.square-enix.com/second/">ブレイブリーセカンド</a>が発売されます。<br>
+そんな忙しい中、みなさんいかがお過ごしですか。</p>
+
+<!--more-->
+
+<h2>KyotoTycoonからElastiCacheへの移行</h2>
+
+<p>今まで弊社の<a href="https://socialplus.jp/">ソーシャルPLUS</a>では、Railsのセッションストアとキャッシュサーバに<a href="http://fallabs.com/kyototycoon/">KyotoTycoon</a>を使っていました。</p>
+
+<p>しかし、KyotoTycoonはRails4でmemcachedを使うために必要な<a href="https://rubygems.org/gems/dalli">dalli</a>から使えません。バイナリプロトコルをフルサポートしていないためだと思います。</p>
+
+<p>そのため今週月曜日に<a href="http://aws.amazon.com/jp/elasticache/">AWS ElastiCache</a>に移行しました。</p>
+
+<p>KyotoTycoonは他にも以下のようなツラミがありました。</p>
+
+<ul>
+<li>開発が止まっている</li>
+<li>KyotoTycoonが稼働するEC2インスタンスを自前で用意し、運用する必要がある
+
+<ul>
+<li>レプリカと合わせて2台構成</li>
+</ul></li>
+<li>サーバのCIも行っている都合上、rpmを作る必要がある
+
+<ul>
+<li>関連記事: <a href="/vagrant-rpm.html">Vagrantで簡単に作れる！！RubyやKyotoTycoonのrpmたち</a></li>
+</ul></li>
+</ul>
+
+<h2>ElastiCacheの構成</h2>
+
+<ul>
+<li>EngineはRedis-2.8</li>
+<li>Node Typeはcache.m3.medium</li>
+<li>primaryとread replicaの2台構成でAvailability Zoneは別</li>
+<li>それぞれのNodeは1台ずつ</li>
+</ul>
+
+<p>EngineをMemcachedではなくRedisにしたのは、read replicaを使いたかったからです。</p>
+
+<h2>データの永続化</h2>
+
+<p>デフォルトパラメータではファイルに書き出さないため再起動したらデータは消えます。</p>
+
+<p>AOF（Append-Only File）を有効にして（appendonly=yes）トランザクションログを記録すれば回避できますが、ソーシャルPLUSではそこまで繊細なデータは扱っていません。</p>
+
+<p>そのため、再起動が必要な時はread replicaをPromoteすることにしました。</p>
+
+<h2>ElastiCacheの監視</h2>
+
+<p>本番環境で動かすためには監視はかかせません。</p>
+
+<p>ソーシャルPLUSでは当初からZabbixを使っており、KyotoTycoonの時は監視用のスクリプトを用意してZabbixに登録していました。</p>
+
+<p>ElastiCacheではCloudWatchが使えるので、<a href="http://www.fluentd.org/">fluentd</a>経由でZabbixに送信することでシンプルかつ既存の監視と馴染ませることが出来ました。</p>
+
+<p><img alt="watch elasticache" src="/images/2015/04/watch-elasticache.png" /></p>
+
+<p>ちなみにEC2インスタンス上で<a href="https://rubygems.org/gems/fluent-plugin-zabbix">fluent-plugin-zabbix</a>を使うためには、一工夫必要でした。付録の「fluent-plugin-zabbix使用時のworkaround」に記載しました。</p>
+
+<h2>fluentd自体の監視</h2>
+
+<p>fluentdが落ちると困るので監視を追加しました。</p>
+
+<p>fluentd付属の<a href="http://docs.fluentd.org/articles/monitoring">Monitoring Agent</a>を有効にし、Zabbixがポーリングしています。</p>
+
+<p><img alt="watch fluentd" src="/images/2015/04/watch-fluentd.png" /></p>
+
+<h2>まとめ</h2>
+
+<ul>
+<li>ElastiCacheを監視するために、CloudWatchからメトリクスを取得し、fluentd経由でZabbixに転送した</li>
+<li>fluent-plugin-zabbixをEC2上で使う時は、workaroundが必要</li>
+<li>fluentd付属のMonitoring Agentを有効にし、Zabbixでfluentdを監視した</li>
+</ul>
+
+<h2>付録</h2>
+
+<h3>fluentdの設定ファイル</h3>
+
+<p>今回の設定内容です。</p>
+
+<pre><code class="prettyprint">#
+# ElastiCacheの監視設定
+#
+
+&lt;source&gt;
+  type        cloudwatch
+  aws_key_id  &lt;AWS_ACCESS_KEY_ID&gt;
+  aws_sec_key &lt;AWS_SECRET_ACCESS_KEY&gt;
+  cw_endpoint monitoring.ap-northeast-1.amazonaws.com
+
+  tag              cloudwatch.elasticache
+  namespace        AWS/ElastiCache
+  statistics       Maximum
+  metric_name      CPUUtilization,SwapUsage,FreeableMemory,NetworkBytesIn,NetworkBytesOut,BytesUsedForCache,CacheHits,CacheMisses,CurrConnections,CurrItems,Evictions,GetTypeCmds,KeyBasedCmds,NewConnections,Reclaimed,ReplicationLag,SetTypeCmds,StringBasedCmds
+  dimensions_name  CacheClusterId
+  dimensions_value production-001
+  period           60
+  interval         60
+&lt;/source&gt;
+
+&lt;match cloudwatch.elasticache&gt;
+  type           zabbix
+  zabbix_server  10.0.40.10
+  host           ElastiCache
+  name_keys      CPUUtilization,SwapUsage,FreeableMemory,NetworkBytesIn,NetworkBytesOut,BytesUsedForCache,CacheHits,CacheMisses,CurrConnections,CurrItems,Evictions,GetTypeCmds,KeyBasedCmds,NewConnections,Reclaimed,ReplicationLag,SetTypeCmds,StringBasedCmds
+  add_key_prefix aws.elasticache
+&lt;/match&gt;
+
+#
+# fluentd自体の監視設定
+#
+
+&lt;source&gt;
+  type monitor_agent
+  bind 0.0.0.0
+  port 24220
+&lt;/source&gt;
+</code></pre>
+
+<h3>fluent-plugin-zabbix使用時のworkaround</h3>
+
+<p>今回のfluentdはEC2上で動いていますが、fluent-plugin-zabbixが依存する<a href="https://rubygems.org/gems/zabbix">zabbix gem</a>がうまく動作しませんでした。</p>
+
+<p><a href="https://github.com/mhat/zabbix-rb/pull/4">PullRequestを送りました</a>が、すでにメンテされていないようでマージされるか分かりません。</p>
+
+<p>そのため<a href="https://github.com/masutaka/zabbix-rb/releases/tag/v0.4.1">修正したzabbix gem</a>を使うChefのレシピにしました。</p>
+
+<p>これがtd-agentとpluginをインストールするためのレシピです。CentOS6で動作確認しています。CentOS7でも動くと思います。</p>
+
+<pre><code class="prettyprint">include_recipe &#39;td-agent&#39;
+
+conf_file = node[&#39;sp-td-agent&#39;][&#39;conf_file&#39;]
+
+return unless conf_file
+
+directory &#39;/etc/td-agent/conf.d&#39;
+
+execute &#39;Add @include directive&#39; do
+  command &#39;printf &quot;\n@include conf.d/*.conf\n&quot; &gt;&gt; /etc/td-agent/td-agent.conf&#39;
+  not_if &#39;fgrep &quot;@include conf.d/*.conf&quot; /etc/td-agent/td-agent.conf&#39;
+  notifies :reload, &#39;service[td-agent]&#39;
+end
+
+cookbook_file &quot;/etc/td-agent/conf.d/#{conf_file}&quot; do
+  notifies :reload, &#39;service[td-agent]&#39;
+end
+
+include_recipe &#39;sp-td-agent::workaround_zabbix_gem&#39;
+
+%w(fluent-plugin-cloudwatch fluent-plugin-zabbix).each do |gem|
+  gem_package gem do
+    gem_binary &#39;/opt/td-agent/embedded/bin/fluent-gem&#39;
+    notifies :reload, &#39;service[td-agent]&#39;
+  end
+end
+</code></pre>
+
+<p><code class="prettyprint">include_recipe &#39;td-agent&#39;</code> ではこちらのレシピが実行されます。</p>
+
+<pre><code class="prettyprint">execute &#39;Install td-agent&#39; do
+  # See http://docs.fluentd.org/articles/install-by-rpm
+  command &#39;curl -L http://toolbelt.treasuredata.com/sh/install-redhat-td-agent2.sh | sh&#39;
+  not_if &#39;rpm -q td-agent&#39;
+end
+
+service &#39;td-agent&#39; do
+  action [:enable, :start]
+  supports restart: true, reload: true, status: true
+end
+</code></pre>
+
+<p><code class="prettyprint">include_recipe &#39;sp-td-agent::workaround_zabbix_gem&#39;</code> がzabbix gemのworkaroundです。</p>
+
+<pre><code class="prettyprint">version = &#39;0.4.1&#39;
+gem_file = &quot;zabbix-#{version}.gem&quot;
+gem_fullpath = &quot;/var/tmp/#{gem_file}&quot;
+
+remote_file gem_fullpath do
+  source &quot;https://github.com/masutaka/zabbix-rb/releases/download/v#{version}/#{gem_file}&quot;
+  checksum &#39;9d6f8c5bc1f8019dca351c056110b5be16a82bd3f5c84347b0d7a2075e93a5ed&#39;
+end
+
+gem_package &#39;zabbix&#39; do
+  gem_binary &#39;/opt/td-agent/embedded/bin/fluent-gem&#39;
+  source gem_fullpath
+  notifies :restart, &#39;service[td-agent]&#39;
+end
+</code></pre>
+
+<h2>参考情報</h2>
+
+<ul>
+<li><a href="https://github.com/yunomu/fluent-plugin-cloudwatch">https://github.com/yunomu/fluent-plugin-cloudwatch</a></li>
+<li><a href="https://github.com/fujiwara/fluent-plugin-zabbix">https://github.com/fujiwara/fluent-plugin-zabbix</a></li>
+<li><a href="http://docs.aws.amazon.com/ja_jp/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html">Redis のパラメータ - Amazon ElastiCache</a></li>
+<li><a href="https://docs.aws.amazon.com/ja_jp/AmazonCloudWatch/latest/DeveloperGuide/elasticache-metricscollected.html">Amazon ElastiCache のディメンションおよびメトリックス - Amazon CloudWatch</a></li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/elasticache.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="ElastiCacheをCloudWatch+fluentd+Zabbixで監視する" data-url="http://tech.feedforce.jp/elasticache.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/elasticache.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/elasticache.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/rails-fluent-bugsnag.html" rel="next">Rails のエラー通知を fluentd 経由で Bugsnag に送る</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/serverci-by-docker.html" rel="prev">CircleCI + DockerでサーバCI始めました</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

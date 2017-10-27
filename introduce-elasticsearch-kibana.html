@@ -1,0 +1,307 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>フィードフォースにおける Elasticsearch+Kibana の導入事例 | feedforce Engineers' blog</title>
+      <meta name="description" content="最近遅ればせながら光の戦士になった増田です。サボり癖がなかなか直りません。さて、この度 Elasticsearch と Kibana の社内事例を作ることが出来ましたので、興奮のあまりお伝えします。">
+      <link rel="canonical" href="http://tech.feedforce.jp/introduce-elasticsearch-kibana.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="フィードフォースにおける Elasticsearch+Kibana の導入事例 | feedforce Engineers' blog">
+      <meta property="og:description" content="最近遅ればせながら光の戦士になった増田です。サボり癖がなかなか直りません。さて、この度 Elasticsearch と Kibana の社内事例を作ることが出来ましたので、興奮のあまりお伝えします。">
+      <meta property="og:url" content="http://tech.feedforce.jp/introduce-elasticsearch-kibana.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/introduce-elasticsearch-kibana.html">フィードフォースにおける Elasticsearch+Kibana の導入事例</a></h1>
+      <ul>
+        <li class="entry-time">2016.06.20</li>
+        <li class="entry-cat"><a href="/category/aws/">AWS</a>, <a href="/category/operation/">運用事例</a></li>
+        <li class="entry-author"><a href="/author/masutaka">masutaka</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/masutaka"><img src="/images/authors/masutaka.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>最近遅ればせながら光の戦士になった増田です。サボり癖がなかなか直りません。</p>
+
+<p>さて、この度 <a href="https://www.elastic.co/jp/products/elasticsearch">Elasticsearch</a> と <a href="https://www.elastic.co/jp/products/kibana">Kibana</a> の社内事例を作ることが出来ましたので、興奮のあまりお伝えします。</p>
+
+<!--more-->
+
+<h2>ずっと導入したかった</h2>
+
+<p>2014 年 3 月に中途で入社して以降、導入したかったものの 1 つが Elasticsearch でした。<a href="https://masutaka.net/chalow/2014-12-14-1.html">個人ではすでに導入しており</a>、効果を実感できていたためです。</p>
+
+<p>その前段である fluentd の社内初事例が 2015 年 4 月のこちらの記事。気がつけば社内の他のプロジェクトにも導入が進んでいました。</p>
+
+<p><a href="http://tech.feedforce.jp/elasticache.html">ElastiCacheをCloudWatch+fluentd+Zabbixで監視する | feedforce Engineers&#39; blog</a></p>
+
+<p>ところで私は先月から <a href="https://dfplus.feedforce.jp/">DF PLUS</a> というサービスにフルコミットし、主にエラー管理やログ基盤などを整備しています。</p>
+
+<p>エラー管理については、<a href="http://tech.feedforce.jp/rails-fluent-bugsnag.html">弊社ではもうお馴染みとなった Bugsnag</a> で整備しました。</p>
+
+<p>実はログ基盤は特に求められていませんでした。でも個人的には、絶対ログ基盤があるべきでサービスの可視化も絶対に必要という、根拠のない信念を持っていました。今回導入して効果を実感できているので、本当にうれしく思っています。</p>
+
+<h2>CloudWatch Logs に送っていた</h2>
+
+<p>これまで DF PLUS では、Rails の Production ログを fluentd 経由で CloudWatch Logs に送っていました。</p>
+
+<p>CloudWatch Logs はお手軽なのですが、このような問題もあります。</p>
+
+<ul>
+<li>ログ自体は設定で保持する期限を指定できるが、グラフ表示期間は 2 週間</li>
+<li>柔軟にグラフを作ることが出来ない</li>
+<li>AWS の UI がアレで見ようという気にならない</li>
+</ul>
+
+<p>特にグラフ表示期間の 2 週間が致命的で、中長期的なメトリクスを取得することが出来ません。</p>
+
+<h2>AWS Elasticsearch を導入した</h2>
+
+<p>そういう状況もあり、虎視眈々と導入を狙っていました。<a href="http://aws.typepad.com/aws_japan/2015/10/amazon-elasticsearch-service.html">去年の 10 月に AWS Elasticsearch がリリース</a>されたときはうれしかったですね。</p>
+
+<p>導入は<a href="https://aws.amazon.com/jp/elasticsearch-service/">公式ガイド</a>に加え、クラスメソッドさんのこちらの記事を参考にしました。</p>
+
+<p><a href="http://dev.classmethod.jp/cloud/aws/cm-advent-calendar-2015-getting-started-again-amazon-es/">AWS再入門 Amazon Elasticsearch Service編 ｜ Developers.IO</a></p>
+
+<p>機能は相当制限されています。例えば本来は elasticsearch.yml にいくつも設定を書けるのに、AWS では管理画面上から下記 2 つの設定を変更出来るだけです。elasticsearch.yml を直接編集することが出来ません。</p>
+
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/1.5/url-access-control.html">rest.action.multi.allow_explicit_index</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/1.5/index-modules-fielddata.html">indices.fielddata.cache.size</a></li>
+</ul>
+
+<p>他にもバージョンは 1.5.2 固定だったり（2016 年 6 月現在の最新は 2.3.3）、VPC 内に作ることが出来ない等の制限があります。</p>
+
+<p>今回はこれらが導入の障壁にならなかったため、AWS の Elasticsearch service を採用しました。</p>
+
+<p><a href="https://www.elastic.co/cloud">本家の Elastic さんもホスティングサービスを出してます</a>ので、検討してみるのも良いかもしれません。</p>
+
+<h2>導入してよかったこと</h2>
+
+<ul>
+<li>サービスの現在を可視化出来る</li>
+<li>サービスの現在のログを、サーバにログインすることなく見られる</li>
+<li>複数サーバのログを横串で検索できる</li>
+<li>データを可視化出来る</li>
+</ul>
+
+<p>そこまで大量のログではないとは言え、個人サーバよりもいろいろなデータを扱えるのは面白いですね。まだまだこれからですが、エンジニア以外の方々も巻き込んでいけたらなと思っています（チームのエンジニアには相当受けが良かったw）。</p>
+
+<p><img alt="Kibana" src="/images/2016/06/kibana.png" /></p>
+
+<h2>まとめ</h2>
+
+<ul>
+<li>ログ基盤は絶対に必要</li>
+<li>データを可視化すると楽しい</li>
+<li>CloudWatch Logs は甘え</li>
+</ul>
+
+<h2>付録</h2>
+
+<h3>アクセスポリシーの Tips</h3>
+
+<p>今回は Production サーバから <a href="https://github.com/atomita/fluent-plugin-aws-elasticsearch-service">fluent-plugin-aws-elasticsearch-service</a> 経由で AWS Elasticsearch にログを送っています。</p>
+
+<p><a href="https://github.com/atomita/fluent-plugin-aws-elasticsearch-service/blob/v0.1.4/lib/fluent/plugin/out_aws-elasticsearch-service.rb#L38">この時、AWS の Credentials 情報が必要です。</a>Production サーバの IP アドレスをアクセスポリシーに加えても、意味がありませんのでご注意下さい。EC2 インスタンスの場合は、Elasticsearch のパーミッションを持った IAM Role を付与すると良いでしょう。</p>
+
+<p>今回は社内から Kibana でアクセスするための、IP アドレス制限ポリシーのみ設定しました。</p>
+
+<pre><code class="prettyprint">{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Sid&quot;: &quot;&quot;,
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Principal&quot;: {
+        &quot;AWS&quot;: &quot;*&quot;
+      },
+      &quot;Action&quot;: &quot;es:*&quot;,
+      &quot;Resource&quot;: &quot;arn:aws:es:ap-northeast-1:012345678901:domain/domainname/*&quot;,
+      &quot;Condition&quot;: {
+        &quot;IpAddress&quot;: {
+          &quot;aws:SourceIp&quot;: [
+            &quot;IPアドレス1&quot;,
+            &quot;IPアドレス2&quot;
+          ]
+        }
+      }
+    }
+  ]
+}
+</code></pre>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/introduce-elasticsearch-kibana.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="フィードフォースにおける Elasticsearch+Kibana の導入事例" data-url="http://tech.feedforce.jp/introduce-elasticsearch-kibana.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/introduce-elasticsearch-kibana.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/introduce-elasticsearch-kibana.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/memory-of-2016-rookie-engineer-training.html" rel="next">フィードフォースの2016年度エンジニア新人研修についてまとめてみた</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/2016-rookie-training.html" rel="prev">2016年度の新卒エンジニア受け入れを終えて</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>MySQL ロックの話 | feedforce Engineers' blog</title>
+      <meta name="description" content="ロックの基本ロックってなんだデータの整合性を保つために読み書きを一時的に制限する仕組み  ">
+      <link rel="canonical" href="http://tech.feedforce.jp/mysql.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="MySQL ロックの話 | feedforce Engineers' blog">
+      <meta property="og:description" content="ロックの基本ロックってなんだデータの整合性を保つために読み書きを一時的に制限する仕組み  ">
+      <meta property="og:url" content="http://tech.feedforce.jp/mysql.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/mysql.html">MySQL ロックの話</a></h1>
+      <ul>
+        <li class="entry-time">2006.10.06</li>
+        <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/akahige">akahige</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/akahige"><img src="/images/authors/no-image.png" /></a>
+    </div>
+    <div class="entry-body">
+      <h2>ロックの基本</h2>
+
+<h3>ロックってなんだ</h3>
+
+<p>データの整合性を保つために読み書きを一時的に制限する仕組み  </p>
+
+<!--more-->
+
+<h3>READロックとWRITEロック</h3>
+
+<h4>READロック</h4>
+
+<ul>
+<li>共有ロック</li>
+<li>他のスレッドによるデータの読み込みは可能</li>
+<li>他のスレッドによるデータ変更は不可</li>
+</ul>
+
+<h4>WRITEロック</h4>
+
+<ul>
+<li>排他ロック</li>
+<li>他のスレッドによる読み込みも変更も不可</li>
+</ul>
+
+<h4>ロックキューと優先順位</h4>
+
+<ul>
+<li>ロック要求を出したときに対象がロック済みの場合はロックキューに要求を入れる</li>
+<li>WRITEロックキューとREADロックキューがあり、WRITEロックキューが優先的に処理される</li>
+<li>よってWRITEロックが続くとSELECTできない状態になる</li>
+<li>この優先順位はいろんな単位で変更可能</li>
+</ul>
+
+<p>基本的に更新をなるべく早く反映させるためにWRITEロックが優先される  </p>
+
+<h3>ロックレベル</h3>
+
+<h4>テーブルロック</h4>
+
+<ul>
+<li>ISAM/MyISAM/HEAP</li>
+<li>テーブル単位のロック</li>
+<li>デッドロックフリー</li>
+<li>大部分が読み込みの場合に適する</li>
+</ul>
+
+<h4>ページロック</h4>
+
+<ul>
+<li>DBD</li>
+<li>ページ（データ格納ブロックの最小単位）単位のロック</li>
+</ul>
+
+<h4>行ロック</h4>
+
+<ul>
+<li>InnoDB</li>
+<li>行（レコード）単位のロック</li>
+<li>多くのスレッドが異なったレコードにアクセスする際にロックの競合が少ない</li>
+<li>ロールバックの変更が少ない</li>
+<li>単一レコードを長時間ロックしても他のスレッドへの影響が最小限</li>
+<li>他のロックに比べて多くのメモリを消費する</li>
+<li>対象レコードが多い場合、多数のロックがかかるために遅くなる</li>
+<li>テーブルロック等に比べるとアプリケーション側に最適化の余地が少ない</li>
+</ul>
+
+<h2>ロックの活用</h2>
+
+<h3>明示的なロック</h3>
+
+<ul>
+<li>LOCK TABLES</li>
+<li><p>UNLOCK TABLES</p></li>
+<li><p>明示的にロックしない場合より速い</p></li>
+<li><p>あるスレッドにおける複数のSQLで一貫した処理</p></li>
+<li><p>UNLOCKされないでスレッドが終了した場合はLOCKは解除される</p></li>
+<li><p>トランザクションの途中でLOCK TABLESするとそこでCOMMITが入る</p></li>
+</ul>
+
+<p><a href="http://dev.mysql.com/doc/refman/4.1/ja/lock-tables.html">MySQL 4.1 リファレンスマニュアル :: 6.7.5 LOCK TABLES および UNLOCK TABLES 構文</a>  </p>
+
+<h3>Priorityの指定</h3>
+
+<h4>SELECT, INSERT, UPDATE, DELETE, REPLACE文で</h4>
+
+<ul>
+<li>SELECT HIGH PRIORITY</li>
+<li>INSERT LOW PRIORITY</li>
+<li>UPDATE LOW PRIORITY</li>
+<li>DELETE LOW PRIORITY</li>
+<li>REPLACE LOW PRIORITY</li>
+</ul>
+
+<h4>SET文で</h4>
+
+<ul>
+<li>SET LOW_PRIORITY_UPDATES = 0 | 1</li>
+</ul>
+
+<h4>起動オプションで</h4>
+
+<ul>
+<li>--low-priority-updates</li>
+</ul>
+
+<h3>ロックレベルの選択</h3>
+
+<ul>
+<li>読み取りメインならテーブルロック</li>
+<li>時間のかかるクエリがなければテーブルロック</li>
+<li>更新頻発なら行ロック</li>
+<li>時間のかかるクエリがあるなら行ロック</li>
+<li>MyISAMはSELECTとINSERTを同時に実行できるので追加と参照しかないならテーブルロック</li>
+</ul>
+
+<h3>ロックに関する問題</h3>
+
+<ul>
+<li>デッドロック
+<a href="http://dev.mysql.com/doc/refman/4.1/ja/innodb-deadlocks.html">MySQL 4.1 リファレンスマニュアル :: 7.5.9.8 デッドロックの対処法</a></li>
+</ul>
+
+<h2>参考</h2>
+
+<ul>
+<li><a href="http://dev.mysql.com/doc/refman/4.1/ja/locking-issues.html">MySQL 4.1 リファレンスマニュアル :: 5.3 ロック関連の問題</a></li>
+<li><a href="http://dev.mysql.com/doc/refman/4.1/ja/locking-methods.html">MySQL 4.1 リファレンスマニュアル :: E.4 ロック方法</a></li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/mysql.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="MySQL ロックの話" data-url="http://tech.feedforce.jp/mysql.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/mysql.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/mysql.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/find1.html" rel="next">find(1)</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/trac_1.html" rel="prev">駆け足でTrac</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

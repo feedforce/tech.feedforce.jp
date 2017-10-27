@@ -1,0 +1,372 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>stretcher + consul + capistrano を使ったデプロイを導入しようと思います | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは。フィードフォース ボドゲ部の kano-e です。こないだ『Last Night on Earth』というアメリカB級ゾンビ映画ゲーム(オリジナルサウンドトラック付き)で遊んで楽しかったのでまた遊びたい！さて、最近 stretcher + consul を使ったアプリケーションのデプロイを tjinjin に布教1され、実際のプロダクト導入に向けてデモ用の環境で動かしています。これまでの (capistrano を使った) デプロイとの違いstretcher や consul が何をしているか良い点と現状の課題について、社内勉強会で話した内容をまとめます。">
+      <link rel="canonical" href="http://tech.feedforce.jp/stretcher-consul-capistrano.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="stretcher + consul + capistrano を使ったデプロイを導入しようと思います | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは。フィードフォース ボドゲ部の kano-e です。こないだ『Last Night on Earth』というアメリカB級ゾンビ映画ゲーム(オリジナルサウンドトラック付き)で遊んで楽しかったのでまた遊びたい！さて、最近 stretcher + consul を使ったアプリケーションのデプロイを tjinjin に布教1され、実際のプロダクト導入に向けてデモ用の環境で動かしています。これまでの (capistrano を使った) デプロイとの違いstretcher や consul が何をしているか良い点と現状の課題について、社内勉強会で話した内容をまとめます。">
+      <meta property="og:url" content="http://tech.feedforce.jp/stretcher-consul-capistrano.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/stretcher-consul-capistrano.html">stretcher + consul + capistrano を使ったデプロイを導入しようと思います</a></h1>
+      <ul>
+        <li class="entry-time">2016.02.09</li>
+        <li class="entry-cat"><a href="/category/operation/">運用事例</a>, <a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/e-takano">e-takano</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/e-takano"><img src="/images/authors/kano-e.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは。<a href="https://twitter.com/ff_boardgame">フィードフォース ボドゲ部</a>の kano-e です。<br>
+こないだ<a href="http://twilog.org/ff_boardgame/date-160203">『Last Night on Earth』というアメリカB級ゾンビ映画ゲーム(オリジナルサウンドトラック付き)で遊んで楽しかった</a>のでまた遊びたい！</p>
+
+<p>さて、最近 stretcher + consul を使ったアプリケーションのデプロイを <a href="/author/tjinjin">tjinjin</a> に布教<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>され、実際のプロダクト導入に向けてデモ用の環境で動かしています。</p>
+
+<ul>
+<li>これまでの (capistrano を使った) デプロイとの違い</li>
+<li>stretcher や consul が何をしているか</li>
+<li>良い点と現状の課題</li>
+</ul>
+
+<p>について、社内勉強会で話した内容をまとめます。</p>
+
+<!--more-->
+
+<h2>これまでの capistrano でのデプロイ</h2>
+
+<p>これまでの capistrano を使ったプロダクトのデプロイは、以下のようなフローでした</p>
+
+<p><img alt=":よくある capistrano のデプロイ" src="/images/2016/02/stretcher_consul_capistrano_012.jpg" /></p>
+
+<p><code class="prettyprint">cap production deploy</code> などと実行するだけですので、普段はタスクの中身をそこまで意識することはありませんが、ざっくりとタスクの流れを追うと</p>
+
+<ul>
+<li>アプリケーションサーバ (デプロイ対象サーバ) に SSH で接続</li>
+<li>各アプリケーションサーバからリポジトリに接続してコードを持ってくる</li>
+<li>アプリケーションが動くために必要な処理 (<code class="prettyprint">bundle install</code> など) を各アプリケーションサーバで実行</li>
+</ul>
+
+<p>といったことを実行しています。</p>
+
+<h2>stretcher + consul + capistrano でのデプロイ</h2>
+
+<p>capistrano に加えて stretcher + consul を導入し、デプロイのフローは以下のようになりました。</p>
+
+<p><img alt=":stretcher + consul + capistrano でのデプロイ" src="/images/2016/02/stretcher_consul_capistrano_035.jpg" /></p>
+
+<ul>
+<li>ビルドサーバに SSH で接続</li>
+<li>ビルドサーバからリポジトリに接続してコードを持ってくる</li>
+<li>アプリケーションが動くために必要な処理 (<code class="prettyprint">bundle install</code> など) もビルドサーバで実行</li>
+<li>アプリケーションのコードを tarball にして、manifest.yml と合わせて s3 にアップ</li>
+<li>デプロイ イベントを発行</li>
+<li>デプロイ イベントを受け取った各アプリサーバが s3 から manifest.yml と tarball をダウンロード、配備</li>
+</ul>
+
+<p>なんだか急に登場人物も増えたし capistrano だけの時よりも複雑……？</p>
+
+<p>いったい誰が何をして、何が嬉しいのか、もう少し詳しく調べてみます。</p>
+
+<h2>もっと詳しく！</h2>
+
+<h3>stretcher</h3>
+
+<p>さっきのフローの中で stretcher が担当している箇所は</p>
+
+<p><img alt=":stretcher の担当箇所" src="/images/2016/02/stretcher_consul_capistrano_060.jpg" /></p>
+
+<p>s3 から manifest.yml と tarball をダウンロードして配備するところです。</p>
+
+<p>stretcher は manifest.yml の置き場所を渡されると、それをダウンロードして中身を確認します。<br>
+manifest.yml には</p>
+
+<ul>
+<li>tarball の在処</li>
+<li>tarball の checksum</li>
+<li>tarball をどこに展開するか</li>
+<li>作業前後で実行したい処理 (シェルスクリプト)</li>
+</ul>
+
+<p>が書かれています。</p>
+
+<p>manifest.yml の中身を確認した stretcher は、指定された tarball をダウンロードして、指定された場所に展開し、指定された処理を実行します。</p>
+
+<h3>consul</h3>
+
+<p>consul の担当箇所は</p>
+
+<p><img alt=":stretcher の担当箇所" src="/images/2016/02/stretcher_consul_capistrano_080.jpg" /></p>
+
+<p>各サーバ間でのイベントのやり取り部分です。</p>
+
+<p>先ほどの例だと consul は、アプリケーションサーバとビルドサーバにいて、クラスタというものを組んでサーバを管理しています。<br>
+イベントが発生するとクラスタ内のサーバに対してイベントが伝播します。</p>
+
+<p><img alt=":stretcher の担当箇所" src="/images/2016/02/stretcher_consul_capistrano_088.jpg" /></p>
+
+<p>この例だと サーバ1, サーバ2, サーバ3 の3台でクラスタを組んでいます。<br>
+サーバ1には <code class="prettyprint">event_a</code> が発生した時の処理が、サーバ2には <code class="prettyprint">event_b</code> の処理が、サーバ3には <code class="prettyprint">event_a</code> と <code class="prettyprint">event_c</code> の処理がそれぞれ登録されています。</p>
+
+<p>クラスタ内では発生したイベントを溜めておく場所があります。イベントが発生すると、まずそこに登録されます。<br>
+クラスタ内の各サーバで新しいイベントの発生を監視し、新しいイベントが発生するとそれを受け取ります。</p>
+
+<p><code class="prettyprint">event_a</code> というイベントが発生した時には、サーバ1とサーバ2が、それぞれ登録された処理を実行します。<br>
+サーバ2も <code class="prettyprint">event_a</code> を受け取りますが、サーバ2の知らないイベントなので何もしません。</p>
+
+<p>デプロイの時には、各アプリケーションサーバにデプロイイベントが発生したら stretcher を起動するように設定しておき、デプロイしたい時には <code class="prettyprint">consul event</code> でデプロイイベントを発生させる、といった使い方をしています。</p>
+
+<h3>capistrano</h3>
+
+<p>capistrano の担当はそれ以外全部です。</p>
+
+<p><img alt=":stretcher の担当箇所" src="/images/2016/02/stretcher_consul_capistrano_100.jpg" /></p>
+
+<ul>
+<li>リポジトリから checkout</li>
+<li><code class="prettyprint">bundle install</code>, <code class="prettyprint">db:migrate</code>, <code class="prettyprint">assets:precompile</code></li>
+<li>tarball を作成して s3 にアップ</li>
+<li>manifest を環境毎に作成して s3 にアップ</li>
+<li>consul event を実行</li>
+</ul>
+
+<p>ほとんど <a href="https://github.com/pepabo/capistrano-stretcher">capistrano-stretcher</a>, <a href="https://github.com/pepabo/capistrano-stretcher-rails">capistrano-stretcher-rails</a> を利用して実行しています。</p>
+
+<p>今までの &quot;お馴染み&quot; の capistrano とはだいぶ違うのですが、一番大きいのは<br>
+<strong>app ロールを定義しない = アプリケーションサーバの情報を capistrano が知らない</strong><br>
+ということではないでしょうか。</p>
+
+<p>capistrano の deploy タスクは、基本的に app ロールに対して実行されるので <code class="prettyprint">cap deploy</code> しても何も起こらなくなります。<br>
+(少し不便だったので <code class="prettyprint">cap deploy</code> で <code class="prettyprint">stretcher:deploy</code> が実行されるようにしました)</p>
+
+<p>アプリケーションサーバに接続しないので、当然ながら unicorn や sidekiq などのプロセスの再起動も capistrano では実行しません。<br>
+それらの処理は stretcher がデプロイ後に実行することとして manifest.yml に定義します。</p>
+
+<p>シンボリックリンクの張り替えなども manifest に書く必要があります。<br>
+current のシンボリックリンクや log, tmp/pids については capistrano-stretcher にデフォルトで設定されていますが、それ以外については自分で設定しておく必要があります。<br>
+デプロイ時に実行したいスクリプトは環境毎に設定でき、capistrano-stretcher が環境毎に manifest.yml を作成してくれます。<br>
+こちらのサーバでは unicorn を reload, こちらのサーバでは sidekiq というということも、そこで指定することになります。</p>
+
+<h2>良いところ</h2>
+
+<p>capistrano や開発マシンで、アプリケーションサーバのことを気にしなくて良くなったことが大きいです。<br>
+今後、アプリケーションサーバの増減や接続先IPアドレスなどの情報を考えなくても良くなるため、デプロイの設定がずいぶん楽になりました。</p>
+
+<p>また <code class="prettyprint">bundle install</code> や <code class="prettyprint">assets:precompile</code> などの処理は、ビルドサーバで1回だけしか実行されないのも嬉しいです。<br>
+本番サーバで一斉に <code class="prettyprint">bundle install</code> が始まってしまってしまって負荷が……みたいな心配からは解放されます。</p>
+
+<h2>今後の課題</h2>
+
+<p>デプロイの失敗検知をどうするか、というのは現状検討中のところです。<br>
+今はまだ台数が少ないので把握できていますが、台数が増えたら中の1台の失敗について把握できるかどうか、という懸念はあります。</p>
+
+<p>また unicorn reload が実は失敗していて、表向き問題は出ていないけど実は古い状態のプロセスが残っていて……という状態に気付けるかどうか、というのも考えているところです。</p>
+
+<p>ほかの課題としては、まだ stretcher や consul 周りに詳しい人が社内に少ないため、布教してくれた tjinjin に頼りっぱなしになっていることでしょうか。<br>
+今回の社内勉強会でも、返答できない質問の時には代わりに回答してもらったりなど、よりかかりまくっています。<br>
+これについては、今後追いつけるように頑張る所存でおります。</p>
+
+<h2>これから</h2>
+
+<p>まだ導入したばかりで見えてるもの・見えてないものどちらの課題もたくさんある状態ですが、</p>
+
+<ul>
+<li>ビルドとデプロイをもっと分離したい</li>
+<li>DB のスキーマ変更のタイミングもデプロイから分離したい</li>
+<li>ほかのプロダクトでも導入できるかもしれない</li>
+</ul>
+
+<p>などなど、期待もいっぱい浮かんできています。</p>
+
+<p>より安全で、開発者にとっても負担の少ないデプロイになると良いなあ。<br>
+ということを考えながら、今は stretcher + consul + capistrano を使ったデプロイを導入しています。</p>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p><a href="http://cross-black777.hatenablog.com/entry/2016/01/23/190211">http://cross-black777.hatenablog.com/entry/2016/01/23/190211</a><br>
+ほかにも Qiita:Team への記事アップや vm 環境を使ったデモなどすごく勉強になりました！&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/stretcher-consul-capistrano.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="stretcher + consul + capistrano を使ったデプロイを導入しようと思います" data-url="http://tech.feedforce.jp/stretcher-consul-capistrano.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/stretcher-consul-capistrano.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/stretcher-consul-capistrano.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/ywt-retrospective.html" rel="next">中長期のふりかえりとしてYWT(やった,わかった,つぎにやる)を試してみました</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/create-ruby-rpm.html" rel="prev">フィードフォースではRubyのrpmをGitHubに自動リリースしています</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

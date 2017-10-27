@@ -1,0 +1,519 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>API Gateway + LambdaでSlackボットを作ってみた | feedforce Engineers' blog</title>
+      <meta name="description" content="寒くなってきましたが暑がりなのでまだ上着はあまり出番がありません、内定者のお豆腐です。そろそろクリスマスですね！ターミナルでnpm xmasを実行すれば黒い画面の中でちょっとしたクリスマス気分を味わえるかもしれません。さて、今回はエンジニア内定者ブログ第2弾として「API Gateway + Lambdaを使ってサーバーレスなSlackボットを実装してみる」というお題で記事を書いてみました。">
+      <link rel="canonical" href="http://tech.feedforce.jp/aws-lambda.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="API Gateway + LambdaでSlackボットを作ってみた | feedforce Engineers' blog">
+      <meta property="og:description" content="寒くなってきましたが暑がりなのでまだ上着はあまり出番がありません、内定者のお豆腐です。そろそろクリスマスですね！ターミナルでnpm xmasを実行すれば黒い画面の中でちょっとしたクリスマス気分を味わえるかもしれません。さて、今回はエンジニア内定者ブログ第2弾として「API Gateway + Lambdaを使ってサーバーレスなSlackボットを実装してみる」というお題で記事を書いてみました。">
+      <meta property="og:url" content="http://tech.feedforce.jp/aws-lambda.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/aws-lambda.html">API Gateway + LambdaでSlackボットを作ってみた</a></h1>
+      <ul>
+        <li class="entry-time">2015.12.22</li>
+        <li class="entry-cat"><a href="/category/aws/">AWS</a></li>
+        <li class="entry-author"><a href="/author/otofu_square">otofu_square</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/otofu_square"><img src="/images/authors/otofu_square.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>寒くなってきましたが暑がりなのでまだ上着はあまり出番がありません、内定者のお豆腐です。<br>
+そろそろクリスマスですね！ターミナルで<code class="prettyprint">npm xmas</code>を実行すれば黒い画面の中でちょっとしたクリスマス気分を味わえるかもしれません。</p>
+
+<p>さて、今回はエンジニア内定者ブログ第2弾として「API Gateway + Lambdaを使ってサーバーレスなSlackボットを実装してみる」というお題で記事を書いてみました。</p>
+
+<!--more-->
+
+<h2>目的</h2>
+
+<p>昨今、サーバーレスアーキテクチャと呼ばれる技術分野が注目されており、それを実現する基盤としてAmazon Web Services（以下AWS）のLambdaが注目されています。<br>
+今年10月にAWSが提供するAPI GatewayがTokyoリージョンでも使用が可能になり、API GatewayとLambdaを組み合わせたアプリケーションの開発がより手軽に行えるようになりました。</p>
+
+<p>そんな中、弊社ではまだAPI Gateway, Lambdaを採用したサービスやノウハウがありませんでした。<br>
+そこで今回、実際に上記2つの技術を使ってサンプルを作ることで今後業務や社内ツールでも使えるかどうか確かめようということで、Slackボットを作ってみることにしました。</p>
+
+<h2>やりたいこと</h2>
+
+<p>SlackのOutgoing Webhooksを使ってAPI（API Gateway + Lambda）を叩いて、登録したLGTM画像のURLを呼び出せるボットを作ります。<br>
+画像のURLは今回実装するAPIを通してAWSで提供されているDynamoDBに保存します。<br>
+呼び出しの際はDynamoDBに保存した値を取得してSlack側に返します。</p>
+
+<h2>今回使ったサービス</h2>
+
+<h3>API Gateway</h3>
+
+<p>API Gatewayとは、 APIの作成、保守、監視、保護が行えるAWSのサービスです。<br>
+このサービスを使うことで、既存のAPIロジックやAWS Lambdaのファンクションを利用したRESTfulなAPIを公開することができます。<br>
+API Gatewayは今回のボットを作る上で、Slackが送信したデータを受け取りLambda側に受け渡す役割を担います。<br>
+料金も非常に低価格で、個人利用や悪意のある大量アクセスがない限りはほぼ無料同然の価格で使用することができます。</p>
+
+<ul>
+<li>100 万回の API 呼び出しの受信につき 4.25 USD</li>
+<li>データ転送費用は最初の10TBにつき 0.14 USD/GB（10TB以降はこれよりGB当たりの料金が安くなる）</li>
+</ul>
+
+<p>参考: <a href="https://aws.amazon.com/jp/api-gateway/pricing/">Amazon API Gateway - 料金</a></p>
+
+<h3>Lambda</h3>
+
+<p>LambdaもAWSが提供しているサービスの一つで、クラウド上でコードが実行できる環境を提供するサービスです。<br>
+自前でコードを実行可能な環境をWeb上に構築しようとすると、そのためのサーバを用意したり管理する必要がありますが、Lambdaを使うことでユーザはサーバを用意することなくコードを実行する環境を手に入れることができます。<br>
+つまり先ほど紹介したサーバーレスアーキテクチャを構成するのにもってこいなサービスなわけです。<br>
+実行可能なプログラミング言語は2015年12月現在、Java 8, Node.js(v0.10.36), Python(2.7)の3つになります。</p>
+
+<p>Lambdaは他のAWSサービスと異なり、1年間の無料期間を過ぎた後であっても下記の無料分が与えられます。<br>
+個人利用や小規模なサービスであれば十分なほどの無料枠だといえるでしょう。<br>
+夢が広がりますね！</p>
+
+<ul>
+<li>1 か月に 1,000,000 件の無料リクエスト</li>
+<li>400,000 GB/秒のコンピューティング時間が無料</li>
+</ul>
+
+<p>上記を超える利用に関しては下記の料金がかかります。</p>
+
+<ul>
+<li>メモリ量により異なるが、最小構成（メモリ128MB）の場合は0.00000208USD/秒</li>
+<li>1,000,000件のリクエストにつき 0.20 USD</li>
+</ul>
+
+<p>料金の例がAWSの公式HPで紹介されていますので、更に気になる方はそちらを見てみると良いかもしれません。</p>
+
+<p>参考: <a href="https://aws.amazon.com/jp/lambda/pricing/">AWS Lambda - 料金</a></p>
+
+<h3>DynamoDB</h3>
+
+<p>DynamoDBは、AWSが提供するスキーマレスなNoSQLデータベースサービスです。<br>
+データベースサーバの構成やセキュリティ、管理などは全てDynamoDB側で行ってくれるため、フルマネージドなデータベースとして利用することができます。<br>
+AWS-SDKを使ってLambdaのコードから簡単にデータの登録、取得が行えるので、今回画像URLの保存先として採用しました。</p>
+
+<p>こちらも1年間の無料枠が設定されているので、個人利用の範囲であればまず料金は発生しないと思って良いでしょう。<br>
+料金形態は少々複雑になっているので、気になる方は下記の公式ページをご覧ください！</p>
+
+<p>参考: <a href="https://aws.amazon.com/jp/dynamodb/pricing/">AWS DynamoDB - 料金</a></p>
+
+<h2>やったこと</h2>
+
+<h3>実装の流れ</h3>
+
+<p>今回のボット作りは以下の流れで行いました。</p>
+
+<ol>
+<li>ボットをNode.jsで実装</li>
+<li>SlackのOutgoing Webhooksの設定</li>
+<li>API Gatewayの設定</li>
+<li>Lambdaの設定</li>
+</ol>
+
+<h3>1. ボットの中身の実装</h3>
+
+<h4>実装について</h4>
+
+<p>今回作成したボットは次のような構造になっています。<br>
+ソースコードはgithubのレポジトリで公開しているので、気になった方はそちらも確認してみてください！<br>
+<a href="https://github.com/otofu-square/lgtm_bot">otofu-square/lgtm_bot - github</a></p>
+
+<pre><code class="prettyprint">index.js
+node_modules
+└ aws-sdk-promise
+lib
+├ requestHandler.js
+├ ping.js
+├ help.js
+├ get.js
+├ getAll.js
+├ add.js
+└ auth.js
+</code></pre>
+
+<p>Lambda内では初めに<a href="https://github.com/otofu-square/lgtm_bot/tree/master/index.js">index.js</a>が読み込まれ、API Gatewayが受け取ったJSONのデータが渡ってきます。<br>
+Slack側から送られてきたテキストデータを<a href="https://github.com/otofu-square/lgtm_bot/tree/master/index.js">index.js</a>内でコマンドとオプションに分割して、<a href="https://github.com/otofu-square/lgtm_bot/tree/master/lib/requestHandler.js">lib/requestHandler.js</a>で各処理に振り分けています。</p>
+
+<h4>ローカル環境でのテスト</h4>
+
+<p>Lambda上でもテストは可能なのですが、今回は実行時にメッセージが送られてしまったりしてあまり気軽にデバッグができません。<br>
+そこでローカルでLambdaの動作確認を行える<a href="https://www.npmjs.com/package/lambda-local">lambda-local</a>という便利なnpmがあります。<br>
+Lambdaにインプットする情報を設定することで、あたかもLambdaを実際に動かしているような形でテストを行うことができます。</p>
+
+<h4>各コマンドの実装</h4>
+
+<p>今回ボットに実装する機能は下記5つになります。</p>
+
+<ul>
+<li>pingコマンド</li>
+<li>helpコマンド</li>
+<li>add コマンド</li>
+<li>listコマンド</li>
+<li>showコマンド</li>
+</ul>
+
+<p>ここでは、簡単に各コマンドについてご紹介します。</p>
+
+<h5>pingコマンド</h5>
+
+<p>pingコマンドは、単純に<code class="prettyprint">pong</code>という文字列を返すだけのシンプルな機能です。<br>
+ボットと通信できているかどうか確認する時に使用することを想定して実装しました。</p>
+
+<pre><code class="prettyprint">lgtm: ping
+
+&gt; pong
+</code></pre>
+
+<p><a href="https://github.com/otofu-square/lgtm_bot/tree/master/lib/ping.js">lgtm_bot/lib/ping.js</a></p>
+
+<h5>helpコマンド</h5>
+
+<p>ボットのコマンドの一覧と、その使い方をメッセージとして返す機能です。<br>
+オプションの渡し方やコマンド名を参照することができます。</p>
+
+<pre><code class="prettyprint">lgtm: help
+
+&gt; lgtm: ping
+&gt; lgtm: list
+&gt; lgtm: add &lt;name&gt; &lt;url&gt;
+&gt; lgtm: show &lt;name&gt;
+</code></pre>
+
+<p><a href="https://github.com/otofu-square/lgtm_bot/tree/master/lib/help.js">lgtm_bot/lib/help.js</a></p>
+
+<h5>add コマンド</h5>
+
+<p>画像のURLを登録する機能です。<br>
+既に同じ<code class="prettyprint">name</code>の画像URLが登録されている場合は上書きされます。</p>
+
+<pre><code class="prettyprint">lgtm: add test http://image.com/lgtm.jpg
+
+&gt; Success.
+&gt; ID : test,
+&gt; URL: http://image.com/lgtm.jpg
+</code></pre>
+
+<p><a href="https://github.com/otofu-square/lgtm_bot/tree/master/lib/add.js">lgtm_bot/lib/add.js</a></p>
+
+<h5>listコマンド</h5>
+
+<p>現在登録されている画像URLの<code class="prettyprint">name</code>値の一覧を返す機能です。</p>
+
+<pre><code class="prettyprint">lgtm: list
+
+&gt; test
+&gt; test1
+&gt; test2
+...
+
+</code></pre>
+
+<p><a href="https://github.com/otofu-square/lgtm_bot/tree/master/lib/getAll.js">lgtm_bot/lib/getAll.js</a></p>
+
+<h5>showコマンド</h5>
+
+<p>指定した<code class="prettyprint">name</code>の画像URLを呼び出します。</p>
+
+<pre><code class="prettyprint">lgtm: show test
+
+&gt; http://image.com/lgtm.jpg
+</code></pre>
+
+<p><a href="https://github.com/otofu-square/lgtm_bot/tree/master/lib/get.js">lgtm_bot/lib/get.js</a></p>
+
+<h3>2. Slack</h3>
+
+<h4>Outgoing Webhooksの設定</h4>
+
+<p>Slack上の任意のPublicチャンネルに <code class="prettyprint">Outgoing Webhooks</code> というインテグレーションを設定することで、チャンネル内の特定の発言をトリガにして外部APIを叩くことができます。</p>
+
+<p>Outgoing Webhooksを設定すると、設定で指定したAPIに対してSlack側からContent-Typeが<code class="prettyprint">application/x-www-form-urlencoded（フォーム送信データ）</code>のデータが送信されます。<br>
+送られてくるパラメータは以下の通りとなります。</p>
+
+<pre><code class="prettyprint">token=APIトークン
+team_id=チームID
+team_domain=チームドメイン
+channel_id=チャンネルID
+channel_name=チャンネル名
+timestamp=実行時のタイムスタンプ
+user_id=トリガワードを発したユーザID
+user_name=トリガワードを発したユーザ名
+text=トリガワードが含まれるメッセージ本文
+trigger_word=トリガワード
+</code></pre>
+
+<p>今回はSlack側から受け取った<code class="prettyprint">text</code>データをLambda側で分析して、その<code class="prettyprint">text</code>データに応じた処理をするよう実装しました。</p>
+
+<p>参考: <a href="https://api.slack.com/outgoing-webhooks">Slack API - Outgoing Webhooks</a></p>
+
+<h3>3. API Gateway</h3>
+
+<h4>初期設定</h4>
+
+<p>初期設定に関しては<a href="http://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/setting-up.html">AWS公式の開発者ガイド</a>が非常に分かりやすいのでそちらにお任せしたいと思います…！<br>
+実際にガイド通りに操作することで問題なくAPI Gatewayを設定することができました。<br>
+ただ、マッピングテンプレートに関しては少々難儀したため、以下でご紹介します。</p>
+
+<h4>マッピングテンプレートの作成</h4>
+
+<p>Slack側からはContent-Typeが<code class="prettyprint">application/x-www-form-urlencoded（フォーム送信データ）</code>が送られてきますが、Lambda側で受け取れるデータはJSONです。よって、API GatewayでSlack側から送られてきたデータを<code class="prettyprint">application/json（JSONデータ）</code>に変換してあげる必要があります。</p>
+
+<p>API Gatewayには <code class="prettyprint">Integration Request</code> , <code class="prettyprint">Integration Response</code> という設定で、APIへ送られてきたデータやAPIから送るデータを、API側の処理の前段階/後段階で最適な形に変換することができます。<br>
+今回はSlack側からLambda側に送られてくる <code class="prettyprint">application/x-www-form-urlencoded</code> のデータをJSONに変換するため、 <code class="prettyprint">Integration Request</code> に以下のマッピングテンプレートを実装しました。<br>
+実装言語は <code class="prettyprint">VTL(Velocity Template Language)</code> と呼ばれる言語を用います。<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup></p>
+
+<p>簡単に説明すると、<code class="prettyprint">##</code>以下がコメント、<code class="prettyprint">#</code>が制御ロジックとなり、<code class="prettyprint">#</code>が行頭に無い部分は実際に出力されるデータそのものとなります。</p>
+
+<pre><code class="prettyprint">## &amp;区切りでPOSTされてきたデータを分割する
+#set($httpPost = $input.path(&#39;$&#39;).split(&quot;&amp;&quot;))
+
+## 出力されるJSONデータの生成
+{
+#foreach( $keyValue in $httpPost )
+ ## &quot;key=value&quot;というデータをkeyとvalueに分ける
+ #set($data = $keyValue.split(&quot;=&quot;))
+ ## JSONのフォーマットに整形する（まだ走査するデータがあれば&quot;,&quot;を挿入する）
+ &quot;$data[0]&quot; : &quot;$data[1]&quot;#if( $foreach.hasNext ),#end
+#end
+}
+</code></pre>
+
+<h3>4. Lambda</h3>
+
+<h4>ソースコードのアップロード</h4>
+
+<p>実装したボットのソースコードをzipで圧縮してLambdaにアップロードすることで、実際にLambda上で実行することが可能になります。<br>
+zipで圧縮する際はソースが入っているディレクトリをまとめてzipにするのではなく、下記のように個別でzipにする必要があります。</p>
+
+<p><code class="prettyprint">$ zip -r lambda.zip index.js node_modules lib</code></p>
+
+<p>圧縮が終わったら、zipファイルをLambdaにアップロードします。<br>
+AWSコンソールのLambdaの管理画面からも可能ですし、<code class="prettyprint">aws-cli</code>がインストールされてれば下記コマンドからでもアップロード可能です。</p>
+
+<p><code class="prettyprint">$ aws lambda update-function-code --function-name lgtm_bot --zip-file lambda.zip</code></p>
+
+<p>特に問題がなければ、アップロードした段階で実装完了となります。<br>
+試しにSlackから<code class="prettyprint">lgtm: ping</code>や<code class="prettyprint">lgtm: help</code>と打ってみて、リプライが返ってくれば問題ないと思います！</p>
+
+<p>Lambdaの管理画面の操作や設定に関しては下記の公式ガイドが参考になりました。</p>
+
+<p>参考: <a href="http://docs.aws.amazon.com/ja_jp/lambda/latest/dg/welcome.html">AWS Lambda - Developer Guide</a></p>
+
+<h2>ハマったポイント</h2>
+
+<h3>デバッグについて</h3>
+
+<p>Slack, API Gateway, Lambda, DynamoDBといった複数のサービスを横断するような実装だったので、バグが発生してうまく動かない際の原因の切り分けで少しつまづきました。<br>
+SlackのOutgoing Webhooksにはログの機能はなく、API Gatewayにもデフォルトではログの機能がありませんでした。<br>
+※ 後日調べたところAPI GatewayにCloudWatchを設定することでログの管理が出来るようです。</p>
+
+<p>そのため、そもそもOutgoing WebhooksからうまくAPIが叩けていないのか、はたまたAPI Gateway側の処理に問題があるのか、が分かりづらいのです。<br>
+今回は段階的に次のように確認することで何とか切り分けることができましたが、もっと簡単な手段があればなぁと思います。</p>
+
+<h3>Node.jsの非同期処理について</h3>
+
+<p>今回Lambda側の実装をするにあたって、Node.jsの非同期処理でハマりました。<br>
+DynamoDBからデータを取得してくる処理を書いたはいいものの、メッセージには取得された結果が入っておらず…。<br>
+記述に問題は無さそうなのに何故だろう…と考えていると、データ取得の処理に待ちが発生してその部分が非同期に実行されており、メッセージのテキストに結果を代入する処理がデータを取得するよりも前に実行されてしまっているのが原因でした。<br>
+今回はPromiseを使って処理が終わるのを待ってからメッセージを返すことで何とか実装できましたが、今まで同期処理的なプログラミングしかしてこなかった自分にとってはその挙動を理解するのに時間がかかってしまいました…。<br>
+ちなみに今回は社内のJavaScript芸人の方に教えていただいた<a href="https://www.npmjs.com/package/aws-sdk-promise">aws-sdk-promise</a>というnpmを使ってPromiseを使った処理を実装しました。</p>
+
+<h2>まとめ</h2>
+
+<p>今回はなんとか無事にAPI Gateway, Lambdaを使ってSlackボットを実装することができました！<br>
+自前のAPIサーバーやドメインを取得することなく、非常に手軽にアプリを実装できて感動しました。<br>
+また、弊社のJavaScript芸人の方々から手ほどきをいただいて、JavaScript周りの知識も身につけることができて良い機会になったと思います！</p>
+
+<p>今回のボットは、サーバーレスアーキテクチャの例としてはシンプルなものでしたが、もっと複雑なアプリケーションも作れてしまいそうな気配があります。<br>
+今後の活用方法としては社内のcronジョブをLambdaの環境に移すことでサーバーの負荷を減らすといったことができそうです。<br>
+しかしながらその方法だとAPI Gatewayの影が薄くなってしまうので、来年入社して実際にサービスの開発に携わることになった時に色々と応用できるように今後も活用方法を模索していきたいなと思います！<br>
+機能追加も定期的に行われているので、今後どんな機能が追加されるか楽しみにしつつAPI Gateway + Lambdaの動向を見守っていく所存です…！</p>
+
+<p>それではみなさん、よいクリスマスをお過ごしください！</p>
+
+<p><img style="display: block; margin-left: auto; margin-right:auto;" src="/images/2015/12/npm_xmas.png" alt="npm_xmas"/></p>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p><a href="http://www.apache.org">Apache Project</a>によって開発された<a href="http://velocity.apache.org">Velocity</a>と呼ばれるJavaによる実装のテンプレートエンジンで用いる言語。&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/aws-lambda.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="API Gateway + LambdaでSlackボットを作ってみた" data-url="http://tech.feedforce.jp/aws-lambda.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/aws-lambda.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/aws-lambda.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/create-ruby-rpm.html" rel="next">フィードフォースではRubyのrpmをGitHubに自動リリースしています</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/qiita-popular-post-2015.html" rel="prev">Qiita:Teamで好評だった記事から2015年をふりかえる</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

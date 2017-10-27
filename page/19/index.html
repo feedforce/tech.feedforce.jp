@@ -1,0 +1,327 @@
+<!doctype html>
+<html>
+  <!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>feedforce Engineers' blog</title>
+      <meta name="description" content="株式会社フィードフォース技術チームのサイト。社内勉強会資料や開発の様子および成果の公開など。">
+      <link rel="canonical" href="http://tech.feedforce.jp">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="feedforce Engineers' blog">
+      <meta property="og:description" content="株式会社フィードフォース技術チームのサイト。社内勉強会資料や開発の様子および成果の公開など。">
+      <meta property="og:url" content="http://tech.feedforce.jp">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+  <body>
+    <header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+    <div id="content">
+          <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/memcached.html">memcached</a></h1>
+        <ul>
+          <li class="entry-time">2007.03.16</li>
+          <li class="entry-cat"><a href="/category/infrastructure/">インフラ</a>, <a href="/category/resume/">勉強会資料</a></li>
+          <li class="entry-author"><a href="/author/akahige">akahige</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/akahige"><img src="/images/authors/no-image.png" /></a>
+      </div>
+      <div class="entry-body">
+        <h2>何？</h2>
+
+<p>オブジェクトをメモリにキャッシュするデーモン。</p>
+
+<p>動的ページを持つウェブアプリケーションの裏側で動くデータベースへの負荷を軽減させることを目的にデザインされている。<br>
+- <a href="http://www.danga.com/memcached/">公式サイト memcached: a distributed memory object caching system</a></p>
+
+
+        <p class="entry-readmore"><a href="/memcached.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/mochikit.html">MochiKit</a></h1>
+        <ul>
+          <li class="entry-time">2007.03.13</li>
+          <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+          <li class="entry-author"><a href="/author/yanagi">yanagi</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/yanagi"><img src="/images/authors/no-image.png" /></a>
+      </div>
+      <div class="entry-body">
+        <p>JavaScript のライブラリ。</p>
+
+<p><a href="http://mochikit.com/">http://mochikit.com/</a></p>
+
+<p>ドキュメント</p>
+
+<ul>
+<li><a href="http://mochikit.com/doc/html/MochiKit/index.html">http://mochikit.com/doc/html/MochiKit/index.html</a></li>
+</ul>
+
+<p>デモ用インタープリタ</p>
+
+<ul>
+<li><a href="http://mochikit.com/examples/interpreter/index.html">http://mochikit.com/examples/interpreter/index.html</a></li>
+</ul>
+
+<h2>入手</h2>
+
+<p>リリース版はちょっと古いので、Subversion リポジトリから取ってくるのが いいでしょう。</p>
+
+<pre><code class="prettyprint">svn co http://svn.mochikit.com/mochikit/trunk mochikit
+</code></pre>
+
+
+        <p class="entry-readmore"><a href="/mochikit.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/dev_camp.html">はじめての開発合宿</a></h1>
+        <ul>
+          <li class="entry-time">2007.03.05</li>
+          <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+          <li class="entry-author"><a href="/author/akahige">akahige</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/akahige"><img src="/images/authors/no-image.png" /></a>
+      </div>
+      <div class="entry-body">
+        <p>去る2/23-25の日程で開発合宿に行ってきたのでそのレポというか感想と言うか。</p>
+
+<p>まあ会社の仕事としてではなく、個人的に行って来たんですけどね。</p>
+
+
+        <p class="entry-readmore"><a href="/dev_camp.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/yum-repos.html">独自yumリポジトリ</a></h1>
+        <ul>
+          <li class="entry-time">2007.02.26</li>
+          <li class="entry-cat"><a href="/category/infrastructure/">インフラ</a>, <a href="/category/resume/">勉強会資料</a></li>
+          <li class="entry-author"><a href="/author/shimada">shimada</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/shimada"><img src="/images/authors/no-image.png" /></a>
+      </div>
+      <div class="entry-body">
+        <h2>YUM(Yellow dog Updater, Modified)</h2>
+
+<ul>
+<li>yum(ヤム)とはYellow Dog Linux(Fedora Coreをベースとして開発されたPowerPCアーキテクチャ向けのLinuxディストリビューション)用に開発されたLinuxのRPM互換パッケージ管理システム</li>
+<li>Fedora Core、CentOS、などのrpm系Linuxディストリビューションの標準のパッケージ管理システム</li>
+</ul>
+
+
+        <p class="entry-readmore"><a href="/yum-repos.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/bts-1.html">BTS - バグトラッキングシステムの利用（１）</a></h1>
+        <ul>
+          <li class="entry-time">2007.02.22</li>
+          <li class="entry-cat"><a href="/category/dev_style/">開発スタイル</a></li>
+          <li class="entry-author"><a href="/author/akahige">akahige</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/akahige"><img src="/images/authors/no-image.png" /></a>
+      </div>
+      <div class="entry-body">
+        <p>これからちょっとずつFFの社内の開発の様子や利用しているツールについて紹介していきます。 公開することで何かフィードバックが得られたりしたらうれしいなと言うことで。</p>
+
+<p>そんなわけで今回は社内で利用しているバグトラッキングシステム（以下BTS）について。</p>
+
+<h2>Bug Tracking System</h2>
+
+<p>BTSとは何かと言うと、バグ(Bug)をトラッキングする(Tracking)システム(System)です。 そのまんまですからわかりやすいですね。 そうでもありませんか。すみません。</p>
+
+
+        <p class="entry-readmore"><a href="/bts-1.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/developers-summit-2007.html">デブサミ2007</a></h1>
+        <ul>
+          <li class="entry-time">2007.02.16</li>
+          <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+          <li class="entry-author"><a href="/author/fukunaga">fukunaga</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/fukunaga"><img src="/images/authors/no-image.png" /></a>
+      </div>
+      <div class="entry-body">
+        <ul>
+<li><a href="http://www.seshop.com/event/dev/2007/">Developers Summit 2007</a></li>
+<li>通称「デブサミ2007」</li>
+</ul>
+
+<h3>会場</h3>
+
+<p><a href="http://images.google.co.jp/images?q=%E7%9B%AE%E9%BB%92%E9%9B%85%E5%8F%99%E5%9C%92&amp;svnum=10&amp;hl=ja&amp;lr=lang_ja&amp;client=firefox&amp;rls=org.mozilla:ja:official&amp;hs=zmv&amp;start=20&amp;sa=N&amp;ndsp=20">目黒雅叙園</a></p>
+
+<h3>日程</h3>
+
+<p>2007/02/14 - 2007/02/15<br><br>
+初日のみ参加してきました。</p>
+
+
+        <p class="entry-readmore"><a href="/developers-summit-2007.html">Read more</a></p>
+      </div>
+    </article>
+
+    <div id="entry-link">
+      <ul>
+            <li id="older-link"><a href="/page/20/">< Older posts</a></li>
+            <li id="newer-link"><a href="/page/18/">Newer posts ></a></li>
+      </ul>
+    </div>
+
+    </div>
+
+    <p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+  </body>
+</html>

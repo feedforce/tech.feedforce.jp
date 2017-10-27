@@ -1,0 +1,429 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>mhaとconsulでDBサーバーの冗長化をしています | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは。Lorentzcaです。3月ですがまだまだ寒いのでなかなか釣りに行けずテンションさげぽよです！ ↑↑この度DBサーバー(物理マシン、MySQL)の引っ越しを行いました。そのついでに、冗長化の仕組みをmhaとconsulを使った方法に変えたので紹介します。">
+      <link rel="canonical" href="http://tech.feedforce.jp/mha-and-consul.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="mhaとconsulでDBサーバーの冗長化をしています | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは。Lorentzcaです。3月ですがまだまだ寒いのでなかなか釣りに行けずテンションさげぽよです！ ↑↑この度DBサーバー(物理マシン、MySQL)の引っ越しを行いました。そのついでに、冗長化の仕組みをmhaとconsulを使った方法に変えたので紹介します。">
+      <meta property="og:url" content="http://tech.feedforce.jp/mha-and-consul.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/mha-and-consul.html">mhaとconsulでDBサーバーの冗長化をしています</a></h1>
+      <ul>
+        <li class="entry-time">2016.03.25</li>
+        <li class="entry-cat"><a href="/category/operation/">運用事例</a></li>
+        <li class="entry-author"><a href="/author/kunishima">kunishima</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/kunishima"><img src="/images/authors/lorentzca.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは。Lorentzcaです。3月ですがまだまだ寒いのでなかなか釣りに行けずテンションさげぽよです！ ↑↑</p>
+
+<p>この度DBサーバー(物理マシン、MySQL)の引っ越しを行いました。<br><br>
+そのついでに、冗長化の仕組みをmhaとconsulを使った方法に変えたので紹介します。</p>
+
+<!--more-->
+
+<h2>はじめに</h2>
+
+<p>まずは簡単に引っ越し前と引っ越し後の構成を比べてみます。</p>
+
+<p>引っ越し前は以下の様な構成でした。</p>
+
+<ul>
+<li>サーバー台数: 2台</li>
+<li>MySQLフェイルオーバーの仕組み: 自作シェルスクリプト</li>
+<li>アプリの参照先を切り替える仕組み: keepalivedでvipを張り替えることで実現</li>
+</ul>
+
+<p>引っ越し後は以下の様な構成になりました。</p>
+
+<ul>
+<li>サーバー台数: <strong>3台</strong></li>
+<li>MySQLフェイルオーバーの仕組み: <strong>mha</strong></li>
+<li>アプリの参照先を切り替える仕組み: <strong>consulのdns機能を使って実現</strong></li>
+</ul>
+
+<p>なぜこのような構成にしたのか、話していきます。</p>
+
+<h2>引っ越し前に持っていた問題意識</h2>
+
+<p>以下の様な課題があり、これを解決するために今までとは違う冗長化の仕組みを導入することにしました。</p>
+
+<ul>
+<li>サーバー2台だとOSやミドルウェアのアップデートが気軽にできない
+
+<ul>
+<li>アップデート作業中、冗長化構成ではなくなるので不安な気持ちになる</li>
+</ul></li>
+<li>自作シェルスクリプトとkeepalivedによる冗長化構成はメンテし辛い
+
+<ul>
+<li>自作シェルスクリプトが秘伝のタレ化している</li>
+<li>keepalivedは起動順やpriorityの設定に気をつけないとvipが期待するサーバーにセットされないのでつらい</li>
+</ul></li>
+<li>マスタで障害発生した場合、復旧が大変
+
+<ul>
+<li>元マスタを復旧しスレーブとして追加する際に、現マスタからMySQLのスナップショットを取る都合上ダウンタイム必須</li>
+</ul></li>
+</ul>
+
+<p>この3つはチームメンバーみんなが問題に思っていました。これらの問題が原因で実際に不具合や障害が発生していたというわけではないのですが、どれも「運用に対する心理的負荷」が大きく何とかしたいという思いでした。</p>
+
+<h2>どのように解決したか！</h2>
+
+<h3>サーバーを3台にする</h3>
+
+<p>以下の様な理由で3台にしました。</p>
+
+<ul>
+<li>サーバーが1台壊れたとしても、スレーブを一時的に止めてスナップショットを取ることができるので、復旧時のダウンタイムをなくせる</li>
+<li>メンテナンスなどでサーバーを再起動するときに、残りの2台で冗長性を確保できる</li>
+</ul>
+
+<p>2台構成のままにするか3台構成にするかは議論を重ねたのですが、やはり「復旧時のダウンタイムをなくせる」ことはサービスを提供する上で重要な要素なので、3台構成を選びました。</p>
+
+<h3>自作スクリプトをやめてmhaを使う</h3>
+
+<p><a href="https://code.google.com/p/mysql-master-ha/">mha</a>とは複雑な操作や苦しみを伴うこと無く、DBマスタサーバーのフェイルオーバーを行えるツールです。<br><br>
+DBマスタサーバーのダウン等による自動的なフェイルオーバーだけでなく、オンラインでのDBマスタサーバーの切り替えも行えます。(サーバーのメンテナンスをしたい時に便利)</p>
+
+<p>以下の様な理由で導入しました。</p>
+
+<ul>
+<li>自作シェルスクリプトからの脱却</li>
+<li>導入実績が多い</li>
+<li>障害からの復旧が簡単になる</li>
+</ul>
+
+<p>mhaを使うのは初めてだったので、vagrantでvmを5台ほど立てて検証していました。vm5台は起動に時間もかかるし作成・破棄がし辛く、なかなか大変でした。</p>
+
+<h3>keepalivedをやめてconsulを使う</h3>
+
+<p><a href="https://www.consul.io/">consul</a>とはサービス(nginx等)の検出や動的な設定を行うための仕組みを提供するツールです。<br><br>
+といってもイメージしにくいと思いますし、実際色々なことが出来ます。具体的には…、おや、こんなところに事例が！</p>
+
+<ul>
+<li><a href="http://tech.feedforce.jp/stretcher-consul-capistrano.html">stretcher + consul + capistrano を使ったデプロイを導入しようと思います | feedforce Engineers&#39; blog</a></li>
+</ul>
+
+<p>さて、consulにはdns機能が内蔵されており、今回はこのdns機能とmhaを連携させることで <strong>「DBマスタサーバーはどこか」</strong> をconsulに問い合わせればわかるようにしました。</p>
+
+<p>以下の様な理由で導入しました。</p>
+
+<ul>
+<li>導入が簡単</li>
+<li><a href="http://ijin.github.io/blog/2014/07/11/mysql-failover-with-consul/">事例</a>がある</li>
+<li>apiで操作できる(mha等のツールと連携させやすい)</li>
+<li>3台以上のサーバーで使える
+
+<ul>
+<li>これに関してはkeepalivedでも出来なくはないが、秘伝のタレが加速しそうだった</li>
+</ul></li>
+<li><strong>好き好きhashicorp</strong></li>
+</ul>
+
+<p>consulの使い方としてはちょっと変則的な気がしますが、今後別の用途でも活用できそうなので良し！ です。</p>
+
+<p>mhaの検証でvmに懲りたので、この辺からクラスタを組む必要のある検証にdockerを使い始めました。一瞬で複数台のコンテナが立ち上がるの、気持ちいい！</p>
+
+<h2>mhaとconsulの連携方法</h2>
+
+<p>mhaやconsulの設定や基本的な使い方はドキュメントに詳しく書いてあるのでそちらを見ていただければと思います。</p>
+
+<p>今回どのようにmhaとconsulを連携させているかがキモとなるので、その部分に絞って紹介します。</p>
+
+<h3>master_ip_failover_script</h3>
+
+<p>mhaはフェイルオーバー時に任意のスクリプトを実行することが出来ます。<br><br>
+スクリプトの指定は<code class="prettyprint">/etc/mha.cnf</code>内に以下のように追記することで指定できます。</p>
+
+<pre><code class="prettyprint">master_ip_failover_script=/path/to/script_name
+</code></pre>
+
+<p>実際にDBマスタサーバーがダウンしてフェイルオーバーが行われる際、以下のようにしてこのスクリプトが実行されます。これはmhaのログで確認できます。(見やすさのため改行しています)</p>
+
+<pre><code class="prettyprint">/path/to/script_name --command=start \
+--ssh_user=sshuser \
+--orig_master_host=10.0.0.100 \
+--orig_master_ip=10.0.0.100 \
+--orig_master_port=3306 \
+--new_master_host=10.0.0.101 \
+--new_master_ip=10.0.0.101 \
+--new_master_port=3306 \
+--new_master_user=&#39;masteruser&#39; \
+--new_master_password=&#39;password&#39; \
+--ssh_options=&#39;\
+-o ServerAliveInterval=60 \
+-o ServerAliveCountMax=20 \
+-o StrictHostKeyChecking=no \
+-o ConnectionAttempts=5 \
+-o PasswordAuthentication=no \
+-o BatchMode=yes \
+-i /path/to/ssh/privkey&#39;
+</code></pre>
+
+<p>何か色々な引数を渡して実行されているのがわかります。</p>
+
+<p>スクリプトを一から作るのは大変なので、<a href="https://github.com/yoshinorim/mha4mysql-manager/blob/master/samples/scripts/master_ip_failover">サンプル</a>を利用します。</p>
+
+<p>サンプルにある<code class="prettyprint">FIXME_xxx;</code>を以下のように書き換えることで、consul(10.0.0.50)のapiを叩き、新DBマスタサーバーがどのホストなのかを知らせています。ここでmhaがスクリプトに渡していた引数(<code class="prettyprint">new_master_ip</code>)が役に立ちます。</p>
+
+<pre><code class="prettyprint">  ## Update master ip on the catalog database, etc
+- FIXME_xxx;
++ system(&quot;curl -s -X PUT -d \&#39;{ \&quot;Node\&quot;: \&quot;master\&quot;, \&quot;Address\&quot;: \&quot;$new_master_ip\&quot; }\&#39; http://10.0.0.50:8500/v1/catalog/register&quot;);
+</code></pre>
+
+<p>もう一箇所、DBのユーザーを新しく作成するためのコードを書くFIXMEがありますが、今回はあらかじめ各DBサーバーにユーザーを作っていたので、コメントアウトしました。</p>
+
+<pre><code class="prettyprint">  ## Creating an app user on the new master
+- print &quot;Creating app user on the new master..\n&quot;;
+- FIXME_xxx_create_user( $new_master_handler-&gt;{DBh} );
+- $new_master_handler-&gt;enable_log_bin_local();
+- $new_master_handler-&gt;disconnect();
++ #print &quot;Creating app user on the new master..\n&quot;;
++ #FIXME_xxx_create_user( $new_master_handler-&gt;{DBh} );
++ #$new_master_handler-&gt;enable_log_bin_local();
++ #$new_master_handler-&gt;disconnect();
+</code></pre>
+
+<h2>アプリはどのようにconsulのdnsを利用するか</h2>
+
+<p>さて、consulのカタログデータベースにDBマスタサーバーのノードを登録すると、以下のように名前を引けるようになります。</p>
+
+<pre><code class="prettyprint">$ dig @10.0.0.50 -p 8600 master.node.consul +short
+10.0.0.100
+</code></pre>
+
+<p>しかし、名前を引くのにいちいちポートやネームサーバーの指定をしたくないので、 <br>
+<code class="prettyprint">*.consul</code>という名前の場合はdnsmasqを使ってconsulのDNSへ名前解決しにいくよう設定しました。</p>
+
+<h3>*.consulの名前の問い合わせ先を指定する設定</h3>
+
+<p><code class="prettyprint">*.consul</code>の名前を引くときは10.0.0.50の8600ポートに問い合わせる設定をします。</p>
+
+<pre><code class="prettyprint">$ cat /etc/dnsmasq.d/consul.conf
+server=/consul/10.0.0.50#8600
+</code></pre>
+
+<h3>resolv.confに書かれた順に名前解決を試すための設定</h3>
+
+<p><code class="prettyprint">/etc/dnsmasq.conf</code>にある<code class="prettyprint">#strict-order</code>のコメントを外し有効にしておきます。</p>
+
+<h3>dnsmasqをリゾルバに追加する</h3>
+
+<pre><code class="prettyprint">$ cat /etc/resolv.conf
+nameserver 127.0.0.1
+nameserver 8.8.8.8
+</code></pre>
+
+<p>以下の様な動作をするようになります。</p>
+
+<ul>
+<li>名前を引く → dnsmasq(127.0.0.1)へ聞きに行く → <code class="prettyprint">*.consul</code>ならconsul(10.0.0.50)へ、それ以外なら8.8.8.8へ問い合わせる</li>
+</ul>
+
+<p>これでポートやネームサーバーの指定をしないで<code class="prettyprint">*.consul</code>の名前を引けるようになりました。</p>
+
+<pre><code class="prettyprint">$ dig master.node.consul +short
+10.0.0.100
+</code></pre>
+
+<h2>所感</h2>
+
+<p>障害が起きてもより落ち着いて対応できるようになったのと、復旧の手順が簡単になり、ダウンタイムをとらなくてもよくなったのが非常に喜ばしいです。</p>
+
+<p>冒頭でさらっとサーバーの引っ越しをしましたと書いていますがかなり大変でした。大変でしたが、既存の仕組みをより保守しやすい仕組みに変えられたのでやる価値はありました！<br><br>
+大きな変更を加えるにはこのタイミングしか無い、とチャンスを逃さなくてよかったです。</p>
+
+<p>今後はconsulをDBマスタサーバーへの名前引き以外でも活用していくぞ！</p>
+
+<h2>参考リンク</h2>
+
+<ul>
+<li><a href="https://www.consul.io/">Consul by HashiCorp</a></li>
+<li><a href="https://code.google.com/p/mysql-master-ha/">mysql-master-ha</a></li>
+<li><a href="http://ijin.github.io/blog/2014/07/11/mysql-failover-with-consul/">ConsulによるMySQLフェールオーバー - @ijin</a></li>
+<li><a href="https://github.com/yoshinorim/mha4mysql-manager/tree/master/samples/scripts">mha4mysql-manager/samples/scripts at master · yoshinorim/mha4mysql-manager · GitHub</a></li>
+<li><a href="http://www.morethanseven.net/2014/04/25/consul/">Consul, DNS and Dnsmasq</a></li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/mha-and-consul.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="mhaとconsulでDBサーバーの冗長化をしています" data-url="http://tech.feedforce.jp/mha-and-consul.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/mha-and-consul.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/mha-and-consul.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/elixir-phoenix-lesson-1.html" rel="next">今から始めるRubyエンジニアのためのElixir Phoenix part1</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/socialplus-bugsnag.html" rel="prev">ソーシャルPLUSで 1 日 700 通超のアラートメールを撲滅したお話</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

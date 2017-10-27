@@ -1,0 +1,279 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>中長期のふりかえりとしてYWT(やった,わかった,つぎにやる)を試してみました | feedforce Engineers' blog</title>
+      <meta name="description" content="弊社では四半期に1度、開発者全体でふりかえりを実施しています。従来は「KPT」でやっていましたが、「中長期のふりかえりには向いていないよね」という社内の声を受けて「YWT」を試してみました。今日はその進め方や感想をお伝えします。なお私がウェブ上の情報を参考に実施したもので、何か正式なやり方に則っている保証はありませんのでご容赦を。">
+      <link rel="canonical" href="http://tech.feedforce.jp/ywt-retrospective.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="中長期のふりかえりとしてYWT(やった,わかった,つぎにやる)を試してみました | feedforce Engineers' blog">
+      <meta property="og:description" content="弊社では四半期に1度、開発者全体でふりかえりを実施しています。従来は「KPT」でやっていましたが、「中長期のふりかえりには向いていないよね」という社内の声を受けて「YWT」を試してみました。今日はその進め方や感想をお伝えします。なお私がウェブ上の情報を参考に実施したもので、何か正式なやり方に則っている保証はありませんのでご容赦を。">
+      <meta property="og:url" content="http://tech.feedforce.jp/ywt-retrospective.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/ywt-retrospective.html">中長期のふりかえりとしてYWT(やった,わかった,つぎにやる)を試してみました</a></h1>
+      <ul>
+        <li class="entry-time">2016.02.16</li>
+        <li class="entry-cat"><a href="/category/dev_style/">開発スタイル</a></li>
+        <li class="entry-author"><a href="/author/r-suzuki">r-suzuki</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/r-suzuki"><img src="/images/authors/r-suzuki.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>弊社では四半期に1度、開発者全体でふりかえりを実施しています。従来は「KPT」でやっていましたが、「中長期のふりかえりには向いていないよね」という社内の声を受けて「YWT」を試してみました。</p>
+
+<p>今日はその進め方や感想をお伝えします。なお私がウェブ上の情報を参考に実施したもので、何か正式なやり方に則っている保証はありませんのでご容赦を。</p>
+
+<!--more-->
+
+<h2>YWTの進行</h2>
+
+<p>KPTがKeep, Problem, Tryの頭文字から構成されているように、YWTも頭文字から成っています。それは、</p>
+
+<ul>
+<li>Y: やったこと</li>
+<li>W: わかったこと</li>
+<li>T: つぎにやること</li>
+</ul>
+
+<p>の3つです。日本で考案された手法とのこと。</p>
+
+<p>実際に今回作成したふりかえり内容から進行を説明すると、</p>
+
+<p><img alt="YWTふりかえり内容" src="/images/2016/02/ywt_sample.png" /></p>
+
+<p>模造紙などの紙を縦長に使い、</p>
+
+<ol>
+<li>Y: やったこと(取り組んだ開発作業)を左端に挙げる</li>
+<li>W: やったことから得られた成果や知見などをYの右側に挙げる(全てのYに対して挙げる必要はない)</li>
+<li>T: やったこと/わかったことを受け、つぎにやることを挙げる</li>
+</ol>
+
+<p>という流れで実施しました。</p>
+
+<p>具体例を見ていくと、</p>
+
+<p><img alt="YWTの流れ" src="/images/2016/02/ywt_flow.png" /></p>
+
+<ul>
+<li>Y: (運用中のアプリケーションに)<a href="https://bugsnag.com/">bugsnag</a>を導入して使い始めた</li>
+<li>W: bugsnagなどのエラー管理を運用開始後に導入するのは大変、だけど「エラーはとにかくbugsnagに情報を集約させる」という対応は楽で良い、ということが分かった</li>
+<li>T: bugsnagにエラー情報が集約されるようになったので、発生頻度や重要度から仕分け・修正していこう</li>
+</ul>
+
+<p>という流れが感じられます。</p>
+
+<h2>弊社でのアレンジ</h2>
+
+<p>弊社は<a href="https://www.feedforce.jp/service/">複数のサービス</a>を提供しており、それぞれ別のチームで開発しています。日常的にGitHubやQiita:Teamでチームを横断した情報共有をしていますが、サービスを横断した技術改善に取り組む「開発基盤チーム」のようなものは今のところありません。</p>
+
+<p>なのでこのふりかえりの場で、チームを横断した知見の共有を実施しました。各チームでYWTを実施した後、1人を残して他チームのYWTを見学させ、その内容についてヒアリング<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>。さらにそこで「もっと詳しく聞きたい」「自分のチームにも導入したい」と感じたものに「ドットシール」を貼っています。シールが多く貼られた内容については、社内勉強会などで開発チーム全体に共有したいと考えています<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>。</p>
+
+<p><img alt="ドットシール" src="/images/2016/02/dot_sticker.png" /></p>
+
+<h2>「まずは事実を挙げる」という進行がいい感じ</h2>
+
+<p>やって分かったことは、最初に「やったこと(Y)」という事実を挙げればよい、という進行がポイントだということ。このおかげで各メンバーの脳内変換やフィルタリングが発生しにくい。まずやったことを挙げた上で、そこから「わかったこと(W)」「つぎにやること(T)」の検討をチームで進めるというプロセスに意味がありそうです。</p>
+
+<p>普段から「Qiita:Teamなどで情報共有しよう」としていますが、各自の脳内にある暗黙知を文章などの形式知にする作業はそれなりに労力が必要なもの。「各自の暗黙知でしかない状態から、如何に重要な情報をみつけるか」は、開発現場によくある課題だと思います。このYWTは、そんな課題に効果のあるやり方だと感じました。引き続き活用していきたいと考えています。</p>
+
+<h2>参考情報</h2>
+
+<p>以下の記事を参考にしました。感謝。</p>
+
+<ul>
+<li><a href="http://mao-instantlife.hatenablog.com/entry/2015/08/26/%E9%95%B7%E3%81%84%E3%82%BF%E3%82%A4%E3%83%A0%E3%82%B9%E3%83%91%E3%83%B3%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%81%B5%E3%82%8A%E3%81%8B%E3%81%88%E3%82%8A%E3%82%92%E3%81%97%E3%81%A6%E3%81%BF">長いタイムスパンのためのふりかえりをしてみた - 冥冥乃志</a></li>
+<li><a href="http://hisa-magazine.net/blog/manabutikara/ywt/">YWTという振り返り手法について | ナカシマガジン</a></li>
+</ul>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p>ワールドカフェのような感じ&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p>もちろんシールの多さだけで判断するわけではありませんが&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/ywt-retrospective.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="中長期のふりかえりとしてYWT(やった,わかった,つぎにやる)を試してみました" data-url="http://tech.feedforce.jp/ywt-retrospective.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/ywt-retrospective.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/ywt-retrospective.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/study-letsencrypt.html" rel="next">入門Let's Encryptという勉強会をしました</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/stretcher-consul-capistrano.html" rel="prev">stretcher + consul + capistrano を使ったデプロイを導入しようと思います</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

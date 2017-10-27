@@ -1,0 +1,309 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>小学生男子がKidsRubyを使ってみた | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは。小学生男子二児の母でRubyプログラマなkano-eです。これまでScratchで遊んでいた我が家の小学生男子たちですが、最近KidsRubyも使い始めました。KidsRubyというのは、Rubyを使った子供向けのプログラミング教育用アプリケーションで、子供のRubyプログラミングをサポートしてくれます。子供たちが使うにあたって自分でも遊んでみたことなど、社内勉強会で共有した内容を紹介したいと思います。">
+      <link rel="canonical" href="http://tech.feedforce.jp/kidsruby.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="小学生男子がKidsRubyを使ってみた | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは。小学生男子二児の母でRubyプログラマなkano-eです。これまでScratchで遊んでいた我が家の小学生男子たちですが、最近KidsRubyも使い始めました。KidsRubyというのは、Rubyを使った子供向けのプログラミング教育用アプリケーションで、子供のRubyプログラミングをサポートしてくれます。子供たちが使うにあたって自分でも遊んでみたことなど、社内勉強会で共有した内容を紹介したいと思います。">
+      <meta property="og:url" content="http://tech.feedforce.jp/kidsruby.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/kidsruby.html">小学生男子がKidsRubyを使ってみた</a></h1>
+      <ul>
+        <li class="entry-time">2013.12.12</li>
+        <li class="entry-cat"><a href="/category/ruby/">Ruby/Rails</a>, <a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/e-takano">e-takano</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/e-takano"><img src="/images/authors/kano-e.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは。小学生男子二児の母でRubyプログラマなkano-eです。</p>
+
+<p>これまでScratchで遊んでいた我が家の小学生男子たちですが、最近KidsRubyも使い始めました。</p>
+
+<p><a href="http://kidsruby.com/">KidsRuby</a>というのは、Rubyを使った子供向けのプログラミング教育用アプリケーションで、子供のRubyプログラミングをサポートしてくれます。</p>
+
+<p>子供たちが使うにあたって自分でも遊んでみたことなど、社内勉強会で共有した内容を紹介したいと思います。</p>
+
+<!--more-->
+
+<h2>KidsRubyとの出会い</h2>
+
+<p>きっかけは、先日のMaker Faire Tokyo 2013<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>で見かけたKidsRubyを使った出展<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>でした。 Rubyでロボットの動作をプログラムして無線で動かすというもので、我が家の子供たちは人生初のRubyコーディングを体験してきました。</p>
+
+<p>これまでScratch<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup>でGUI操作でのプログラミング経験はあったものの、キーボード操作はほとんどできず、小文字のbとdの区別も曖昧な状態です。 正直、タイピングがメインのプログラムはまだ難しいと思っていたのですが、思いのほか楽しそうにRubyのコードを書いているのを見て、考えを改めることになりました。</p>
+
+<h2>KidsRubyをはじめる</h2>
+
+<p>KidsRubyはRuby環境の構築が簡単にできるようになっていて、 <a href="http://kidsruby.com/download">ダウンロードページ</a>からインストーラをダウンロードしてインストールするだけで準備は完了です。 インストーラはWindows、Mac OSX、Debian Linux、それからRaspberry Pi用のものが用意されているので、自分の環境に合ったものを選ぶことができます。</p>
+
+<p>アプリケーションを起動すると、以下画像のように左右2ペインの画面が開きます。</p>
+
+<p><a href="/images/2013/11/kidsruby-screenshot-w960.png"><img alt="kidsruby-screenshot-w960" src="/images/2013/11/kidsruby-screenshot-w960.png" /></a></p>
+
+<p>画面の左側はエディタ、右側はタブ切り替えでヘルプ<sup id="fnref4"><a href="#fn4" rel="footnote">4</a></sup>や出力結果の表示です。</p>
+
+<p>この画面構成のおかげで、</p>
+
+<ol>
+<li>ヘルプを読む</li>
+<li>コードを書く</li>
+<li>実行結果を確認する</li>
+</ol>
+
+<p>という学習サイクルが自然とできるようになっています。</p>
+
+<h2>ヘルプ、初めてのプログラミング</h2>
+
+<p>ヘルプの内容は「初めてのプログラミング」が意識されていて、「Rubyプログラミングの入門」というよりは「Rubyを使ったプログラミングの入門」になっています。</p>
+
+<p>特に最初のチュートリアルはHacketyHack<sup id="fnref5"><a href="#fn5" rel="footnote">5</a></sup>をKidsRuby用に書き直したものになっており、「プログラミングって何？」とか「パソコンに上手に指示するには」といった内容から始まります。</p>
+
+<p>普段からScratchを使い慣れている小学5年生男子は、一人でヘルプを読んで、勝手にコードを書いて、実行して、どんどんページを進めていました。 「これはScratchのこのブロックみたいな動きをする」というような理解の仕方をしているようで、「RubyもScratchと似ているところがあるね」<sup id="fnref6"><a href="#fn6" rel="footnote">6</a></sup>と言っていました。</p>
+
+<p>小学3年生男子の方は、エラーになった時など大人のサポートがないと解決が難しそうでしたし、ヘルプも少し進めると疲れて飽きてしまった様子でした。 それでも、自分の書いたコードで画面の色が変わった時には「すげー！」と楽しそうでした。</p>
+
+<h2>HacketyHackの次</h2>
+
+<p>KidsRubyのヘルプはHacketyHackのほかに、RubyWarrior<sup id="fnref7"><a href="#fn7" rel="footnote">7</a></sup>というプログラムをゲームや、Gosu<sup id="fnref8"><a href="#fn8" rel="footnote">8</a></sup>というゲーム開発ライブラリのチュートリアル、それから無線操作できるボール型のロボット・Sphero<sup id="fnref9"><a href="#fn9" rel="footnote">9</a></sup>をRubyで操作するgemの紹介があります。</p>
+
+<p>子供の興味次第ですが、そのままRubyプログラミングとの付き合いを続けることもできそうです。</p>
+
+<h2>Rubyは楽しい、プログラミングは楽しい</h2>
+
+<p>KidsRubyはRubyらしく「楽しい」ことを意識して作られているようです。 プログラミングも、本を読んだり絵を描いたりするのと同じように楽しいことだと、子供たちが少しでも感じてくれたら嬉しいなと思います。</p>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p><a href="http://makezine.jp/event/mft2013/">Maker Faire Tokyo 2013</a>は、オライリー・ジャパンが主催する主にDIYの展示発表会です。<br>
+今年(2013年)はお台場で2日間開催されましたが、会場が日本科学未来館とタイム24ビルと2カ所にわかれており、2日間あっても全部回り切るのは難しいくらいのブースが参加していました。&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p><a href="http://www.monoxit.com/info/113%EF%BC%88%E6%97%A5-4-%E6%9C%88-maker-faire-tokyo-2013%E3%81%AB%E5%87%BA%E5%B1%95%E3%81%97%E3%81%BE%E3%81%99/">MONOXITさんのブース</a>でした。<br>
+MONOXITさんは、 <a href="http://www.monoxit.com/wshop/%E9%96%8B%E5%82%AC%E4%BA%88%E5%AE%9A%E3%81%AE%E3%83%AF%E3%83%BC%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%83%E3%83%97/">KidsRubyやRaspberry Piを使ったワークショップ</a>を行っているようです。&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn3">
+<p>Scratchは、MITメディアラボが開発した子供向けのプログラミング教育環境です。GUIでブロックを組み立てるようにプログラミングできるので、タイピングができない子供でも、プログラミングを楽しむことができます。&nbsp;<a href="#fnref3" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn4">
+<p>KidsRubyのヘルプは多言語化されていて、日本語版も存在します。<br>
+漢字遣いなどは小学2年生から読むことができるように配慮されているようです。&nbsp;<a href="#fnref4" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn5">
+<p><a href="http://hackety.com/">HacketyHack</a>は子供のためのプログラミング入門用アプリケーションです。<br>
+<a href="http://en.wikipedia.org/wiki/Why_the_lucky_stiff">why the lucky stiff</a>さんのインターネット活動引退前の最後の仕事だったそうです。&nbsp;<a href="#fnref5" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn6">
+<p>親心から補足すると、RubyとScratchが似ているというよりは、プログラミングの基本的な考え方は同じ、ということではないかと思います。<br>
+試しにKidsRubyのチュートリアルに出てきたコードをScratchのスクリプトにしてみました。<br>
+<a href="/images/2013/11/kidsruby-code-a.png"><img alt="kidsruby-code-a" src="/images/2013/11/kidsruby-code-a-300x111.png" /></a><br>
+<a href="/images/2013/11/kidsruby-code-b.png"><img alt="kidsruby-code-b" src="/images/2013/11/kidsruby-code-b-300x98.png" /></a><br><br>
+2枚とも、左がKidsRubyのチュートリアルのコード、右がScratchのスクリプトに移植したものです。&nbsp;<a href="#fnref6" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn7">
+<p><a href="https://github.com/ryanb/ruby-warrior">RubyWarrior</a>は、Rubyでキャラクターの行動をプログラミングし、塔を登ってゆくゲームです。<br>
+KidsRubyでは多国語に対応した <a href="https://github.com/rafmagana/ruby-warrior-i18n">i18n-ed version</a>が使われています。<br>
+ほかにも、 <a href="https://www.bloc.io/ruby-warrior/#/">ブラウザ上で遊べるように</a>したものや、 <a href="http://jswarrior.fusioncharts.com/">JSバージョン</a>など、派生プロジェクトも多いです。&nbsp;<a href="#fnref7" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn8">
+<p><a href="http://libgosu.org/">Gosu</a>はRubyとC++に対応したゲーム開発ライブラリです。<br>
+本家の <a href="https://github.com/jlnr/gosu/wiki/Ruby-Tutorial">チュートリアル</a>が丁寧なので、一通り読み進めれば、簡単なゲームは作れてしまいます。<br>
+KidsRubyのGosuのチュートリアルは、本家のチュートリアルを簡単にしたものになっています。&nbsp;<a href="#fnref8" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn9">
+<p><a href="http://www.gosphero.com/">Sphero</a>は、iPhoneやAndoroidから公式アプリで動かすだけでなく、 <a href="http://orbotixinc.github.io/Sphero-Docs/">各種言語のライブラリ</a>で操作ができる楽しいガジェットです。<br>
+社内勉強会ではちらっと「こういうものもあるらしいです」という紹介をしただけでしたが、その姿の可愛さと楽しそうなPVのインパクトが大きく、その後社内で増殖を続けています。&nbsp;<a href="#fnref9" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/kidsruby.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="小学生男子がKidsRubyを使ってみた" data-url="http://tech.feedforce.jp/kidsruby.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/kidsruby.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/kidsruby.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/reading-lean-from-the-trenches.html" rel="next">『リーン開発の現場』読書会はじめました</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/elisp.html" rel="prev">elisp はじめてガイド</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

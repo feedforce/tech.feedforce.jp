@@ -1,0 +1,444 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは。寒がりすぎな増田です。いつからだろう？先週金曜日に社内勉強会で掲題の発表をしました。感想や質問も頂いたので、返信という形で記事として記録しておきます。">
+      <link rel="canonical" href="http://tech.feedforce.jp/vue-elasticsearch.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは。寒がりすぎな増田です。いつからだろう？先週金曜日に社内勉強会で掲題の発表をしました。感想や質問も頂いたので、返信という形で記事として記録しておきます。">
+      <meta property="og:url" content="http://tech.feedforce.jp/vue-elasticsearch.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></h1>
+      <ul>
+        <li class="entry-time">2017.02.20</li>
+        <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/masutaka">masutaka</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/masutaka"><img src="/images/authors/masutaka.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは。寒がりすぎな増田です。いつからだろう？</p>
+
+<p>先週金曜日に社内勉強会で掲題の発表をしました。感想や質問も頂いたので、返信という形で記事として記録しておきます。</p>
+
+<!--more-->
+
+<h2>スライド</h2>
+
+<script async class="speakerdeck-embed" data-id="514f1a6d5b9b49f6b50368fd5cc18e41" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+
+<h2>発表の内容</h2>
+
+<ul>
+<li><a href="https://masutaka.net/chalow/">https://masutaka.net/chalow/</a> に自前で検索機能を付けた
+
+<ul>
+<li><a href="https://masutaka.net/chalow/search.html">https://masutaka.net/chalow/search.html</a></li>
+<li>フロントエンドは <a href="https://jp.vuejs.org/">Vue.js</a> で実装。バックエンドは <a href="https://nginx.org">nginx</a> のリバースプロキシを介した <a href="https://www.elastic.co/jp/products/elasticsearch">Elasticsearch</a></li>
+<li>今のところ、記事データの Index は Elasticsearch の Bulk API でデプロイのたびに作り直している</li>
+</ul></li>
+<li>ついでに <a href="https://cse.google.co.jp/">Google Custom Search Engine</a> でも実装した
+
+<ul>
+<li><a href="https://masutaka.net/chalow/search-google.html">https://masutaka.net/chalow/search-google.html</a></li>
+</ul></li>
+<li>『<a href="http://0xcc.net/unimag/1/">ChangeLog メモ</a>』と、その静的 HTML ジェネレータ <a href="http://chalow.org/">chalow</a> も紹介</li>
+</ul>
+
+<h2>感想や質問</h2>
+
+<p>※ リストの 2 階層目は私からのコメントです。</p>
+
+<h3>今回の検索機能</h3>
+
+<ul>
+<li>ちゃんとかたまり１つ作り上げるのすごい... 自分の、やり切り力足りなさ
+
+<ul>
+<li>今回はむしろスライド作成に心が折れそうになりました...</li>
+</ul></li>
+<li>検索データは html から作ってたけど、元の txt ファイルからじゃダメなの？
+
+<ul>
+<li>chalow を改造すれば、絶対そのほうが良いです。今回は疲れていたので、Ruby に逃げました（chalow は Perl 製）</li>
+</ul></li>
+<li>私は全文検索に <a href="https://www.algolia.com/">Algolia</a> つかってます :)
+
+<ul>
+<li>search.masutaka.net 使っていいよー</li>
+</ul></li>
+<li>隠しコマンド良い</li>
+<li>隠しリンク！
+
+<ul>
+<li>90 年代に初めてホームページ(!)を作った頃を思い出して付けました</li>
+</ul></li>
+<li>ユーザーに検索機能どのくらい使われてますか？
+
+<ul>
+<li>多分私だけです(ｷﾘｯ</li>
+<li>nginx のログを Kibana で可視化すれば把握は可能です</li>
+</ul></li>
+<li><a href="https://rubygems.org/gems/oga">Oga</a> 知らなかった
+
+<ul>
+<li>Nokogiri と違って、libxml 使わないのが最高です</li>
+<li><a href="http://qiita.com/gravitonMain/items/720f441713b1378fe55c">IO を渡せば、Nokogiri より速いみたいです</a></li>
+<li>もう Nokogiri を使う理由はないと思いますね</li>
+</ul></li>
+<li>インポートの負荷は高くないのかな？ デプロイの時間も気になる
+
+<ul>
+<li>HTML をパースして JSON を作るのに 60 〜 70秒、インポートは 10 秒未満ですね。パースが長い</li>
+<li>デプロイ時間は 4 〜 5 分で、そのうち HTML の生成は 15 秒ほどですね</li>
+</ul></li>
+</ul>
+
+<h3>フロントエンド</h3>
+
+<ul>
+<li>フロントの人達怖い...
+
+<ul>
+<li>やさしい方々ばかりですよ</li>
+</ul></li>
+<li>マスカット Vue2 の勉強会早よ
+
+<ul>
+<li>（言えてない...）すみません！ すぐに！</li>
+</ul></li>
+<li>あくしおす</li>
+<li>あくしぃぁうす
+
+<ul>
+<li>よい発音です</li>
+</ul></li>
+<li>発音がちょっと...
+
+<ul>
+<li>ｱｸｼｨｧｳｽ</li>
+</ul></li>
+<li>Riot.js もよろしくお願いします（◯ねって言われそう）
+
+<ul>
+<li>◯は伏せ字にしましたw</li>
+<li>評判が良くなかったので、なんとなく避けました</li>
+<li><a href="https://jp.vuejs.org/v2/guide/comparison.html#Riot">Vue.js のガイドに Riot.js と比較がある</a>ので、参考にしてみて下さい。他のフレームワークとの比較もあります</li>
+</ul></li>
+<li>Vue.js の人りりしい
+
+<ul>
+<li><a href="https://github.com/yyx990803">たしかに...</a></li>
+<li>（Issue や PR のリンクが Twitter に流れると、りりしいお顔が拝見できるそうです）</li>
+</ul></li>
+<li>Vue.js よさそう!!
+
+<ul>
+<li>とにかくハードルが低くて良いです。そこから JS の世界を広げていけばよいかと(ｵﾏｴﾓﾅｰ</li>
+</ul></li>
+</ul>
+
+<h3>Elasticsearch + Kibana</h3>
+
+<ul>
+<li>電子書籍全文検索システムで使おうと思ったことがある
+
+<ul>
+<li>その後どうしたのか気になります</li>
+</ul></li>
+<li>Mongo クエリよりつらそう
+
+<ul>
+<li>雰囲気が<a href="https://ja.wikipedia.org/wiki/%E3%83%9D%E3%83%BC%E3%83%A9%E3%83%B3%E3%83%89%E8%A8%98%E6%B3%95">ポーランド記法</a>っぽいので、慣れれば Lisper は書きやすいかも？</li>
+</ul></li>
+<li>Kuromoji 試したい
+
+<ul>
+<li><a href="https://github.com/textlint/textlint">textlint</a> でも使われているみたいですね</li>
+<li><a href="https://github.com/feedforce/tech.feedforce.jp/blob/86d7b8728b5d23e77985a41d5322c6a1b3b793b9/circle.yml#L13">この技術者ブログは CI の時に textlint を使ってます</a></li>
+</ul></li>
+<li>Kuromoji の他の Analyzer どんなのが？（Qiita とか何使ってるのかな）
+
+<ul>
+<li><a href="https://speakerdeck.com/johtani/elastic-stackwoli-yong-site-detakarayang-naqi-dukiwojian-tukeru?slide=44">GitHub は Elasticsearch 使っているみたいですね</a></li>
+<li><a href="http://blog.qiita.com/post/101162528979/new-qiita-search">Qiita と Qiita:Team でも使っているみたいです</a></li>
+</ul></li>
+<li>学習コスト高いですよね
+
+<ul>
+<li>そうなんですよ。ライトな検索にはコストが高いと思いました</li>
+</ul></li>
+<li>Kibana 5 いいなぁ〜 使いやすそう
+
+<ul>
+<li><a href="https://www.elastic.co/jp/cloud">Elastic Cloud</a> がいろいろお手軽です</li>
+</ul></li>
+<li><img alt="ド・モルガンの法則" src="/images/2017/02/de-morgan.jpg" />
+
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/5.1/query-dsl-bool-query.html">Elasticsearch の Bool Query</a> に should_not がない理由で話に出しましたね</li>
+</ul></li>
+</ul>
+
+<h3>見学者の方から</h3>
+
+<p>今回は社外から見学者の方もいらしてました。</p>
+
+<ul>
+<li>アクシオス使ってみます
+
+<ul>
+<li>是非！</li>
+</ul></li>
+<li>自分もブログを運営しているのですが、WordPress を使用しています。ブログといったら WordPress というイメージを持っていたので Chalow やもろもろを使って実装しているとしり驚きました
+
+<ul>
+<li>WordPress は PHP &amp; MySQL という構成なので運用がヘビーですよね</li>
+<li>アップデートをまめにしないと、乗っ取られて攻撃の踏み台とかにされるので注意です</li>
+</ul></li>
+</ul>
+
+<h3>その他</h3>
+
+<ul>
+<li>実験場良い✨
+
+<ul>
+<li>インフラに興味があるエンジニアは絶対持ったほうが良いです</li>
+</ul></li>
+<li>バックエンドエンジニアは Vue &gt; Angular &gt; React かも
+
+<ul>
+<li>Angular はフルスタックすぎて挫折したなー</li>
+</ul></li>
+<li>Emacs
+
+<ul>
+<li>一生をともにします</li>
+</ul></li>
+<li>自分サーバの紹介おもしろい
+
+<ul>
+<li>意外としている人いなかったか</li>
+</ul></li>
+<li>setq (setq )
+
+<ul>
+<li>Kibana のタグクラウドに出てましたね</li>
+</ul></li>
+<li>記事数すごい
+
+<ul>
+<li>初期はホントにメモですので</li>
+</ul></li>
+<li>使ってみようと思いました
+
+<ul>
+<li>きっかけになれば幸いです</li>
+</ul></li>
+<li>面白かったです!!!
+
+<ul>
+<li>うれしいです!!!</li>
+</ul></li>
+<li>もくもく会の成果が出てて良かったです!!
+
+<ul>
+<li>やったー!!</li>
+</ul></li>
+<li>masutaka++
+
+<ul>
+<li>これからも◯の数を増やしていきます</li>
+</ul></li>
+<li>エオルゼアにもいきましょう
+
+<ul>
+<li>今週から復活します！</li>
+</ul></li>
+<li>&quot;2001年から&quot; → 15年強...！
+
+<ul>
+<li>メモが残っているといろいろ便利です</li>
+<li>人に説明するとき URL を貼るだけで良いとか</li>
+</ul></li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/vue-elasticsearch.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした" data-url="http://tech.feedforce.jp/vue-elasticsearch.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/vue-elasticsearch.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/vue-elasticsearch.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/cloudfront-tilda.html" rel="next">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/troubleshooting_discussion.html" rel="prev">障害対応についてパネルディスカッション形式で話し合ってみた</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

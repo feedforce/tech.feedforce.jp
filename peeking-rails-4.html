@@ -1,0 +1,473 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>Peeking Rails 4 | feedforce Engineers' blog</title>
+      <meta name="description" content="12月14日の社内勉強会では、2013年前半にリリースされる見込みのRuby on Railsバージョン4について、最新のコードを試す方法や目に付いた新機能を紹介してみました。免責本記事の内容は開発中のソフトウェアの記事執筆時の状態に基づいています。その後の開発進捗によって実態に符合しなくなっている可能性がありますので、その点お含み置き下さい。">
+      <link rel="canonical" href="http://tech.feedforce.jp/peeking-rails-4.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="Peeking Rails 4 | feedforce Engineers' blog">
+      <meta property="og:description" content="12月14日の社内勉強会では、2013年前半にリリースされる見込みのRuby on Railsバージョン4について、最新のコードを試す方法や目に付いた新機能を紹介してみました。免責本記事の内容は開発中のソフトウェアの記事執筆時の状態に基づいています。その後の開発進捗によって実態に符合しなくなっている可能性がありますので、その点お含み置き下さい。">
+      <meta property="og:url" content="http://tech.feedforce.jp/peeking-rails-4.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/peeking-rails-4.html">Peeking Rails 4</a></h1>
+      <ul>
+        <li class="entry-time">2012.12.27</li>
+        <li class="entry-cat"><a href="/category/ruby/">Ruby/Rails</a>, <a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/ozawa">ozawa</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/ozawa"><img src="/images/authors/sakuro.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>12月14日の社内勉強会では、2013年前半にリリースされる見込みのRuby on Railsバージョン4について、最新のコードを試す方法や目に付いた新機能を紹介してみました。</p>
+
+<h2>免責</h2>
+
+<p>本記事の内容は開発中のソフトウェアの記事執筆時の状態に基づいています。その後の開発進捗によって実態に符合しなくなっている可能性がありますので、その点お含み置き下さい。</p>
+
+<!--more-->
+
+<h2>Rails 4とは</h2>
+
+<p>Rails 4は Rails 3に続くRailsのメジャーバージョンアップです。</p>
+
+<p>Railsはメジャーバージョンごとに新たな考え方(パラダイム)を導入してきました。Rails 1でDRY(Don&#39;t Repeat Yourself)、CoC(Convention over Configuration)、Rails 2でRESFful、Rails 3でモジュール化などです。しかしながら、Rails 4ではとくに目立つような新たな考え方は導入されず、細かいところでより便利になっていくようです。強いて言えば、Ruby 1.8系のサポートがなくなるところが大きな差異でしょうか。</p>
+
+<h2>本日の環境</h2>
+
+<p>試すに当たっては、実行するRubyも新しいものを使ってみました。Rails 4の要求するRubyは1.9系なので、必ずしも本記事のように2.0のプレビュー版を使用する必要はありません。</p>
+
+<ul>
+<li>Ruby 2.0.0 preview2</li>
+<li>bundler 1.3.0.pre</li>
+</ul>
+
+<p>2.0 preview を使用している場合、通常の gem install でインストールされる bundler 1.2系が動作しないので、1.3.0.pre を使用しています。(gem install bundler --preでインストールできます)</p>
+
+<pre><code class="prettyprint">$ ruby -v
+ruby 2.0.0dev (2012-12-01 trunk 38126) [x86_64-darwin12.2.1]
+$ gem list
+***LOCAL GEMS***
+bigdecimal (1.1.0)
+bundler (1.3.0.pre)
+io-console (0.3)
+json (1.7.1)
+minitest (4.3.2)
+psych (2.0.0)
+rake (0.9.5)
+rdoc (4.0.0.preview2)
+test-unit (2.0.0.0)
+</code></pre>
+
+<h2>Rails 4を試そう</h2>
+
+<p><a href="http://github.com/rails/rails">Railsの最新コードはgithub.comで公開</a>されており、現時点では開発の最先端と、いずれ公開される見込みのRails 4にさして差はない(正式リリース間近になると開発バージョンとRails 4のリリース向けの内容に差が出てきます)ので、これを使ってRailsアプリを動かしてみましょう。</p>
+
+<h3>アプリケーションの作成</h3>
+
+<p>demoという名前のアプリケーションを作成します。</p>
+
+<h4>空のアプリケーションの作成</h4>
+
+<p>個人的に、アプリごとに依存gemをわけてインストールするのが好みなので、まず空のアプリケーションを作って、その中にgemをインストールすることにします。</p>
+
+<pre><code class="prettyprint">$ mkdir demo
+$ cd demo
+</code></pre>
+
+<p>空のアプリケーションのディレクトリを作成してその中に移動しました。</p>
+
+<h4>必要なgemの用意</h4>
+
+<p>Rails 3以降では依存するgemはbundlerを使って管理しますが、Rails 4でもそれは変わりません。</p>
+
+<pre><code class="prettyprint">$ vi Gemfile
+</code></pre>
+
+<p>以下の内容でGemfileを作成します。</p>
+
+<pre><code class="prettyprint">source :rubygems
+gem &#39;rails&#39;, github: &#39;rails/rails&#39;
+</code></pre>
+
+<p>--pathオプションを付けて、bundle installを実行します。</p>
+
+<pre><code class="prettyprint">$ bundle install --path vendor/bundle
+</code></pre>
+
+<p>Railsがcloneされたあと、bundlerの依存関係の解決時に</p>
+
+<pre><code class="prettyprint">Could not find gem &#39;activerecord-deprecated_finders (= 0.0.1) ruby&#39;,
+which is required by gem &#39;rails (&gt;= 0) ruby&#39;, in any of the sources.
+</code></pre>
+
+<p>と怒られてしまいます。</p>
+
+<p>activerecord-deprecated_findersは、Rails 4でdeprecated扱いになる、オプションをハッシュで渡すスタイルのActiveRecordのfindメソッドを提供するもので、Rails 4.0では必須の依存gemになっていますが、Rails 4.1で依存がなくなるので、4.0のうちに新しいwhereを使う流儀に対応しておきましょう。</p>
+
+<p>Gemfileを編集して activerecord-deprecated_finders への依存を追加。</p>
+
+<pre><code class="prettyprint">source :rubygems
+gem &#39;rails&#39;, github: &#39;rails/rails&#39;
+gem &#39;activerecord-deprecated_finders&#39;, github: &#39;rails/activerecord-deprecated_finders&#39; #追加
+</code></pre>
+
+<p>再度bundlerを実行すると、Railsコマンドの実行に必要なgemがひととおり vendor/bundle ディレクトリの中に配置されます。</p>
+
+<h4>アプリケーションの生成</h4>
+
+<p>最新のRailsのフレームワークが用意できたので、カレントディレクトリ(. = demo)を指定して初期アプリケーションを作成します。このとき --edge オプションを忘れないでください。</p>
+
+<p>Gemfileを上書きするか尋ねられるので、上書きします。</p>
+
+<pre><code class="prettyprint">$ bundle exec rails new . --edge
+:
+Your bundle is complete!
+It was installed into ./vendor/bundle
+</code></pre>
+
+<p>Gemfileは以下のような内容で上書きされています。(コメントと空行は省きました)</p>
+
+<pre><code class="prettyprint">source &#39;https://rubygems.org&#39;
+gem &#39;rails&#39;, github: &#39;rails/rails&#39;
+gem &#39;arel&#39;, github: &#39;rails/arel&#39;
+gem &#39;activerecord-deprecated_finders&#39;, github: &#39;rails/activerecord-deprecated_finders&#39;
+gem &#39;sqlite3&#39;
+group :assets do
+  gem &#39;sprockets-rails&#39;, github: &#39;rails/sprockets-rails&#39;
+  gem &#39;sass-rails&#39;, github: &#39;rails/sass-rails&#39;
+  gem &#39;coffee-rails&#39;, github: &#39;rails/coffee-rails&#39;
+  gem &#39;uglifier&#39;, &#39;&gt;= 1.0.3&#39;
+end
+gem &#39;jquery-rails&#39;
+gem &#39;turbolinks&#39;
+</code></pre>
+
+<h4>サーバ起動</h4>
+
+<pre><code class="prettyprint">$ script/rails s
+=&gt; Booting WEBrick
+=&gt; Rails 4.0.0.beta application starting in development on http://0.0.0.0:3000
+=&gt; Call with -d to detach
+=&gt; Ctrl-C to shutdown server
+[2012-12-13 23:06:24] INFO WEBrick 1.3.1
+[2012-12-13 23:06:24] INFO ruby 2.0.0 (2012-12-01) [x86_64-darwin12.2.1]
+[2012-12-13 23:06:24] INFO WEBrick::HTTPServer#start: pid=38974 port=3000
+</code></pre>
+
+<p>目立った変化はありませんね。</p>
+
+<p>ブラウザで <a href="http://localhost:3000/">http://localhost:3000/</a> にアクセスするとおなじみのウェルカムページが表示されます。</p>
+
+<p><a href="/images/2012/12/rails4-welcome.png"><img title="Rails 4 Welcomeページ" alt="Rails 3までと一見変わるところのないRails 4 Welcomeページ" src="/images/2012/12/rails4-welcome-150x150.png" /></a></p>
+
+<h3>おなじみのページ(?)</h3>
+
+<p>おなじみのページが表示されてはいるのですが、 public ディレクトリを見てみましょう。</p>
+
+<pre><code class="prettyprint">$ ls public
+404.html 422.html 500.html favicon.ico robots.txt
+</code></pre>
+
+<p>Rails 3まで使っていたindex.htmlファイルがありません。それでは今表示されているページの正体は何でしょうか?</p>
+
+<p>サーバの出力を見てみます。</p>
+
+<pre><code class="prettyprint">Started GET &quot;/&quot; for 127.0.0.1 at 2012-12-13 23:06:33 +0900
+Processing by Rails::WelcomeController#index as HTML
+  Rendered vendor/bundle/ruby/2.0.0/bundler/gems/rails-0262a18c7b0a/railties/lib/rails/templates/rails/welcome/index.html.erb (3.9ms)
+Completed 200 OK in 19ms (Views: 18.1ms | ActiveRecord: 0.0ms)
+</code></pre>
+
+<p>実はRails 4では、初期トップページは組み込みのWelcomeコントローラが提供しているのでした。</p>
+
+<h2>新機能つまみぐい</h2>
+
+<p>以下では、生成したアプリでいくつかの新機能を試してみることにします。</p>
+
+<h3>準備</h3>
+
+<p>動作を見るために、User scaffoldを作成して、データを投入しておきます。</p>
+
+<pre><code class="prettyprint">$ script/rails generate scaffold User name:string admin:boolean
+</code></pre>
+
+<p>マイグレーションファイルを修正して、admin 属性のデフォルトを false に変更。</p>
+
+<pre><code class="prettyprint">t.boolean :admin, default: false
+</code></pre>
+
+<p>db/seeds.rb で初期データを与えておきます。</p>
+
+<pre><code class="prettyprint">User.where(name: &#39;Alice&#39;, admin: false).first_or_create
+User.where(name: &#39;Bob&#39;, admin: true).first_or_create
+</code></pre>
+
+<p>初期データベースを構築します。</p>
+
+<pre><code class="prettyprint">$ bundle exec rake db:migrate db:seed
+</code></pre>
+
+<h3>AR not</h3>
+
+<p>レコードの検索条件で条件の否定を簡潔に書けるようになりました。配列にも対応しています。</p>
+
+<pre><code class="prettyprint">&gt;&gt; User.where.not(name: &#39;Alice&#39;).to_sql.display
+SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE (&quot;users&quot;.&quot;name&quot; != &#39;Alice&#39;)=&gt; nil
+&gt;&gt; User.where.not(name: [&#39;Alice&#39;, &#39;Bob&#39;]).to_sql.display
+SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE (&quot;users&quot;.&quot;name&quot; NOT IN (&#39;Alice&#39;, &#39;Bob&#39;))=&gt; nil
+#nilはdisplayメソッドの返値であってSQLの結果ではありません。
+</code></pre>
+
+<h3>TurboLinks</h3>
+
+<p>JavaScriptのブラウザ履歴操作APIの一部であるpushStateを利用した、PJAXという仕組みがあります。リンクをたどるタイミングで、実際にはリンクをたどらず、ページの一部だけをスクリプトで書き換えるとともに、本来の遷移先をブラウザ履歴に追加するものです。githubのリポジトリビューでディレクトリ階層をたどると表示されているコードがアニメーションして切り替わるところが有名な使用例ですね。スクリプトでページを書き換えているにもかかわらず、ブラウザで履歴を戻ることも出来ます。</p>
+
+<p>Rails 4ではデフォルトで <a href="http://github.com/rails/turbolinks">turbolinks gem</a>を採用して、通常のリンクをすべて自動的にPJAXに対応させてしまいます (逆にPJAXでは望ましくないリンクにはそれを表す属性を付ける)。</p>
+
+<p>Turbolinksが有効な場合、すべてのページ遷移リンクのクリックがturbolinksのスクリプトで処理されるようになります。しかしながら、サーバには通常のリクエストと同様に見えるので、従来同様ページ全体のHTMLがレスポンスとして返ってきます。このあと、turbolinksスクリプトは、現在のページのbody要素をレスポンス(HTML)のbody要素で置換、一方レスポンスのhead要素はtitle要素だけを反映して他は捨ててしまいます。結果的にレスポンスのheadに含まれていたスタイルシートへのlinkや外部スクリプトを参照するscript要素が一切評価されません。これにより、パフォーマンスの向上が見込めるわけです。</p>
+
+<p>欠点として、jQuery.ready のようなページ構築後にスクリプトが実行されるタイミングがなくなってしまう(最初にページをロードした時に発火するのみ)ので、対応策として、page:load イベントに同等の処理を書く必要があることに注意しましょう。</p>
+
+<h3>Strong Parameters</h3>
+
+<p>ActiveRecordのオブジェクトを生成するときに、外部から入力されたパラメータを素通ししてしまうと、管理者権限フラグのような、取り扱いに注意を要する属性まで外部から操作できてしまう可能性があり、危険です。</p>
+
+<p>今年の3月に、 <a href="https://github.com/blog/1068-public-key-security-vulnerability-and-mitigation">Railsアプリが持ちうる脆弱性を指摘したが相手にされず、githubをクラックして実証してしまったという事件</a>がありましたが、これがまさにその問題を突いた攻撃でした。</p>
+
+<p>Rails 3までの対策は、ActiveRecordのサブクラスで <code class="prettyprint">attr_accessible</code> や <code class="prettyprint">attr_protected</code> を使用して、インスタンスの生成時にハッシュで与える初期パラメータをフィルタリングするというものでした。</p>
+
+<p>しかし、このやり方には、パラメータの出所が外部である場合の問題なのに常に適用されてしまうという筋の悪さがあります。</p>
+
+<p>Rails 4では、Strong Parametersという仕組みを導入し、外界との仲立ちをするコントローラでパラメータのフィルタリングを行うようになりました。</p>
+
+<p>先ほど生成したuser scaffoldのuser_controller.rbを見ると以下のようなコードがあります。</p>
+
+<p>createメソッド冒頭  </p>
+
+<pre><code class="prettyprint">def create
+  @user = User.new(user_params)
+  :
+</code></pre>
+
+<p>末尾  </p>
+
+<pre><code class="prettyprint">def user_params
+  params.require(:user).permit(:name, :admin)
+end
+</code></pre>
+
+<p>これがStrong Parametersの使用例です。</p>
+
+<p>Rails 3まではActionControllerのparamsはHashWithIndifferentAccessのインスタンスでしたが、Rails 4ではActionController::Parametersのインスタンスになっています。このクラスは、以下のような拡張が行われたHashWithIndifferentAccessのサブクラスです。</p>
+
+<ul>
+<li>許可するキーのリストを持っており、許可されていればそのまま返す。許可されていなければnilを返す。</li>
+<li>必須のキーのリストも持っており、与えられていないのにアクセスがあると例外を発生させます。</li>
+<li>requireメソッド: パラメータのうち必須のものを引数にとり、それが存在すればその値を(Hashならば再帰的にActionController::Parametersのインスタンスとして)返し、指定されていなければ例外を発生させます。</li>
+<li>permitメソッド: パラメータのうち許可するものだけからなる部分集合を返します。</li>
+</ul>
+
+<p>Scaffoldで作られた user_params のままだと、全てのパラメータを許可していますので、ユーザーの新規作成時に admin 属性を有効にして作成すると、誰でも管理権限のあるユーザーを作ることが出来てしまいます。</p>
+
+<p><a href="/images/2012/12/create_with_admin_permitted.png"><img title="admin属性を許可した状態でadmin権限のあるユーザーを作成" alt="admin属性を許可した状態で、admin属性を有効にしてユーザー生成を試みる" src="/images/2012/12/create_with_admin_permitted-150x150.png" /></a></p>
+
+<p><a href="/images/2012/12/created_with_admin_permitted.png"><img title="admin権限のあるユーザーが生成された" src="/images/2012/12/created_with_admin_permitted-150x150.png" /></a></p>
+
+<p>そこで、以下のように name のみを許可するように変更してみましょう。</p>
+
+<pre><code class="prettyprint">def user_params
+  params.require(:user).permit(:name)
+end
+</code></pre>
+
+<p>生成してみます。</p>
+
+<p><a href="/images/2012/12/create_without_admin_permitted.png"><img title="admin権限を許可しない状態でadmin権限のあるユーザーを生成" alt="admin属性を許可しない状態で、admin属性を有効にしてユーザー生成を試みる" src="/images/2012/12/create_without_admin_permitted-150x150.png" /></a></p>
+
+<p><a href="/images/2012/12/created_without_admin_permitted.png"><img title="admin権限のないユーザーを生成した" alt="admin権限のあるユーザーの生成を試みたが阻止された" src="/images/2012/12/created_without_admin_permitted-150x150.png" /></a></p>
+
+<p>今度はadmin権限を外部から設定されてしまう事態を回避できました。</p>
+
+<h2>おわりに</h2>
+
+<p>Rails 4でアプリケーションを動かす方法と、いくつかの新機能を紹介してみました。</p>
+
+<p>年末年始に遊んでみるのにちょうどよいのではないでしょうか。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/peeking-rails-4.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="Peeking Rails 4" data-url="http://tech.feedforce.jp/peeking-rails-4.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/peeking-rails-4.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/peeking-rails-4.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/rails-hack-and-contribute.html" rel="next">Railsを改造しよう</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/chef-introduction.html" rel="prev">はじめましてChef</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

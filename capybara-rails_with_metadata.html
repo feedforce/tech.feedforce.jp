@@ -1,0 +1,352 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>Capybaraでドキュメント・メタデータが出力されていることを確認したい | feedforce Engineers' blog</title>
+      <meta name="description" content="どうも。毎晩エオルゼアに帰宅しては冒険者の遺留品集めに勤しんでおります tmd45 こと玉田です。この記事は最近 capybara を使っていてちょっと困ったこととその解決法です。手元の環境は rspec 3.0.0, rspec-rails 3.0.2, capybara 2.4.1 です。">
+      <link rel="canonical" href="http://tech.feedforce.jp/capybara-rails_with_metadata.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="Capybaraでドキュメント・メタデータが出力されていることを確認したい | feedforce Engineers' blog">
+      <meta property="og:description" content="どうも。毎晩エオルゼアに帰宅しては冒険者の遺留品集めに勤しんでおります tmd45 こと玉田です。この記事は最近 capybara を使っていてちょっと困ったこととその解決法です。手元の環境は rspec 3.0.0, rspec-rails 3.0.2, capybara 2.4.1 です。">
+      <meta property="og:url" content="http://tech.feedforce.jp/capybara-rails_with_metadata.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/capybara-rails_with_metadata.html">Capybaraでドキュメント・メタデータが出力されていることを確認したい</a></h1>
+      <ul>
+        <li class="entry-time">2014.12.16</li>
+        <li class="entry-cat"><a href="/category/ruby/">Ruby/Rails</a>, <a href="/category/test/">テスト</a></li>
+        <li class="entry-author"><a href="/author/tmd45">tmd45</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/tmd45"><img src="/images/authors/tmd45.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>どうも。毎晩エオルゼアに帰宅しては冒険者の遺留品集めに勤しんでおります tmd45 こと玉田です。</p>
+
+<p>この記事は最近 capybara を使っていてちょっと困ったこととその解決法です。<br>
+手元の環境は <code class="prettyprint">rspec 3.0.0</code>, <code class="prettyprint">rspec-rails 3.0.2</code>, <code class="prettyprint">capybara 2.4.1</code> です。</p>
+
+<!--more-->
+
+<p>なお、タイトルでティンときて結論だけ知りたいという方は、下の方にスクロールして『ドキュメント・メタデータの HTML タグを capybara で match させるには？』をさくっとご確認ください。</p>
+
+<p><img alt="capybara" src="http://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Capybara_Izu_Shaboten_001.jpg/800px-Capybara_Izu_Shaboten_001.jpg" /><br>
+<a href="http://commons.wikimedia.org/wiki/File:Capybara_Izu_Shaboten_001.jpg">引用元: 柚子湯に入るカピバラ（伊豆シャボテン公園）</a></p>
+
+<h2>ドキュメント・メタデータの HTML タグが capybara で match できない</h2>
+
+<p>ドキュメント・メタデータ（メタデータ・コンテンツ）とは HTML 文章に関する情報のことを指し、例えば以下の様な HTML タグで記述します。<code class="prettyprint">&lt;head&gt;</code> 要素にはこのメタデータの集まりが書かれています。</p>
+
+<ul>
+<li><code class="prettyprint">&lt;title&gt;</code> タイトル</li>
+<li><code class="prettyprint">&lt;link&gt;</code> リンク情報</li>
+<li><code class="prettyprint">&lt;meta&gt;</code> メタデータ（meta 要素）</li>
+</ul>
+
+<p>ドキュメント・メタデータは、文章情報や別文章との関係などを定義するもので、ブラウザから見たときに「人に見えるコンテンツ」ではありません。</p>
+
+<p>私が携わっている弊社のサービス『ソーシャルPLUS』では、ブラウザ側で動作する JavaScript が存在しなければきちんとサービス提供ができません。<br>
+そのため簡易的ではありますが、ある画面のテストで “生成した（JavaScript の）URL が link タグで出力されていること” をテストしたいと思いました。</p>
+
+<h3>capybara でテストしてみよう</h3>
+
+<p>文字列で言うと、このようなものが出力されていると期待します：<br>
+（href 属性、rel 属性が必須属性です）</p>
+
+<pre><code class="prettyprint">&lt;link href=&quot;http://www.example.com/style.css&quot; rel=&quot;stylesheet&quot; /&gt;
+</code></pre>
+
+<p>これを Capybara::RSpecMatcher の <code class="prettyprint">have_selector</code> で以下のように記述しました：</p>
+
+<pre><code class="prettyprint rb">html = &#39;&lt;link href=&quot;http://www.example.com/style.css&quot; rel=&quot;stylesheet&quot; /&gt;&#39;
+url = &#39;http://www.example.com/style.css&#39;
+
+# Capybara::RSpecMatchers を使ったテスト
+expect(html).to have_selector(&quot;link[href=&#39;#{url}&#39;][rel=&#39;stylesheet&#39;]&quot;)
+</code></pre>
+
+<p>しかし、テストを実行してみると「この条件にマッチするセレクタはないよ」と怒られてしまいました：</p>
+
+<pre><code class="prettyprint">Failure/Error: it { expect(html).to have_selector(&quot;link[href=&#39;#{url}&#39;][rel=&#39;stylesheet&#39;]&quot;) }
+       expected to find css &quot;link[href=&#39;http://www.example.com/style.css&#39;][rel=&#39;stylesheet&#39;]&quot; but there were no matches. Also found &quot;&quot;, which matched the selector but not all filters.
+</code></pre>
+
+<h4>補足：matcher は以下のように書いても同じ意味になります</h4>
+
+<pre><code class="prettyprint rb"># kind :css
+expect(html).to have_selector(:css, &quot;link[href=&#39;#{url}&#39;][rel=&#39;stylesheet&#39;]&quot;)
+expect(html).to have_css(&quot;link[href=&#39;#{url}&#39;][rel=&#39;stylesheet&#39;]&quot;)
+# kind :xpath
+expect(html).to have_selector(:xpath, &quot;//link[@href=&#39;#{url}&#39;][@rel=&#39;stylesheet&#39;]&quot;)
+expect(html).to have_xpath(&quot;//link[@href=&#39;#{url}&#39;][@rel=&#39;stylesheet&#39;]&quot;)
+</code></pre>
+
+<h3>他のタグはマッチするんだよね</h3>
+
+<p>ここで結構手間取っていて、「css セレクタだとメタデータの指定ってできないんだっけ？」とか「css セレクタや xpath セレクタの書き方を間違ったのかもしれない」といろいろ試行錯誤しました。<br>
+私は API ドキュメント・ラヴァー ではありますが  <code class="prettyprint">have_selector</code> の項や、その部分だけのコードを見てもさっぱりわかりませんでした。結果から見れば、深堀りが足りなかっただけなのですが（あるいは実際のコードを追ったほうが早い）。</p>
+
+<p>もっと簡単なコードで確認してみましょう。<br>
+ここでは Capybara::Node::Matcher の <code class="prettyprint">has_selector?</code> を利用しました。</p>
+
+<p><code class="prettyprint">&lt;input&gt;</code> タグは以下のようにマッチします：</p>
+
+<pre><code class="prettyprint rb"># console
+&gt; html = Capybara.string(&#39;&lt;input type=&quot;text&quot; name=&quot;user_name&quot;&gt;&#39;)
+&gt; html.has_selector?(&#39;input&#39;)
+=&gt; true
+</code></pre>
+
+<p>同じ方法で <code class="prettyprint">&lt;link&gt;</code> や <code class="prettyprint">&lt;meta&gt;</code> はマッチしません：</p>
+
+<pre><code class="prettyprint rb"># console
+&gt; html = Capybara.string(&#39;&lt;link href=&quot;http://example.com&quot; rel=&quot;stylesheet&quot; /&gt;&#39;)
+&gt; html.has_selector?(&#39;link&#39;)
+=&gt; false
+
+&gt; html = Capybara.string(&#39;&lt;meta name=&quot;description&quot; content=&quot;概要&quot; /&gt;&#39;)
+&gt; html.has_selector?(&#39;meta&#39;)
+=&gt; false
+</code></pre>
+
+<p>明らかにそのタグが書かれているにも関わらず、なぜマッチできないのでしょう。</p>
+
+<h2>ドキュメント・メタデータの HTML タグを capybara で match させるには？</h2>
+
+<p>いきなり結論ですが、matcher に <code class="prettyprint">visible: false</code> オプションを指定すれば、メタデータのタグでもマッチさせることができます：</p>
+
+<pre><code class="prettyprint rb">html = &#39;&lt;link href=&quot;http://www.example.com/style.css&quot; rel=&quot;stylesheet&quot; /&gt;&#39;
+url = &#39;http://www.example.com/style.css&#39;
+
+# オプション visible: false を指定
+expect(html).to have_selector(&quot;link[href=&#39;#{url}&#39;][rel=&#39;stylesheet&#39;]&quot;, visible: false)
+</code></pre>
+
+<p>いちいち <code class="prettyprint">visible: false</code> オプションを付けたくない場合、メタデータに対してたくさんのテストがある場合などは Capybara.configure で以下のように設定します：</p>
+
+<pre><code class="prettyprint rb"># spec_helper.rb
+Capybara.configure do |config|
+  config.ignore_hidden_elements = false
+end
+</code></pre>
+
+<p>この設定は <code class="prettyprint">capybara 2.1.0</code> (2013年4月頃) からデフォルトが <code class="prettyprint">true</code> です。これによってメタデータなどの <strong>「人に見えるコンテンツ」ではないものがマッチしないように</strong> なっています。</p>
+
+<p>feature spec など「ユーザから見てどういう振る舞いが期待されるか」をテストするのであれば、この定義はもっともであると考えられます。</p>
+
+<p>ご参考までに console での実行結果も確認してみます：</p>
+
+<pre><code class="prettyprint rb"># console
+&gt; html = Capybara.string(&#39;&lt;link href=&quot;http://example.com&quot; rel=&quot;stylesheet&quot; /&gt;&#39;)
+&gt; html.has_selector?(&#39;link&#39;, visible: false)
+=&gt; true
+
+&gt; html = Capybara.string(&#39;&lt;meta name=&quot;description&quot; content=&quot;概要&quot; /&gt;&#39;)
+&gt; html.has_selector?(&#39;meta&#39;, visible: false)
+=&gt; true
+</code></pre>
+
+<h3>visible オプションについて</h3>
+
+<p><code class="prettyprint">capybara 2.4.1</code> の API ドキュメントでは<a href="http://www.rubydoc.info/gems/capybara/2.4.1/Capybara/Node/Finders#all-instance_method">この辺り</a>にオプションの説明があります。</p>
+
+<blockquote>
+<p>Options Hash (options):</p>
+
+<ul>
+<li>visible (Boolean) — Only find elements that are visible on the page. Setting this to false finds invisible and visible elements.</li>
+</ul>
+</blockquote>
+
+<p>最新版（執筆時点で 2.4.4）では<a href="http://www.rubydoc.info/github/jnicklas/capybara/master/Capybara/Node/Finders#all-instance_method">さらにオプションが増えて</a>いますね。</p>
+
+<p>capybara の Visibility（<code class="prettyprint">hidden</code> な要素や <code class="prettyprint">display: none</code> な文章がどう扱われるか）については、下記の記事がシンプルにまとまっていてとても分かりやすかったのでご紹介いたします。</p>
+
+<ul>
+<li><a href="http://willnet.in/101">capybara 2.1 を学ぶ - willnet.in</a></li>
+</ul>
+
+<p>メタデータのなかでも <code class="prettyprint">&lt;title&gt;</code> タグについてはオプション以外に専用のクラスが用意されており、 <code class="prettyprint">have_title</code> macher でテストが可能です。</p>
+
+<ul>
+<li><a href="http://d.hatena.ne.jp/ria10/20130411/1365695467">capybaraを2.1にupgradeしてテンパった方へ - リア充爆発日記</a></li>
+</ul>
+
+<p>（それぞれこの記事を書きながらたどり着きました。もっと早く知っていれば…orz）</p>
+
+<p>こちらからは以上です。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/capybara-rails_with_metadata.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="Capybaraでドキュメント・メタデータが出力されていることを確認したい" data-url="http://tech.feedforce.jp/capybara-rails_with_metadata.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/capybara-rails_with_metadata.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/capybara-rails_with_metadata.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/aws-iam-billing.html" rel="next">AWSで請求情報をIAMユーザーでも閲覧できるようにする</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/vagrant-rpm.html" rel="prev">Vagrantで簡単に作れる！！RubyやKyotoTycoonのrpmたち</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,421 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>自由研究：フィード巡回ボットのHTTPリクエスト観察日記 | feedforce Engineers' blog</title>
+      <meta name="description" content="夏の自由研究を9月頭に行ったので、その経過などをここで発表したいと思います。">
+      <link rel="canonical" href="http://tech.feedforce.jp/free_theme_feed_aggregator.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="自由研究：フィード巡回ボットのHTTPリクエスト観察日記 | feedforce Engineers' blog">
+      <meta property="og:description" content="夏の自由研究を9月頭に行ったので、その経過などをここで発表したいと思います。">
+      <meta property="og:url" content="http://tech.feedforce.jp/free_theme_feed_aggregator.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/free_theme_feed_aggregator.html">自由研究：フィード巡回ボットのHTTPリクエスト観察日記</a></h1>
+      <ul>
+        <li class="entry-time">2007.09.20</li>
+        <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/ff_koshigoe">ff_koshigoe</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/ff_koshigoe"><img src="/images/authors/koshigoe.gif" /></a>
+    </div>
+    <div class="entry-body">
+      <p>夏の自由研究を9月頭に行ったので、その経過などをここで発表したいと思います。</p>
+
+<!--more-->  
+
+<h3>１日目</h3>
+
+<p>フィードを巡回するボットが、どんなHTTPリクエストを行っているのか気になったので、HTTPリクエストのログを記録することにしました。</p>
+
+<p>これから、ログを観察していこうと思います。<br>
+- どんなHTTPリクエストをしているのだろう？<br>
+- 知らないHTTPリクエストヘッダとかあるかな？<br>
+- 対応できていないHTTPリクエストヘッダとかあるかな？</p>
+
+<p>ログを記録には、簡単なPHPスクリプトを使います。<br>
+- CGIで動作しているので、$_SERVER[&#39;HTTP_*&#39;]からHTTPリクエストヘッダを抽出します<br>
+- スクリプトは最終的にフィードを返します<br>
+- そのほか、必要に応じて修正していきます</p>
+
+<p>巡回してもらうために、いくつかのフィードリーダーに登録しました。<br>
+- Google Reader<br>
+- はてなRSS<br>
+- Livedoor Reader<br>
+- Google Blogsearch(ping)<br>
+- My Yahoo(ping)<br>
+- Feedpath</p>
+
+<h3>２日目</h3>
+
+<p>だいぶ、ログが溜まりました。</p>
+
+<p>早速、知らなかったHTTPリクエストヘッダが登場しました。<br>
+- Connection: TE, close<br>
+- Te: deflate,gzip;q=0.3<br>
+- A-Im: feed<br>
+- A-Im: channel</p>
+
+<p>気になることもありました。<br>
+- ボットによってIf-Modified-Sinceをつけたりつけなかったりしている</p>
+
+<p>まず、If-Modified-Sinceについてですが、結果から言えばLast-Modifiedの付け忘れでした。ボットによっては、フィードの中から最終更新日時を記録してくれるようで、HTTPレスポンスヘッダに関わらず条件付GETを行ってくれるようです。安全のため、プログラムでフィードを返す場合はLast-Modifiedを忘れないようにしないといけません。<br>
+- 観察用スクリプトをLast-Modifiedと304応答に対応しました</p>
+
+<p>続いて、&quot;Connection: TE, close&quot;ですが、これはホップバイホップヘッダであるTEを書いているだけですね。このあたりは曖昧に記憶していました。お恥ずかしい。</p>
+
+<p>さて、それではA-Imにいきましょう。これはなんでしょうか。<br><br>
+RFC3229(Delta encoding in HTTP)にA-IMに関する記述があります。</p>
+
+<blockquote>
+<pre><code class="prettyprint">10.5.3 A-IM
+</code></pre>
+</blockquote>
+
+<p>The A-IM request-header field is similar to Accept, but restricts the instance-manipulations (section 10.1) that are acceptable in the response. As specified in section 10.5.2, a response may be the result of applying multiple instance-manipulations.</p>
+
+<p>A-IM = &quot;A-IM&quot; &quot;:&quot; #( instance-manipulation</p>
+
+<blockquote>
+<p>[&quot;;&quot; &quot;q&quot; &quot;=&quot; qvalue] )<br>
+```</p>
+
+<p><a href="http://ietf.org/rfc/rfc3229.txt">Delta encoding in HTTP</a>  </p>
+
+<pre><code class="prettyprint">10.5.3 A-IM
+</code></pre>
+</blockquote>
+
+<p>A-IM リクエストヘッダフィールドは Accept に似ているが、レスポンス中に受け入れ可能な instance-manipulation (section 10.1) を制限する。</p>
+
+<blockquote>
+<p>section 10.5.2 にて明示されるように、レスポンスは複数の instance-manipulation を適用した結果であるかもしれない。</p>
+
+<p>A-IM = &quot;A-IM&quot; &quot;:&quot; #( instance-manipulation<br>
+[&quot;;&quot; &quot;q&quot; &quot;=&quot; qvalue] )<br>
+```</p>
+
+<p><a href="http://www.studyinghttp.net/cgi-bin/rfc.cgi?3229#Sec10.5.3">HTTP における差分エンコーディング</a>  </p>
+</blockquote>
+
+<p>なるほど。インスタンス操作のための仕様ですか。<br><br>
+それでは、理解もそこそこに、&quot;A-Im: feed&quot;をGoogleから探してみましょう。</p>
+
+<blockquote>
+<p>In short, it allows you to only send new entries in your Atom feeds down to the clients. The client program adds a few HTTP headers (a If-Modified-Since to tell you what the last time they got was and an A-IM that indicates you support the &#39;feed&#39; IM) and things just magically work.  </p>
+
+<p><a href="http://asdf.blogs.com/asdf/2004/09/mod_speedyfeed__1.html">Rooneg::Weblog: mod_speedyfeed 0.02</a>  </p>
+
+<p>Atom フィードのダウンロード速度を上昇させる Apache モジュール。仕組みはフィルタモジュールとして動作し、Content Type が application/atom+xml の場合、クライアントから送られてくる If-Modified-Since ヘッダを調べて、新しい記事のフィードのみを配信するという仕組み。  </p>
+
+<p><a href="http://naoya.dyndns.org/~naoya/mt/archives/001346.html">mod_speedyfeed : NDO::Weblog</a>  </p>
+</blockquote>
+
+<p>Atom用の仕様で、クライアントが最後に取得したエントリーのタイムスタンプを教えると最新のエントリだけを取得できるようにする仕組みのようですね。</p>
+
+<p>さてさて、&quot;A-Im: channel&quot;はどうでしょうか。<br><br>
+残念ながら、分かりませんでした。名前からして、RSS1.0/RSS2.0に使えるのではないかと推測しています。</p>
+
+<p>それでは、最後に&quot;Te: deflate,gzip;q=0.3&quot;です。どうもAccept-Encodingのようなにおいがしますが、どうでしょうか。</p>
+
+<blockquote>
+<pre><code class="prettyprint">14.39 TE
+</code></pre>
+</blockquote>
+
+<p>The TE request-header field indicates what extension transfer-codings it is willing to accept in the response and whether or not it is willing to accept trailer fields in a chunked transfer-coding. Its value may consist of the keyword &quot;trailers&quot; and/or a comma-separated list of extension transfer-coding names with optional accept parameters (as described in section 3.6).</p>
+
+<blockquote>
+<pre><code class="prettyprint">
+
+[Hypertext Transfer Protocol -- HTTP/1.1](http://ietf.org/rfc/rfc2616.txt)  
+
+</code></pre>
+
+<p>14.39 TE</p>
+</blockquote>
+
+<p>TE リクエストヘッダフィールドは、レスポンスとしてどんな拡張転送コーディングを受け入れられるか、またチャンク形式転送コーディング内の trailer フィールドを受け入れられるかどうかを示す。</p>
+
+<blockquote>
+<p>この値は、&quot;trailers&quot; というキーワードや、 (section 3.6 にて定義される) 拡張転送コーディングの名前と省略可能な受け入れパラメータをコンマで区切ったリストからなるだろう。<br>
+```</p>
+
+<p><a href="http://www.studyinghttp.net/cgi-bin/rfc.cgi?2616#Sec14.39">ハイパーテキスト転送プロトコル -- HTTP/1.1</a>  </p>
+</blockquote>
+
+<p>&quot;転送コーディング&quot;が鍵のようです。</p>
+
+<blockquote>
+<pre><code class="prettyprint">3.6 Transfer Codings
+</code></pre>
+</blockquote>
+
+<p>Transfer-coding values are used to indicate an encoding transformation that has been, can be, or may need to be applied to an entity-body in order to ensure &quot;safe transport&quot; through the network. This differs from a content coding in that the transfer-coding is a property of the message, not of the original entity.</p>
+
+<blockquote>
+<pre><code class="prettyprint">
+
+[Hypertext Transfer Protocol -- HTTP/1.1](http://ietf.org/rfc/rfc2616.txt)  
+
+</code></pre>
+
+<p>3.6 転送コーディング</p>
+</blockquote>
+
+<p>転送コーディング値は、ネットワークを通して &quot;安全な転送&quot; を保証するために、エンティティボディに適用されている、する事のできる、する必要のあるエンコーディング変換を示すために使われる。</p>
+
+<blockquote>
+<p>転送コーディングは、元のエンティティではなくメッセージの特性である、という点で内容コーディングとは異なる。<br>
+```</p>
+
+<p><a href="http://www.studyinghttp.net/cgi-bin/rfc.cgi?2616#Sec3.6">ハイパーテキスト転送プロトコル -- HTTP/1.1</a>  </p>
+</blockquote>
+
+<p>なんとなくわかった気になりました。とにかく、転送時に適用されるエンコーディングということでしょう。つまり、&quot;Te: deflate,gzip;q=0.3&quot;は、「圧縮転送を受け付けます」という意味でしょう。</p>
+
+<p>疲れたのでこのくらいにしましょう。</p>
+
+<h3>３日目</h3>
+
+<p>さて、本日は観察日記の最終日です。</p>
+
+<p>まずは、転送コーディングについてもう少し見てみようと思います。</p>
+
+<p>何よりも気になることは、「Accept-Encodingを使わずにApacheが圧縮したレスポンスを返してくれるのかどうか」です。Apacheでは、mod_deflateを利用することで、&quot;Accept-Encoding: gzip&quot;なとどしたリクエストに対して、gzip圧縮したレスポンスを返すことが出来ます。このmod_deflateは、&quot;Te: gzip&quot;としたリクエストについても同様に処理してくれるのでしょうか？もしくは、mod_deflateとは別の転送コーディング用のモジュール(フィルタ)などが用意されているのでしょうか。</p>
+
+<p>Googleや人に尋ねてみましたが、残念ながら分かりませんでした。調べられた範囲の情報から推測すると、どうもApacheでは対応していないのではないかと考えられます。</p>
+
+<p>それでは、なぜAccept-Encodingを使わずに&quot;Te: deflate,gzip;q=0.3&quot;を使っているのでしょうか？&quot;Te: deflate,gzip;q=0.3&quot;を使っているボットに対してgzip圧縮したフィードを無理やり返してみましたが、正しく表示されています。このことから、ボットが期待していることは「圧縮したレスポンスを受け取る」ということで間違ってはいないと思います。<br><br>
+おそらく、PerlでHTTP-GETするモジュールの仕様なんでしょう。</p>
+
+<p>さて、&quot;A-Im: channel&quot;ですが、これについてはまったくあてが無いので、あきらめました。</p>
+
+<h3>まとめ</h3>
+
+<p>最後に、自由研究で得られたことをまとめてみたいと思います。<br>
+- フィード巡回ボットはHTTP/1.0とHTTP/1.1の両方があります<br>
+- HTTP/1.1のボットの一部は内容コーディングでなく転送コーディングで圧縮転送を要求します<br>
+- 差分エンコーディングに対応したボットが少数ながら存在します<br>
+- 転送コーディングと差分エンコーディングについて勉強できました</p>
+
+<p>未解決のまま、もやもやしている疑問について、ご存知の方はぜひ教えてください。よろしくお願いします。<br>
+- 本当にApacheでは&quot;Te: deflate,gzip;q=0.3&quot;に&quot;Transfer-Encoding: gzip&quot;と返せないのでしょうか？<br>
+- なぜ、一部のボットではAccept-EncodingでなくTeを使うようにしているのでしょうか？<br>
+- &quot;A-Im: channel&quot;は、いったい何者でサーバ側でのどのような挙動を期待しているのでしょうか？</p>
+
+<h3>おまけ</h3>
+
+<p>特徴があった(気になる点があった)ボットについて書いておきます。</p>
+
+<dl>
+<dt>Bloglines</dt>
+<dd>
+<ul>
+<li>A-Im: feed</li>
+
+</ul>
+
+</dd>
+<dt>はてなRSS</dt>
+<dd>
+<ul>
+<li>Te: deflate,gzip;q=0.3</li>
+
+</ul>
+
+</dd>
+<dt>Livedoor Reader</dt>
+<dd>
+<ul>
+<li>Te: deflate,gzip;q=0.3</li>
+
+</ul>
+
+</dd>
+<dt>Feedpath</dt>
+<dd>
+<ul>
+<li>A-Im: channel</li>
+
+</ul>
+
+</dd>
+
+</dl>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/free_theme_feed_aggregator.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="自由研究：フィード巡回ボットのHTTPリクエスト観察日記" data-url="http://tech.feedforce.jp/free_theme_feed_aggregator.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/free_theme_feed_aggregator.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/free_theme_feed_aggregator.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/dev-camp-report-2.html" rel="next">開発合宿レポート＠伊東温泉</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/load_balance_apache.html" rel="prev">負荷分散講習会 Apache編</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

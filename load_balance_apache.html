@@ -1,0 +1,429 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>負荷分散講習会 Apache編 | feedforce Engineers' blog</title>
+      <meta name="description" content="ゴール負荷分散のいくつかの方法に関して理解するmod_proxy_balancerによる負荷分散クラスタが構築できる">
+      <link rel="canonical" href="http://tech.feedforce.jp/load_balance_apache.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="負荷分散講習会 Apache編 | feedforce Engineers' blog">
+      <meta property="og:description" content="ゴール負荷分散のいくつかの方法に関して理解するmod_proxy_balancerによる負荷分散クラスタが構築できる">
+      <meta property="og:url" content="http://tech.feedforce.jp/load_balance_apache.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/load_balance_apache.html">負荷分散講習会 Apache編</a></h1>
+      <ul>
+        <li class="entry-time">2007.08.27</li>
+        <li class="entry-cat"><a href="/category/infrastructure/">インフラ</a>, <a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/akahige">akahige</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/akahige"><img src="/images/authors/no-image.png" /></a>
+    </div>
+    <div class="entry-body">
+      <h2>ゴール</h2>
+
+<ul>
+<li>負荷分散のいくつかの方法に関して理解する</li>
+<li>mod_proxy_balancerによる負荷分散クラスタが構築できる</li>
+</ul>
+
+<!--more-->  
+
+<h2>基礎知識編</h2>
+
+<h3>基本的な資料</h3>
+
+<p>主にクラスタによる負荷分散の資料。<br>
+- <a href="http://httpd.apache.org/docs/2.2/ja/mod/mod_proxy_balancer.html">Apache モジュール mod_proxy_balancer</a><br>
+- <a href="http://www.onflow.jp/blog/archives/2006/02/mod_proxy_balan.html">mod_proxy_balancerで中?大規模サーバー運用するときの勘所 - cyano</a></p>
+
+<p>あと社外秘資料。</p>
+
+<h3>負荷分散？</h3>
+
+<p>複数台のサーバにアクセスを分散して、個々のサーバにかかる負荷を減らし、全体的に処理できるアクセスを増やすこと。</p>
+
+<p>以下のようなアプローチがある。</p>
+
+<h4>DNSラウンドロビン</h4>
+
+<ul>
+<li>DNSでひとつのホスト名に複数のIPアドレスを割り当てる方法</li>
+<li>シンプル</li>
+<li><p>しかしダウンしているホストにもアクセスが振り分けされてしまう</p>
+
+<ul>
+<li>冗長化と併用でなんとかなるかな？</li>
+</ul></li>
+</ul>
+
+<h4>機能ごとにホストを分割</h4>
+
+<ul>
+<li>ウェブサーバとDBサーバの分割（基本過ぎるが一応これも負荷分散）</li>
+<li>提供するコンテンツごとにホストを分割</li>
+<li>だがスケールするほど構成が複雑になるという難点</li>
+</ul>
+
+<h4>負荷分散クラスタ</h4>
+
+<ul>
+<li>いわゆるロードバランサを利用した負荷分散</li>
+<li>複数台のホストが同一機能を提供</li>
+<li>落ちたホストにはアクセスの振り分けが行われない</li>
+<li>スケールしやすい</li>
+</ul>
+
+<p>非常に大規模になるとこれらのアプローチを併用することになると思う。</p>
+
+<p>とりあえず今回は主に負荷分散クラスタの話で。</p>
+
+<h3>mod_proxy_balancerって？</h3>
+
+<p>L7での負荷分散を行うApacheのモジュール。 Apache 2.2から使えるようになった。</p>
+
+<p>これによって負荷分散クラスタを構築できる。</p>
+
+<p>今回やっていくのはこれ。</p>
+
+<h3>LVSって？</h3>
+
+<p>Linux Virtual Serverの略。 L4での負荷分散を行うLinuxカーネルの機能。</p>
+
+<p>L7での負荷分散より多くのトラフィックをさばけるが、運用していくにはそれなりのネットワーク知識と英語力（英語の情報が圧倒的に多いので）が必要。 詳しくはWEB+DBプレスのvol.37をあたりをがっつり読んでください。</p>
+
+<p>その他参考。<br>
+- <a href="http://dsas.blog.klab.org/archives/50664843.html">こんなに簡単！ Linuxでロードバランサ (1) - DSAS開発者の部屋</a><br>
+- <a href="http://www.austintek.com/LVS/LVS-HOWTO/HOWTO/">LVS-HOWTO</a></p>
+
+<h2>設定ファイルの書き方</h2>
+
+<h3>設定の前提</h3>
+
+<ul>
+<li>LB機1台 (192.168.1.100)</li>
+<li>バックエンド2台 (192.168.1.101, 192.168.1.102)</li>
+</ul>
+
+<h3>LB機</h3>
+
+<p>バーチャルホストを作ってそこに設定を書いていく。 （バーチャルホストを定義しなくてもいいが、今回はバーチャルホストにする）</p>
+
+<pre><code class="prettyprint">&lt;VirtualHost *:80&gt;
+  ProxyRequest Off
+  ProxyPass / balancer://cluster/
+
+ ProxyPass /balancer-manager !
+
+ &lt;Location /balancer-manager&gt;
+    SetHandler balancer-manager
+    Order Deny,Allow
+    Deny from all
+    Allow from 192.168.1.0/24
+  &lt;/Location&gt;
+
+ &lt;Proxy balancer://cluster/&gt;
+    BalancerMember http://192.168.1.101/ loadfactor=10
+    BalancerMember http://192.168.1.102/ loadfactor=10
+  &lt;/Proxy&gt;
+&lt;/VirtualHost&gt;
+</code></pre>
+
+<h2>実践編 - 基本 -</h2>
+
+<h3>二台への負荷分散の確認</h3>
+
+<p>振り分け先のホストにそれぞれ異なる内容のファイル用意してアクセスしてみる。</p>
+
+<p>アクセスの都度異なるホストにつながることを確認する。</p>
+
+<h3>バックエンド一台落ちた</h3>
+
+<p>落ちた方にはアクセスが振り分けられない。</p>
+
+<p>イエス！</p>
+
+<h3>バックエンド全部落ちた</h3>
+
+<p>Service Temporarily Unavailable</p>
+
+<p>そんな時 <a href="http://blog.fkoji.com/2007/03261000.html">猫メソッド</a>。</p>
+
+<pre><code class="prettyprint">ErrorDocument 503 (猫のURL）
+</code></pre>
+
+<h3>ロードバランサ落ちた</h3>
+
+<p>冗長化しときましょう。</p>
+
+<h3>バランサマネージャ</h3>
+
+<p>クラスタの状態の確認と更新ができる。</p>
+
+<p>いろいろいじってみましょう。</p>
+
+<h2>実践編 - 応用 -</h2>
+
+<h3>stickysession</h3>
+
+<p>以下の行更新。</p>
+
+<pre><code class="prettyprint">ProxyPass / balancer://cluster/ stickysession=backendid
+</code></pre>
+
+<pre><code class="prettyprint">BalancerMember http://192.168.1.101/ loadfactor=10 route=1
+    BalancerMember http://192.168.1.102/ loadfactor=10 route=2
+</code></pre>
+
+<p>次のようなファイルをそれぞれのサーバに置く。</p>
+
+<p>101</p>
+
+<pre><code class="prettyprint">&lt;?php
+  setcookie(&#39;backendid&#39;, &quot;hogehoge.1&quot;);
+?&gt;
+</code></pre>
+
+<p>102</p>
+
+<pre><code class="prettyprint">&lt;?php
+  setcookie(&#39;backendid&#39;, &quot;hogehoge.2&quot;);
+?&gt;
+</code></pre>
+
+<p>「hogehoge.n」が「route=n」に対応する。</p>
+
+<h4>stickysession張った状態で101が落ちたら</h4>
+
+<p>ギャース！猫再び。</p>
+
+<p>落ちているほうにアクセス振り分けが固定されたままになってしまう。</p>
+
+<h4>落ちても平気なように</h4>
+
+<p>redirectを指定する。</p>
+
+<pre><code class="prettyprint">BalancerMember http://192.168.1.101/ loadfactor=10 route=1 redirect=2
+    BalancerMember http://192.168.1.102/ loadfactor=10 route=2
+</code></pre>
+
+<p>101が落ちていると102の方へつながる。</p>
+
+<p>しかし相互リダイレクトはうまくいかないので、以下のようには書けない。</p>
+
+<pre><code class="prettyprint">BalancerMember http://192.168.1.102/ loadfactor=10 route=2 redirect=1
+</code></pre>
+
+<p>だから102の方が落ちたらやっぱり猫。</p>
+
+<p>バランサマネージャの設定更新がGETで手軽に叩けるようなので、バックエンドをNagiosなどで監視して、落ちていたらリダイレクト先を動的に設定するようなスクリプトを書いたりしておくといいかもしれない。</p>
+
+<p>真面目にやろうとすると意外とめんどいね。stickysession。</p>
+
+<h3>静的ファイルをロードバランサで返す</h3>
+
+<p>バックエンドが動的ファイルを扱うサーバの場合、そのサーバに静的ファイルを扱わせるとリソースがもったいない。 なので静的なファイルはロードバランサが返すようにするとお得。</p>
+
+<p>以下の行追加。</p>
+
+<pre><code class="prettyprint">ProxyPass /img !
+   ProxyPass /css !
+</code></pre>
+
+<p>静的ファイルは動的ファイルに比べて負荷が数十分の一から百分の一以下なので、全部ロードバランサでさばいてもけっこういける。</p>
+
+<h3>バックエンドのログのリモートIP</h3>
+
+<p>サーバ変数のREMOTE_ADDRがロードバランサのIPになってしまうので次のような困ったことが起きる。<br>
+- プログラム内でクライアントのリモートIPが取れない（他の変数に記録されるので取ろうと思えば取れるが、プログラムの改変が必要になる）<br>
+- IPによるアクセス制限が効かなくなる<br>
+- ログのリモートIPがすべてロードバランサのものになる</p>
+
+<p>そこでmod_rpafを使う。</p>
+
+<p>参考 : <a href="http://www.drk7.jp/MT/archives/000573.html">リバースプロキシを導入する際はmod_rpaf :: Drk7jp</a></p>
+
+<p>バックエンド側で以下の設定を追記。</p>
+
+<pre><code class="prettyprint">&lt;IfModule mod_rpaf-2.0.c&gt;
+       RPAFenable On
+       RPAFsethostname Off
+       RPAFproxy_ips 192.168.1.100
+   &lt;/IfModule&gt;
+</code></pre>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/load_balance_apache.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="負荷分散講習会 Apache編" data-url="http://tech.feedforce.jp/load_balance_apache.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/load_balance_apache.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/load_balance_apache.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/free_theme_feed_aggregator.html" rel="next">自由研究：フィード巡回ボットのHTTPリクエスト観察日記</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/keepalived.html" rel="prev">keepalived講習会</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

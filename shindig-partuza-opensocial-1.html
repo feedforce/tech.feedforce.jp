@@ -1,0 +1,286 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>ShindigとPartuzaでOpenSocialガジェットのテスト環境を構築(その1) | feedforce Engineers' blog</title>
+      <meta name="description" content="OpenSocial対応のガジェットを構築するうえでの悩みどころは、「テスト環境どうするの？」というところではないでしょうか。まだ公開していないガジェットアプリケーションを Orkutのsandboxでテストするのはちょっとなぁ・・・と思ったことがある人は、ここで紹介するShindigとPartuzaを使ってみるといいかもしれません。今回はまず Shindig について説明します。">
+      <link rel="canonical" href="http://tech.feedforce.jp/shindig-partuza-opensocial-1.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="ShindigとPartuzaでOpenSocialガジェットのテスト環境を構築(その1) | feedforce Engineers' blog">
+      <meta property="og:description" content="OpenSocial対応のガジェットを構築するうえでの悩みどころは、「テスト環境どうするの？」というところではないでしょうか。まだ公開していないガジェットアプリケーションを Orkutのsandboxでテストするのはちょっとなぁ・・・と思ったことがある人は、ここで紹介するShindigとPartuzaを使ってみるといいかもしれません。今回はまず Shindig について説明します。">
+      <meta property="og:url" content="http://tech.feedforce.jp/shindig-partuza-opensocial-1.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/shindig-partuza-opensocial-1.html">ShindigとPartuzaでOpenSocialガジェットのテスト環境を構築(その1)</a></h1>
+      <ul>
+        <li class="entry-time">2008.10.06</li>
+        <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/fukunaga">fukunaga</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/fukunaga"><img src="/images/authors/no-image.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p><a href="http://code.google.com/apis/opensocial/">OpenSocial</a>対応のガジェットを構築するうえでの悩みどころは、「テスト環境どうするの？」というところではないでしょうか。</p>
+
+<p>まだ公開していないガジェットアプリケーションを <a href="http://www.orkut.com/">Orkut</a>のsandboxでテストするのはちょっとなぁ・・・と思ったことがある人は、ここで紹介するShindigとPartuzaを使ってみるといいかもしれません。</p>
+
+<p>今回はまず Shindig について説明します。</p>
+
+<!--more-->  
+
+<h2>Shindig</h2>
+
+<p><a href="http://incubator.apache.org/shindig/">Shindig</a>は <a href="http://code.google.com/apis/opensocial/docs/0.8/spec.html">OpenSocial API Specification</a>と <a href="http://code.google.com/apis/gadgets/docs/spec.html">Gadgets Specification</a>を実装したオープンソースのプロジェクトです。 <a href="http://incubator.apache.org/">Apache incubator</a>にて開発が進められています。</p>
+
+<p>Shindigを使うと誰でも自由にOpenSocialガジェットをホストするサイトを構築することができます。ローカル環境に立てればテスト環境が作れるというわけです。</p>
+
+<p>※ iGoogleのガジェットをいくつか試してみましたが、すべてのガジェットが実行できるわけではありませんでした。iGoogle独自のメソッドの多くは実装されていないようです。</p>
+
+<h3>Shindigの構成要素</h3>
+
+<ul>
+<li>Gadget Container JavaScript</li>
+<li>Gadget Server</li>
+<li>OpenSocial Container JavaScript</li>
+<li>OpenSocial Data Server</li>
+</ul>
+
+<h3>導入</h3>
+
+<p><a href="http://incubator.apache.org/shindig/#php">http://incubator.apache.org/shindig/#php</a></p>
+
+<p>Java版もありますが、ここではPHP版で。</p>
+
+<h4>必要環境</h4>
+
+<ul>
+<li>Subversion</li>
+<li>mod_rewrite</li>
+<li>PHP 5.2.x (json, simplexml, mcrypt, curl)</li>
+</ul>
+
+<h4>ソースをチェックアウト</h4>
+
+<pre><code class="prettyprint">$ mkdir /var/www/shindig
+$ cd /var/www/shindig
+$ svn co http://svn.apache.org/repos/asf/incubator/shindig/trunk/ .
+</code></pre>
+
+<h4>バーチャルホストを立てる</h4>
+
+<p>ここでは dev.shindig.jp というドメインとします。</p>
+
+<pre><code class="prettyprint">&lt;VirtualHost 192.168.1.142:80&gt;
+    DocumentRoot /var/www/shindig/php
+    DirectoryIndex index.html index.php
+    ServerName dev.shindig.jp
+    AddDefaultCharset UTF-8 
+
+ &lt;Directory /var/www/shindig/php&gt;
+        AllowOverride All
+    &lt;/Directory&gt; 
+&lt;/VirtualHost&gt;
+</code></pre>
+
+<h4>PECL json インストール</h4>
+
+<p>個人の環境にPECL jsonが入っていなかったのでインストールしました。</p>
+
+<pre><code class="prettyprint">$ sudo pecl install json
+</code></pre>
+
+<h3>ガジェットを実行してみる</h3>
+
+<p>ここまでできれば、すぐにガジェットを実行することができます。エンドポイントは、</p>
+
+<pre><code class="prettyprint">http://dev.shindig.jp/gadgets/ifr?
+</code></pre>
+
+<p>です。urlパラメータを与えてガジェットを実行します。</p>
+
+<pre><code class="prettyprint">http://dev.shindig.jp/gadgets/ifr?url=[ガジェットのXMLファイルのURL]
+</code></pre>
+
+<p><img alt="shindig-example.gif" src="/images/2008/09/shindig-example.gif" /></p>
+
+<p>↑ ドキュメントに <a href="http://www.labpixies.com/campaigns/todo/todo.xml">サンプルとして記載されているガジェット</a>を実行したところ。</p>
+
+<p>このように、Shindigを使うと簡単にOpenSocial対応ガジェットをホスティングする環境を作ることができます。</p>
+
+<p>というわけで、次回はPartuzaについて。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/shindig-partuza-opensocial-1.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="ShindigとPartuzaでOpenSocialガジェットのテスト環境を構築(その1)" data-url="http://tech.feedforce.jp/shindig-partuza-opensocial-1.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/shindig-partuza-opensocial-1.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/shindig-partuza-opensocial-1.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/shindig-partuza-opensocial-2.html" rel="next">ShindigとPartuzaでOpenSocialガジェットのテスト環境を構築(その2)</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/rubycocoa.html" rel="prev">RubyCocoaを1杯</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

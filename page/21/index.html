@@ -1,0 +1,312 @@
+<!doctype html>
+<html>
+  <!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>feedforce Engineers' blog</title>
+      <meta name="description" content="株式会社フィードフォース技術チームのサイト。社内勉強会資料や開発の様子および成果の公開など。">
+      <link rel="canonical" href="http://tech.feedforce.jp">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="feedforce Engineers' blog">
+      <meta property="og:description" content="株式会社フィードフォース技術チームのサイト。社内勉強会資料や開発の様子および成果の公開など。">
+      <meta property="og:url" content="http://tech.feedforce.jp">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+  <body>
+    <header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+    <div id="content">
+          <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/the_atom_syndication_format.html">The Atom Syndication Format</a></h1>
+        <ul>
+          <li class="entry-time">2006.10.20</li>
+          <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+          <li class="entry-author"><a href="/author/yanagi">yanagi</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/yanagi"><img src="/images/authors/no-image.png" /></a>
+      </div>
+      <div class="entry-body">
+        <p>RSS の代替を目指した新しいフォーマット</p>
+
+<p>2003年6月 IBM の Sam Ruby が仕様策定のための行動を開始</p>
+
+<p>Atom は仕様群の総称</p>
+
+<ul>
+<li>The Atom Syndication Format (コンテンツ配信のためのフィードフォーマット)</li>
+<li>The Atom Publishing Protocol (コンテンツ編集のためのプロトコル)</li>
+<li>Atom Feed Autodiscovery (フィードを自動的に見つけるための記述)</li>
+</ul>
+
+
+        <p class="entry-readmore"><a href="/the_atom_syndication_format.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/find1.html">find(1)</a></h1>
+        <ul>
+          <li class="entry-time">2006.10.20</li>
+          <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+          <li class="entry-author"><a href="/author/akahige">akahige</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/akahige"><img src="/images/authors/no-image.png" /></a>
+      </div>
+      <div class="entry-body">
+        <p>ファイルを検索するコマンド。</p>
+
+<pre><code class="prettyprint">find [path...] [expression]
+</code></pre>
+
+<p>与えられた起点ディレクトリ以下からファイルを検索する。</p>
+
+
+        <p class="entry-readmore"><a href="/find1.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/mysql.html">MySQL ロックの話</a></h1>
+        <ul>
+          <li class="entry-time">2006.10.06</li>
+          <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+          <li class="entry-author"><a href="/author/akahige">akahige</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/akahige"><img src="/images/authors/no-image.png" /></a>
+      </div>
+      <div class="entry-body">
+        <h2>ロックの基本</h2>
+
+<h3>ロックってなんだ</h3>
+
+<p>データの整合性を保つために読み書きを一時的に制限する仕組み  </p>
+
+
+        <p class="entry-readmore"><a href="/mysql.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/trac_1.html">駆け足でTrac</a></h1>
+        <ul>
+          <li class="entry-time">2006.09.01</li>
+          <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+          <li class="entry-author"><a href="/author/akahige">akahige</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/akahige"><img src="/images/authors/no-image.png" /></a>
+      </div>
+      <div class="entry-body">
+        <h2>Tracとはなんぞや</h2>
+
+<p>プロジェクト管理ツール。 Wiki + Subversion連携 + チケットシステム（BTS + 進捗管理）</p>
+
+
+        <p class="entry-readmore"><a href="/trac_1.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/ruby.html">Rubyの落とし穴</a></h1>
+        <ul>
+          <li class="entry-time">2006.08.18</li>
+          <li class="entry-cat"><a href="/category/ruby/">Ruby/Rails</a>, <a href="/category/resume/">勉強会資料</a></li>
+          <li class="entry-author"><a href="/author/yanagi">yanagi</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/yanagi"><img src="/images/authors/no-image.png" /></a>
+      </div>
+      <div class="entry-body">
+        <p>Rubyリファレンスマニュアル - <a href="http://www.ruby-lang.org/ja/man/?cmd=view;name=Ruby%A4%CE%CD%EE%A4%C8%A4%B7%B7%EA">Rubyの落とし穴</a>  </p>
+
+
+        <p class="entry-readmore"><a href="/ruby.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/railsmigration.html">RailsのMigration</a></h1>
+        <ul>
+          <li class="entry-time">2006.07.21</li>
+          <li class="entry-cat"><a href="/category/ruby/">Ruby/Rails</a>, <a href="/category/resume/">勉強会資料</a></li>
+          <li class="entry-author"><a href="/author/akahige">akahige</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/akahige"><img src="/images/authors/no-image.png" /></a>
+      </div>
+      <div class="entry-body">
+        <h3>なんですかこれは</h3>
+
+<p>データベース構造をバージョン管理する仕組み</p>
+
+<p>SQLではなくRubyのコードでデータベース構造を記述することによって抽象化  </p>
+
+<ul>
+<li>本番環境への変更の適用漏れがなくなる</li>
+<li>ほかの開発環境や検証環境への変更の適用がバッチリ</li>
+<li>必要があれば以前のバージョンに戻せる</li>
+<li>複数のデータベースエンジンへの対応が簡単にできる
+
+<ul>
+<li>MySQL, PostgreSQL, SQLite, SQL Server, Sybase, Oracle (メジャーなものはDB2以外ぜんぶだって)</li>
+</ul></li>
+</ul>
+
+
+        <p class="entry-readmore"><a href="/railsmigration.html">Read more</a></p>
+      </div>
+    </article>
+
+    <div id="entry-link">
+      <ul>
+            <li id="older-link"><a href="/page/22/">< Older posts</a></li>
+            <li id="newer-link"><a href="/page/20/">Newer posts ></a></li>
+      </ul>
+    </div>
+
+    </div>
+
+    <p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+  </body>
+</html>

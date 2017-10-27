@@ -1,0 +1,330 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>terraformを使ってAWS環境を構築する | feedforce Engineers' blog</title>
+      <meta name="description" content="お久しぶりです。tjinjinです(╹◡╹)最近じめじめしていますね。梅雨あけると夏ですよ！！夏アニメが始まりますよ！！ということで、PV見た感じの私のおすすめは六花の勇者です！”りっか”ではなく”ろっか”です！">
+      <link rel="canonical" href="http://tech.feedforce.jp/startup-terraform.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="terraformを使ってAWS環境を構築する | feedforce Engineers' blog">
+      <meta property="og:description" content="お久しぶりです。tjinjinです(╹◡╹)最近じめじめしていますね。梅雨あけると夏ですよ！！夏アニメが始まりますよ！！ということで、PV見た感じの私のおすすめは六花の勇者です！”りっか”ではなく”ろっか”です！">
+      <meta property="og:url" content="http://tech.feedforce.jp/startup-terraform.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/startup-terraform.html">terraformを使ってAWS環境を構築する</a></h1>
+      <ul>
+        <li class="entry-time">2015.07.06</li>
+        <li class="entry-cat"><a href="/category/terraform/">Terraform</a>, <a href="/category/aws/">AWS</a>, <a href="/category/operation/">運用事例</a></li>
+        <li class="entry-author"><a href="/author/tjinjin">tjinjin</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/tjinjin"><img src="/images/authors/tjinjin.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p><img alt="terraform logo" src="/images/2015/07/terraform-logo.png" /></p>
+
+<p>お久しぶりです。tjinjinです(╹◡╹)</p>
+
+<p>最近じめじめしていますね。梅雨あけると夏ですよ！！夏アニメが始まりますよ！！<br>
+ということで、PV見た感じの私のおすすめは六花の勇者です！”りっか”ではなく”ろっか”です！</p>
+
+<!--more-->
+
+<h2>AWS環境のコード化</h2>
+
+<p>弊社ではAWS環境の構築を管理コンソールでの温かみのある作業やRakeTaskで行ってきましたが、サービスを新規で立てるのに時間がかかるという課題があり、AWS環境もコード化したいという思いがありました。インフラチーム内で検討した結果、 <s>名前がかっこいい</s> コードが読みやすいということで一部サービスでterraformを採用し始めています。</p>
+
+<p>terraformを使って行く中で、何点か壁にぶち当たったので情報共有できればと思います。</p>
+
+<h2>terraformとは？</h2>
+
+<p>一言で表すとインフラ構成をコード化することのできるツールというところでしょうか。みんな大好きHashicorp社のツールですね。今回の記事ではAWSを主に使いますが、HerokuやDigitalOceanなどでも利用でき汎用性の高いオーケストレーションツールといえるのではないでしょうか。</p>
+
+<h2>弊社での使い方</h2>
+
+<p>弊社内ではterraformを使う上で下記のような運用にしています。</p>
+
+<h3>terraform applyは手動で実行する</h3>
+
+<p>弊社ではCircleCIを使ったサーバCIを行っていますが、terraformではまだ運用実績がないためPRを確認した後に手動実行するようにしております。ゆくゆくは自動で実行できるようにしていきたいところです。</p>
+
+<h3>tfstateファイルはs3で共有する</h3>
+
+<p>複数人で開発を行うときに問題となるのが、tfstateファイルの扱いです。各人のローカルにあるtfstateファイルが同期されていないと、同じtfファイルを使っていても、違う環境ができあがる可能性があります。v0.5.0からs3上にtfstateファイルを保存し、そこを参照する設定ができるようになりました。Atlasやgithub上での共有も検討したのですが、Atlasは将来的な有料化のリスクを鑑み、github上ではそもそも厳しいということでs3を選択しました。</p>
+
+<pre><code class="prettyprint">$ terraform remote config -backend=S3 -backend-config=&quot;&lt;s3_bucket_name&gt;&quot; -backend-config=&quot;key=&lt;tfstate_name&gt;&quot;
+</code></pre>
+
+<h3>tfファイルはひとつのファイルにする</h3>
+
+<p>弊社内で1ヶ月くらい前に話あったのですが、現在の運用では下記のようなフォルダ構成にしております。エンジニア間でも意見がわかれる所なのですが、一旦１ファイルでといことにしています。たぶん変更します。</p>
+
+<pre><code class="prettyprint">$ tree -a
+.
+├── production
+│   ├── .envrc
+│   ├── .terraform
+│   │   ├── terraform.tfstate
+│   │   └── terraform.tfstate.backup
+│   ├── main.tf
+│   └── terraform.tfvars
+└── stage
+    ├── .envrc
+    ├── .terraform
+    │   ├── terraform.tfstate
+    │   └── terraform.tfstate.backup
+    ├── main.tf
+    └── terraform.tfvars
+
+</code></pre>
+
+<p>AWSの認証情報は.envrcに保存し、direnvを使っています。当初tfvarsファイルに設定するようにしていたのですが、各人のIAMを使っていこともあり、構成管理するものでもないので、環境変数の方が楽ではということになりました。</p>
+
+<h2>利用していく中でぶつかった問題</h2>
+
+<h3>terraformで環境を構築した後に管理コンソールで環境を変更してしまい、<code class="prettyprint">terraform plan</code>叩いたときに差分が出ました。どうすれば？</h3>
+
+<p><em>弊社インフラチーム内では禁止事項です。</em></p>
+
+<p>仮に行った場合は、反逆罪として牢獄に打ち込まれるレベルです（嘘です）。</p>
+
+<p>tfファイルと実際の環境に差分がある状態でapplyするとtfファイルの状態に修正しようと動きます。tfファイルだけだと<code class="prettyprint">terraform plan</code>時に差分が出てしまうので、tfstateも修正する必要があります。</p>
+
+<ul>
+<li>tfファイルを最新の環境に合わせて修正する</li>
+<li>tfstateファイルも最新の環境に合わせて修正する</li>
+<li><code class="prettyprint">terraform plan</code>を実行し、差分が出ていない状態にする</li>
+</ul>
+
+<p>ここまでやれば大丈夫です。</p>
+
+<h3>terraformで作った、security groupの名前が間違ってた。正しい名前に変えたいんだけど、もうサーバ立ってるけどどうなるの？</h3>
+
+<p><em>applyできません。</em></p>
+
+<p>terraformはapply時は依存関係をうまく処理してくれますが、変更などによって環境を一時破壊する際には安全に倒す設計のため、依存関係があると削除できません。今回のケースではSG内にサーバ構築されており、依存関係がある状態になりますのでそこを解消するために、SGからサーバを除外してあげる必要があります。</p>
+
+<p>手動で行うのが嫌でしたので、applyだけでやろうとすると下記の手順になりました。</p>
+
+<ul>
+<li>tfファイルのサーバに関する部分をコメントアウトしてapplyする（サーバが削除されます）。</li>
+<li>tfファイルでSGの名前を変更してapplyする（SGが一度破棄・再構築されます）。</li>
+<li>サーバ部分のコメントアウトを外しapplyする</li>
+</ul>
+
+<p>コレジャナイ感が非常にありますね(；・∀・）</p>
+
+<h3>terraformで立てたサーバがインターネットにアクセスできないんだけど！！前は出来たのにどうなってるの（怒）</h3>
+
+<p><em>terraformのバージョンアップによる影響です。</em>私のせいではないので、怒らないで下さい＞＜</p>
+
+<p>直接の原因としては、SGのoutbound設定がされておらず外に通信できないためです。AWSの初期設定ではoutboundの設定がされるのですが、terraformの仕様がかわり、v0.5.0以降ではデフォルトの設定が削除されるようになりました<a href="https://github.com/hashicorp/terraform/blob/master/CHANGELOG.md#050-may-7-2015">link</a>。従って、v0.5.0以降で作成する場合は下記のように<code class="prettyprint">egress</code>の設定が必要です。</p>
+
+<pre><code class="prettyprint">resource &quot;aws_security_group&quot; &quot;web&quot; {
+    name = &quot;test&quot;
+    description = &quot;Used in the terraform&quot;
+    vpc_id = &quot;${aws_vpc.main.id}&quot;
+    ingress {
+        from_port = 22
+        to_port = 22
+        protocol = &quot;tcp&quot;
+        cidr_blocks = [&quot;10.0.0.0/16&quot;]
+    }
+    ingress {
+        from_port = -1
+        to_port = -1
+        protocol = &quot;icmp&quot;
+        cidr_blocks = [&quot;0.0.0.0/0&quot;]
+    }
+    ingress {
+        from_port = 0
+        to_port = 65535
+        protocol = &quot;tcp&quot;
+        cidr_blocks = [&quot;10.0.0.0/16&quot;]
+    }
+    egress {
+      from_port = 0
+      to_port = 0
+      protocol = &quot;-1&quot;
+      cidr_blocks = [&quot;0.0.0.0/0&quot;]
+    }
+</code></pre>
+
+<h2>まとめ</h2>
+
+<p>まだまだ、発展途上のプロダクトのため変更を追うのが大変です。運用の情報なども少ないので、情報交換させて下さい＞＜次の記事は、terraformingを使って既存環境をコード化するって記事を書きたいと思っています。（未定）</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/startup-terraform.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="terraformを使ってAWS環境を構築する" data-url="http://tech.feedforce.jp/startup-terraform.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/startup-terraform.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/startup-terraform.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/gathering-information.html" rel="next">『最近の情報収集方法』というお題で発表しました</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/add-ebs-to-running-ec2.html" rel="prev">稼働中のEC2インスタンスにディスク(EBS)を追加する</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

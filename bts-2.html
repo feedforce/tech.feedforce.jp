@@ -1,0 +1,329 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>BTS - バグトラッキングシステムの利用（２） | feedforce Engineers' blog</title>
+      <meta name="description" content="前回からかなり間が空いてしまいましたが、さて今回は実際の運用に関してです。">
+      <link rel="canonical" href="http://tech.feedforce.jp/bts-2.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="BTS - バグトラッキングシステムの利用（２） | feedforce Engineers' blog">
+      <meta property="og:description" content="前回からかなり間が空いてしまいましたが、さて今回は実際の運用に関してです。">
+      <meta property="og:url" content="http://tech.feedforce.jp/bts-2.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/bts-2.html">BTS - バグトラッキングシステムの利用（２）</a></h1>
+      <ul>
+        <li class="entry-time">2007.03.29</li>
+        <li class="entry-cat"><a href="/category/dev_style/">開発スタイル</a></li>
+        <li class="entry-author"><a href="/author/akahige">akahige</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/akahige"><img src="/images/authors/no-image.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p><a href="http://tech.feedforce.jp/bts-1.html">前回</a>からかなり間が空いてしまいましたが、さて今回は実際の運用に関してです。</p>
+
+<p><a href="/images/2007/03/imgp0908.jpg"><img alt="BTS人形" src="/images/2007/03/imgp0908.jpg" /></a></p>
+
+<!--more-->  
+
+<h2>普通のBTS運用</h2>
+
+<p>まず影舞による一般的な運用から。<br><br>
+一般的な運用ではバグレポートは以下の流れを順にたどります。</p>
+
+<table><thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>新規</td>
+<td>ポストされたばかりのレポート</td>
+</tr>
+<tr>
+<td>受付済</td>
+<td>担当者がアサインされた状態</td>
+</tr>
+<tr>
+<td>修正済</td>
+<td>担当者が修正済みの状態</td>
+</tr>
+<tr>
+<td>完了</td>
+<td>確認等を経て完了した状態</td>
+</tr>
+</tbody></table>
+
+<p>バグを発見した人がBTSにバグレポートをポストし、開発側がその対応に担当者をアサインします。<br><br>
+アサインされた担当者はバグを修正し、修正が完了したら確認等を経て完了をレポートします。</p>
+
+<p>「バグトラッキングシステム」という名前そのままのシンプルな運用ですね。<br><br>
+影舞以外のBTSでもここらへんは基本的に同じであるかと思います。</p>
+
+<p>ついでにポストやリプライの内容がメンバー全員にメールで飛ぶようにしたり、RSSで購読できるようにするのも一般的ですかね。</p>
+
+<h2>FFの場合</h2>
+
+<p>私たちもとりあえず上記のような運用からスタートして、その後走りながら試行錯誤を重ねていきました。<br><br>
+その結果、現在では以下のような流れでバグを処理しています。</p>
+
+<table><thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>新規</td>
+<td>ポストされたばかりのレポート</td>
+</tr>
+<tr>
+<td>受付</td>
+<td>技術チームが問題を確認した状態</td>
+</tr>
+<tr>
+<td>実行中</td>
+<td>担当者がタスクとしてコミットした状態</td>
+</tr>
+<tr>
+<td>実行済</td>
+<td>担当者が作業を完了して確認者に確認を依頼した状態</td>
+</tr>
+<tr>
+<td>リリース待ち</td>
+<td>確認者が修正内容を確認してリリースを待っている状態</td>
+</tr>
+<tr>
+<td>完了</td>
+<td>修正がリリースされ、確認者が本番環境で再度修正内容を確認した状態</td>
+</tr>
+</tbody></table>
+
+<p>担当者に関しては一方的なアサインはせずに、担当者自らがコミットして作業を開始するようになっています。<br><br>
+担当者は作業を開始したらステータスを実行中にして自分が取り組んでいることをアピールします。</p>
+
+<p>修正作業が終わるとレポートのステータスは実行済みとなり、担当以外の他のメンバー（確認者）に修正の確認依頼がかかります。<br><br>
+確認者は修正内容の確認を行い、問題がなければリリース待ちとします。</p>
+
+<p>リリース待ちのものは本番にリリースされたタイミングで、再び確認者が確認を行い、本番環境でも問題がなければ完了とします。</p>
+
+<p>確認の手間が二度にわたっていてめんどくさいと思われるかもしれませんが、品質の維持や修正の抜けによる手戻りが発生することを考えればコスト的には高くないと考えています。</p>
+
+<h2>BTS人形</h2>
+
+<p>さてところで上記のように作業からリリースまでの間に以上のフローを定めたのはいいのですが、実際には実行済み状態で放置されるレポートが多数発生。<br><br>
+修正のリリースに支障をきたすという事態がしばしば起こるようになりました。</p>
+
+<p>そこでその状況を打開すべく登場したのが次のBTS人形です。</p>
+
+<p><a href="/images/2007/03/imgp0908.jpg"><img alt="BTS人形" src="/images/2007/03/imgp0908.jpg" /></a></p>
+
+<p>確認を依頼する際、これ見よがしに確認者の机の目立つところやキーボードの上に置くのが正しい使い方です。<br><br>
+彼らのおかげで確認忘れがほぼなくなり、修正作業からリリースまでの流れがスムーズになりました。</p>
+
+<p>ただしごくたまに誰かの机の上に定住してしまっている人形もいたりするので、そうならないようにたまにチェックをいれる必要はありそうです。</p>
+
+<h2>アグレッシブなBTS運用</h2>
+
+<p>FFでは機能追加や改良に関する要望や提案などもBTSで管理しています。<br><br>
+すべての要望はまずBTSに登録されて検討されます。</p>
+
+<p>BTSのこうした使い道に関しては <a href="http://www.mozilla.gr.jp/docs/beginbugzilla/#BugIs">Bugzillaのドキュメント</a>にも見られるように、 BTS運用の第二のステップとしては割と普通のことなのかなと思います。<br><br>
+この流れが更に発展していくと、Tracなどに見られるようなプロジェクト管理ツールへの統合や進化の方向へ向かっていくみたいですね。</p>
+
+<h2>とはいえあんまり複雑にしても</h2>
+
+<p>現在のFFのBTSを見ると、他にもいろんな項目がオプションとして追加されています。</p>
+
+<p>バグや要望のレポートをより効率よくかつシステマチックに処理しようとした努力の跡です。<br><br>
+でも実際はちょっとの間使われただけで、それらの項目は今は使われなくなってしまいました。</p>
+
+<p>複雑なものや面倒なものはそれを利用するモチベーションが切れると使われなくなるのが常です。<br><br>
+ツールの助けがあるとはいえ、運用をシンプルにしていくことはやはり大切なのでありますね。</p>
+
+<h2>まとめ</h2>
+
+<p>というわけで以上がFFのBTS運用のお話でした。</p>
+
+<p>日々試行錯誤しつつ運用しているので、常に変わる可能性はありますが、現時点ではこんなかんじです。</p>
+
+<p>また何か大きな変化や思いついたことがあれば第三弾を書くかもしれませんが、とりあえず今回のところはこれにて。</p>
+
+<p>ではでは。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/bts-2.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="BTS - バグトラッキングシステムの利用（２）" data-url="http://tech.feedforce.jp/bts-2.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/bts-2.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/bts-2.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/geo-tagging.html" rel="next">Geo Tagging関連情報まとめ</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/python.html" rel="prev">はじめましてPython</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

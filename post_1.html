@@ -1,0 +1,418 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>機能テストの話 | feedforce Engineers' blog</title>
+      <meta name="description" content="機能テストって何かしらブラックボックステストアプリケーションを実際に操作してテストする受け入れテストとも言う">
+      <link rel="canonical" href="http://tech.feedforce.jp/post_1.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="機能テストの話 | feedforce Engineers' blog">
+      <meta property="og:description" content="機能テストって何かしらブラックボックステストアプリケーションを実際に操作してテストする受け入れテストとも言う">
+      <meta property="og:url" content="http://tech.feedforce.jp/post_1.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/post_1.html">機能テストの話</a></h1>
+      <ul>
+        <li class="entry-time">2006.12.01</li>
+        <li class="entry-cat"><a href="/category/test/">テスト</a>, <a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/akahige">akahige</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/akahige"><img src="/images/authors/no-image.png" /></a>
+    </div>
+    <div class="entry-body">
+      <h2>機能テストって何かしら</h2>
+
+<ul>
+<li>ブラックボックステスト</li>
+<li>アプリケーションを実際に操作してテストする</li>
+<li>受け入れテストとも言う</li>
+</ul>
+
+<!--more-->  
+
+<h2>テストの種類</h2>
+
+<ul>
+<li>RAT</li>
+<li>FAST</li>
+<li>TOFT</li>
+<li>FET</li>
+<li>境界条件テスト</li>
+<li>探索型テスト</li>
+</ul>
+
+<h3>RAT (Release Acceptance Test) リリース時受け入れテスト</h3>
+
+<p>スモークテストとも言う。</p>
+
+<p>アプリケーションがとりあえず動作、機能テスト可能な状態にあるかどうかを確認するテスト。 なので実は機能テストではない。</p>
+
+<p>アプリケーションを起動できるか、文法エラーで動かないところはないか、動作に必要なリソース（データベース等）に接続できているか、といったレベル。  </p>
+
+<h3>FAST (Functional Acceptance Simple Test) 受け入れ時簡易機能テスト</h3>
+
+<p>広く浅い範囲を対象とした最低限の機能テスト。 軽量なので一回のテストにかかるコストが少なく、素早く実行できる。</p>
+
+<p>対象は以下のとおり。  </p>
+
+<ul>
+<li>リンク</li>
+<li>UIコントロール（入力、ナビゲーション）の挙動</li>
+<li>追加、削除、更新などのデータ変更テスト</li>
+<li>ログイン、ログアウトなどのその他主要機能</li>
+</ul>
+
+<p>すでにテスト環境で完全なテストを通っているものを他の環境（本番環境や開発環境など）へリリースした際に行ったりする種類のテスト。  </p>
+
+<h3>TOFT (Task-Oriented Functional Test) タスク指向機能テスト</h3>
+
+<p>プログラムの機能を確認するいわゆる正常系のテスト。</p>
+
+<p>ユーザがタスクを完了できるかどうか、実行される各タスクの完全性を確認する  </p>
+
+<ul>
+<li>様々なデータの入力に対してデータ出力が常に適切であるかどうかをチェック</li>
+<li>他の関連する機能と組み合わせた場合の完全性</li>
+</ul>
+
+<p>網羅性が要求される。  </p>
+
+<h3>FET (Force-Error Test) 強制エラーテスト</h3>
+
+<p>いわゆる異常系のテスト。</p>
+
+<p>エラーを意図的に発生させ、エラー処理が正しく機能しているかどうかをテストする。 エラーによってアプリケーションが不安定になったり、データが破損することがないことを確認する。  </p>
+
+<ul>
+<li>エラーを意図的に発生させる</li>
+<li>エラー検出の確認</li>
+<li>エラー処理の確認（エラーから復帰できるか、データ等に異常は発生してないか）</li>
+<li>エラー通知の確認（エラーメッセージが表示されたか、内容は適切か）</li>
+<li>エラーによるそのほかの障害が発生していないか探す（エラー処理に抜けがないか等）</li>
+</ul>
+
+<h3>境界条件テスト</h3>
+
+<p>TOFTやFETの延長線上にあるテスト。 テストに用いる各変数の境界値をテストする。</p>
+
+<p>等価クラスから境界値を分析してテスト変数を絞る。</p>
+
+<p>テスト変数を絞ることはリスクだが、リソース節約のメリットの方がはるかに大きい。  </p>
+
+<h4>等価クラス</h4>
+
+<p>どの値を入力しても結果が同じように処理される。それらの値は等価クラスとしてひとまとめにできる。  </p>
+
+<ul>
+<li>数の範囲（2桁の数字 10-99 など）</li>
+<li>グループ（日付、時刻、国名など）</li>
+<li>不正な入力（半角数字のみ許可のところに半角英字、記号、全角文字など）</li>
+<li>等価な動作環境（同じバージョンのOSの別々のマシン）</li>
+</ul>
+
+<h4>境界値</h4>
+
+<p>等価クラスから別の等価クラスへ移行する境界 境界値付近ではエラーが起こりやすいので、  </p>
+
+<ul>
+<li>許容される入力値と許容されない入力値の境界</li>
+<li>サポートされるシステム要件とサポートされないシステム要件の境界</li>
+</ul>
+
+<p>ひとつの境界値からは多くとも最大9のテストケースが得られる。  </p>
+
+<ul>
+<li>有効値の範囲</li>
+<li>有効値の最小</li>
+<li>有効値の最小+1</li>
+<li>有効値の最小-1</li>
+<li>有効値の最小-α（確実に有効値より小さい）</li>
+<li>有効値の最大</li>
+<li>有効値の最大+1</li>
+<li>有効値の最大-1</li>
+<li>有効値の最大+α（確実に有効値より大きい）</li>
+</ul>
+
+<p>他に文字列の等価クラスや小数点や前ゼロのついた数字のような特別なクラスなどが存在する。 ひとつのフィールドの値に関して等価クラスがたくさんあれば境界値もそれだけ増える。  </p>
+
+<h4>境界値を使ったテストケースの作成</h4>
+
+<ul>
+<li>等価クラスを見つける</li>
+<li>境界を見つける</li>
+<li>有効な入力に対する出力結果を予想する</li>
+<li>不正な入力に対するエラー処理を予想する</li>
+<li>テストケース一覧の作成</li>
+</ul>
+
+<h3>探索型テスト</h3>
+
+<p>アプリケーションを操作して未知のバグを見つけ出すためのテスト。 学習、計画、実行を同時に行う。  </p>
+
+<h3>どのテストを使うか</h3>
+
+<ul>
+<li>継続的インテグレーションにともなう完全なテスト -&gt; TOFT, FET, 境界条件テスト</li>
+<li>テスト済みアプリケーションのリリース時 -&gt; FAST</li>
+<li>リリース前の積極的なデバッグ作業 -&gt; 探索型</li>
+</ul>
+
+<h2>機能テストの自動化</h2>
+
+<p>なんでもかんでも自動化すればいいってもんでもない。  </p>
+
+<ul>
+<li>自動化にはしっかりとした計画が必要</li>
+<li>自動化の前にテスト容易性を強化したほうがよい</li>
+<li>ダメな自動化は無駄</li>
+<li>自動テストが複雑すぎるとテスト自体にバグが</li>
+<li>でもやっぱ好き</li>
+<li>複数人で作る場合は命名規約などのガイドラインがあったほうがよい</li>
+</ul>
+
+<h3>作成コストと保守コスト</h3>
+
+<ul>
+<li>アプリケーションの規模が大きくなるほど作成コストがかさむ</li>
+<li>アプリケーション更新のプロセスに組み込まないとすぐに陳腐化する</li>
+<li>つまり保守コストもかかる</li>
+<li>保守コストがアプリケーションの開発速度に影響する</li>
+<li>UI変更で全滅したりする</li>
+</ul>
+
+<h3>保守性の高いテスト</h3>
+
+<ul>
+<li>ちょっとした文言変更くらいには影響されない</li>
+<li>他のテストの変更に影響されない</li>
+</ul>
+
+<h3>機能テストを減らす工夫</h3>
+
+<ul>
+<li>ユニットテストにまかせる
+
+<ul>
+<li>モデルのバリデーションテストなど</li>
+</ul></li>
+<li>フレームワークを利用する
+
+<ul>
+<li>フレームワークが面倒見てくれる部分のテストは割愛</li>
+<li>テストを書きやすいフレームワークもある Railsとか</li>
+</ul></li>
+</ul>
+
+<h3>テストライブラリ構築上の注意</h3>
+
+<ul>
+<li>複雑すぎる処理はそれ自体にバグが埋まる可能性</li>
+<li>整理しておかないと同じようなものがいくつも作られて混乱の元に</li>
+</ul>
+
+<h2>テスト容易性</h2>
+
+<h3>可視性</h3>
+
+<ul>
+<li>ソースコード</li>
+<li>ログ出力</li>
+<li>デバッグ出力</li>
+</ul>
+
+<p>エラーの原因がすぐに追跡できること。わかること。  </p>
+
+<h3>操作性</h3>
+
+<ul>
+<li>エラーシミュレーション</li>
+<li>診断コマンド</li>
+<li>テスト用API</li>
+</ul>
+
+<p>エラーの状態を再現しやすいこと。</p>
+
+<p>自動テストの対象としてGUIがいいかテスト用APIがいいかは意見が分かれる。 SeleniumはGUI</p>
+
+<h2>参考文献</h2>
+
+<ul>
+<li><a href="http://www.amazon.co.jp/gp/product/4797322063">『インターネットアプリケーションのためのソフトウェアテスト』</a></li>
+<li><a href="http://www.amazon.co.jp/gp/product/482228154X">『ソフトウェアテスト293の鉄則』</a></li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/post_1.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="機能テストの話" data-url="http://tech.feedforce.jp/post_1.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/post_1.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/post_1.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/google-desktop-api.html" rel="next">Google Desktop API</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/44_yui_yahoo_ui_library.html" rel="prev">YUI (Yahoo! UI Library)</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

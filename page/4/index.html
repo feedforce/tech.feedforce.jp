@@ -1,0 +1,311 @@
+<!doctype html>
+<html>
+  <!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>feedforce Engineers' blog</title>
+      <meta name="description" content="株式会社フィードフォース技術チームのサイト。社内勉強会資料や開発の様子および成果の公開など。">
+      <link rel="canonical" href="http://tech.feedforce.jp">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="feedforce Engineers' blog">
+      <meta property="og:description" content="株式会社フィードフォース技術チームのサイト。社内勉強会資料や開発の様子および成果の公開など。">
+      <meta property="og:url" content="http://tech.feedforce.jp">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+  <body>
+    <header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+    <div id="content">
+          <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/mha-and-consul.html">mhaとconsulでDBサーバーの冗長化をしています</a></h1>
+        <ul>
+          <li class="entry-time">2016.03.25</li>
+          <li class="entry-cat"><a href="/category/operation/">運用事例</a></li>
+          <li class="entry-author"><a href="/author/kunishima">kunishima</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/kunishima"><img src="/images/authors/lorentzca.jpg" /></a>
+      </div>
+      <div class="entry-body">
+        <p>こんにちは。Lorentzcaです。3月ですがまだまだ寒いのでなかなか釣りに行けずテンションさげぽよです！ ↑↑</p>
+
+<p>この度DBサーバー(物理マシン、MySQL)の引っ越しを行いました。<br><br>
+そのついでに、冗長化の仕組みをmhaとconsulを使った方法に変えたので紹介します。</p>
+
+
+        <p class="entry-readmore"><a href="/mha-and-consul.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/socialplus-bugsnag.html">ソーシャルPLUSで 1 日 700 通超のアラートメールを撲滅したお話</a></h1>
+        <ul>
+          <li class="entry-time">2016.02.24</li>
+          <li class="entry-cat"><a href="/category/operation/">運用事例</a></li>
+          <li class="entry-author"><a href="/author/masutaka">masutaka</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/masutaka"><img src="/images/authors/masutaka.jpg" /></a>
+      </div>
+      <div class="entry-body">
+        <p>こんにちは。増田です。<br>
+最近は <a href="http://www.jp.playstation.com/ps4/">PS4</a> と <a href="http://www.jp.playstation.com/nasne/">nasne</a> を Amazon のショッピングカートに入れては戻す日々を送っています。</p>
+
+<p>さて、私が担当する<a href="https://socialplus.jp">ソーシャルPLUS</a>では毎日 700 通超のアラートメールに苦しめられてきました。なぜこんなことになってしまったのか...。</p>
+
+<p>しかしながら、この記事は Bugsnag を使ってそのメールを（ほぼ）撲滅できたお話です。</p>
+
+<p>Bugsnag については弊社のこちらの記事をどうぞ。</p>
+
+<ul>
+<li><a href="http://tech.feedforce.jp/rails-fluent-bugsnag.html">Rails のエラー通知を fluentd 経由で Bugsnag に送る | feedforce Engineers&#39; blog</a></li>
+</ul>
+
+
+        <p class="entry-readmore"><a href="/socialplus-bugsnag.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/study-letsencrypt.html">入門Let's Encryptという勉強会をしました</a></h1>
+        <ul>
+          <li class="entry-time">2016.02.22</li>
+          <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+          <li class="entry-author"><a href="/author/sugiuchi">sugiuchi</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/sugiuchi"><img src="/images/authors/sugiuchi.jpg" /></a>
+      </div>
+      <div class="entry-body">
+        <p>Let&#39;s Encrypt！！インフラ担当の杉内です。</p>
+
+<p>少し前になりますが毎週金曜に行っている社内の勉強会でLet&#39;s Encryptについて発表しました。<br>
+今日は資料の公開とスライド中ではデモで済ませてしまったところのフォローを交えつつ紹介したいと思います。</p>
+
+
+        <p class="entry-readmore"><a href="/study-letsencrypt.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/ywt-retrospective.html">中長期のふりかえりとしてYWT(やった,わかった,つぎにやる)を試してみました</a></h1>
+        <ul>
+          <li class="entry-time">2016.02.16</li>
+          <li class="entry-cat"><a href="/category/dev_style/">開発スタイル</a></li>
+          <li class="entry-author"><a href="/author/r-suzuki">r-suzuki</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/r-suzuki"><img src="/images/authors/r-suzuki.jpg" /></a>
+      </div>
+      <div class="entry-body">
+        <p>弊社では四半期に1度、開発者全体でふりかえりを実施しています。従来は「KPT」でやっていましたが、「中長期のふりかえりには向いていないよね」という社内の声を受けて「YWT」を試してみました。</p>
+
+<p>今日はその進め方や感想をお伝えします。なお私がウェブ上の情報を参考に実施したもので、何か正式なやり方に則っている保証はありませんのでご容赦を。</p>
+
+
+        <p class="entry-readmore"><a href="/ywt-retrospective.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/stretcher-consul-capistrano.html">stretcher + consul + capistrano を使ったデプロイを導入しようと思います</a></h1>
+        <ul>
+          <li class="entry-time">2016.02.09</li>
+          <li class="entry-cat"><a href="/category/operation/">運用事例</a>, <a href="/category/resume/">勉強会資料</a></li>
+          <li class="entry-author"><a href="/author/e-takano">e-takano</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/e-takano"><img src="/images/authors/kano-e.png" /></a>
+      </div>
+      <div class="entry-body">
+        <p>こんにちは。<a href="https://twitter.com/ff_boardgame">フィードフォース ボドゲ部</a>の kano-e です。<br>
+こないだ<a href="http://twilog.org/ff_boardgame/date-160203">『Last Night on Earth』というアメリカB級ゾンビ映画ゲーム(オリジナルサウンドトラック付き)で遊んで楽しかった</a>のでまた遊びたい！</p>
+
+<p>さて、最近 stretcher + consul を使ったアプリケーションのデプロイを <a href="/author/tjinjin">tjinjin</a> に布教<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>され、実際のプロダクト導入に向けてデモ用の環境で動かしています。</p>
+
+<ul>
+<li>これまでの (capistrano を使った) デプロイとの違い</li>
+<li>stretcher や consul が何をしているか</li>
+<li>良い点と現状の課題</li>
+</ul>
+
+<p>について、社内勉強会で話した内容をまとめます。</p>
+
+
+        <p class="entry-readmore"><a href="/stretcher-consul-capistrano.html">Read more</a></p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="entry-date">
+        <h1><a href="/create-ruby-rpm.html">フィードフォースではRubyのrpmをGitHubに自動リリースしています</a></h1>
+        <ul>
+          <li class="entry-time">2015.12.25</li>
+          <li class="entry-cat"><a href="/category/operation/">運用事例</a>, <a href="/category/ruby/">Ruby/Rails</a></li>
+          <li class="entry-author"><a href="/author/tjinjin">tjinjin</a></li>
+        </ul>
+      </div>
+      <div class="entry-author-image">
+        <a href="/author/tjinjin"><img src="/images/authors/tjinjin.png" /></a>
+      </div>
+      <div class="entry-body">
+        <p>皆様いかがお過ごしでしょうか。tjinjinです。もうすぐ2015年も終わりますね。皆様にとってステキな年になったでしょうか。私にとってステキな年だったので、来年はもっと熱い年にしていきたいなと思っているところです。</p>
+
+<p>本日はRubyのrpmパッケージ作成を自動化しましたのでご紹介します！</p>
+
+<p>ちなみにすでにRuby-2.3.0のrpmパッケージを作成しました！！！<br>
+<a href="https://github.com/feedforce/ruby-rpm/releases/tag/2.3.0">https://github.com/feedforce/ruby-rpm/releases/tag/2.3.0</a></p>
+
+
+        <p class="entry-readmore"><a href="/create-ruby-rpm.html">Read more</a></p>
+      </div>
+    </article>
+
+    <div id="entry-link">
+      <ul>
+            <li id="older-link"><a href="/page/5/">< Older posts</a></li>
+            <li id="newer-link"><a href="/page/3/">Newer posts ></a></li>
+      </ul>
+    </div>
+
+    </div>
+
+    <p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+  </body>
+</html>

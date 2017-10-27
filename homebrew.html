@@ -1,0 +1,787 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>Homebrew のご紹介 | feedforce Engineers' blog</title>
+      <meta name="description" content="9/3 の勉強会で Homebrew について発表したので、その内容を公開します。man や公式ドキュメントの抜粋を和訳した程度の内容ですが、何かの助けになれば幸いです。2011/02/23 追記 : 草稿的に書いた私的な wiki ページを残してありますが、同一人(koshigoe)によるものです。">
+      <link rel="canonical" href="http://tech.feedforce.jp/homebrew.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="Homebrew のご紹介 | feedforce Engineers' blog">
+      <meta property="og:description" content="9/3 の勉強会で Homebrew について発表したので、その内容を公開します。man や公式ドキュメントの抜粋を和訳した程度の内容ですが、何かの助けになれば幸いです。2011/02/23 追記 : 草稿的に書いた私的な wiki ページを残してありますが、同一人(koshigoe)によるものです。">
+      <meta property="og:url" content="http://tech.feedforce.jp/homebrew.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/homebrew.html">Homebrew のご紹介</a></h1>
+      <ul>
+        <li class="entry-time">2010.09.10</li>
+        <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/ff_koshigoe">ff_koshigoe</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/ff_koshigoe"><img src="/images/authors/koshigoe.gif" /></a>
+    </div>
+    <div class="entry-body">
+      <p>9/3 の勉強会で Homebrew について発表したので、その内容を公開します。</p>
+
+<p>man や公式ドキュメントの抜粋を和訳した程度の内容ですが、何かの助けになれば幸いです。</p>
+
+<p><strong>2011/02/23 追記</strong> : 草稿的に書いた私的な <a href="http://w.koshigoe.jp/study/?%5Bsystem%5D%5Bosx%5D+Homebrew+%BB%C8%A4%A4%CA%FD%A5%E1%A5%E2">wiki ページ</a>を残してありますが、同一人(koshigoe)によるものです。</p>
+
+<!--more-->  
+
+<h2>Table of Contents</h2>
+
+<ul>
+<li>1 何の話？</li>
+<li>2 Homebrew</li>
+<li>3 インストール</li>
+<li>4 語彙
+
+<ul>
+<li>4.1 Formula</li>
+<li>4.2 Keg</li>
+<li>4.3 Celler</li>
+</ul></li>
+<li>5 まずは</li>
+<li>6 コマンド紹介(標準コマンド編)
+
+<ul>
+<li>6.1 $ brew search text</li>
+<li>6.2 $ brew search /regex/</li>
+<li>6.3 $ brew install [options] formula</li>
+<li>6.4 $ brew install --interactive [--git] formula</li>
+<li>6.5 $ brew list</li>
+<li>6.6 $ brew formula</li>
+<li>6.7 $ brew info formula</li>
+<li>6.8 $ brew info --github formula</li>
+<li>6.9 $ brew info --all</li>
+<li>6.10 $ brew info URL</li>
+<li>6.11 $ brew home</li>
+<li>6.12 $ brew formula</li>
+<li>6.13 $ brew remove formula</li>
+<li>6.14 $ brew link formula</li>
+<li>6.15 $ brew unlink formula</li>
+<li>6.16 $ brew prune</li>
+<li>6.17 $ brew outdated</li>
+<li>6.18 $ brew deps [--1] formula</li>
+<li>6.19 $ brew uses [--installed] formula</li>
+<li>6.20 $ brew doctor</li>
+<li>6.21 $ brew cat formula</li>
+<li>6.22 $ brew cleanup [formula]</li>
+<li>6.23 $ brew update</li>
+<li>6.24 $ brew create [--cache] URL</li>
+<li>6.25 $ brew crewate --macports|--fink formula</li>
+<li>6.26 $ brew edit formula</li>
+<li>6.27 $ brew edit</li>
+</ul></li>
+<li>7 Formula を自作する
+
+<ul>
+<li>7.1 Gist ファイルの Formula を作ってみる</li>
+<li>7.1.1 手順</li>
+<li>7.1.2 コマンド履歴</li>
+<li>7.1.3 ScriptFileFormula</li>
+<li>7.1.4 GithubGistFormula</li>
+</ul></li>
+<li>8 コマンド紹介(外部コマンド編)
+
+<ul>
+<li>8.1 $ brew audit [formula]</li>
+<li>8.2 $ brew fetch formula</li>
+<li>8.3 $ brew man</li>
+<li>8.4 $ brew missing</li>
+<li>8.5 $ brew server</li>
+<li>8.6 $ brew test formula</li>
+<li>8.7 $ brew graph</li>
+</ul></li>
+<li>9 Formula Cookbook から抜粋メモ
+
+<ul>
+<li>9.1 約束事</li>
+<li>9.2 Commit</li>
+<li>9.3 Push</li>
+<li>9.4 インストールの手続き</li>
+<li>9.5 ユーティリティ紹介</li>
+<li>9.5.1 bin.install(paths)</li>
+<li>9.5.2 inplace path, before, after</li>
+<li>9.5.3 patches</li>
+<li>9.5.4 HEAD</li>
+<li>9.5.5 download_strategy</li>
+<li>9.5.6 prefix.install(paths)</li>
+<li>9.5.7 変数など</li>
+<li>9.5.8 keg_only</li>
+</ul></li>
+<li>10 環境変数一覧</li>
+<li>11 メモ</li>
+<li>12 参考</li>
+</ul>
+
+<h2>1 何の話？</h2>
+
+<p>Mac OSX に含まれていないコマンド類をインストールするためのパッケージ管理システムについての話。 「できる限り Apple が用意した組み込みのコマンド(パッケージ)を使う」という方針。 Ruby で記述されている。</p>
+
+<h2>2 Homebrew</h2>
+
+<p>(訳) home-brew: 自家醸造飲料(ビール、酒)</p>
+
+<h2>3 インストール</h2>
+
+<pre><code class="prettyprint">$ ruby -e &quot;$(curl -fsS http://gist.github.com/raw/323731/install_homebrew.rb)&quot;
+</code></pre>
+
+<ol>
+<li>/usr/local/ 以下のパーミッションを調整<br></li>
+<li>リポジトリから tar ボールをダウンロード</li>
+<li>tar ボールを /usr/local/ 以下に展開</li>
+<li>詳しくは</li>
+</ol>
+
+<p><a href="http://gist.github.com/raw/323731/install_homebrew.rb">http://gist.github.com/raw/323731/install_homebrew.rb</a></p>
+
+<h2>4 語彙</h2>
+
+<h3>4.1 Formula</h3>
+
+<p>(和訳) 調理法 (用語) パッケージの説明書</p>
+
+<h3>4.2 Keg</h3>
+
+<p>(和訳) 小たる、たるビール (用語) Formula のインストール先パス</p>
+
+<h3>4.3 Celler</h3>
+
+<p>(和訳) 地下貯蔵室 (用語) Keg 群のインストール先パス</p>
+
+<h2>5 まずは</h2>
+
+<ul>
+<li>Formula のアップデートなどに git を使うので、git を入れておくと便利。</li>
+<li>home コマンドを実行すると Homebrew のホームページをブラウザで開くので、目を通しておくとよい。</li>
+<li>実際にコマンドで何ができるかは man ページに目を通しておくとよい。</li>
+</ul>
+
+<pre><code class="prettyprint">$ brew install git
+$ brew update
+$ brew home
+$ man brew
+</code></pre>
+
+<h2>6 コマンド紹介(標準コマンド編)</h2>
+
+<h3>6.1 $ brew search text</h3>
+
+<p>指定文字列( text )の部分マッチで Formula を検索する。</p>
+
+<h3>6.2 $ brew search /regex/</h3>
+
+<p>指定正規表現のマッチングで Formula を検索する。</p>
+
+<h3>6.3 $ brew install [options] formula</h3>
+
+<ul>
+<li>--debug</li>
+<li>--use-llvm LLVM 対応。
+<a href="http://llvm.org/">http://llvm.org/</a>
+<a href="http://ja.wikipedia.org/wiki/Low_Level_Virtual_Machine">http://ja.wikipedia.org/wiki/Low_Level_Virtual_Machine</a></li>
+<li>--ignore-dependencies 依存関係を無視する。</li>
+<li>--HEAD HEAD を取得してインストールする。</li>
+</ul>
+
+<h3>6.4 $ brew install --interactive [--git] formula</h3>
+
+<ul>
+<li>--interactive ダウンロードして展開した後、シェルを開いて対話的なインストール作業を実施できる。</li>
+<li>--git パッチ作りなどに役立てるために git リポジトリを作る。</li>
+</ul>
+
+<h3>6.5 $ brew list</h3>
+
+<p>インストール済みの全ての Formula を表示する。</p>
+
+<h3>6.6 $ brew formula</h3>
+
+<p>その formula のインストール済みファイルを表示する。</p>
+
+<h3>6.7 $ brew info formula</h3>
+
+<p>その formula についての情報を表示する。</p>
+
+<h3>6.8 $ brew info --github formula</h3>
+
+<p>その formula の github の履歴ページをブラウザで開く。</p>
+
+<h3>6.9 $ brew info --all</h3>
+
+<p>全ての Formula の情報のサマリを表示する。</p>
+
+<h3>6.10 $ brew info URL</h3>
+
+<p>http:// 始まりの URL を指定すると、その URL からパッケージ名とバージョン番号を推測して表示する。</p>
+
+<h3>6.11 $ brew home</h3>
+
+<p>Homebrew のホームページをブラウザで開く。</p>
+
+<h3>6.12 $ brew formula</h3>
+
+<p>その formula のホームページをブラウザで開く。</p>
+
+<h3>6.13 $ brew remove formula</h3>
+
+<p>その formula を削除(アンインストール)する。</p>
+
+<h3>6.14 $ brew link formula</h3>
+
+<p>その formula のインストールされたファイルにリンクする。</p>
+
+<h3>6.15 $ brew unlink formula</h3>
+
+<p>その formula のインストールされたファイルへのリンクを解除する。</p>
+
+<h3>6.16 $ brew prune</h3>
+
+<p>デッドリンクになっているものを削除する。</p>
+
+<h3>6.17 $ brew outdated</h3>
+
+<p>アップデートがある Formula の一覧を表示する。</p>
+
+<h3>6.18 $ brew deps [--1] formula</h3>
+
+<p>その formula の依存関係を表示する。--1 をつけた場合、一階層の依存関係のみを表示。</p>
+
+<h3>6.19 $ brew uses [--installed] formula</h3>
+
+<p>その formula に依存している Formula を表示する。 --installed をつけた場合、インストール済みの Formula のみを表示する。</p>
+
+<h3>6.20 $ brew doctor</h3>
+
+<p>システムの潜在的な問題を報告する。</p>
+
+<h3>6.21 $ brew cat formula</h3>
+
+<p>その formula のファイル内容を表示する。</p>
+
+<h3>6.22 $ brew cleanup [formula]</h3>
+
+<p>古いバージョンの Formula を削除する。 formula が指定されれば、その formula についてのみ。</p>
+
+<h3>6.23 $ brew update</h3>
+
+<p>git を使って Homebrew および Formula の新しいバージョンにアップデートする。</p>
+
+<h3>6.24 $ brew create [--cache] URL</h3>
+
+<p>パッケージのソースアーカイブの URL を指定して Formula を作成する。</p>
+
+<h3>6.25 $ brew crewate --macports|--fink formula</h3>
+
+<p>MacPorts か Fink のパッケージ検索結果ページをブラウザで開く。</p>
+
+<h3>6.26 $ brew edit formula</h3>
+
+<p>指定した formula をエディタで開く。</p>
+
+<h3>6.27 $ brew edit</h3>
+
+<p>全ての Formula を TextMate(mate) で開く。</p>
+
+<h2>7 Formula を自作する</h2>
+
+<p><a href="http://wiki.github.com/mxcl/homebrew/formula-cookbook">http://wiki.github.com/mxcl/homebrew/formula-cookbook</a></p>
+
+<h3>7.1 Gist ファイルの Formula を作ってみる</h3>
+
+<h4>7.1.1 手順</h4>
+
+<ol>
+<li>create すると環境変数 EDITOR で指定されているエディタで Formula ファイル(ひな形)が開くので、ソフトウェアのホームページの URL などを記入する (環境変数 HOMEBREW_EDITOR を設定していれば、そのエディタで開く) パッケージ名やバージョン番号の推測が期待通りでなければ修正する。 (Formula のファイルはパッケージ名に依存するので、必要に応じて変更しておく)<br></li>
+<li>fetch コマンドを使うとハッシュを調べられる (ダウンロード後のファイルでハッシュ値を得ていいのかという話は別)</li>
+<li>ハッシュ値を記入する</li>
+<li>install メソッドにインストールの手続きを書く</li>
+<li>インストールしてみる</li>
+</ol>
+
+<h4>7.1.2 コマンド履歴</h4>
+
+<pre><code class="prettyprint">$ brew create http://gist.github.com/raw/227178/d03bb254c9a28206d6ed516947e1893472ab9558/mymemcheck.rb
+Formula name [mymemcheck]:
+... edit Formula file ...
+require &#39;formula&#39;
+
+class Mymemcheck &lt;Formula
+  url &#39;http://gist.github.com/raw/227178/d03bb254c9a28206d6ed516947e1893472ab9558/mymemcheck.rb&#39;
+  homepage &#39;&#39;
+  md5 &#39;&#39;
+
+  # depends_on &#39;cmake&#39;
+
+  def install
+    system &quot;./configure&quot;, &quot;--disable-debug&quot;, &quot;--disable-dependency-tracking&quot;,
+                          &quot;--prefix=#{prefix}&quot;
+    # system &quot;cmake . #{std_cmake_parameters}&quot;
+    system &quot;make install&quot;
+  end
+end
+$ brew cat mymemcheck
+require &#39;formula&#39;
+
+class Mymemcheck &lt;Formula
+  url &#39;http://gist.github.com/raw/227178/d03bb254c9a28206d6ed516947e1893472ab9558/mymemcheck.rb&#39;
+  homepage &#39;http://gist.github.com/227178&#39;
+  md5 &#39;&#39;
+  version &#39;0.0.1&#39;
+
+  # depends_on &#39;cmake&#39;
+
+  def install
+    system &quot;./configure&quot;, &quot;--disable-debug&quot;, &quot;--disable-dependency-tracking&quot;,
+                          &quot;--prefix=#{prefix}&quot;
+    # system &quot;cmake . #{std_cmake_parameters}&quot;
+    system &quot;make install&quot;
+  end
+end
+$ brew fetch mymemcheck
+==&gt; Downloading http://gist.github.com/raw/227178/d03bb254c9a28206d6ed516947e1893472ab9558/mymemcheck.rb
+######################################################################## 100.0%
+MD5: 44c84bde2574a1e6f125a81aa4e8ca57
+SHA1: 8100730d0bf26c2d374aba2ceb5f8e1b4fc73069
+$ brew edit mymemcheck
+$ brew cat mymemcheck
+require &#39;formula&#39;
+
+class Mymemcheck &lt;Formula
+  url &#39;http://gist.github.com/raw/227178/d03bb254c9a28206d6ed516947e1893472ab9558/mymemcheck.rb&#39;
+  homepage &#39;http://gist.github.com/227178&#39;
+  sha1 &#39;8100730d0bf26c2d374aba2ceb5f8e1b4fc73069&#39;
+  version &#39;0.0.1&#39;
+
+  # depends_on &#39;cmake&#39;
+
+  def install
+    system &quot;./configure&quot;, &quot;--disable-debug&quot;, &quot;--disable-dependency-tracking&quot;,
+                          &quot;--prefix=#{prefix}&quot;
+    # system &quot;cmake . #{std_cmake_parameters}&quot;
+    system &quot;make install&quot;
+  end
+end
+require &#39;formula&#39;
+
+class Mymemcheck &lt;Formula
+  url &#39;http://gist.github.com/raw/227178/d03bb254c9a28206d6ed516947e1893472ab9558/mymemcheck.rb&#39;
+  homepage &#39;http://gist.github.com/227178&#39;
+  sha1 &#39;8100730d0bf26c2d374aba2ceb5f8e1b4fc73069&#39;
+  version &#39;0.0.1&#39;
+
+  def install
+    bin.install Dir[&#39;*&#39;]
+  end
+end
+$ brew install -vd mymemcheck
+$ which mymemcheck.rb
+/usr/local/bin/mymemcheck.rb
+</code></pre>
+
+<h4>7.1.3 ScriptFileFormula</h4>
+
+<p>スクリプトファイルを /usr/local/bin&gt; にリンクするだけなら、Formula の代わりに ScriptFileFormula を継承すると簡単。</p>
+
+<pre><code class="prettyprint"># see ack.rb for an example usage
+class ScriptFileFormula &lt;Formula
+  def install
+    bin.install Dir[&#39;*&#39;]
+  end
+end
+</code></pre>
+
+<h4>7.1.4 GithubGistFormula</h4>
+
+<p>スクリプトファイルを gist から持ってくるなら、Formula の代わりに GithubGistFormula を継承すると簡単。</p>
+
+<pre><code class="prettyprint"># see flac.rb for example usage
+class GithubGistFormula &lt;ScriptFileFormula
+  def initialize name=&#39; __UNKNOWN__&#39;
+    super name
+    @version=File.basename(File.dirname(url))[0,6]
+  end
+end
+</code></pre>
+
+<h2>8 コマンド紹介(外部コマンド編)</h2>
+
+<p>brew-{command} という名前の実行可能ファイルか、brew-{command}.rb という Ruby スクリプトが、PATH からたどることが出来るなら、 command を外部コマンドとして実行できる。 実行可能ファイルは exec で実行され、ruby スクリプトファイルは、require によって実行される。</p>
+
+<h3>8.1 $ brew audit [formula]</h3>
+
+<p>指定した formula か全ての Formula が Homebrew のコーディングスタイルに違反していないか検査する。</p>
+
+<h3>8.2 $ brew fetch formula</h3>
+
+<p>その formula の tarball をダウンロードするか VCS からチェックアウトする。MD5 と SHA1 のチェックサムも表示。</p>
+
+<h3>8.3 $ brew man</h3>
+
+<p>man ページを再構築する。  </p>
+
+<p><a href="http://rtomayko.github.com/ronn/">ronn</a> が必要。</p>
+
+<h3>8.4 $ brew missing</h3>
+
+<p>依存関係が失われた Formula を調べる。</p>
+
+<h3>8.5 $ brew server</h3>
+
+<p>利用可能な Formula をブラウズするサーバアプリを立ち上げる。  </p>
+
+<p><a href="http://www.sinatrarb.com/">sinatra</a> が必要。</p>
+
+<h3>8.6 $ brew test formula</h3>
+
+<p>test メソッドを実装している Formula について、テストを実行する。</p>
+
+<h3>8.7 $ brew graph</h3>
+
+<p>グラフデータを出力。</p>
+
+<h2>9 <a href="http://wiki.github.com/mxcl/homebrew/formula-cookbook">Formula Cookbook</a> から抜粋メモ</h2>
+
+<h3>9.1 約束事</h3>
+
+<ul>
+<li>インストールで使うコマンドは絶対パスで指定すること</li>
+<li>マニュアルは {$prefix}/share/man/ 以下に書き出すように</li>
+<li>Formula のファイル名とクラス名
+
+<ul>
+<li>/[-_.\s]/ で分割しキャメルケースに変換したものがクラス名 (+ という文字は x に置換される)</li>
+<li>クラス名の逆がファイル名</li>
+</ul></li>
+</ul>
+
+<h3>9.2 Commit</h3>
+
+<ul>
+<li>コミットメッセージの先頭行は 50 文字以内</li>
+<li>一行あけて、三行目に説明を書く</li>
+</ul>
+
+<pre><code class="prettyprint">$ cd /usr/local
+$ git add Library/Formula/foo.rb
+$ git commit
+</code></pre>
+
+<h3>9.3 Push</h3>
+
+<ul>
+<li>Homebrew を fork して使う</li>
+<li>pull request より issue ticket</li>
+</ul>
+
+<pre><code class="prettyprint">$ gem install github
+$ cd `brew --prefix`
+$ github fork
+$ git push myname master
+</code></pre>
+
+<h3>9.4 インストールの手続き</h3>
+
+<ol>
+<li>Formula.download_strategy でインスタンス作成<br></li>
+<li>DownloadStrategy.fetch でダウンロード</li>
+<li>サンドボックス (/tmp/homebrew) が作られる</li>
+<li>DownloadStrategy.stage で展開</li>
+<li>パッチ適用</li>
+<li>カレントディレクトリを stage ディレクトリに変更 (make コマンドなど、カレントディレクトリに依存するケースに対応)</li>
+<li>Formula.install</li>
+<li>keg にインストールされるだけ</li>
+<li>Homebrew のプレフィクスから keg にリンクする</li>
+<li>注意事項が表示される</li>
+</ol>
+
+<h3>9.5 ユーティリティ紹介</h3>
+
+<h4>9.5.1 bin.install(paths)</h4>
+
+<p>指定したパスにマッチするものを keg の bin/ にインストールする。</p>
+
+<h4>9.5.2 inplace path, before, after</h4>
+
+<p>path にあるファイルの中身の before から after に書き換える。</p>
+
+<h4>9.5.3 patches</h4>
+
+<p>patches メソッドを定義して、その戻り値で当てたいパッチを文字列や Hash で指定できる。</p>
+
+<h4>9.5.4 HEAD</h4>
+
+<p>install 時に --HEAD オプションを指定すると trunk/master/HEAD をチェックアウトする。 そのときに使うリポジトリの URL を head メソッドで指定しておく。</p>
+
+<pre><code class="prettyprint">class Foo &lt; Formula
+  head &#39;git://github.com/mxcl/lastfm-cocoa.git&#39;
+end
+</code></pre>
+
+<h4>9.5.5 download_strategy</h4>
+
+<p>ダウンロード方法を指定する。</p>
+
+<pre><code class="prettyprint">class Bar &lt; Formula
+  def download_strategy; GitDownloadStrategy; end
+  head &#39;/users/abc/src/git.git&#39;
+end
+</code></pre>
+
+<h4>9.5.6 prefix.install(paths)</h4>
+
+<p>コンパイル不要でコピーするだけの様な場合に使える。</p>
+
+<pre><code class="prettyprint">prefix.install [&#39;file1&#39;, &#39;file2&#39;]
+prefix.install Dir[&#39;*&#39;]
+</code></pre>
+
+<h4>9.5.7 変数など</h4>
+
+<table><thead>
+<tr>
+<th>変数名</th>
+<th>デフォルト値</th>
+<th>例示</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>name</td>
+<td>Formula の名前</td>
+<td>foo</td>
+</tr>
+<tr>
+<td>HOMEBREW_PREFIX</td>
+<td>/usr/local</td>
+<td></td>
+</tr>
+<tr>
+<td>prefix</td>
+<td>#{HOMEBREW_PREFIX}/Cellar/#{name}/#{version}</td>
+<td>/usr/local/Cellar/foo/0.1</td>
+</tr>
+<tr>
+<td>bin</td>
+<td>#{prefix}/bin</td>
+<td>/usr/local/Cellar/foo/0.1/bin</td>
+</tr>
+<tr>
+<td>lib</td>
+<td>#{prefix}/lib</td>
+<td>etc.</td>
+</tr>
+<tr>
+<td>man</td>
+<td>#{prefix}/share/man</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<h4>9.5.8 keg_only</h4>
+
+<p>/usr/local/bin などへリンクせず、keg で止める。</p>
+
+<h2>10 環境変数一覧</h2>
+
+<ul>
+<li>HOMEBREW_DEBUG</li>
+<li>HOMEBREW_DEBUG_INSTALL</li>
+<li>HOMEBREW_DEBUG_PREFIX</li>
+<li>HOMEBREW_EDITOR</li>
+<li>HOMEBREW_KEEP_INFO</li>
+<li>HOMEBREW_SVN</li>
+<li>HOMEBREW_TEMP</li>
+<li>HOMEBREW_USE_LLVM</li>
+<li>HOMEBREW_VERBOSE</li>
+</ul>
+
+<h2>11 メモ</h2>
+
+<p>コマンドによってはシェルを開くため、cd しただけかと思いながら実は別シェルを開いているという罠がある。</p>
+
+<h2>12 参考</h2>
+
+<ul>
+<li><a href="http://github.com/mxcl/homebrew">http://github.com/mxcl/homebrew</a></li>
+<li><a href="http://gist.github.com/raw/323731/install_homebrew.rb">http://gist.github.com/raw/323731/install_homebrew.rb</a></li>
+<li><a href="http://wiki.github.com/mxcl/homebrew/">http://wiki.github.com/mxcl/homebrew/</a></li>
+<li><a href="http://d.hatena.ne.jp/tokuhirom/20100625/1277435268">http://d.hatena.ne.jp/tokuhirom/20100625/1277435268</a></li>
+</ul>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/homebrew.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="Homebrew のご紹介" data-url="http://tech.feedforce.jp/homebrew.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/homebrew.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/homebrew.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/jasmine.html" rel="next">Jasmineでテスティング</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/review_rdoc.html" rel="prev">おさらいRDoc</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

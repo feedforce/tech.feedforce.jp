@@ -1,0 +1,369 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>入門Let's Encryptという勉強会をしました | feedforce Engineers' blog</title>
+      <meta name="description" content="Let&#39;s Encrypt！！インフラ担当の杉内です。少し前になりますが毎週金曜に行っている社内の勉強会でLet&#39;s Encryptについて発表しました。今日は資料の公開とスライド中ではデモで済ませてしまったところのフォローを交えつつ紹介したいと思います。">
+      <link rel="canonical" href="http://tech.feedforce.jp/study-letsencrypt.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="入門Let's Encryptという勉強会をしました | feedforce Engineers' blog">
+      <meta property="og:description" content="Let&#39;s Encrypt！！インフラ担当の杉内です。少し前になりますが毎週金曜に行っている社内の勉強会でLet&#39;s Encryptについて発表しました。今日は資料の公開とスライド中ではデモで済ませてしまったところのフォローを交えつつ紹介したいと思います。">
+      <meta property="og:url" content="http://tech.feedforce.jp/study-letsencrypt.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/study-letsencrypt.html">入門Let's Encryptという勉強会をしました</a></h1>
+      <ul>
+        <li class="entry-time">2016.02.22</li>
+        <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/sugiuchi">sugiuchi</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/sugiuchi"><img src="/images/authors/sugiuchi.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>Let&#39;s Encrypt！！インフラ担当の杉内です。</p>
+
+<p>少し前になりますが毎週金曜に行っている社内の勉強会でLet&#39;s Encryptについて発表しました。<br>
+今日は資料の公開とスライド中ではデモで済ませてしまったところのフォローを交えつつ紹介したいと思います。</p>
+
+<!--more-->
+
+<p>資料はこちら</p>
+
+<script async class="speakerdeck-embed" data-id="f66dffb7f52b4b55b8b5b5b548fe81a2" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+
+<h2>Let&#39;s Encryptとは</h2>
+
+<p><a href="https://letsencrypt.org/">Let&#39;s Encrypt</a>とはSSL/TLS証明書を無料で発行してくれる認証局です。<br>
+SSL証明書を無料で発行するとともに、発行、インストール、更新を自動化しHTTPSの普及を目的としています。</p>
+
+<p>SSL証明書が無料という部分も魅力的ですが、注目すべきは証明書に関連する作業が自動化されるところです。<br>
+SSL証明書の取得は支払いやドメインの所持者かどうかの確認等、手作業が必要な部分が多く自動化しづらいのが現状です。そこを自動化していこうというスタンスはとても素晴らしいです！</p>
+
+<p>以下デモパートでの一連の流れです。</p>
+
+<h2>下準備</h2>
+
+<p>今回試した環境はCentOS7 + Apache2.4です。<br>
+取得する証明書のドメインは <code class="prettyprint">letsen.critical-alert.net</code> で、<br>
+このドメインのAレコードは証明書をインストールするサーバに向いています。</p>
+
+<p>クライアントの取得にgitが必要なのでインストールします。</p>
+
+<pre><code class="prettyprint">$ yum install git
+</code></pre>
+
+<p>webサーバはapacheを使うのでインストールし、起動させておきます。</p>
+
+<pre><code class="prettyprint">$ yum install httpd
+$ systemctl start httpd
+</code></pre>
+
+<h2>証明書の取得</h2>
+
+<p>実際に証明書を取得していきます。<br>
+下準備の通り、apacheをインストール&amp;起動済みです。</p>
+
+<p>Let&#39;s EncryptのクライアントがGitHub上で公開されていますのでそれを使います。</p>
+
+<pre><code class="prettyprint">$ git clone https://github.com/letsencrypt/letsencrypt
+</code></pre>
+
+<p>次にLet&#39;s Encryptクライアントが依存するパッケージをインストールします。<br>
+letsencrypt-auto というスクリプトが本体になっていて、このスクリプトを実行します。</p>
+
+<pre><code class="prettyprint">$ cd letsencrypt
+$ ./letsencrypt-auto --help
+</code></pre>
+
+<p>はい。helpを実行しただけですが、スクリプト起動時にいきなりyumでパッケージがザクザクインストールされてびっくりします...<br>
+このスクリプトはOSを自動判定してpythonやgcc、openssl-develなどクライアントを動かすのに必要なライブラリなどがインストールされます。<br>
+(本番環境への導入時はこの辺のパッケージのインストールやアップデートの影響がないか確認をしたほうが良さそうです)</p>
+
+<p>次に取得のコマンドを実行します。</p>
+
+<pre><code class="prettyprint">$ ./letsencrypt-auto certonly --text \
+-d letsen.critical-alert.net \
+--webroot --webroot-path=/var/www/html \
+-m sample@example.com \
+--agree-tos
+</code></pre>
+
+<p>スライド中のオプションと違っている部分がありますので、1個づつ解説します。<br>
+(--rsa-key-size はデフォルトで2048でした)</p>
+
+<ul>
+<li>certonly
+
+<ul>
+<li>証明書のみを取得します</li>
+</ul></li>
+<li>-d
+
+<ul>
+<li>取得するドメインを指定します</li>
+</ul></li>
+<li>--webroot
+
+<ul>
+<li>webサーバのドキュメントルートに認証用のファイルを生成します</li>
+</ul></li>
+<li>--webroot-path
+
+<ul>
+<li>ドキュメントルートのパスを指定します</li>
+</ul></li>
+<li>-m
+
+<ul>
+<li>メールアドレスを指定します。アカウントとして使用され緊急の連絡等にも使用されるようです</li>
+</ul></li>
+<li>--agree-tos
+
+<ul>
+<li>利用規約に同意します</li>
+</ul></li>
+</ul>
+
+<p>メールアドレスやagree-tosは初回のみ実行すればOKです。</p>
+
+<h2>証明書の保存場所</h2>
+
+<p>コマンドを実行して下記のような出力があれば取得できています。</p>
+
+<pre><code class="prettyprint">IMPORTANT NOTES:
+
+ - Congratulations! Your certificate and chain have been saved at
+   /etc/letsencrypt/live/letsen.critical-alert.net/fullchain.pem. Your
+   cert will expire on 2016-05-07. To obtain a new version of the
+   certificate in the future, simply run Let&#39;s Encrypt again.
+
+以下略
+</code></pre>
+
+<p>無事に取得できているか確認します。<br>
+取得した証明書は <code class="prettyprint">/etc/letsencrypt/live</code> というディレクトリにドメインごとに保存されます。</p>
+
+<pre><code class="prettyprint">ls /etc/letsencrypt/live/letsen.critical-alert.net/
+
+cert.pem -&gt; ../../archive/letsen.critical-alert.net/cert1.pem
+chain.pem -&gt; ../../archive/letsen.critical-alert.net/chain1.pem
+fullchain.pem -&gt; ../../archive/letsen.critical-alert.net/fullchain1.pem
+privkey.pem -&gt; ../../archive/letsen.critical-alert.net/privkey1.pem
+</code></pre>
+
+<p>このようにシンボリックリンクになっていて、本体は <code class="prettyprint">archive</code> というディレクトリに保存されています。<br>
+更新時はこのシンボリックリンク先が差し代わるようになっていて、webサーバ側の設定を変えなくていいようになっています。</p>
+
+<p>証明書はそれぞれこのようになっています。</p>
+
+<pre><code class="prettyprint">cert.pem &gt; 証明書
+chain.pem &gt; 中間証明書
+fullchain.pem &gt; 証明書+中間証明書(Nginxはこれを使用)
+privkey.pem &gt; 秘密鍵
+</code></pre>
+
+<p>取得した証明書をapacheに設定します。<br>
+cert.pem、chain.pem、privkey.pem の3ファイルを使います。</p>
+
+<pre><code class="prettyprint">$ vi /etc/httpd/conf.d/ssl.conf
+
+中略
+SSLCertificateFile /etc/letsencrypt/live/letsen.critical-alert.net/cert.pem
+SSLCertificateKeyFile /etc/letsencrypt/live/letsen.critical-alert.net/privkey.pem
+SSLCertificateChainFile /etc/letsencrypt/live/letsen.critical-alert.net/chain.pem
+</code></pre>
+
+<p>設定できたらリロードします。</p>
+
+<pre><code class="prettyprint">$ systemctl reload httpd
+</code></pre>
+
+<p>ブラウザでアクセスし、証明書を確認するとちゃんと Let&#39;s Encrypt で取得した証明書が表示されます！</p>
+
+<p><img alt="Letsencrypt" src="/images/2016/02/letsencrypt.png" /></p>
+
+<h2>おわりに</h2>
+
+<p>ざっくりの解説でしたが以上のように非常に簡単に、無料で証明書が取得できます。<br>
+ここから実運用に乗せるには更新を仕込んだりする必要があります。-&gt; <a href="https://letsencrypt.readthedocs.org/en/latest/using.html#renewal">更新について</a><br>
+それから複数台構成や構成管理を行っているサーバに対してはどう管理していったらいいかという課題はあります。<br>
+Let&#39;s Encrypt側でも更新プロセスの改善を行っていくという一文が上記のマニュアルにも記載されており、今後の展開をチェックしていこうと思っています。</p>
+
+<p>また、つい先日AWSも<a href="https://aws.amazon.com/jp/certificate-manager/">AWS Certificate Manager</a>というELBとCloudFrontで使用可能な無料証明書サービスがリリースし、こちらも証明書の更新が自動化されているようです。<br>
+まだ東京リージョンのELBにdeployすることはできませんがこれによりますます証明書の無料化、自動化が加速しそうな感じがしますね！</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/study-letsencrypt.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="入門Let's Encryptという勉強会をしました" data-url="http://tech.feedforce.jp/study-letsencrypt.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/study-letsencrypt.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/study-letsencrypt.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/socialplus-bugsnag.html" rel="next">ソーシャルPLUSで 1 日 700 通超のアラートメールを撲滅したお話</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/ywt-retrospective.html" rel="prev">中長期のふりかえりとしてYWT(やった,わかった,つぎにやる)を試してみました</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

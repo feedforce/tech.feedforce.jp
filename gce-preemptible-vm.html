@@ -1,0 +1,457 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>GCE の preemptible VM で、インフラの CI を回し始めました | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは！ a-know こと、いのうえです。ここではあまり技術的な記事を書くことが少ない私ですが、今回は少し、踏み込んだ内容の記事をお届けしたいと思います。...あ、この記事は フィードフォースエンジニア Advent Calendar 2015 の 15日目の記事であり、また、Google Cloud Platform Advent Calendar 2015の 15日目の記事でもあります。">
+      <link rel="canonical" href="http://tech.feedforce.jp/gce-preemptible-vm.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="GCE の preemptible VM で、インフラの CI を回し始めました | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは！ a-know こと、いのうえです。ここではあまり技術的な記事を書くことが少ない私ですが、今回は少し、踏み込んだ内容の記事をお届けしたいと思います。...あ、この記事は フィードフォースエンジニア Advent Calendar 2015 の 15日目の記事であり、また、Google Cloud Platform Advent Calendar 2015の 15日目の記事でもあります。">
+      <meta property="og:url" content="http://tech.feedforce.jp/gce-preemptible-vm.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/gce-preemptible-vm.html">GCE の preemptible VM で、インフラの CI を回し始めました</a></h1>
+      <ul>
+        <li class="entry-time">2015.12.15</li>
+        <li class="entry-cat"><a href="/category/infrastructure/">インフラ</a></li>
+        <li class="entry-author"><a href="/author/inoue">inoue</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/inoue"><img src="/images/authors/inoue.jpg" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは！ <a href="https://twitter.com/a_know">a-know</a> こと、いのうえです。<br>
+ここではあまり技術的な記事を書くことが少ない私ですが、今回は少し、踏み込んだ内容の記事をお届けしたいと思います。</p>
+
+<p>...あ、この記事は <a href="http://www.adventar.org/calendars/906">フィードフォースエンジニア Advent Calendar 2015</a> の 15日目の記事であり、また、<a href="http://qiita.com/advent-calendar/2015/gcp">Google Cloud Platform Advent Calendar 2015</a>の 15日目の記事でもあります。</p>
+
+<!--more-->
+
+<h2>はじめに</h2>
+
+<p>タイトルにある &quot;GCE&quot; とは、いわずもがな、 &quot;<strong>Google Compute Engine</strong>&quot; のことですが、その &quot;<strong>preemptible VM</strong>&quot; とは、下記のような特徴を持ったインスタンスのことです。</p>
+
+<ul>
+<li>Google の膨大なデータセンターの余剰リソースを活用したインスタンス
+
+<ul>
+<li>低コスト（<strong>最大70%オフ</strong>）</li>
+<li>低寿命（最大で24時間までしか持続しない）</li>
+</ul></li>
+<li>上記のような特徴以外は、基本的に通常のインスタンスと全く遜色はない
+
+<ul>
+<li><strong>分単位での課金</strong>（最初の10分間は固定）、AWS EC2 に比べると<strong>早い起動速度</strong>、など</li>
+</ul></li>
+</ul>
+
+<p>このオプションがリリースされたとき、私の頭に真っ先に浮かんだことが、<strong>「これは、Chef &amp; serverspec を活用してのインフラ CI に最適かもしれない」</strong>ということ。</p>
+
+<p>弊社におけるインフラ CI は、少し前から実施はしていたのですが、多少の紆余曲折がありました。</p>
+
+<ul>
+<li>AWS EC2 を用いてのインフラの CI を実施
+
+<ul>
+<li>インスタンスの起動に時間が掛かるなど、速度面での課題があった</li>
+</ul></li>
+<li>docker を用いてのインフラの CI を実施
+
+<ul>
+<li>本質的な意味でインフラの CI をしていることにはなっていないのでは？という疑問が</li>
+</ul></li>
+</ul>
+
+<p>こうした経緯もあって、「インフラ CI の &quot;三度目の正直&quot; に、GCE preemptible VM がなれるかもしれない」と考えたわけです。このことを、弊社インフラエンジニアの <a href="http://tech.feedforce.jp/author/tjinjin/">tjinjin</a> にも話してみたところ、彼はすぐに、プライベートで検証してみてくれました。</p>
+
+<p><a href="http://cross-black777.hatenablog.com/entry/2015/10/31/192310">GCEでサーバCIをやってみる - とある元SEの学習日記</a></p>
+
+<p>そんな中、社内でもちょうど新規プロダクトの立ち上げがあり、そのインフラ周りのリポジトリも新たに作成する必要があったため、「よし、tjinjin の検証結果もあるし、このリポジトリの CI に GCE preemptible VM を使ってみるか！」と一念発起しました。CTO にも快諾してもらって作業を実施し、先日、無事 CI が安定して回るようになりました。</p>
+
+<p>その設定作業に関しては、基本的には先に挙げた tjinjin の検証記事の通りに行えば実施できるのですが、初心者には微妙にわかりにくいところがあったり、また思わぬ落とし穴があったりもしたので、tjinjin への尊敬と感謝の念を込めつつ、&quot;リバイバル執筆&quot; をしてみたいと思います。</p>
+
+<p>...あ、CI の SaaS として、<a href="https://circleci.com/">CircleCI</a> の利用を前提としています。</p>
+
+<h2>GCE preemptible VM でインフラの CI を行うための設定作業</h2>
+
+<h3>1. vagrant plugin である &quot;vagrant-google&quot; をインストールする</h3>
+
+<p>vagrant を活用します。理由はいくつかあって、vagrant を使っていれば、立てたインスタンスの特定やアクセスがラクだったり、 <code class="prettyprint">$ vagrant ssh-config</code> で config 情報を書き出せたり、とか。これは GCE だから、というわけではなく、AWS でのインフラ CI をやっていたときもこの方法で実施していました。今回もそれに倣うことにします。</p>
+
+<h3>2. リポジトリを追加する</h3>
+
+<p>CI 対象の GitHub リポジトリを、CircleCI の <strong>Add Projects</strong> から追加して下さい。</p>
+
+<p><img alt="Add Project" src="/images/2015/12/gce-preemptible-vm01.png" /></p>
+
+<h3>3. GCP のプロジェクトを作成する</h3>
+
+<p>既存のプロジェクト内で実施しても問題はありませんが、プロジェクトを分けておくと請求書も別で出力される...、、つまり、純粋に CI でどれだけコストが掛かったか、が把握しやすくなるので、オススメかなと思います。<br>
+課金設定（支払いアカウントの作成と設定）も、忘れずに。</p>
+
+<h3>4. API を有効にする</h3>
+
+<p>新しくプロジェクトを作成した場合、 Compute Engine API は無効な状態になっています。ので、こちらを有効にして下さい。<br>
+API を有効にするのは、Google Developers Console の API Manager から行うことができます。</p>
+
+<p><img alt="API Manager" src="/images/2015/12/gce-preemptible-vm02.png" /></p>
+
+<h3>5. 認証情報を追加する</h3>
+
+<p>先ほどの API Manager の左メニューに、「認証情報」というメニューもあると思います。こちらから、認証情報（サービスアカウント）を追加します。最後に、key ファイルとなる json ファイルを取得しておきます。</p>
+
+<h3>6. CI 用の鍵を作成し、今回のプロジェクトに登録する</h3>
+
+<p><code class="prettyprint">ssh-keygen</code> で。passphrase は無し、というのが普通なのかと思います。<br>
+説明のため、鍵ファイルの名前はここでは <strong>id_gce-circleci</strong> とします。また、公開鍵の方のファイル内コメントに <code class="prettyprint">&lt;ユーザー名&gt;@&lt;ホスト名&gt;</code> みたいなところがあると思いますが、この &quot;&lt;ユーザー名&gt;&quot; のところも <code class="prettyprint">circleci</code> としておきます。</p>
+
+<p>そうして出来た鍵を、GCP プロジェクトに登録します。Compute Engine のコンソールを開き、左サイドメニューの &quot;<strong>メタデータ</strong>&quot; を開いたページ内の &quot;<strong>SSHキー</strong>&quot; タブで登録します。<br>
+公開鍵をペーストするわけですが、この鍵に対応するユーザー名については、さきほどの公開鍵内コメントのユーザー名が自動で採用されます。つまり、今回の場合は <code class="prettyprint">circleci</code> となります。</p>
+
+<p><img alt="SSH キー" src="/images/2015/12/gce-preemptible-vm03.png" /></p>
+
+<p>↑わかりにくいですが、「編集」ボタンから鍵の登録を行うことができます。</p>
+
+<p>この設定をしておくことで、起動した GCE インスタンスに対して下記のようなことが自動で行われるようになります。</p>
+
+<ul>
+<li>対応するユーザーの作成</li>
+<li>登録しておいた公開鍵の authorized_keys への追加</li>
+<li>/etc/sudoers に <code class="prettyprint">&lt;ユーザー名&gt; ALL=NOPASSWD: ALL</code> の行の追加</li>
+</ul>
+
+<p>ここで頭の片隅に置いておきたいことは、<strong>メタデータの登録をして立てたインスタンスの authorized_keys や /etc/sudoers は、プラットフォーム側で適宜管理されている</strong>、ということです。<br>
+例えば、authorized_keys の公開鍵の行をコメントアウトしたり、/etc/sudoers から <code class="prettyprint">&lt;ユーザー名&gt; ALL=NOPASSWD: ALL</code> の行を削除したりしても、<strong>ある程度の時間が経つとそれらが元に戻る</strong>ようになっています。<br>
+なので、authorized_keys や /etc/sudoers を書き換えるような Chef recipe を書いている場合・書き換え後のファイルの内容を比較するような serverspec を書いているような場合は、この点に注意する必要があります。</p>
+
+<h3>7. Vagrantfile を作成する</h3>
+
+<p>下記のようなかんじです。</p>
+
+<pre><code class="prettyprint ruby">VAGRANTFILE_API_VERSION = &quot;2&quot;
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = &quot;bento/centos-7.1&quot;
+  config.ssh.insert_key = false
+
+  config.vm.define :gcp do |gcp|
+    gcp.vm.box = &quot;gce&quot;
+    gcp.vm.box_url = &quot;https://github.com/mitchellh/vagrant-google/raw/master/google.box&quot;
+    gcp.vm.synced_folder &quot;.&quot;, &quot;/vagrant&quot;, disabled: true
+
+    gcp.vm.provider :google do |google, override|
+      google.google_project_id = ENV[&#39;GCP_PROJECT_ID&#39;]
+      google.google_client_email = ENV[&#39;GCP_EMAIL&#39;]
+      google.google_json_key_location = ENV[&#39;GCP_KEY_LOCATION&#39;]
+
+      google.name = &quot;ci-instance-#{Time.new.to_i}&quot;
+      google.zone = &quot;asia-east1-a&quot;
+      google.machine_type = &quot;n1-standard-1&quot;
+
+      google.image = &quot;centos-7-v20151104&quot;
+      google.disk_size = &quot;10&quot;
+
+      google.preemptible = true
+      google.on_host_maintenance = &quot;TERMINATE&quot;
+
+      google.auto_restart = false
+
+      override.ssh.username = &#39;circleci&#39;
+      override.ssh.private_key_path = &#39;~/.ssh/id_gce-circleci&#39;
+      override.ssh.pty = true
+    end
+  end
+end
+</code></pre>
+
+<p>いくつかポイントになりそうなところだけに絞って、解説します。</p>
+
+<h4>Project ID, Client Email, JSON Key Location</h4>
+
+<p>これらの値は環境変数で与えています。JSON Key Location は、先ほどの <strong>5. 認証情報を追加する</strong> のところで取得した JSON ファイルのロケーションになります。ひとまずはローカルの適当な場所に置いて、その場所を指定しておいてください。</p>
+
+<h4>name</h4>
+
+<p>いわゆるインスタンス名ですが、現在時刻の UNIX 時間を名前に付け加えています。<br>
+これは、GCE が同名インスタンスを複数同時に立ち上げられないためで、CI が複数同時に走ったときのことを考慮しています。（なので、別に時間ではなくてもいいと思います）</p>
+
+<h4>image</h4>
+
+<p>ここでは CentOS 7 のイメージを指定しています。その他の OS のイメージを探す際には、gcloud コマンドで <code class="prettyprint">$ gcloud compute images list --project centos-cloud --no-standard-images</code> このようにすると、探すことができます。</p>
+
+<h4>preemptible</h4>
+
+<p>これを true にすることで、preemptible なインスタンスが立ち上がります。これを true にしないと、今回の記事の存在意義が揺らぎます。笑</p>
+
+<h4>ssh.username, ssh.private<em>key</em>path</h4>
+
+<p>先ほどの 6. の手順でプロジェクトに登録した鍵に関する情報を指定します。「このインスタンスに ssh するのに、どこの鍵を用いたら良いのか」、という観点での指定が必要になります。<br>
+例に示してあるように、 <code class="prettyprint">~/.ssh/id_gce-circleci</code> としておくと、ローカルから ssh 接続するときでも、CI コンテナから ssh 接続するときでも、不都合は少ないのかなと思います。「username」も、6. で指定したとおり、 <code class="prettyprint">circleci</code> になりますね。</p>
+
+<h3>8. ローカルから GCE インスタンスの起動を確認する</h3>
+
+<p>ここまでできたら、作成した Vagrantfile での GCE インスタンスの起動確認の意味で、 <code class="prettyprint">$ vagrant up --provider=google gcp</code> してみましょう。Google Developer Console を見るなどして確認することになると思います。<br>
+正常にインスタンスが起動していれば、成功です（場合によっては、Console を確認しにいく間もなく、インスタンスが寿命を迎える...ということもあるかも、しれません。しかしそれが、preemptible オプションです。:) ）<br>
+確認できたら、 <code class="prettyprint">$ vagrant destroy gcp</code> してインスタンスを削除しておくのを忘れずに。preemptible とはいえ、最長で 24時間持続する可能性がありますので。。</p>
+
+<h3>9. CircleCI 側に環境変数を設定する</h3>
+
+<p>いよいよ、CircleCI 側への設定に入ります。</p>
+
+<p>まずは環境変数の設定です。先ほどの Vagrantfile で <code class="prettyprint">ENV[&#39;xxx&#39;]</code> としているような値をどんどん登録していきましょう。</p>
+
+<p>さきほどの確認時には適当に設定していた JSON Key Location は、いったん <code class="prettyprint">.ssh/ci.json</code> とでもしておきましょう。もちろん、普通にしていたらそんなところにファイルはできません、が、その疑問については後ほど解消することにします。<br>
+それと、Vagrantfile では指定していなかった環境変数をひとつ、余計に指定しておきます。値は、<strong>例の JSON ファイルの中身を文字列として登録</strong>することになります。環境変数名は <code class="prettyprint">$GCP_KEY</code> とでもしておきましょう。</p>
+
+<h3>10. CircleCI 側に鍵を登録する</h3>
+
+<p><strong>SSH permisions</strong> メニューから行います。</p>
+
+<p><img alt="SSH permisions" src="/images/2015/12/gce-preemptible-vm04.png" /></p>
+
+<p>ここで登録すると、 Hostname に指定した名前を元に、CI を行っているコンテナ内において、 <code class="prettyprint">~/.ssh/id_&lt;hostname&gt;</code> のロケーションでその鍵にアクセスできるようになります。なので、今回の例では Hostname は <code class="prettyprint">gce-circleci</code> と指定することになります。</p>
+
+<p><img alt="SSH permisions" src="/images/2015/12/gce-preemptible-vm05.png" /></p>
+
+<h3>11. circle.yml を書く</h3>
+
+<p>例えば下記のようになります。</p>
+
+<pre><code class="prettyprint yml">machine:
+  timezone:
+    Asia/Tokyo
+
+dependencies:
+  cache_directories:
+    - ~/.vagrant.d
+    - ~/tmp
+    - ~/cache
+  pre:
+    - |
+      VERSION=1.7.4
+      mkdir ~/cache
+      cd ~/cache
+      if [ ! -f vagrant_${VERSION}_x86_64.deb ]; then
+        wget https://dl.bintray.com/mitchellh/vagrant/vagrant_${VERSION}_x86_64.deb
+      fi
+      sudo dpkg -i vagrant_${VERSION}_x86_64.deb
+      if ! vagrant plugin list | fgrep -q vagrant-google; then
+        vagrant plugin install vagrant-google
+      fi
+      cd ~/$CIRCLE_PROJECT_REPONAME
+      echo $GCP_KEY &gt; $GCP_KEY_LOCATION
+test:
+  pre:
+    - vagrant up gcp --provider=google
+    - vagrant ssh-config --host ci-vm gcp &gt;&gt; ~/.ssh/config
+    - bundle exec knife solo bootstrap ci-vm
+    - vagrant ssh gcp -c &quot;sudo gpasswd -a circleci wheel&quot;
+  override:
+    - bundle exec rake spec:ci
+  post:
+    - vagrant destroy gcp -f
+</code></pre>
+
+<p>ここでもいくつかポイントを絞って触れてみたいと思います。</p>
+
+<h4><code class="prettyprint">echo $GCP_KEY &gt; $GCP_KEY_LOCATION</code></h4>
+
+<p>ここまでやってきた作業の通り、 <code class="prettyprint">$GCP_KEY</code> には JSON キーファイルの中身が、 <code class="prettyprint">$GCP_KEY_LOCATION</code> には JSON キーファイルの（あって欲しい）パスが、それぞれ環境変数の値として設定されています。<br>
+つまり、<strong>必要となる JSON ファイルはここで作成していることになります</strong>。...さきほどの疑問は解消できましたでしょうか？　これにより、credential 情報をリポジトリに含めずに済んでいます。</p>
+
+<h4><code class="prettyprint">vagrant ssh-config --host ci-vm gcp &gt;&gt; ~/.ssh/config</code></h4>
+
+<p>CI のプロセスの中で起動した GCE インスタンスの ssh-config の情報を <code class="prettyprint">ci-vm</code> というホスト名で書き出しています。これにより、以降のステップでは <code class="prettyprint">ci-vm</code> の名前でアクセスできるようになっています。（そのため、chef レシピリポジトリ内 nodes ディレクトリで管理する対象 node に <code class="prettyprint">ci-vm</code> に対応する node を追加しておくことも、予め必要になります。）</p>
+
+<h4><code class="prettyprint">bundle exec rake spec:ci</code></h4>
+
+<p>CI が立てた GCE インスタンスに対して、serverspec を実行するステップです。対応する rake task はあらかじめ定義しておいて下さい。</p>
+
+<h3>12. Pull Request を出してみる</h3>
+
+<p>Vagrantfile や circle.yml など、ここまでの作業であれこれ変更を加えているかと思います。その作業をまるっと、自分のリポジトリに対して Pull Request してみましょう。きっと、CI が動き始め、諸々の設定に間違いがなければ、めでたく pass するかと思います。</p>
+
+<p><img alt="CI passed" src="/images/2015/12/gce-preemptible-vm06.png" /></p>
+
+<h2>まとめ</h2>
+
+<p>手順としては以上となります。少々煩雑になってしまいましたが、いかがでしたでしょうか。<br>
+実際にやってみると、それほど大変ではないと思います。現在既に chef recipe での構成管理や serverspec でのインフラのテストなどを行っているのであれば、なおさらかと思います。</p>
+
+<p>みなさんの職場での GCP 利用例の最初の一例として、<strong>GCE preemptible VM の CI 利用</strong>、いかがでしょうか！٩( &#39;ω&#39; )و</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/gce-preemptible-vm.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="GCE の preemptible VM で、インフラの CI を回し始めました" data-url="http://tech.feedforce.jp/gce-preemptible-vm.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/gce-preemptible-vm.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/gce-preemptible-vm.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/qiita-popular-post-2015.html" rel="next">Qiita:Teamで好評だった記事から2015年をふりかえる</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/socialplus-rip-technologies.html" rel="prev">今年ソーシャルPLUSで捨てられた技術たち</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

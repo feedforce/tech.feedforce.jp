@@ -1,0 +1,488 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>Slack上のrubotyに登録したジョブを編集する | feedforce Engineers' blog</title>
+      <meta name="description" content="こんにちは。2016年卒内定者のotofu_squareです。社内ではお豆腐先生と呼ばれています。今参加させていただいている内定者インターンの活動の一環として、技術ブログの執筆に加わってみよう、ということになりました。そこで今回は、弊社が利用するSlack上で動くruboty ボット『feedくん』と、そのボットに登録されたジョブをまとめて編集する方法についてご紹介します。">
+      <link rel="canonical" href="http://tech.feedforce.jp/ruboty-redis.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="Slack上のrubotyに登録したジョブを編集する | feedforce Engineers' blog">
+      <meta property="og:description" content="こんにちは。2016年卒内定者のotofu_squareです。社内ではお豆腐先生と呼ばれています。今参加させていただいている内定者インターンの活動の一環として、技術ブログの執筆に加わってみよう、ということになりました。そこで今回は、弊社が利用するSlack上で動くruboty ボット『feedくん』と、そのボットに登録されたジョブをまとめて編集する方法についてご紹介します。">
+      <meta property="og:url" content="http://tech.feedforce.jp/ruboty-redis.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/ruboty-redis.html">Slack上のrubotyに登録したジョブを編集する</a></h1>
+      <ul>
+        <li class="entry-time">2015.10.20</li>
+        <li class="entry-cat"><a href="/category/ruby/">Ruby/Rails</a></li>
+        <li class="entry-author"><a href="/author/otofu_square">otofu_square</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/otofu_square"><img src="/images/authors/otofu_square.png" /></a>
+    </div>
+    <div class="entry-body">
+      <p>こんにちは。2016年卒内定者のotofu_squareです。社内ではお豆腐先生と呼ばれています。</p>
+
+<p>今参加させていただいている内定者インターンの活動の一環として、技術ブログの執筆に加わってみよう、ということになりました。<br>
+そこで今回は、弊社が利用するSlack上で動くruboty ボット『feedくん』と、そのボットに登録されたジョブをまとめて編集する方法についてご紹介します。</p>
+
+<!--more-->
+
+<h2>feedくんとは</h2>
+
+<p>feedくんは、feedforceの公式ゆるキャラ（？）で、<a href="https://www.feedforce.jp">弊社ホームページ</a>上でも所々に出てきては見ている人の心を和ませてくれる憎めないヤツです。<br>
+弊社では社内のコミュニケーションツールとしてSlackを利用しており、その中にfeedくんがボットとして住んでいます。</p>
+
+<p><img style="display: block; margin-left: auto; margin-right:auto;" src="/images/2015/09/feedkun.png" alt="Slack上に住んでいる弊社マスコットキャラクター「feedくん」"/></p>
+
+<p>feedくんは<a href="https://github.com/r7kamura/ruboty">ruboty</a>というチャットボットフレームワークで実装されHeroku上で動作しており、<a href="https://github.com/r7kamura/ruboty-cron">ruboty-cron</a>というプラグインを利用して必要に応じてジョブを登録して発言してもらっています。<br>
+その他にも、画像を検索してくれたり、雑談に付き合ってくれたりもします。<br>
+最近では、技術書管理に<a href="https://github.com/rike422/ruboty-can_i_borrow">ruboty-can_i_borrow</a>を使ってみよう…！という動きもあるようです。<br>
+また、弊社エンジニアの<a href="author/e-takano">kano-e</a>さんが以前実装した、<a href="sebastian.html">東京ドームのイベントをお知らせしてくれるセバスチャン</a>の機能もfeedくんに移植されています。</p>
+
+<h2>feedくんの生活環境（動作環境）</h2>
+
+<p>それでは本題に入る前に、feedくんがどのように実装され、どんな環境で動作しているかご紹介します。</p>
+
+<h3>ruboty</h3>
+
+<p>前述の通り、feedくんはrubotyというチャットボットフレームワークで実装されています。<br>
+rubotyの特徴は、やはり全てをrubyで書けるという点に尽きると思います。<br>
+プラグインによる拡張が容易になっており、現在でも様々なプラグインが公開されています。<br>
+弊社で使っているrubotyはgithub上に<a href="https://github.com/feedforce/feedforce-ruboty">feedforce-ruboty</a>として公開されているので、どんなプラグインを使っているのか興味をお持ちの方は是非見てみてくださいね！</p>
+
+<h3>Heroku</h3>
+
+<p><a href="https://www.heroku.com/home">Heroku</a>は、Webアプリの開発から公開まで可能なプラットフォームを提供するクラウドサービスです。<br>
+インフラには<a href="http://aws.amazon.com/jp/">AWS</a>、バージョン管理には<a href="http://git-scm.com">Git</a>が使用されています。<br>
+なんといっても寛大な無料枠があるのが特徴で、<a href="https://blog.heroku.com/archives/2015/5/7/heroku-free-dynos">1日18時間の利用制限</a>などの制限はあるものの、無料で利用することができます。<br>
+課金によってスペックを柔軟に変更することもできるので、スケーラビリティの点からも優れています。<br>
+feedくんはHerokuにデプロイされて動作しています。</p>
+
+<h3>redis(Redis To Go)</h3>
+
+<p><a href="http://redis.io">redis</a>は、キーバリューモデルを採用するNoSQLとして有名です。<br>
+メモリ上にデータを展開するので、読み書きが高速であるという特徴があります。<br>
+<a href="http://redistogo.com">Redis To Go</a>は、redisサーバーをクラウドから利用することができるサービスです。<br>
+Heroku上で<a href="https://addons.heroku.com/redistogo#nano">アドオン</a>が提供されており、アプリに対して簡単にredisを組み込むことができます。<br>
+redisは、feedくんに登録したジョブを永続的に保持するために利用しています。</p>
+
+<h2>「ジョブをまとめて編集する」ことが必要になった背景</h2>
+
+<p>今回の本題の背景をご説明しましょう。</p>
+
+<p>以前ruboty-cronのアップデートが入った際に、登録してあるジョブのフォーマットを全て変更する必要がありました。<br>
+変更に当たってSlack上からfeedくんに登録されているジョブの一覧を参照したのですが、どのチャンネルで登録されたジョブか分からず、ジョブの再登録に当たっては結局登録した人の記憶頼りとなってしまいました。</p>
+
+<p>今回はそのような場合に、登録したジョブを取得してまとめて編集する方法をご紹介します。</p>
+
+<h2>feedくんの脳みそを解剖する（ジョブの取得）</h2>
+
+<p>では早速、feedくんの脳みそ（Redis To Go）から登録されているジョブを取り出してみましょう。<br>
+弊社では開発言語としてrubyが使われることが多いので、今回紹介するスクリプトでもrubyを使用しています。</p>
+
+<h3>アクセス情報をHerokuから取得する</h3>
+
+<p>まずrubotyをデプロイしているHerokuにアクセスして、Redis To Goのアクセス情報を取得します。</p>
+
+<p>アクセス情報はHeroku上の環境変数に保存されているので、ターミナルからHerokuにアクセスして環境変数を参照します。<br>
+その際には、<a href="https://toolbelt.heroku.com">Heroku Toolbelt</a>のインストールが必要なのでご注意ください。</p>
+
+<p>それでは実際にHerokuにログインして、Herokuのコンソールを立ち上げてみましょう。</p>
+
+<pre><code class="prettyprint">$ heroku login
+$ heroku run console --app アプリ名
+</code></pre>
+
+<p>コマンドを実行すると、次のような表示になります。<br>
+デフォルトではHeroku上でirbが立ち上がるようになっています。</p>
+
+<pre><code class="prettyprint">Running console on アプリ名... up, run.xxxx
+irb(main):001:0&gt;
+</code></pre>
+
+<p>環境変数は <code class="prettyprint">ENV</code> 変数に格納されているので、読みやすいように<code class="prettyprint">pp</code>メソッドで参照してみましょう。<br>
+ENVの中に <code class="prettyprint">REDISTOGO_URL</code> というキーがあるはずです。</p>
+
+<pre><code class="prettyprint terminal">irb(main):001:0&gt; require &#39;pp&#39;
+=&gt; true
+irb(main):002:0&gt; pp ENV
+{&quot;...&quot;=&gt;&quot;...&quot;
+ ...
+ ...
+ &quot;REDISTOGO_URL&quot;=&gt;&quot;redis://redistogo:...&quot;
+ ...
+ ...
+}
+</code></pre>
+
+<p>この値がRedis To Goにアクセスするために必要な情報となります。</p>
+
+<h3>Redis To Goにアクセスする</h3>
+
+<p>それではHerokuのコンソール上でrubyを使ってredisにアクセスしてみましょう！</p>
+
+<p>今回はredisに簡単にアクセスするために、<a href="https://github.com/redis/redis-rb">redis-rb</a>というgemを使います。</p>
+
+<pre><code class="prettyprint ruby">require &#39;redis&#39;
+redis = Redis.new(url: ENV[&#39;REDISTOGO_URL&#39;])
+</code></pre>
+
+<p>上のスクリプトを実行するとredisというインスタンスが生成されます。<br>
+このインスタンスを通して、redisに対して様々な操作を行うことができます。</p>
+
+<h3>データを取得する</h3>
+
+<p>それではredisインスタンスからgetメソッドを呼び出して、登録されているジョブを取得しましょう。</p>
+
+<p>rubotyはデフォルトで<code class="prettyprint">ruboty:brain</code>というキーにデータを保存するよう設定されています。</p>
+
+<pre><code class="prettyprint ruby">raw_data = redis.get(&quot;ruboty:brain&quot;)
+</code></pre>
+
+<p>raw_data変数に取得したデータが格納されており、中身を見てみると、エンコードされた判読不能な文字列しか得られません。<br>
+このままでは非常に残念な感じになってしまうので、そのデータを判読可能な状態に変換してあげる必要があります。</p>
+
+<h3>取得したデータをオブジェクトに変換する</h3>
+
+<p>rubotyはジョブを登録するとき、ジョブのオブジェクト情報を、<a href="http://rurema.clear-code.com/2.2.0/class/Marshal.html">Marshalモジュール</a>のdumpメソッドでテキスト情報に変換してredisに保存しています。<br>
+なので、今回redisから取得したデータは<code class="prettyprint">Marshal.load</code>で元のオブジェクトに戻してあげます。</p>
+
+<pre><code class="prettyprint ruby">Marshal.load(raw_data)
+</code></pre>
+
+<p>上記スクリプトを実行すると、登録したジョブがハッシュとして取得できます。</p>
+
+<h2>feedくんの記憶を改竄する（ジョブの編集）</h2>
+
+<p>feedくんの脳みそから無事ジョブデータを取得することができました。</p>
+
+<p>それでは次に、取得したジョブデータを編集してfeedくんの脳みそに戻す方法をご紹介しましょう。</p>
+
+<h3>ジョブデータの構造</h3>
+
+<p>ジョブのハッシュは、次のようなデータ構造になっています。</p>
+
+<pre><code class="prettyprint ruby">{0001=&gt;
+  {&quot;body&quot;=&gt;&quot;feedkun: echo Hello FeedForce !!&quot;,
+   &quot;from&quot;=&gt;&quot;チャンネル名@hogehoge.xmpp.slack.com/登録したユーザ名&quot;,
+   &quot;from_name&quot;=&gt;&quot;登録したユーザ名&quot;,
+   &quot;to&quot;=&gt;&quot;feedkun@hogehoge.xmpp.slack.com/slack-nnnn&quot;,
+   &quot;type&quot;=&gt;&quot;groupchat&quot;,
+   &quot;id&quot;=&gt;0000,
+   &quot;schedule&quot;=&gt;&quot;* * * * *&quot;},
+ 0002=&gt;
+  {
+   ...
+  }
+  ...
+}
+</code></pre>
+
+<p>ハッシュの各キーには、次のような値が格納されています。</p>
+
+<ul>
+<li><p><em>0001</em><br>
+任意の4桁の数字（ジョブID）</p></li>
+<li><p><em>body</em><br>
+ジョブとして登録するメッセージの本文</p></li>
+<li><p><em>from</em><br>
+どのユーザーがどのチャンネルで登録したジョブなのか</p></li>
+<li><p><em>from_name</em><br>
+ジョブを登録したユーザーの名前</p></li>
+<li><p><em>to</em><br>
+どのボットに対してジョブを登録したか</p></li>
+<li><p><em>type</em><br>
+ジョブの登録先がチャンネルの場合は<code class="prettyprint">groupchat</code>、ダイレクトメッセージの場合は<code class="prettyprint">chat</code></p></li>
+<li><p><em>id</em><br>
+ジョブID（上記例だと0001や0002のこと）</p></li>
+<li><p><em>schedule</em><br>
+<a href="https://ja.wikipedia.org/wiki/Crontab">crontab形式</a>による発言スケジュールの設定</p></li>
+</ul>
+
+<p>各項目の細かいデータフォーマットに関してはRubotyの作者である<a href="http://r7kamura.hatenablog.com/entry/2014/05/14/041123">r7kamuraさんのブログ記事</a>にて一部紹介されているので、興味を持った方はそちらを見てみてください。</p>
+
+<h3>ジョブを編集する</h3>
+
+<p>それでは実際に登録されたジョブを編集してみましょう！</p>
+
+<p>ジョブのハッシュは以下の通りになっているものとします。</p>
+
+<pre><code class="prettyprint ruby">{0001=&gt;
+  {&quot;body&quot;=&gt;&quot;feedkun: echo Hello FeedForce !!&quot;,
+   &quot;from&quot;=&gt;&quot;feedforce-channel@hogehoge.xmpp.slack.com/otofu_square&quot;,
+   &quot;from_name&quot;=&gt;&quot;otodu_square&quot;,
+   &quot;to&quot;=&gt;&quot;feedkun@hogehoge.xmpp.slack.com/slack-nnnn&quot;,
+   &quot;type&quot;=&gt;&quot;groupchat&quot;,
+   &quot;id&quot;=&gt;0000,
+   &quot;schedule&quot;=&gt;&quot;* * * * *&quot;},
+  ...
+}
+</code></pre>
+
+<h4>本文を変更する</h4>
+
+<p>本文を変更するには、ハッシュの<em>body</em>の要素を編集します。</p>
+
+<p>今回は<code class="prettyprint">feedkun: echo Hello FeedForce !!</code>という内容を、<code class="prettyprint">feedkun: echo Hello otofu_square !!</code>に変更してみます。<br>
+ちなみにFeedくんに<code class="prettyprint">feedkun: echo hogehoge</code>と話しかけると、<em>echo以下</em>の内容を発言してくれます。<br>
+本文を変更するには、ハッシュの<em>body</em>の要素を変更します。</p>
+
+<p>現時点でジョブのハッシュの<em>body</em>には編集前の本文が入っているので、下記のように<em>echo以下</em>を<code class="prettyprint">Hello otofu_square !!</code>に変更します。</p>
+
+<pre><code class="prettyprint ruby">{0001=&gt;
+  {&quot;body&quot;=&gt;&quot;feedkun: echo Hello otofu_square !!&quot;,
+   ...
+  }
+  ...
+}
+</code></pre>
+
+<p>こうすることで、このジョブの発言内容を新しいものに置き換えることができます。</p>
+
+<h4>発言スケジュールを変更する</h4>
+
+<p>発言スケジュールはジョブのハッシュの<em>schedule</em>に格納されています。<br>
+スケジュールは<a href="https://ja.wikipedia.org/wiki/Crontab">crontab形式</a>で記述されますが、現状のままだと毎分発言が繰り返されてしまいます。</p>
+
+<p>今回はfeedくんに朝の挨拶をしてもらうように、毎週月〜金の午前8時00分にスケジュールを変更してみましょう。<br>
+上記スケジュールをcrontab形式で表現すると、<code class="prettyprint">0 8 * * 1-5</code>となるので、</p>
+
+<pre><code class="prettyprint ruby">{0001=&gt;
+  {...
+   &quot;schedule&quot;=&gt;&quot;0 8 * * 1-5&quot;}
+  ...
+}
+</code></pre>
+
+<p>上記のように変更します。</p>
+
+<h4>発言チャンネルを変更する</h4>
+
+<p>現在の状態だと、このジョブの発言チャンネルは<em>feedforce-channel</em>に設定されています。<br>
+今回は、<em>greeting-channel</em>で発言してもらうように変更してみましょう。</p>
+
+<pre><code class="prettyprint ruby">{0001=&gt;
+  {...
+   &quot;from&quot;=&gt;&quot;greeting-channel@hogehoge.xmpp.slack.com/otofu_square&quot;,
+   ...}
+  ...
+}
+</code></pre>
+
+<p>上記のようにすることで、発言チャンネルを<em>greeting-channel</em>に変更することができます。</p>
+
+<h3>編集した内容をRedis To Goに再登録する</h3>
+
+<p>編集したジョブの情報をredisに再登録するには、ジョブのハッシュオブジェクトを<code class="prettyprint">Marshal.dump</code>で文字列に変換してから、redisの<code class="prettyprint">ruboty:brain</code>キーにセットする必要があります。<br>
+ハッシュオブジェクトを文字列に変換するには、下記のスクリプトを実行します。</p>
+
+<pre><code class="prettyprint ruby">hash = {
+ 0001=&gt;
+  {&quot;body&quot;=&gt;&quot;feedkun: echo Hello otofu_square !!&quot;
+   &quot;from&quot;=&gt;&quot;greeting-channel@hogehoge.xmpp.slack.com/otofu_square&quot;,
+   &quot;from_name&quot;=&gt;&quot;otodu_square&quot;,
+   &quot;to&quot;=&gt;&quot;feedkun@hogehoge.xmpp.slack.com/slack-nnnn&quot;,
+   &quot;type&quot;=&gt;&quot;groupchat&quot;,
+   &quot;id&quot;=&gt;0000,
+   &quot;schedule&quot;=&gt;&quot;0 8 * * 1-5&quot;},
+ 0002=&gt;
+  {...
+   ...}
+ 0003=&gt;...
+ ...
+}
+
+result = Marshal.dump(hash)
+</code></pre>
+
+<p>実行すると、<em>result</em>にハッシュオブジェクトを文字列化したデータが代入されます。<br>
+あとはこの<em>result</em>のデータをredisの<code class="prettyprint">ruboty:brain</code>キーにセットしてあげましょう。</p>
+
+<pre><code class="prettyprint ruby">redis.set(&quot;ruboty:brain&quot;, result)
+</code></pre>
+
+<p>これでジョブの再登録が完了しました。</p>
+
+<h2>まとめ</h2>
+
+<p>この記事では、rubotyに登録されたジョブを、redisから取得したデータを変更することで編集する方法をご紹介しました。</p>
+
+<p>何らかの理由でジョブをまとめて再登録したい場合や、複数のジョブの発言チャンネルを変更したい場合には有用な方法になると思います。</p>
+
+<p>そもそもrubotyを知らなかった！という方や、知っていたけどredisやruboty-cronを使ったことはなかった！という方は、是非この機会に試してみて、ここでご紹介した内容も実践してみていただけると嬉しい限りです。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/ruboty-redis.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="Slack上のrubotyに登録したジョブを編集する" data-url="http://tech.feedforce.jp/ruboty-redis.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/ruboty-redis.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/ruboty-redis.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/leaders-integration.html" rel="next">CTO 就任にあわせて『リーダーズインテグレーション』を実施してみました！</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/cto-announcement.html" rel="prev">マネージャー改め、CTOと名乗ることにしました</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

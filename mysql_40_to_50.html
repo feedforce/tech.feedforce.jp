@@ -1,0 +1,419 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>MySQL4.0系→MySQL5.0系 | feedforce Engineers' blog</title>
+      <meta name="description" content="MySQLのバージョンアップMySQL 4.0 までは、3.X から 4.0 に upgrade しても、なんの影響もなくそのまま古いデータ(/var/lib/mysql)を使えました。ダンプ→リストア不要、「ALTER TABLE」も不要。4.1 以上にupgradeするときは、日本語キャラクターセットを使っている場合、注意しなくてはならない点が複数存在します。">
+      <link rel="canonical" href="http://tech.feedforce.jp/mysql_40_to_50.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="MySQL4.0系→MySQL5.0系 | feedforce Engineers' blog">
+      <meta property="og:description" content="MySQLのバージョンアップMySQL 4.0 までは、3.X から 4.0 に upgrade しても、なんの影響もなくそのまま古いデータ(/var/lib/mysql)を使えました。ダンプ→リストア不要、「ALTER TABLE」も不要。4.1 以上にupgradeするときは、日本語キャラクターセットを使っている場合、注意しなくてはならない点が複数存在します。">
+      <meta property="og:url" content="http://tech.feedforce.jp/mysql_40_to_50.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/mysql_40_to_50.html">MySQL4.0系→MySQL5.0系</a></h1>
+      <ul>
+        <li class="entry-time">2007.04.18</li>
+        <li class="entry-cat"><a href="/category/infrastructure/">インフラ</a>, <a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/shimada">shimada</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/shimada"><img src="/images/authors/no-image.png" /></a>
+    </div>
+    <div class="entry-body">
+      <h3>MySQLのバージョンアップ</h3>
+
+<ul>
+<li>MySQL 4.0 までは、3.X から 4.0 に upgrade しても、なんの影響もなくそのまま古いデータ(/var/lib/mysql)を使えました。
+
+<ul>
+<li>ダンプ→リストア不要、「ALTER TABLE」も不要。</li>
+</ul></li>
+<li>4.1 以上にupgradeするときは、日本語キャラクターセットを使っている場合、注意しなくてはならない点が複数存在します。</li>
+</ul>
+
+<!--more-->  
+
+<h3>4.0→5.0</h3>
+
+<h4>追加機能</h4>
+
+<p>詳細： <a href="http://lists.mysql.com/mysql-ja/262">http://lists.mysql.com/mysql-ja/262</a><br><br>
+　　　 <a href="http://www.klab.org/media/mysql/">http://www.klab.org/media/mysql/</a><br>
+- ストアドプロシージャ、ストアドファンクションを実装<br>
+- トリガーを実装<br>
+- ビューを実装<br>
+- サーバサイドカーソル機能を実装<br>
+- 情報スキーマを実装<br>
+- XA 分散・トランザクションの実装<br>
+- HEAP(MEMORY) テーブルのインデックスに、BTREE が追加<br>
+- サブクエリ の追加<br>
+- NDB クラスターの追加<br>
+- GIS追加<br>
+- utf8 , ucs2 キャラクターセットの追加<br>
+- 日本語キャラクタセット cp932 / eucjpms に対応<br>
+- 文字コードの自動変換機能が追加<br>
+- データベース、テーブル、フィールド、それぞれ個別にキャラクターセットを指定できるようになった。</p>
+
+<p>　　　　．．．．．</p>
+
+<h4>変更点</h4>
+
+<p>詳細： <a href="http://www.mysql.gr.jp/frame/modules/bwiki/index.php?FAQ#content_1_40">http://www.mysql.gr.jp/frame/modules/bwiki/index.php?FAQ#content_1_40</a><br>
+- パスワードの保存形式が変わった。(長くなった)</p>
+
+<pre><code class="prettyprint">～4.0  12de31820cbc0fce
+4.1～  *59170D1E4A5E56267B6ED9C51ED62619FB817E6B
+</code></pre>
+
+<ul>
+<li><p>CHAR(10) は 10 バイトから 10 文字に変わった。</p>
+
+<ul>
+<li>3.X, 4.0 で char(10) と定義していたフィールドが、 4.1 に uprade した瞬間に、char(3) もしくは char(5) 扱いになってしまいます。</li>
+<li>ujis は、最大で 3バイトを使用して 1文字を表現する。sjis は最大で 2バイトを使用して sjis 1文字を表現する。</li>
+<li>4.0 で CHAR(10) と定義した。これは 10 バイト。</li>
+<li>4.1 に upgrade したら、10バイトを、X文字にしなければならない。</li>
+<li>そこで、ujis の場合は、10バイト -&gt; 3(ujis)文字となる。</li>
+</ul></li>
+</ul>
+
+<pre><code class="prettyprint">char(10) が char(3) になるトリック
+ 4.0 まで : １２３４５６７８９10
+ 内部バイト: ■■■■■■■■■■
+ 4.1(ujis) : ＋－＋＋－＋＋－＋
+    文字数 　１　　２　　３
+ 4.1(sjis) : ＋＋＋＋＋＋＋＋＋＋
+    文字数 　 １　２　３　４　５
+</code></pre>
+
+<ul>
+<li>char() に、全てのバイト列が入らなくなった。
+
+<ul>
+<li>ujis のフィールドには、EUC-JP に定義されるコード空間のバイトしか INSERT できない。</li>
+</ul></li>
+<li>データベース名、テーブル名は、OS 上では unicode に直されて保存されるように変わった(ディレクトリ名、ファイル名が、utf8 キャラクターセットで書かれるようになった)。
+
+<ul>
+<li>4.0 まではバイナリ列がそのままデータベース名(=ディレクトリ名)、テーブル名(=ファイル名)になっていた。</li>
+</ul></li>
+<li>mysqldump の標準キャラクターセットがどうコンパイルしても utf8 になる</li>
+<li>timestamp 型の表示フォーマットが変わった。</li>
+</ul>
+
+<pre><code class="prettyprint">～4.0 20050116214504
+4.1～ 2005-01-16 21:45:50
+</code></pre>
+
+<ul>
+<li>mysqlデータベースのテーブルが変わった</li>
+</ul>
+
+<p>　　　　．．．．．</p>
+
+<h3>アップグレード時の問題と対応</h3>
+
+<p>詳細： <a href="http://www.mysql.gr.jp/frame/modules/bwiki/?Contrib">http://www.mysql.gr.jp/frame/modules/bwiki/?Contrib</a><br><br>
+　　　 <a href="http://www.mysql.gr.jp/frame/modules/bwiki/index.php?FAQ#content_1_46">http://www.mysql.gr.jp/frame/modules/bwiki/index.php?FAQ#content_1_46</a><br>
+- パスワードの保存形式が変わった</p>
+
+<ul>
+<li><p>mysqld起動オプションで解決：old-password</p>
+
+<ul>
+<li>文字コードの自動変換機能</li>
+<li>char() に、全てのバイト列が入らなくなった。</li>
+<li>mysqldump の標準キャラクターセットがどうコンパイルしても utf8 になる</li>
+<li>パッチで解決： <a href="http://www.mysql.gr.jp/frame/modules/bwiki/index.php?plugin=attach&amp;refer=Contrib&amp;openfile=mysql-5.0.33-jp-all.patch2">http://www.mysql.gr.jp/frame/modules/bwiki/index.php?plugin=attach&amp;refer=Contrib&amp;openfile=mysql-5.0.33-jp-all.patch2</a></li>
+<li>CHAR(10) は 10 バイトから 10 文字に変わった。</li>
+</ul></li>
+<li><p>シェルバッチで解決： <a href="http://www.mysql.gr.jp/frame/modules/bwiki/index.php?plugin=attach&amp;refer=Contrib&amp;openfile=mysql_change_char_len.sh">http://www.mysql.gr.jp/frame/modules/bwiki/index.php?plugin=attach&amp;refer=Contrib&amp;openfile=mysql_change_char_len.sh</a></p>
+
+<ul>
+<li>timestamp 型の表示フォーマットが変わった。</li>
+<li>アプリの作り方に注意。</li>
+<li>データベース名、テーブル名は、OS 上では unicode に直されて保存されるように変わった(ディレクトリ名、ファイル名が、utf8 キャラクターセットで書かれるようになった)。</li>
+<li>mysqlデータベースのテーブルが変わった</li>
+<li>変換コマンドで解決：mysql_fix_privilege_tables</li>
+</ul></li>
+</ul>
+
+<h3>アップデート準備</h3>
+
+<h4>コンパイル</h4>
+
+<ul>
+<li>問題解決パッチ適用</li>
+</ul>
+
+<pre><code class="prettyprint">http://www.mysql.gr.jp/frame/modules/bwiki/index.php?plugin=attach&amp;refer=Contrib&amp;openfile=mysql-5.0.33-jp-all.patch2
+</code></pre>
+
+<ul>
+<li>configure時標準オプションに下記オプションを追加</li>
+</ul>
+
+<pre><code class="prettyprint">--with-charset=binary
+</code></pre>
+
+<h4>必須作業</h4>
+
+<p>my.cnfの設定<br>
+- 旧形式のパスワードを利用する</p>
+
+<pre><code class="prettyprint">[mysqld-5.0]
+old-passwords
+</code></pre>
+
+<ul>
+<li>クライアント、サーバ間等の文字コードを統一し自動変換をしない</li>
+</ul>
+
+<pre><code class="prettyprint">[client]
+default-character-set=ujis
+
+[mysqld]
+skip-character-set-client-handshake
+default-character-set=ujis
+default-collation=ujis_japanese_ci
+
+[mysqldump]
+default-character-set=ujis
+hex-blob
+
+[mysql]
+default-character-set=ujis
+</code></pre>
+
+<h3>アップグレード方法</h3>
+
+<h4>MySQLアップデートのみ</h4>
+
+<p>/var/lib/mysqlディレクトリのデータを5.0用に変換して利用する<br>
+- mysqlテーブルが4.0仕様なので無視して起動</p>
+
+<pre><code class="prettyprint">/etc/init.d/mysql start --skip-grant-tables
+</code></pre>
+
+<ul>
+<li>mysqlテーブル4.0→5.0変換処理</li>
+</ul>
+
+<pre><code class="prettyprint">mysql_fix_privilege_tables
+</code></pre>
+
+<ul>
+<li>既存char項目変換処理シェルバッチ</li>
+</ul>
+
+<pre><code class="prettyprint">http://www.mysql.gr.jp/frame/modules/bwiki/index.php?plugin=attach&amp;refer=Contrib&amp;openfile=mysql_change_char_len.sh
+</code></pre>
+
+<h4>MySQLアップデート＋バックアップデータインポート（構造ごと）</h4>
+
+<p>mysqldumpで4.0データを構造ごとエクスポートし5.0上にインポートし再構築<br>
+- バックアップデータインポート（構造ごと）<br>
+- 権限情報の設定が必要<br>
+  - mysqlテーブルのデータのみインポート</p>
+
+<h3>アップグレード実施結果</h3>
+
+<h4>MySQLアップデートのみ</h4>
+
+<p><strong>※微妙に桁数が変わってしまう：</strong>  </p>
+
+<p><strong>　4.0→5.0　　　　　　　　：varchar(100)→varchar(33)</strong>  </p>
+
+<p><strong>　mysql_change_char_len.sh：varchar(33)→varchar(101)</strong></p>
+
+<h4>MySQLアップデート＋バックアップデータインポート（構造ごと）</h4>
+
+<p><strong>※データが多い場合時間がかかる：</strong>  </p>
+
+<p><strong>　クライアント(mysqlclient)も変更が必要？？？</strong></p>
+
+<h3>参考資料</h3>
+
+<ul>
+<li><a href="http://lists.mysql.com/mysql-ja/262">http://lists.mysql.com/mysql-ja/262</a></li>
+<li><a href="http://www.mysql.gr.jp/frame/modules/bwiki/index.php?FAQ#content_1_40">http://www.mysql.gr.jp/frame/modules/bwiki/index.php?FAQ#content_1_40</a></li>
+<li><a href="http://www.klab.org/media/mysql/">http://www.klab.org/media/mysql/</a></li>
+</ul>
+
+<p>　　　　．．．．．</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/mysql_40_to_50.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="MySQL4.0系→MySQL5.0系" data-url="http://tech.feedforce.jp/mysql_40_to_50.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/mysql_40_to_50.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/mysql_40_to_50.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/pragger.html" rel="next">Pragger</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/geo-tagging.html" rel="prev">Geo Tagging関連情報まとめ</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

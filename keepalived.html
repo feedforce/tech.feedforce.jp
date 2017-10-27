@@ -1,0 +1,459 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>keepalived講習会 | feedforce Engineers' blog</title>
+      <meta name="description" content="ゴールVRRPによる仮想IP持ち回りの仕組みを理解するkeepalivedを利用したHAクラスタが構築できるLVS周りはナシで。">
+      <link rel="canonical" href="http://tech.feedforce.jp/keepalived.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="keepalived講習会 | feedforce Engineers' blog">
+      <meta property="og:description" content="ゴールVRRPによる仮想IP持ち回りの仕組みを理解するkeepalivedを利用したHAクラスタが構築できるLVS周りはナシで。">
+      <meta property="og:url" content="http://tech.feedforce.jp/keepalived.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/keepalived.html">keepalived講習会</a></h1>
+      <ul>
+        <li class="entry-time">2007.08.13</li>
+        <li class="entry-cat"><a href="/category/infrastructure/">インフラ</a>, <a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/akahige">akahige</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/akahige"><img src="/images/authors/no-image.png" /></a>
+    </div>
+    <div class="entry-body">
+      <h2>ゴール</h2>
+
+<ul>
+<li>VRRPによる仮想IP持ち回りの仕組みを理解する</li>
+<li>keepalivedを利用したHAクラスタが構築できる</li>
+</ul>
+
+<p>LVS周りはナシで。</p>
+
+<!--more-->  
+
+<h2>基礎知識編</h2>
+
+<h3>基本的な資料</h3>
+
+<ul>
+<li><a href="http://www.keepalived.org/">keepalived 本家</a></li>
+<li><a href="http://dsas.blog.klab.org/archives/50665382.html">こんなに簡単！ Linuxでロードバランサ (2) - DSAS開発者の部屋</a></li>
+</ul>
+
+<p>あとは昔まとめた社外秘の資料</p>
+
+<h3>keepalivedって何スか</h3>
+
+<p>LinuxにおけるVRRPの実装のひとつ。HAクラスタを実現するデーモン。  </p>
+
+<p>HAクラスタのマスタ機とバックアップ機の両方で動作させることで簡単にHAクラスタができる。</p>
+
+<p>またLVSを利用した負荷分散クラスタの稼動をサポートする機能もある。</p>
+
+<h3>VRRP</h3>
+
+<p>仮想IPを複数機器で共有し、一番プライオリティの高い機器がそのIPを持つ仕組み。</p>
+
+<p>本来はルータ冗長化のためのプロトコルだが、サーバの冗長化にも使用できる。<br><br>
+つまりHAクラスタが作成可能。</p>
+
+<p>参考 : <a href="http://ja.wikipedia.org/wiki/Virtual_Router_Redundancy_Protocol">Virtual Router Redundancy Protocol - Wikipedia</a></p>
+
+<h2>設定ファイルの書き方</h2>
+
+<p>設定ファイルは/etc/keepalived/keepalived.conf。</p>
+
+<h3>設定の前提</h3>
+
+<ul>
+<li>クラスタの仮想IPは192.168.1.10</li>
+<li>MASTERの実IPは192.168.1.11</li>
+<li>BACKUPの実IPは192.168.1.12</li>
+<li>あとでたくさんの仮想IPを持たせる</li>
+</ul>
+
+<h3>MASTER側</h3>
+
+<p>MASTERである192.168.1.11のサーバには以下の内容のファイルを置く。</p>
+
+<pre><code class="prettyprint"># Configuration File for keepalived
+global_defs {
+    notification_email {
+               hogehoge@feedforce.jp
+    }
+    notification_email_from keepalived@feedforce.jp
+    smtp_server localhost
+    smtp_connect_timeout 30
+}
+
+vrrp_instance VI_1 {
+        state MASTER
+        interface eth0
+        virtual_router_id 51
+        priority 150
+        advert_int 1
+        authentication {
+                auth_type PASS
+                auth_pass 1111
+        }
+        virtual_ipaddress {
+                192.168.1.10
+        }
+}
+
+</code></pre>
+
+<h3>BACKUP側</h3>
+
+<p>BACKUPである192.168.1.12のサーバには以下の内容のファイルを置く。</p>
+
+<pre><code class="prettyprint"># Configuration File for keepalived
+global_defs {
+    notification_email {
+               hogehoge@feedforce.jp
+    }
+    notification_email_from keepalived@feedforce.jp
+    smtp_server localhost
+    smtp_connect_timeout 30
+}
+
+vrrp_instance VI_1 {
+        state BACKUP
+        interface eth0
+        virtual_router_id 51
+        priority 100
+        advert_int 1
+        authentication {
+                auth_type PASS
+                auth_pass 1111
+        }
+        virtual_ipaddress {
+                192.168.1.10
+        }
+}
+</code></pre>
+
+<h3>設定値の意味</h3>
+
+<p>以下少しだけ説明とか設定上の注意点とか。</p>
+
+<h4>global_defs</h4>
+
+<p>keepalivedの動作全般に関係し、クラスタ内のサーバに異常が生じた際にメールを飛ばす設定などを行うセクション。</p>
+
+<h4>vrrp_instance</h4>
+
+<p>仮想ルータを定義するセクション。<br><br>
+仮想ルータはいくつでも定義でき、またひとつの仮想ルータが複数の仮想IPを持つことが出来る。</p>
+
+<h4>advert_int</h4>
+
+<p>死活確認のインターバル。</p>
+
+<h4>virtual_router_id</h4>
+
+<p>属してる仮想ルータの識別ID。</p>
+
+<p>同一ネットワーク内にvrrpで動作している仮想ルータがある場合、virtual_router_idは他の仮想ルータとかぶらない値である必要がある。</p>
+
+<h4>state, priority</h4>
+
+<p>MASTERのpriorityにはBACKUPのpriorityの値より大きなものを設定する。</p>
+
+<h2>実践編 - 基本 -</h2>
+
+<h3>設定ファイルを編集して仮想IPを増やしたり減らしたりしてみよう</h3>
+
+<ul>
+<li>設定ファイルの編集</li>
+</ul>
+
+<pre><code class="prettyprint">vrrp_instance VI_1 {
+...
+        virtual_ipaddress {
+                192.168.1.10
+                192.168.1.101
+                192.168.1.102
+                192.168.1.103
+                192.168.1.104
+        }
+...
+}
+</code></pre>
+
+<h3>フェイルオーバー - マスタからバックアップへの切り替え</h3>
+
+<ul>
+<li>片方ケーブルを抜く</li>
+<li>両機のIPを確認する</li>
+</ul>
+
+<pre><code class="prettyprint">$ /sbin/ip address list
+</code></pre>
+
+<h3>フェイルバック - バックアップからマスタへの切り替え</h3>
+
+<ul>
+<li>抜いたケーブルを戻す</li>
+<li>両機のIPを確認する</li>
+</ul>
+
+<pre><code class="prettyprint">$ /sbin/ip address list
+</code></pre>
+
+<h3>マスタとバックアップの設定を入れ替えて切り替え作業をしてみる</h3>
+
+<ul>
+<li>設定ファイルの編集</li>
+<li>最初の状態でマスタが入れ替わっていることを確認する</li>
+<li>フェイルオーバーとフェイルバックを確認する</li>
+</ul>
+
+<h2>実践編 - 応用 -</h2>
+
+<h3>フェイルオーバー時とフェイルバック時にスクリプトを実行する</h3>
+
+<ul>
+<li>自分がマスタになった場合（主にマスタの起動時やフェイルオーバー時）にhoge.shを実行</li>
+</ul>
+
+<pre><code class="prettyprint">vrrp_instance VI_1 {
+...
+   notify_master /etc/keepalived/hoge.sh
+...
+}
+</code></pre>
+
+<ul>
+<li>自分がバックアップになった場合（主にフェイルバック時）にhage.shを実行</li>
+</ul>
+
+<pre><code class="prettyprint">vrrp_instance VI_1 {
+...
+   notify_backup /etc/keepalived/hage.sh
+...
+}
+</code></pre>
+
+<h3>21個以上の仮想IP</h3>
+
+<ul>
+<li>virtual_ipaddressに21個以上追加してどうなるか試す</li>
+</ul>
+
+<pre><code class="prettyprint">vrrp_instance VI_1 {
+...
+        virtual_ipaddress {
+                192.168.1.10
+                ...(18個略)
+                192.168.1.119
+                192.168.1.120
+                192.168.1.121
+                192.168.1.122
+        }
+...
+}
+</code></pre>
+
+<ul>
+<li>21個目以上はvirtual_ipaddress_excludedに追加する</li>
+</ul>
+
+<pre><code class="prettyprint">vrrp_instance VI_1 {
+...
+        virtual_ipaddress {
+                192.168.1.10
+                ...(18個略)
+                192.168.1.119
+        }
+        virtual_ipaddress_excluded {
+                192.168.1.120
+                192.168.1.121
+                192.168.1.122
+        }
+...
+}
+</code></pre>
+
+<h2>備考</h2>
+
+<p>vrrpはネットワークな死活確認しか行わない。<br><br>
+なのでサービスの死活確認を行いたい場合は別途なんらかの仕組みが必要。</p>
+
+<p>これに関してはクラスタ上の各サーバが自己のサービス監視を行って、サービスがダウンしたらkeepalivedを停止させる、といった事を行えば、サービスが停止したサーバをクラスタから切り離すことができる。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/keepalived.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="keepalived講習会" data-url="http://tech.feedforce.jp/keepalived.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/keepalived.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/keepalived.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/load_balance_apache.html" rel="next">負荷分散講習会 Apache編</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/iptables.html" rel="prev">iptables講習会</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

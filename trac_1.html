@@ -1,0 +1,507 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>駆け足でTrac | feedforce Engineers' blog</title>
+      <meta name="description" content="Tracとはなんぞやプロジェクト管理ツール。 Wiki + Subversion連携 + チケットシステム（BTS + 進捗管理）">
+      <link rel="canonical" href="http://tech.feedforce.jp/trac_1.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="駆け足でTrac | feedforce Engineers' blog">
+      <meta property="og:description" content="Tracとはなんぞやプロジェクト管理ツール。 Wiki + Subversion連携 + チケットシステム（BTS + 進捗管理）">
+      <meta property="og:url" content="http://tech.feedforce.jp/trac_1.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/trac_1.html">駆け足でTrac</a></h1>
+      <ul>
+        <li class="entry-time">2006.09.01</li>
+        <li class="entry-cat"><a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/akahige">akahige</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/akahige"><img src="/images/authors/no-image.png" /></a>
+    </div>
+    <div class="entry-body">
+      <h2>Tracとはなんぞや</h2>
+
+<p>プロジェクト管理ツール。 Wiki + Subversion連携 + チケットシステム（BTS + 進捗管理）</p>
+
+<!--more-->
+
+<h3>なにがうれしいの</h3>
+
+<p>ブラウザ上でオールインワンのプロジェクト管理。  </p>
+
+<ul>
+<li>Wikiでドキュメント管理</li>
+<li>Subversionリポジトリのブラウズができてチェンジセットが見やすくてソースも見られる。</li>
+<li>バグやタスクをチケットとして発行して管理。BTSとして使える。フィールドカスタマイズも自由。</li>
+<li>マイルストーンごとにチケットを登録しておくと進捗見える化</li>
+<li>RSSやメールでチケットの更新をお知らせ</li>
+<li>さらにプラグイン機構で機能追加可能</li>
+</ul>
+
+<p>うれしい。  </p>
+
+<h3>なにがめんどくさいの</h3>
+
+<p>Tracの暗黒面。  </p>
+
+<ul>
+<li>導入が面倒。RH7.3とか古いディストリに入れようとすると泥沼。最近のディストリなら比較的楽。</li>
+<li>多機能ゆえの業。導入した直後に何していいのかわからん。</li>
+<li>あー、また別のWiki記法覚えないといかんのか。（pukiwikiともhikiとも違う）</li>
+</ul>
+
+<p>だが使いこなすほどになじむ、なじむぞ！（たぶん）  </p>
+
+<h2>なにはともあれつかってみよう</h2>
+
+<p>百聞は一見にしかず。 インストールしてログインするところまで。  </p>
+
+<ul>
+<li>環境準備</li>
+<li>Trac日本語版のインストール</li>
+<li>Subversionのリポジトリを作る</li>
+<li>プロジェクト環境を作る</li>
+<li>ブラウザからアクセス</li>
+<li>認証の設定</li>
+<li>ユーザ権限の設定</li>
+<li>TracWebAdminを入れる</li>
+</ul>
+
+<p>なお、今回入れるのは0.9.6。 これ以前のバージョンでは以下の記述は当てはまらない場合があるので注意。  </p>
+
+<h3>環境準備</h3>
+
+<p>Tracを動かすには以下のものが必要  </p>
+
+<ul>
+<li>Python</li>
+<li>Subvertion</li>
+<li>Clearsilver（テンプレートエンジン）</li>
+<li>SQLite or PostgreSQL</li>
+</ul>
+
+<p>以下は手元のCentOS 4.3における手順</p>
+
+<p>clearsilverだけ入ってなかったので適当にRPMをひろってきて入れる。  </p>
+
+<pre><code class="prettyprint">mkdir ~/trac_tmp
+cd ~/trac_tmp
+wget http://dag.wieers.com/packages/clearsilver/python-clearsilver-0.10.1-1.2.el4.rf.i386.rpm
+wget http://dag.wieers.com/packages/clearsilver/clearsilver-0.10.1-1.2.el4.rf.i386.rpm
+sudo rpm -ivh python-clearsilver-0.10.1-1.2.el4.rf.i386.rpm clearsilver-0.10.1-1.2.el4.rf.i386.rpm
+</code></pre>
+
+<p>もちろん他のソフトウェアも入ってなかったら入れる必要あり TracのRPMも落ちているが、これはあとで日本語版を入れるので入れない。  </p>
+
+<h3>日本語版のインストール</h3>
+
+<p>日本語化されたものがあるので、最初からそれをインストールする。</p>
+
+<p><a href="http://www.i-act.co.jp/project/products/products.html">インタアクト Trac日本語版 http://www.i-act.co.jp/project/products/products.html</a>  </p>
+
+<pre><code class="prettyprint">wget http://www.i-act.co.jp/project/products/downloads/trac-0.9.6-ja-1.zip
+unzip trac-0.9.6-ja-1.zip
+cd trac-0.9.6-ja-1
+sudo python setup.py install
+</code></pre>
+
+<p>完了。楽ちん。</p>
+
+<p>ちなみにすでに前のバージョンのTracが入っている場合はPythonのsite-packages内のTracのディレクトリを全削除してから再インストールがよろしい、とTrac付属のドキュメントに書いてあった。 くわしくはUPGRADEというテキストファイルを読むべし。  </p>
+
+<h3>Subversionのリポジトリ作る</h3>
+
+<p>Tracのプロジェクト環境を作成するためにリポジトリが必要なので作っておく。 もちろん既存のリポジトリがあればそれを使ってよい。  </p>
+
+<pre><code class="prettyprint">svnadmin create /home/akahige/tracdemorepos
+</code></pre>
+
+<h4>ちょっと罠</h4>
+
+<p>同じサーバ上にリポジトリがないと作成できないというちょっと罠。 本リポジトリと別のサーバにTracをいれたければ、SVKでTracのあるサーバにリポジトリを同期するとよろしいでしょう。 ただし本リポジトリとSVKで同期を取ったリポジトリのリビジョン番号はずれてしまいますが。  </p>
+
+<h3>プロジェクト環境を作る</h3>
+
+<p>いよいよブラウザからアクセスできる環境を作る。  </p>
+
+<pre><code class="prettyprint">trac-admin /home/akahige/tracdemo/ initenv
+</code></pre>
+
+<p>以下の情報を聞かれるので入力していく  </p>
+
+<ul>
+<li>プロジェクト名
+
+<ul>
+<li>Trac Demo（てきとうに）</li>
+</ul></li>
+<li>DB
+
+<ul>
+<li>./db/sqlite.db（デフォルトはSQLiteを使うので考えがなければそのままで）</li>
+</ul></li>
+<li>Subversionのリポジトリ
+
+<ul>
+<li>/home/akahige/tracdemorepos（さっき作ったやつかもともとあるリポジトリのパス）</li>
+</ul></li>
+</ul>
+
+<p>これで完了。 入力ミスなどで失敗したらおもむろに/home/akahige/tracdemoをいったん削除してから再実行。</p>
+
+<p>ちなみにプロジェクト環境はプロジェクトごとに何個でも作れる。  </p>
+
+<h3>ブラウザからアクセス</h3>
+
+<p>いよいよブラウザからアクセス。</p>
+
+<p>ここは手っ取り早くTrac用Webサーバを起動するが、Apacheやlighttpd等の上で動かすこともできる（広く公開するならそっちで動かす方がいい）  </p>
+
+<pre><code class="prettyprint">tracd -p 8000 /home/akahige/tracdemo/
+</code></pre>
+
+<p>起動したらブラウザからアクセス。  </p>
+
+<pre><code class="prettyprint">http://192.168.1.145:8000/
+</code></pre>
+
+<p>これでとりあえずTracが使えるようになった。 conf/trac.iniの内容を編集することでカスタマイズ等も可。</p>
+
+<p>とりあえずプロジェクトのWikiでTracのドキュメントを読んでみたりするとよいでしょう。 日本語版を入れたのでドキュメントも日本語になっている。ワーイ。</p>
+
+<p>でも実はまだセットアップは終わってなかったりする。 CMのあとまだまだ続きます。  </p>
+
+<h3>認証の設定</h3>
+
+<p>TracはHTTP認証でユーザを判別するのでその設定する。 この設定をしなくてもTracを使うことはできるが、誰が何をしたのか履歴に残すためにやっておいたほうがいい。 あとユーザごとに権限設定もできるので。</p>
+
+<p>認証にはダイジェスト認証も使えるようだけど、ここではとりあえずベーシック認証でやる。</p>
+
+<p>普通にパスワードファイルを作り  </p>
+
+<pre><code class="prettyprint">htpasswd -c /home/akahige/tracdemo/.htpasswd akahige
+</code></pre>
+
+<p>そのバスワードファイルを読みこむようにtracdを起動しなおす。このとき「,」の前後にスペースとかいれちゃだめなのがちょっと罠。  </p>
+
+<pre><code class="prettyprint">tracd --basic-auth tracdemo,/home/akahige/tracdemo/.htpasswd,tracninshou -p 8000 -d /home/akahige/tracdemo
+</code></pre>
+
+<p>-dオプション付きで起動したので今度はデーモンとして動作。 その他のオプションに関してはtracd -hしてみませう。</p>
+
+<p>さて再度ブラウザからアクセス。  </p>
+
+<pre><code class="prettyprint">http://192.168.1.145:8000/
+</code></pre>
+
+<p>ここでヘッダのログインのリンクを踏むとダイアログが開いてベーシック認証となる。</p>
+
+<p>これでユーザの認証ができるようになった。  </p>
+
+<h3>ユーザ権限の設定</h3>
+
+<p>とりあえずさっき.htpasswdに追加したユーザに管理者権限を与える。  </p>
+
+<pre><code class="prettyprint">trac-admin /home/akahige/tracdemo/ permission add akahige TRAC_ADMIN
+</code></pre>
+
+<p>trac-adminはまあ、こういった管理一般に使うコマンドなわけですね。 一度ためしにtrac-admin -hとかしてみるとよいでしょう。</p>
+
+<p>ともかくこれでマイルストーンの編集とか管理者のみにできる作業を行うことができるようになった。  </p>
+
+<h3>TracWebAdmin入れる</h3>
+
+<p>さらに設定をコマンドラインからやるのめんどいよという向きのために、設定をやりやすくするためにTracの設定をウェブベースで行うことのできるプラグインを入れてみる。</p>
+
+<p>まずはプラグインを入れる準備。やってることの意味はドキュメントを読んでください。  </p>
+
+<pre><code class="prettyprint">wget http://peak.telecommunity.com/dist/ez_setup.py
+sudo python ez_setup.py
+</code></pre>
+
+<p>お次が件のプラグイン。展開はしないで拡張子をeggに変えてpythonのsite-packagesに入れる。</p>
+
+<p><a href="http://trac.edgewall.org/wiki/WebAdmin">WebAdmin - The Trac Project - Trac http://trac.edgewall.org/wiki/WebAdmin</a>  </p>
+
+<pre><code class="prettyprint">wget http://trac.edgewall.org/attachment/wiki/WebAdmin/TracWebAdmin-0.1.1dev_r2765-py2.3.egg.zip?format=raw
+mv TracWebAdmin-0.1.1dev_r2765-py2.3.egg.zip?format=raw TracWebAdmin-0.1.1dev_r2765-py2.3.egg
+sudo cp TracWebAdmin-0.1.1dev_r2765-py2.3.egg /usr/lib/python2.3/site-packages/
+</code></pre>
+
+<p>入れたらtrac.iniの末尾に以下の業を追加。  </p>
+
+<pre><code class="prettyprint">[components] webadmin.* = enabled
+</code></pre>
+
+<p>これで管理者でログインしている場合はAdminタブが出てTracに関する設定をブラウザ上からいろいろできるようになる。 先ほどのユーザ権限の設定なんかももうコマンドラインを叩く必要はない。  </p>
+
+<h4>セキュリティ上の注意</h4>
+
+<p>作成したTracのプロジェクト環境を外部公開する場合は注意。ほかの人にWebAdminを使われないように！ 必要なければこのプラグインは使わないほうがセキュリティの観点からは好ましい。 内部利用のみであればいれたほうがたぶん幸せ。</p>
+
+<p>利便性とセキュリティのトレードオフ。</p>
+
+<p>以上でひととおりのセットアップは終わり。</p>
+
+<p>お疲れ様でした。</p>
+
+<h2>運用してみよう</h2>
+
+<h3>さいしょになにする</h3>
+
+<ul>
+<li>タイムラインを見てスゲーと思う</li>
+<li>ソースが見られることを確認して満足する</li>
+<li>Wikiに落書きをする</li>
+<li>「テスト」というタイトルのチケットを登録する</li>
+<li>マイルストーンの設定ができなくて首をかしげる</li>
+<li>管理者権限でログインしたら設定できることを知る</li>
+<li>ユーザ権限の設定</li>
+<li>マイルストーンにチケットの解決状況が反映されるのを見てご満悦</li>
+</ul>
+
+<p>すみません、これは自分の「さいしょになにした」でした。</p>
+
+<p>以下一般的な運用。  </p>
+
+<ul>
+<li>Wikiに仕様や気になることのメモを</li>
+<li>新しいタスクがやってきたらチケットに登録</li>
+<li>いまいましいバグが発生したらチケットに登録</li>
+<li>チケットごとに担当を割り当てて対応</li>
+<li>コンポーネントを設定して関連するチケットをひとまとまりに</li>
+<li>マイルストーンを設定してチケットをまとめる</li>
+<li>チケットが順調に解決されていく様をマイルストーンの表示で見てニヤつく</li>
+<li>チケットの解決が滞っている様をマイルストーンの表示で見て不安におののく</li>
+</ul>
+
+<p>まあ、いろいろいじってみるべし。  </p>
+
+<h3>権限の設定</h3>
+
+<p>特定の人以外にWikiの編集とかその他いろいろさせたくないとか言うときに。</p>
+
+<p>WebAdminからできますよ。ワーイ。  </p>
+
+<h3>チケットの項目のカスタマイズ</h3>
+
+<p>柔軟なカスタマイズで運用にぴったりフィットできますよ。きっと。  </p>
+
+<h4>既存項目の選択リストをいじる</h4>
+
+<p>英語になってるものを日本語にしたりとか。</p>
+
+<p>WebAdminからできますよ。ワーイ。  </p>
+
+<h4>既存項目を隠す</h4>
+
+<p>選択リストのアイテムを全部消してしまえば非表示になりますよ。</p>
+
+<p>WebAdminからできますよ。ワーイ。  </p>
+
+<h4>カスタム項目を追加</h4>
+
+<p>trac.iniをエディタでいじります。 詳細はドキュメント参照。</p>
+
+<p>残念ながらWebAdminからはできませんよ。できたらいいのにな。</p>
+
+<p>そのうちだれか偉い人のおかげでできるようになるかもしれない。  </p>
+
+<h3>インタフェースのカスタマイズ</h3>
+
+<p>アイコンとかデザインとかカスタマイズしたいですよ！</p>
+
+<p>基本的に画像の変更やスタイルシートの変更で。 テンプレートをいじれば何でもできるが、バージョンアップに追随するのに苦労しそうなのでオススメではない。  </p>
+
+<h3>他のBTSから乗り換えたいですよ！</h3>
+
+<p>BugzzilaとかMantisからだと移行スクリプトがあるぽいです。 所詮はDB間のデータ移行ですからね。</p>
+
+<p>だれか影舞から移行するスクリプトをつくってください（他力本願）  </p>
+
+<h3>ドキュメント読む</h3>
+
+<p>まとまったものがあるので読みましょう。</p>
+
+<p>小一時間であなたもTrac Masterです。</p>
+
+<p>まだ自分は全部読んでませんすみません。</p>
+
+<p>以上、駆け足終了。</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/trac_1.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="駆け足でTrac" data-url="http://tech.feedforce.jp/trac_1.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/trac_1.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/trac_1.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/mysql.html" rel="next">MySQL ロックの話</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/ruby.html" rel="prev">Rubyの落とし穴</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>

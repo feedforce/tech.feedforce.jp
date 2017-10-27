@@ -1,0 +1,707 @@
+<!doctype html>
+<html>
+<!--
+  _____       _____       _____        _____
+ |" ___|     |" ___|     |_ " _|      |_ " _|
+U| |_  u    U| |_  u       | |          | |
+\|  _|/     \|  _|/       /| |\        /| |\
+ |_|         |_|         u |_|U       u |_|U
+ )(\\,-      )(\\,-      _// \\_      _// \\_
+(__)(_/     (__)(_/     (__) (__)    (__) (__)
+______________________________________________
+
+      ―― May The Force Be With You ――
+______________________________________________
+
+-->
+<head>
+  <meta charset="utf-8">
+  <title>Capistrano | feedforce Engineers' blog</title>
+      <meta name="description" content="※ この資料について2006年4月の勉強会資料をCapistranoのバージョンアップ（現時点では1.3.1になってました）による仕様変更などに合わせてちょっと修正したものです。 質疑応答の部分は当時のままなので最初の質問が初々しいです。Capistranoって何なのさデプロイツール デプロイ=配備参考 : Capistrano: Automating Application Deployment一言で言うと複数のサーバ上で同時に並行してコマンドを実行できるツール。 複数のサーバで動いているサービスのデプロイを楽に行うことができる。Rails起源なのでRailsに特化した部分もあるが、ほかのアプリケーションでも使える。  ">
+      <link rel="canonical" href="http://tech.feedforce.jp/capistrano.html">
+  <meta name="author" content="feedforce Engineers' blog">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta property="og:title" content="Capistrano | feedforce Engineers' blog">
+      <meta property="og:description" content="※ この資料について2006年4月の勉強会資料をCapistranoのバージョンアップ（現時点では1.3.1になってました）による仕様変更などに合わせてちょっと修正したものです。 質疑応答の部分は当時のままなので最初の質問が初々しいです。Capistranoって何なのさデプロイツール デプロイ=配備参考 : Capistrano: Automating Application Deployment一言で言うと複数のサーバ上で同時に並行してコマンドを実行できるツール。 複数のサーバで動いているサービスのデプロイを楽に行うことができる。Rails起源なのでRailsに特化した部分もあるが、ほかのアプリケーションでも使える。  ">
+      <meta property="og:url" content="http://tech.feedforce.jp/capistrano.html">
+  <meta name="google-site-verification" content="B-twIpMxCJ5YAekO9zOuwMOb66HhGJ9PSXlJVtNrFEE" />
+  <meta property="og:image" content="http://tech.feedforce.jp/images/og_image.png">
+  <meta property="og:type" content="blog">
+  <meta property="og:site_name" content="feedforce Engineers' blog">
+  <meta property="og:site_url" content="http://tech.feedforce.jp">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+
+  <link href="/css/fftt.css" rel="stylesheet" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="FFTT RSS Feed" href="/feed.xml" />
+</head>
+
+<body class="single">
+<header>
+  <div class="wrapper">
+    <div class="menubtn"><span>MENU</span></div>
+    <div id="menu" class="togmenu">
+      <nav>
+  <div>
+    <ul class="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/archives/">Archives</a></li>
+              <li><a href="http://developer.feedforce.jp">>> RENEW!</a></li>
+    </ul>
+  </div>
+</nav>
+
+      <div id="search">
+  <div id="search-box">
+    <script>
+        (function () {
+            var cx = '003651522337024020086:oaofzsoa3du';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+    <gcse:searchbox-only></gcse:searchbox-only>
+  </div>
+</div>
+
+    </div>
+  </div>
+</header>
+<h1 id="headline"><a href="/"></a></h1>
+
+
+<div id="content">
+  <article class="entry">
+    <div class="entry-date">
+      <h1><a href="/capistrano.html">Capistrano</a></h1>
+      <ul>
+        <li class="entry-time">2007.02.06</li>
+        <li class="entry-cat"><a href="/category/ruby/">Ruby/Rails</a>, <a href="/category/resume/">勉強会資料</a></li>
+        <li class="entry-author"><a href="/author/akahige">akahige</a></li>
+      </ul>
+    </div>
+    <div class="entry-author-image">
+      <a href="/author/akahige"><img src="/images/authors/no-image.png" /></a>
+    </div>
+    <div class="entry-body">
+      <h5>※ この資料について</h5>
+
+<p>2006年4月の勉強会資料をCapistranoのバージョンアップ（現時点では1.3.1になってました）による仕様変更などに合わせてちょっと修正したものです。 質疑応答の部分は当時のままなので最初の質問が初々しいです。</p>
+
+<h2>Capistranoって何なのさ</h2>
+
+<p>デプロイツール デプロイ=配備</p>
+
+<p>参考 : <a href="http://manuals.rubyonrails.com/read/book/17">Capistrano: Automating Application Deployment</a></p>
+
+<p>一言で言うと複数のサーバ上で同時に並行してコマンドを実行できるツール。 複数のサーバで動いているサービスのデプロイを楽に行うことができる。</p>
+
+<p>Rails起源なのでRailsに特化した部分もあるが、ほかのアプリケーションでも使える。  </p>
+
+<!--more-->
+
+<p>昔はSwitchTowerと呼ばれていた。はてなでも使われてる。</p>
+
+<h3>何がいいのか</h3>
+
+<ul>
+<li><p>複数サーバへの作業が効率化、自動化できる</p></li>
+<li><p>定義済みの標準タスクに沿った運用をするとデプロイに必要な要件を考える手間が減って楽</p></li>
+<li><p>すでに決まっている運用フローを自動化するなら標準タスクをまったく無視して上書きしちゃってもいい</p></li>
+</ul>
+
+<h4>例えば</h4>
+
+<pre><code class="prettyprint">$ cap httpd_config_update
+$ cap restart
+</code></pre>
+
+<p>これだけですべてのサーバが新しい設定で再起動したり。 新しい設定ファイルはsubversionとかからとってくるとかね。</p>
+
+<h3>Capitranoを使うための要件</h3>
+
+<h4>Capistranoを実行するサーバ</h4>
+
+<ul>
+<li>Capistranoがインストールされている（ってことはもちろんRubyも）</li>
+</ul>
+
+<h4>リモートのサーバたち</h4>
+
+<ul>
+<li>POSIXシェルコマンドが実行できる</li>
+<li>SSH接続できる</li>
+<li>ユーザ名とパスワードは揃える</li>
+<li>Rubyは特に入ってなくてもいい</li>
+</ul>
+
+<p>サーバが二台以上ないとあんまり楽しくありません。</p>
+
+<h2>とりあえず使ってみよう</h2>
+
+<h3>インストール</h3>
+
+<h4>Ruby</h4>
+
+<p>まあ適当に。ソースからでもバイナリからでもお好きに。</p>
+
+<h4>gem</h4>
+
+<p>ソース落としてきて。バイナリはないみたい。</p>
+
+<h4>Capistrano</h4>
+
+<pre><code class="prettyprint">$ sudo gem install capistrano -y
+</code></pre>
+
+<p>以下のコマンドでヘルプが表示されればオッケー</p>
+
+<pre><code class="prettyprint">$ cap -h
+</code></pre>
+
+<h3>男の簡単レシピ</h3>
+
+<p>インストールできたらCapistranoのレシピを書いて使ってみる。</p>
+
+<h4>otoko.rb</h4>
+
+<pre><code class="prettyprint ruby">set :application, &quot;ff_tools&quot;
+ set :user, &quot;kan&quot;
+ set :password, &quot;pasuwa-do&quot;
+
+ role :local, &quot;localhost&quot;
+
+ desc &quot;say hello to all hosts&quot;
+ task :hellowello do
+   run &quot;echo Hello, $HOSTNAME for #{application}&quot;
+ end
+</code></pre>
+
+<h3>実行</h3>
+
+<p>-f でレシピファイルを指定します。（昔は -r でした） -f を指定しないとデフォルトで./config/deploy.rbを読もうとします。</p>
+
+<pre><code class="prettyprint">$ cap -f otoko.rb hellowello
+</code></pre>
+
+<p>ローカルホストでechoするだけのつまらないレシピ。 まあでも動かないともっとつまらないからね。とりあえずはこれで勘弁。</p>
+
+<p>追加できるリモートサーバがあればちょっと面白くなる。</p>
+
+<pre><code class="prettyprint">role :local, &quot;localhost&quot;, &quot;192.168.1.101&quot;, &quot;192.168.1.102&quot;
+</code></pre>
+
+<h2>レシピを書こう</h2>
+
+<p>レシピに含まれるのは基本的に以下の三つの要素。</p>
+
+<ul>
+<li>変数</li>
+<li>ロール</li>
+<li>タスク</li>
+</ul>
+
+<p>あと基本的にRubyの文法が全部使える。 収拾がつかなくならない程度に好きに書けと。</p>
+
+<h3>変数</h3>
+
+<pre><code class="prettyprint">set :変数名, 値
+</code></pre>
+
+<ul>
+<li>setキーワードで定義</li>
+<li>Rubyの変数として参照</li>
+</ul>
+
+<pre><code class="prettyprint ruby">set :application, &quot;ff_tools&quot;
+ set :hellocommand, &quot;echo Hello, $HOSTNAME&quot;
+
+ run &quot;echo #{application}&quot;
+ run hellocommand
+</code></pre>
+
+<h3>ロール</h3>
+
+<pre><code class="prettyprint">role :ロール名, &quot;host&quot;[, &quot;host2&quot;, ...]
+</code></pre>
+
+<ul>
+<li>ロール名は好きに（基本はrailsにのっとってapp, web, db）</li>
+<li>ロール＝同じ処理を実行するサーバのグループ</li>
+<li>ひとつのロールに含まれるサーバを一行で全部定義することもできるし、複数行で定義することもできる</li>
+<li>ロールの中でもprimaryのようなフラグが作れる</li>
+</ul>
+
+<pre><code class="prettyprint">role :app, &quot;app01.feedforce.jp&quot;, &quot;app02.feedforce.jp&quot;
+ role :web, &quot;web01.feedforce.jp&quot;
+ role :web, &quot;web02.feedforce.jp&quot;
+ role :db, &quot;db01.feedforce.jp&quot;, :primary =&gt; true
+ role :db, &quot;db02.feedforce.jp&quot;
+ role :spider, &quot;spider01.feedforce.jp&quot;
+</code></pre>
+
+<h3>タスク</h3>
+
+<pre><code class="prettyprint">task :タスク名 do ... end
+ task :タスク名, :roles =&gt; :ロール名 do ... end
+ task :タスク名, :roles =&gt; [:ロール名1, :ロール名2] do ... end
+ task :タスク名, :roles =&gt; :ロール名, :only =&gt; { :primary =&gt; true } do
+</code></pre>
+
+<ul>
+<li>タスクはメソッドと同じようにほかのタスク内で使える</li>
+<li>でもメソッドじゃないから他のメソッドからは使えない</li>
+<li>ロールを指定しないタスクはすべてのサーバで実行される</li>
+<li>taskの直前の行にdescで説明を書ける</li>
+</ul>
+
+<pre><code class="prettyprint">desc &quot;say hello to all hosts&quot;
+ task :hellowello do
+   run &quot;echo Hello, $HOSTNAME&quot;
+ end
+</code></pre>
+
+<h4>豆の知識 : タスク内でタスクを呼び出したときのロール</h4>
+
+<p>タスクをメソッド気分で使おうとするとロールで若干はまるかもしれないので注意。</p>
+
+<p>タスクはどこで呼び出されようと頑なに自分の仕事範囲（:roles）を守る。</p>
+
+<p>例えば以下のようなコードがあったとする。</p>
+
+<h5>roletest.rb</h5>
+
+<pre><code class="prettyprint">role :app, &quot;app01.feedforce.jp&quot;, &quot;app02.feedforce.jp&quot;
+ role :web, &quot;web01.feedforce.jp&quot;
+ set :application, &quot;hogehoge&quot;
+
+ task :hellowello do
+    run &quot;echo Hello, $HOSTNAME&quot;
+ end
+
+ task :helloapps, :roles =&gt; :app do
+   hellowello
+   run &quot;echo $HOSTNAME is apps?&quot;
+ end
+</code></pre>
+
+<p>このコードにはhelloappsを実行したときにhellowelloがappだけに適用されて欲しいという願いを込めてみた。</p>
+
+<h5>実行</h5>
+
+<pre><code class="prettyprint">$ cap -f roletest.rb helloapps
+</code></pre>
+
+<p>期待通りの結果になることを念じつつ実行。</p>
+
+<h5>実行結果</h5>
+
+<pre><code class="prettyprint">loading configuration /usr/local/lib/ruby/gems/1.8/gems/capistrano-1.1.0/lib/capistrano/recipes/standard.rb
+    loading configuration ./roletest.rb
+  * executing task helloapps
+  * executing task hellowello
+  * executing &quot;echo Hello, $HOSTNAME&quot;
+    servers: [&quot;app01.feedforce.jp&quot;, &quot;app02.feedforce.jp&quot;, &quot;web01.feedforce.jp&quot;]
+    [app01.feedforce.jp] executing command
+    [app02.feedforce.jp] executing command
+    [web01.feedforce.jp] executing command
+ ** [out :: app01.feedforce.jp] Hello, app01.rsssuite.jp
+ ** [out :: app02.feedforce.jp] Hello, app02.rsssuite.jp
+ ** [out :: web01.feedforce.jp] Hello, web01.rsssuite.jp
+    command finished
+  * executing &quot;echo $HOSTNAME is apps?&quot;
+    servers: [&quot;app01.feedforce.jp&quot;, &quot;app02.feedforce.jp&quot;]
+    [app01.feedforce.jp] executing command
+    [app02.feedforce.jp] executing command
+ ** [out :: app01.feedforce.jp] app01.rsssuite.jp is apps?
+ ** [out :: app02.feedforce.jp] app02.rsssuite.jp is apps?
+    command finished
+</code></pre>
+
+<p>残念ながら願いもむなしくhellowelloはすべてのロールで実行されてしまったようだ。 その下のrunはappだけを対象に実行されたのに。</p>
+
+<p>こういう時にはタスクじゃなくてメソッドを使うしかない。 でもメソッド内ではリモートにコマンドを投げるヘルパータスクが使えなくて困る。</p>
+
+<p>そこで</p>
+
+<h4>Tips : タスクをメソッド内で定義</h4>
+
+<p>という技をできるかと思ってやってみたらできちゃった。</p>
+
+<p>以下のようにする。</p>
+
+<pre><code class="prettyprint ruby">def prepare_hellowello(target_roles)
+   task :hellowello, :roles =&gt; target_roles do
+     run &quot;echo Hello, $HOSTNAME&quot;
+   end
+ end
+
+ task :helloapps, :roles =&gt; :app do
+   prepare_hellowello :app
+   hellowello
+ end
+</code></pre>
+
+<h5>実行</h5>
+
+<pre><code class="prettyprint">$ cap -f roletest.rb helloapps
+</code></pre>
+
+<p>さてどうなるか。</p>
+
+<h5>実行結果</h5>
+
+<pre><code class="prettyprint">loading configuration /usr/local/lib/ruby/gems/1.8/gems/capistrano-1.1.0/lib/capistrano/recipes/standard.rb
+    loading configuration ./roletest.rb
+  * executing task helloapps
+  * executing task hellowello
+  * executing &quot;echo Hello, $HOSTNAME&quot;
+    servers: [&quot;app01.feedforce.jp&quot;, &quot;app02.feedforce.jp&quot;]
+    [app01.feedforce.jp] executing command
+    [app02.feedforce.jp] executing command
+ ** [out :: app01.feedforce.jp] Hello, app01.rsssuite.jp
+ ** [out :: app02.feedforce.jp] Hello, app02.rsssuite.jp
+    command finished
+</code></pre>
+
+<p>期待通り。</p>
+
+<p>こんな風にすると同じタスクを対象ロールを変えつつ実行できる。 ちなみにprepare_hellowelloを連続して対象ロールを変えて呼び出しても平気。</p>
+
+<h3>拡張タスク before_* - after_*</h3>
+
+<p>タスクの前後に何か処理を実行したい場合はbefore_*とafter_で拡張できる</p>
+
+<pre><code class="prettyprint">task: before_setup do ... end
+ task: setup do ... end
+ task: after_setup do ... end
+</code></pre>
+
+<p>使いどころは</p>
+
+<ul>
+<li><p>定義済みタスクをちょこっと拡張したいとき</p></li>
+<li><p>前後の処理を実行したいサーバとそうでないサーバがあるとき</p></li>
+</ul>
+
+<h2>標準タスク</h2>
+
+<p>Railsの運用にマッチするタスクが標準タスクとして定義されている。</p>
+
+<h3>なにはなくともタスク確認 show_tasks</h3>
+
+<p>desc付きのタスクを一覧表示。</p>
+
+<p>rake -T のような存在。</p>
+
+<h3>便利な標準タスク shell</h3>
+
+<p>標準タスクの中でもshellだけは格別便利。</p>
+
+<p>roleとして定義してあるすべてのサーバに対して対話的シェルを実行できる。</p>
+
+<pre><code class="prettyprint">$ cap -f otoko.rb shell
+</code></pre>
+
+<pre><code class="prettyprint">* executing task shell
+====================================================================
+Welcome to the interactive Capistrano shell! This is an experimental
+feature, and is liable to change in future releases.
+--------------------------------------------------------------------
+cap&gt; echo $HOSTNAME
+[establishing connection(s) to localhost, 192.168.1.101, 192.168.1.102]
+    [localhost] executing command
+    [192.168.1.102] executing command
+    [192.168.1.101] executing command
+[localhost] lb03.feedforce.jp
+[192.168.1.101] web01.feedforce.jp
+[192.168.1.102] web02.feedforce.jp
+    command finished
+cap&gt; pwd
+    [localhost] executing command
+    [192.168.1.102] executing command
+    [192.168.1.101] executing command
+[192.168.1.102] /home/kan
+[localhost] /home/kan
+[192.168.1.101] /home/kan
+    command finished
+cap&gt; 
+cap&gt; date &gt; date.txt
+    [localhost] executing command
+    [192.168.1.102] executing command
+    [192.168.1.101] executing command
+    command finished
+cap&gt; cat date.txt
+    [192.168.1.102] executing command
+    [192.168.1.101] executing command
+    [localhost] executing command
+[192.168.1.102] Wed Jan 31 12:48:41 JST 2007
+[192.168.1.101] Wed Jan 31 12:48:44 JST 2007
+[localhost] Wed Jan 31 12:48:42 JST 2007
+    command finished
+cap&gt; exit
+exiting
+</code></pre>
+
+<p>あんまり複雑なことすると何がなんだかわからなくなるけど、サービスの再起動みたいな単純なコマンド投入とか確認に使える。</p>
+
+<h3>その他</h3>
+
+<ul>
+<li>アップデートはdeploy</li>
+<li>アップデートでおかしくなったらrollback</li>
+<li>DBの更新をするときはmigrate</li>
+<li>rollbackはDBの変更はロールバックできません</li>
+<li>メンテ画面表示はdisable_web</li>
+<li>メンテ終了はenable_web</li>
+<li>等々...</li>
+</ul>
+
+<p>詳しくはドキュメント嫁。</p>
+
+<h2>タスクを作ろう</h2>
+
+<p>標準タスク以外に勝手に作ってよし。</p>
+
+<p>以下はタスク内で使える便利なヘルパータスク。</p>
+
+<table><thead>
+<tr>
+<th>タスク名</th>
+<th>説明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>run</td>
+<td>一般ユーザでコマンド実行</td>
+</tr>
+<tr>
+<td>sudo</td>
+<td>root権限でコマンド実行 リモート側でsudoの設定をしてないと使えないよ</td>
+</tr>
+<tr>
+<td>put</td>
+<td>ファイル作成</td>
+</tr>
+<tr>
+<td>delete</td>
+<td>ファイル削除</td>
+</tr>
+<tr>
+<td>render</td>
+<td>Erbテンプレートをレンダリング。環境ごとにファイル内容をカスタマイズしたいときなどに</td>
+</tr>
+<tr>
+<td>transaction</td>
+<td>一連のコマンドをトランザクションとして束ねる</td>
+</tr>
+<tr>
+<td>on_rollback</td>
+<td>transactionをロールバックするために使う</td>
+</tr>
+</tbody></table>
+
+<p>あとはRubyを駆使していろいろできますので。</p>
+
+<h2>拡張</h2>
+
+<h3>タスクライブラリ</h3>
+
+<ul>
+<li>汎用的に使えそうなCapistranoタスクはライブラリとして切り出すと便利</li>
+<li>変数をうまく使っていろんな環境で使えるようにすると吉</li>
+</ul>
+
+<h4>ファイル</h4>
+
+<pre><code class="prettyprint">cap_task_lib.rb
+</code></pre>
+
+<p>中身はレシピと同様にタスクを定義。</p>
+
+<h4>使うとき</h4>
+
+<pre><code class="prettyprint">require &#39;cap_task_lib&#39;
+</code></pre>
+
+<p>レシピ内でrequire。</p>
+
+<h3>拡張ライブラリ</h3>
+
+<p>Capistrano自体をRubyスクリプトで拡張</p>
+
+<p>以下略</p>
+
+<p>つ 【 <a href="http://manuals.rubyonrails.com/read/book/17">ドキュメント</a>】</p>
+
+<h2>資料で触れられなかった話題</h2>
+
+<ul>
+<li>レシピ内で使う標準変数</li>
+<li>Capistranoのコマンドラインオプション</li>
+</ul>
+
+<p>つ 【 <a href="http://manuals.rubyonrails.com/read/book/17">ドキュメント</a>】</p>
+
+<h2>質疑応答</h2>
+
+<h3>「:roles」とかの「:」を使うのはrubyの記法？</h3>
+
+<p>Ruby博士が今日は御茶ノ水に行ってしまったのでわかりません。（<a href="http://shibuyajs.org/%EF%BC%89">http://shibuyajs.org/）</a></p>
+
+<p>調べてみたらシンボルというものだそうです。</p>
+
+<ul>
+<li>文字列の代わりにハッシュのキーに使う</li>
+<li>特に値に意味のない定数を使いたいときにシンボルを使う</li>
+</ul>
+
+<p>とかするといいようです。</p>
+
+<h3>標準タスクはそのまま使えるの？</h3>
+
+<p>変数とロールだけ指定すれば使えます。</p>
+
+<p>逆に言うと環境に合わせて変数とロールを指定することだけはする必要があります。</p>
+
+<h3>セキュリティのために直接SSHで接続できないホストに対する処理は？</h3>
+
+<p>できません。</p>
+
+<p>そのホストにSSHで接続できるマシンをCapistrano実行マシンにする必要があります。</p>
+
+<h3>リモートサーバの処理の失敗はどう見る？</h3>
+
+<p>リモートサーバ側で標準出力への出力がこちら側に返ってくるのでそれで見る。</p>
+
+<p>つまりサーバ上で直接実行するのと一緒。 失敗してもだんまりな処理の場合は成功失敗わかりません。</p>
+
+<h3>標準タスクのロールバックはどういう仕組みで？</h3>
+
+<p>過去のリリースをあるディレクトリに保存しておいて、そこにシンボリックリンク先変更。</p>
+
+<h3>Capistrano導入する場合はディレクトリ構成とか変えないとだめ？</h3>
+
+<p>標準タスクの流れに沿う場合はそのとおり。</p>
+
+<p>現在の自分たちの運用にあわせて独自にタスクをバリバリ作っていくならその限りではなし。</p>
+
+<h3>いつ導入？</h3>
+
+<p>Coming Soon...</p>
+
+<p>本気。</p>
+
+<p>（今はとっくに導入済み)</p>
+
+    </div>
+    <div class="sns-btn">
+      <ul>
+        <li><a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en" data-save-url="http://tech.feedforce.jp/capistrano.html"></a></li>
+        <li><a href="http://twitter.com/share" class="twitter-share-button" data-text="Capistrano" data-url="http://tech.feedforce.jp/capistrano.html" data-via="feedforce" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+        <li><iframe src="//www.facebook.com/plugins/like.php?href=http://tech.feedforce.jp/capistrano.html&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" style="border:none; overflow:hidden; width:110px; height:21px;" frameborder="0"></iframe></li>
+        <li><a href="http://b.hatena.ne.jp/entry/http://tech.feedforce.jp/capistrano.html" class="hatena-bookmark-button" data-hatena-bookmark-title="<?php the_title();?>" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script></li>
+      </ul>
+    </div>
+    <div id="single-entry-bnr">
+  <a href="http://developer.feedforce.jp">
+    <img alt="Feedforce Developer Blog" src="/images/developer-blog_banner760.png" />
+  </a>
+  <p>新しいブログへ移行しました！こちらもよろしくお願いします。</p>
+</div>
+
+  </article>
+</div>
+
+<div id="single-entry-link">
+  <div class="wrapper">
+    <ul>
+          <li id="newer-link">
+            <a href="/developers-summit-2007.html" rel="next">デブサミ2007</a>&nbsp;&raquo;
+          </li>
+          <li id="older-link">
+            &laquo;&nbsp;<a href="/selenium_rc.html" rel="prev">Selenium RCの紹介</a>
+          </li>
+    </ul>
+  </div>
+</div>
+
+<p class="pagetop"><a href="#site-head">▲</a></p>
+<footer>
+  <div class="foot-menu">
+    <div class="wrapper">
+      <div id="widget_recent_entries">
+        <h2>Recent posts</h2>
+        <ul>
+              <li><a href="/dynamodb-setup-on-rails.html">DynamoDB を Rails で使えるようにするためのあれこれ</a></li>
+              <li><a href="/run-e2e-test-on-circleci-2_0.html">E2E テストを CircleCI 2.0 (Beta) で完結させてみた話</a></li>
+              <li><a href="/safe-rds-update.html">安全な Amazon RDS のアップデート</a></li>
+              <li><a href="/cloudfront-tilda.html">CloudFront + Tilda でソーシャルPLUSのプロモーションサイトを一新しました</a></li>
+              <li><a href="/vue-elasticsearch.html">自分のブログに Elasticsearch + Vue.js で検索機能を付けたという発表をした</a></li>
+              <li><a href="/troubleshooting_discussion.html">障害対応についてパネルディスカッション形式で話し合ってみた</a></li>
+        </ul>
+      </div>
+      <div id="widget_categories"><h2>Categories</h2>
+        <ul>
+              <li><a href="/category/resume/">勉強会資料 (72)</a></li>
+              <li><a href="/category/ruby/">Ruby/Rails (24)</a></li>
+              <li><a href="/category/test/">テスト (10)</a></li>
+              <li><a href="/category/infrastructure/">インフラ (23)</a></li>
+              <li><a href="/category/dev_style/">開発スタイル (18)</a></li>
+              <li><a href="/category/operation/">運用事例 (21)</a></li>
+              <li><a href="/category/aws/">AWS (10)</a></li>
+              <li><a href="/category/bigquery/">BigQuery (2)</a></li>
+              <li><a href="/category/terraform/">Terraform (1)</a></li>
+              <li><a href="/category/announcement/">お知らせ (3)</a></li>
+              <li><a href="/category/elixir/">Elixir/Phoenix (1)</a></li>
+              <li><a href="/category/facebook/">Facebook (2)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrapper copy">
+    <ul>
+      <li></li>
+    </ul>
+    <p>
+      <small>Copyright &copy; feedforce Inc. All Rights Reserved.</small>
+    </p>
+  </div>
+</footer>
+
+<script src="/js/lib.js" type="text/javascript"></script><script src="/js/script.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5R4VN4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5R4VN4');</script>
+<!-- End Google Tag Manager -->
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</body>
+</html>
